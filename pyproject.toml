@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "loca7"
+version = "0.1.0"
+description = ""
+authors = ["Ewen Le Bihan <lebhiae@bde.enseeiht.fr>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "^4.1.5"
+whitenoise = "^6.3.0"
+typed-dotenv = {extras = ["pydantic"], version = "^1.0.1"}
+djangorestframework = "^3.14.0"
+psycopg2 = "^2.9.5"
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
