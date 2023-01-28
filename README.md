@@ -6,6 +6,10 @@ Loca7 est le site de recherche de logement pour les étudiants de l'ENSEEIHT.
 
 Il propose une inteface permettant de rechercher les logements, de poster des annonces et de les gérer. Il propose également une interface administrateur.
 
+## Prototype de l'interface
+
+Un [prototype de l'interface](https://www.figma.com/file/Y6xMoifKInWIAGuGGdZp49/loca7?node-id=0%3A1&t=UtmI53RLcQkMtKkV-1) est en cours de création sur _Figma_.
+
 ## Roadmap
 
 ### Recherche
