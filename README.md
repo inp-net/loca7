@@ -8,7 +8,9 @@ Il propose une inteface permettant de rechercher les logements, de poster des an
 
 ## Prototype de l'interface
 
-Un [prototype de l'interface](https://www.figma.com/file/Y6xMoifKInWIAGuGGdZp49/loca7?node-id=0%3A1&t=UtmI53RLcQkMtKkV-1) est en cours de création sur _Figma_.
+Un [prototype de l'interface](https://www.figma.com/file/Y6xMoifKInWIAGuGGdZp49/loca7?node-id=0%3A1&t=UtmI53RLcQkMtKkV-1) est disponible sur _Figma_.
+
+Il y a également une copie locale importable dans figma, au nom de `/prototype.fig`.
 
 ## Roadmap
 
@@ -21,6 +23,8 @@ Un [prototype de l'interface](https://www.figma.com/file/Y6xMoifKInWIAGuGGdZp49/
 ### Post d'annonces
 
 - [ ] Champ de description en texte riche WYSIWYG (pas de BBCode)
+- [ ] Autocomplétion pour l'adresse (permet de récupérer lat et long pour l'appartement) via l'API d'Open Street Map, [Nomatim](https://nominatim.org/release-docs/develop/) 
+      (à self-hoster pour faire de l'auto-complétion, ils rate-limite à 1 req/s, trop peu si plusieurs utilisateur en même temps même avec un debounce)
 - [ ] Filepicker pour les photos avec gestion du glisser-déposer
 
 ### Gestion des annonces
@@ -31,6 +35,7 @@ Un [prototype de l'interface](https://www.figma.com/file/Y6xMoifKInWIAGuGGdZp49/
 
 - [ ] Intégration avec le LDAP
 - [ ] Intégration avec [Google reCaptcha v3](https://developers.google.com/recaptcha/docs/v3) à la création et à la connexion
+- [ ] Évaluation de la complexité d'un mot de passe avec [zxcvbn](https://github.com/dropbox/zxcvbn)
 
 ### Notifications par mail
 
@@ -58,3 +63,7 @@ Un [prototype de l'interface](https://www.figma.com/file/Y6xMoifKInWIAGuGGdZp49/
     - **data/** API
     - **notifications/** gestion des notifications par mail
 - **front/** frontend
+
+## Temps passé
+
+- **Prototype d'interface:** 16 heures
