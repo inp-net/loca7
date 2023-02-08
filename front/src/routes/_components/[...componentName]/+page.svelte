@@ -4,12 +4,17 @@
 	let [componentName, slotContent] = $page.params['componentName'].split('/', 2);
 	let props = Object.fromEntries(
 		Array(...$page.url.searchParams.entries()).map(([k, v]) => {
-			try {
-				return [k, JSON.parse(v)];
-			} catch (e) {
-				console.log(v);
-				return [k, true];
+			let value;
+			if (v === '') {
+				value = true;
+			} else {
+				try {
+					value = JSON.parse(v);
+				} catch (e) {
+					value = v;
+				}
 			}
+			return [k, value];
 		})
 	);
 
@@ -20,9 +25,9 @@
 </script>
 
 <h1>
-	&lt;{componentName}{#if props.length > 0}:{/if}{Object.entries(props).map(
-		([k, v]) => `${k}=${JSON.stringify(v)}`
-	)}{#if slotContent}
+	&lt;{componentName}{#if Object.keys(props).length > 0}&nbsp;{/if}{Object.entries(props)
+		.map(([k, v]) => (v === true ? k : `${k}=${JSON.stringify(v)}`))
+		.join(' ')}{#if slotContent}
 		&gt;{slotContent}&lt;/{componentName}&gt;
 	{:else}
 		/&gt;
