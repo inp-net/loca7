@@ -94,7 +94,7 @@ h2 {
   line-height: 0.95;
 }
 
-.typo-field-label, label {
+.typo-field-label{
   font-size: var(--size-field-label);
   font-weight: var(--weight-field-label);
   letter-spacing: 0.15em;

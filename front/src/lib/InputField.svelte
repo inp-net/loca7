@@ -1,1 +1,10 @@
-<!-- Should combine a field label with a slot that should contain an Input* -->
+<script lang="ts">
+	export let label: string;
+</script>
+
+<div class="field">
+	<label
+		><span class="typo-field-label">{label}</span>
+		<slot />
+	</label>
+</div>

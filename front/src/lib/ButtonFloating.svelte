@@ -14,7 +14,7 @@
 	on:mouseenter={() => (hoverOrFocus = true)}
 	on:mouseleave={() => (hoverOrFocus = false)}
 >
-	<Icon name={icon} color={hoverOrFocus ? 'muted' : 'fg'} />
+	<Icon name={icon} color={hoverOrFocus ? 'bg' : 'fg'} />
 </button>
 
 <style>
@@ -30,5 +30,10 @@
 		padding: 1rem;
 
 		cursor: pointer;
+	}
+
+	button:hover, button:focus {
+		background: var(--fg);
+		color: var(--bg);
 	}
 </style>
