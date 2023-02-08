@@ -38,16 +38,19 @@
 	<ButtonColored id="colored-successful" successful>Label</ButtonColored>
 
 	<label for="navigation">Navigation</label>
-	<ButtonNavigation id="navigation">Label</ButtonNavigation>
+	<ButtonNavigation href="test" id="navigation">Label</ButtonNavigation>
+
+	<label for="navigation-current">Navigation, current</label>
+	<ButtonNavigation current href="test" id="navigation-current">Label</ButtonNavigation>
 </main>
 
 <style>
 	:global(body) {
 		margin: 0 auto;
 		max-width: 1200px;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
 	}
 
 	main {
