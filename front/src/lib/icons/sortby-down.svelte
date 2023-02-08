@@ -1,0 +1,12 @@
+<script lang="ts">
+	export let color: string = 'currentColor';
+</script>
+
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path
+		d="M14.5 19L25.25 29.75L36 19L14.5 19Z"
+		fill={color}
+		stroke={color}
+		stroke-width="5.81081"
+	/>
+</svg>
