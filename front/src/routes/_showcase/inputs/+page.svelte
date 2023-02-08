@@ -1,6 +1,7 @@
 <script lang="ts">
 	import InputField from '$lib/InputField.svelte';
 	import InputNumber from '$lib/InputNumber.svelte';
+	import InputSelectMultiple from '$lib/InputSelectMultiple.svelte';
 
 	let surface: number = 650;
 	let counter: number = -4294967295;
@@ -20,6 +21,12 @@
 
 	<InputField label="Volume sonore de Téo">
 		<InputNumber bind:value={teo} positive unit="dB" initial={1_000_000} />
+	</InputField>
+</section>
+
+<section class="choices">
+	<InputField label="multiple choices">
+		<InputSelectMultiple name="multiple-choices" options={['Lorem', 'Ipsum', 'Dolor', 'Sit amet']} />
 	</InputField>
 </section>
 
