@@ -38,10 +38,10 @@
 	<ButtonColored id="colored-successful" successful>Label</ButtonColored>
 
 	<label for="navigation">Navigation</label>
-	<ButtonNavigation href="test" id="navigation">Label</ButtonNavigation>
+	<ButtonNavigation href="buttons" id="navigation">Label</ButtonNavigation>
 
 	<label for="navigation-current">Navigation, current</label>
-	<ButtonNavigation current href="test" id="navigation-current">Label</ButtonNavigation>
+	<ButtonNavigation current href="buttons" id="navigation-current">Label</ButtonNavigation>
 </main>
 
 <style>
