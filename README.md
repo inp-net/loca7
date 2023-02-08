@@ -19,6 +19,7 @@ Il y a également une copie locale importable dans figma, au nom de `/prototype.
 - [ ] Intégration avec [OpenStreetMap](https://www.openstreetmap.org) via [mapbox](https://labs.mapbox.com/mapping)
 - [ ] Filtrage par type de logement, surface, prix, présence de parking, meublé, etc.
 - [ ] Tri par prix, surface, distance à l'ENSEEIHT, etc.
+- [ ] Temps de trajet avec l'n7, à pied, à vélo et en transports (calculé depuis l'adresse du logement avec [TravelTime](https://docs.traveltime.com/api/) (l'API de [Nomatim]() n'a pas les transports en commun))
 
 ### Post d'annonces
 
@@ -29,7 +30,7 @@ Il y a également une copie locale importable dans figma, au nom de `/prototype.
 
 ### Gestion des annonces
 
-- [ ] 
+- [ ] Liste des annonces, bouton pour déposer si aucune annonce, avec une vue liste presque comme l'interface utilisateur mais en moins compacte
 
 ### Comptes
 
@@ -45,7 +46,10 @@ Il y a également une copie locale importable dans figma, au nom de `/prototype.
 
 ### Interface administrateur
 
-- [ ]
+- [ ] Vue liste avec même fonctionnalités que la recherche mais:
+  - Plus compacte
+  - Avec des actions pour les admins: supprimer, rendre obsolète/remettre visible
+  - Montrer/cacher les obsolètes, les afficher en grisé
 
 
 ## Stack
