@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let name: string;
+	export let strokeWidth: string;
 	export let color = 'currentColor';
 </script>
 
@@ -7,6 +8,7 @@
 	<svelte:component
 		this={iconSVG.default}
 		color={color.startsWith('#') ? color : `var(--${color})`}
+		{strokeWidth}
 	/>
 {:catch error}
 	<span style="color: red;">{error}</span>
