@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let name: string;
 	export let strokeWidth: string = "5";
-	export let color = 'currentColor';
+	export let color = 'fg';
 </script>
 
 {#await import(`./icons/${name}.svelte`) then iconSVG}
