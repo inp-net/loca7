@@ -13,6 +13,7 @@
 	on:blur={() => (hoverOrFocus = false)}
 	on:mouseenter={() => (hoverOrFocus = true)}
 	on:mouseleave={() => (hoverOrFocus = false)}
+	on:click
 >
 	<Icon name={icon} color={hoverOrFocus ? '#fffc' : 'bg'} />
 </button>

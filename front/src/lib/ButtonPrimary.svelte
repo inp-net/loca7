@@ -2,7 +2,7 @@
 	export let id: string;
 </script>
 
-<button {id} class="typo-big-button">
+<button {id} class="typo-big-button" on:click>
 	<slot />
 </button>
 

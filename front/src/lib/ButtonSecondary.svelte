@@ -1,8 +1,9 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
 	import Icon from './Icon.svelte';
 
-	export let icon: string;
-	export let id: string;
+	export let icon: string = "";
+	export let id: string = "";
 	export let dangerous: boolean = false;
 
 	let hoverOrFocus = false;
@@ -16,6 +17,7 @@
 	on:blur={() => (hoverOrFocus = false)}
 	on:mouseenter={() => (hoverOrFocus = true)}
 	on:mouseleave={() => (hoverOrFocus = false)}
+	on:click
 >
 	{#if icon}
 		<div class="icon">

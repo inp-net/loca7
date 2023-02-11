@@ -22,6 +22,7 @@
 	style:--background={`var(--${backgroundColor})`}
 	style:--pressed-background={`var(--${pressedBackgroundColor})`}
 	style:--pressed-foreground={successful ? '#000' : '#fff'}
+	on:click
 >
 	<slot />
 </button>
