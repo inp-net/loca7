@@ -18,21 +18,34 @@
 		})
 	);
 
+	let title: string;
+	$: {
+		title = `<${componentName}`;
+		if (Object.keys(props).length > 0) {
+			title +=
+				' ' +
+				Object.entries(props)
+					.map(([k, v]) => (v === true ? k : `${k}=${JSON.stringify(v)}`))
+					.join(' ');
+		}
+		if (slotContent) {
+			title += `>${slotContent}</${componentName}>`;
+		} else {
+			title += '/>';
+		}
+	}
+
 	let wireframe = false;
 	let componentDomNode: HTMLElement;
 	let newPropKey = '';
 	let newPropValue = '';
 </script>
 
-<h1>
-	&lt;{componentName}{#if Object.keys(props).length > 0}&nbsp;{/if}{Object.entries(props)
-		.map(([k, v]) => (v === true ? k : `${k}=${JSON.stringify(v)}`))
-		.join(' ')}{#if slotContent}
-		&gt;{slotContent}&lt;/{componentName}&gt;
-	{:else}
-		/&gt;
-	{/if}
-</h1>
+<svelte:head>
+	<title>{title}</title>
+</svelte:head>
+
+<h1>{title}</h1>
 
 {#await import(`../../../lib/${componentName}.svelte`) then component}
 	<main class:wireframe bind:this={componentDomNode}>
