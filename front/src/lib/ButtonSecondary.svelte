@@ -34,7 +34,7 @@
 		gap: 0.5em;
 		padding: 0.5rem 1rem;
 
-		background: transparent;
+		background: var(--bg);
 		border: var(--border-width) solid var(--fg);
 		border-radius: 1000px;
 
