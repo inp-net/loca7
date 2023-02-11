@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let name: string;
-	export let strokeWidth: string;
+	export let strokeWidth: string = "5";
 	export let color = 'currentColor';
 </script>
 
