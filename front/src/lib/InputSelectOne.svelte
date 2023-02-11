@@ -21,6 +21,7 @@
 		background: var(--fg);
 		color:var(--bg);
 		padding: 0.25rem 0.5rem;
+		cursor: pointer;
 	}
 
 	label[aria-current=true] {
