@@ -2,6 +2,7 @@
 	import InputCheckbox from '$lib/InputCheckbox.svelte';
 	import InputField from '$lib/InputField.svelte';
 	import InputNumber from '$lib/InputNumber.svelte';
+	import InputPassword from '$lib/InputPassword.svelte';
 	import InputSelectMultiple from '$lib/InputSelectMultiple.svelte';
 	import InputSelectOne from '$lib/InputSelectOne.svelte';
 
@@ -52,6 +53,10 @@
 	</InputField>
 </section>
 
+<section class="password">
+	<InputPassword label="Mot de passe" value="tvn7>can7" />
+</section>
+
 <style>
 	h1 {
 		margin-bottom: 3rem;
@@ -60,5 +65,9 @@
 	.numbers {
 		display: flex;
 		gap: 1rem;
+	}
+
+	.password {
+		max-width: 500px;
 	}
 </style>
