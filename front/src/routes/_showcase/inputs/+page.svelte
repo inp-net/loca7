@@ -3,6 +3,7 @@
 	import InputField from '$lib/InputField.svelte';
 	import InputNumber from '$lib/InputNumber.svelte';
 	import InputSelectMultiple from '$lib/InputSelectMultiple.svelte';
+	import InputSelectOne from '$lib/InputSelectOne.svelte';
 
 	let surface: number = 650;
 	let counter: number = -4294967295;
@@ -39,6 +40,15 @@
 <section class="checkbox">
 	<InputField label="Thing">
 		<InputCheckbox label="Thing1" bind:value={tristate} />
+	</InputField>
+</section>
+
+<section class="radio">
+	<InputField label="Type d'appartement">
+		<InputSelectOne
+			options={['Chambre', 'Studio', 'T1', 'T1 bis', 'T2', 'T3 et plus', 'Colocation', 'Manoir']}
+			value="Manoir"
+		/>
 	</InputField>
 </section>
 
