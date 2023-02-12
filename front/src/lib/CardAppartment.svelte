@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CarouselImages from './CarouselImages.svelte';
 	import Icon from './Icon.svelte';
 	import type { AppartmentKind } from './types';
 	import { durationDisplay } from './utils';
@@ -28,40 +29,7 @@
 
 <article>
 	<section class="photos">
-		<div class="image-gradient-overlay" />
-		<nav>
-			<button
-				aria-hidden={images.findIndex((src) => src === currentImage) === 0}
-				class="prev arrow"
-				on:click={() =>
-					(currentImage = images[images.findIndex((src) => src === currentImage) - 1])}
-				><Icon color="#fff" name="next" flip /></button
-			>
-			<ul class="dots">
-				{#each images as src}
-					<li>
-						<button
-							aria-current={currentImage === src}
-							on:click={() => {
-								currentImage = src;
-							}}
-						/>
-					</li>
-				{/each}
-			</ul>
-			<button
-				aria-hidden={images.findIndex((src) => src === currentImage) === images.length - 1}
-				class="next arrow"
-				on:click={() =>
-					(currentImage = images[images.findIndex((src) => src === currentImage) + 1])}
-				><Icon color="#fff" name="next" /></button
-			>
-		</nav>
-		<ul>
-			{#each images as src}
-				<li><img aria-hidden={currentImage !== src} {src} /></li>
-			{/each}
-		</ul>
+		<CarouselImages cover {images} current={currentImage} />
 	</section>
 	<a href="/appartements/{id}">
 		<div class="content">
@@ -132,106 +100,18 @@
 		background: var(--bg);
 		border-radius: 1rem;
 		width: 400px;
+		overflow: hidden;
 	}
 
 	.content {
 		padding: 1.5rem;
-		border-bottom-left-radius: 1rem;
-		border-bottom-right-radius: 1rem;
+		transition: all 0.25s ease;
 	}
 
 	section.photos {
 		position: relative;
 		width: 100%;
 		height: 300px;
-	}
-
-	section.photos .image-gradient-overlay {
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 0;
-		bottom: 0;
-		z-index: 2;
-		background: linear-gradient(90deg, rgba(0, 0, 0, 0.3333) 0%, rgba(0, 0, 0, 0) 20%),
-			linear-gradient(-90deg, rgba(173, 101, 101, 0.33333) 0%, rgba(0, 0, 0, 0) 20%),
-			linear-gradient(0deg, rgba(0, 0, 0, 0.33333) 0%, rgba(0, 0, 0, 0) 20%);
-		border-top-left-radius: 1rem;
-		border-top-right-radius: 1rem;
-	}
-
-	section.photos img {
-		position: absolute;
-		top: 0;
-		width: 100%;
-		height: 300px;
-		object-fit: cover;
-		object-position: center;
-		border-top-left-radius: 1rem;
-		border-top-right-radius: 1rem;
-	}
-
-	section.photos img[aria-hidden='true'] {
-		display: none;
-	}
-
-	section.photos nav {
-		display: flex;
-		position: absolute;
-		justify-content: space-between;
-		align-items: center;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		top: 0;
-		z-index: 10;
-		height: 100%;
-		width: 100%;
-	}
-
-	section.photos nav button {
-		cursor: pointer;
-	}
-
-	section.photos .dots {
-		list-style: none;
-		padding: 0;
-		display: flex;
-		flex-direction: row;
-		align-items: end;
-		justify-content: center;
-		gap: 1rem;
-		height: 100%;
-		transition: all 0.25s ease;
-		margin-bottom: 2rem;
-	}
-
-	section.photos .dots button {
-		width: 0.75rem;
-		height: 0.75rem;
-		border-radius: 10000px;
-		background: var(--bg);
-		border: none;
-		transition: all 0.25s ease;
-	}
-
-	section.photos .dots button[aria-current='true'] {
-		width: 2rem;
-	}
-
-	section.photos button.arrow {
-		z-index: 10;
-		height: 5rem;
-		width: 5rem;
-		background: transparent;
-		border: none;
-		transition: all 0.25s ease;
-		height: 100%;
-	}
-
-	section.photos button.arrow[aria-hidden='true'] {
-		opacity: 0;
-		pointer-events: none;
 	}
 
 	section.figures {
