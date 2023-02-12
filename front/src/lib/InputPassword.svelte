@@ -71,7 +71,7 @@
 			{placeholder}
 			{id}
 			{name}
-			actionIcon={shown ? 'eye-closed' : 'eye-open'}
+			actionIcon={shown ? 'eye-cancel' : 'eye-open'}
 		/>
 	</InputField>
 
