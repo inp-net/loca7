@@ -143,7 +143,7 @@
 	section.photos {
 		position: relative;
 		width: 100%;
-		height: 200px;
+		height: 300px;
 	}
 
 	section.photos .image-gradient-overlay {
@@ -164,7 +164,7 @@
 		position: absolute;
 		top: 0;
 		width: 100%;
-		height: 200px;
+		height: 300px;
 		object-fit: cover;
 		object-position: center;
 		border-top-left-radius: 1rem;
