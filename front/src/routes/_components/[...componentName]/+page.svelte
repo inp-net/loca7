@@ -62,7 +62,7 @@
 			<label for={`prop-${key}`}
 				>{key}
 				<input id={`prop-${key}`} type="text" bind:value={props[key]} />
-				<button on:click={() => delete props[key]}>Delete</button>
+				<button on:click={() => delete props[key]}>del</button>
 			</label>
 		{/each}
 
@@ -115,14 +115,21 @@
 		border: 1px solid transparent;
 		display: inline-flex;
 		box-sizing: content-box;
+		padding-bottom: 500px;
 	}
 
 	section.props {
+		z-index: 1000000;
 		position: fixed;
-		bottom: 1em;
-		left: 1em;
-		display: flex;
-		flex-direction: column;
-		gap: 0.5em;
+		bottom: 0;left: 0;right: 0;
+		padding: 0.5em;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
+		gap: 1em;
+		background: var(--bg);
+	}
+
+	section.props input {
+		width: calc(100% - 100px);
 	}
 </style>
