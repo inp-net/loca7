@@ -3,7 +3,8 @@
 	import ButtonCircle from './ButtonCircle.svelte';
 	import Icon from './Icon.svelte';
 
-	export let filesWithPreview: { file: File; previewURL: string; id: string }[] = [];
+	type FileWithPreview = { file: File; previewURL: string; id: string };
+	export let filesWithPreview: FileWithPreview[] = [];
 	$: updateFiles(inputDom, filesWithPreview);
 
 	let empty: boolean;
@@ -27,7 +28,7 @@
 		});
 	}
 
-	function updateFiles(target: HTMLInputElement, filesWithPreview) {
+	function updateFiles(target: HTMLInputElement, filesWithPreview: FileWithPreview[]) {
 		if (!target) return;
 		console.log("updating <input>'s files");
 		target.files = fileListOf(filesWithPreview.map((f) => f.file));
