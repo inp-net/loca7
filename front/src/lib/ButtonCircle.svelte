@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon from './Icon.svelte';
 
-	export let id: string;
+	export let id: string = "";
 	export let icon: string;
 
 	let hoverOrFocus = false;
