@@ -187,7 +187,7 @@
 		background-color: transparent;
 		height: 2rem;
 		width: 2rem;
-		cursor: pointer;
+		cursor: grab;
 	}
 
 	.dropzone:not(.empty) .icon {
