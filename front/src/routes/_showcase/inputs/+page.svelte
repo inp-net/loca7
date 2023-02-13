@@ -1,6 +1,7 @@
 <script lang="ts">
 	import InputCheckbox from '$lib/InputCheckbox.svelte';
 	import InputField from '$lib/InputField.svelte';
+	import InputImages from '$lib/InputImages.svelte';
 	import InputNumber from '$lib/InputNumber.svelte';
 	import InputPassword from '$lib/InputPassword.svelte';
 	import InputSelectMultiple from '$lib/InputSelectMultiple.svelte';
@@ -57,6 +58,12 @@
 	<InputPassword label="Mot de passe" value="tvn7>can7" />
 </section>
 
+<section class="images">
+	<InputField label="Photos de l'appartemment">
+		<InputImages />
+	</InputField>
+</section>
+
 <style>
 	h1 {
 		margin-bottom: 3rem;
@@ -69,5 +76,9 @@
 
 	.password {
 		max-width: 500px;
+	}
+
+	.images {
+		max-width: 600px;
 	}
 </style>
