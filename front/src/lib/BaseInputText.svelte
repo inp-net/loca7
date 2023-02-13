@@ -120,6 +120,8 @@
 	}
 	.error-area {
 		background-color: var(--blood);
+	}
+	.error-area p {
 		color: #fff;
 	}
 
