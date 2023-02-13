@@ -34,6 +34,6 @@
 		display: flex;
 		gap: 0.5rem;
 		padding: 0.5rem;
-		width: max-content;
+		flex-wrap: wrap;
 	}
 </style>

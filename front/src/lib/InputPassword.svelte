@@ -99,7 +99,6 @@
 	.feedback > div {
 		display: flex;
 		gap: 0.5rem;
-		height: 1.2em;
 		align-items: center;
 	}
 

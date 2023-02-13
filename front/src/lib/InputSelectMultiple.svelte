@@ -25,6 +25,7 @@
 		gap: 0.5rem;
 		margin: 0;
 		padding: 0;
+		flex-wrap: wrap;
 	}
 	label {
 		background-color: transparent;
