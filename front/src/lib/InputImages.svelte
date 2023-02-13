@@ -69,7 +69,7 @@
 		on:change={(e) => {
 			console.log('on change fired');
 			updateFilePreviews(e.target.files);
-			updateFiles(e.target);
+			updateFiles(e.target, filesWithPreview);
 		}}
 		accept="image/*"
 	/>
