@@ -1,8 +1,9 @@
 <script lang="ts">
-	export let id: string;
+	export let id: string = '';
 	export let dangerous = false;
 	export let warns = false;
 	export let successful = false;
+	export let href: string = '';
 
 	const backgroundColor = dangerous ? 'rose' : warns ? 'plaster' : successful ? 'moss' : 'ice';
 	const foregroundColor = dangerous ? 'blood' : warns ? 'safran' : successful ? 'cactus' : 'cobalt';
@@ -15,9 +16,11 @@
 		: 'sky';
 </script>
 
-<button
+<svelte:element
+	this={href ? 'a' : 'button'}
 	{id}
-	class="typo-paragraph"
+	{href}
+	class="button-colored typo-paragraph"
 	style:--foreground={`var(--${foregroundColor})`}
 	style:--background={`var(--${backgroundColor})`}
 	style:--pressed-background={`var(--${pressedBackgroundColor})`}
@@ -25,10 +28,10 @@
 	on:click
 >
 	<slot />
-</button>
+</svelte:element>
 
 <style>
-	button {
+	.button-colored {
 		background-color: var(--background);
 		color: var(--foreground);
 
@@ -41,8 +44,8 @@
 		cursor: pointer;
 	}
 
-	button:hover,
-	button:focus {
+	.button-colored:hover,
+	.button-colored:focus {
 		background-color: var(--pressed-background);
 		color: var(--pressed-foreground);
 	}
