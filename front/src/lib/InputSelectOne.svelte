@@ -19,12 +19,12 @@
 
 	label {
 		background: var(--fg);
-		color:var(--bg);
-		padding: 0.25rem 0.5rem;
+		color: var(--bg);
+		padding: 0.5rem 1rem;
 		cursor: pointer;
 	}
 
-	label[aria-current=true] {
+	label[aria-current='true'] {
 		background: var(--diamond);
 		color: var(--fg);
 	}
@@ -33,7 +33,8 @@
 		border: var(--border-width) solid var(--fg);
 		display: flex;
 		gap: 0.5rem;
-		padding: 0.5rem;
+		padding: 1rem;
 		flex-wrap: wrap;
+		margin: 0;
 	}
 </style>
