@@ -9,3 +9,9 @@
 	</svelte:element>
 	<slot />
 </div>
+
+<style>
+	.field {
+		flex-grow: 1;
+	}
+</style>
