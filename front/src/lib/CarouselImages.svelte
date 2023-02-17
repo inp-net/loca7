@@ -67,7 +67,7 @@
 		bottom: 0;
 		z-index: 2;
 		background: linear-gradient(90deg, rgba(0, 0, 0, 0.3333) 0%, rgba(0, 0, 0, 0) 20%),
-			linear-gradient(-90deg, rgba(173, 101, 101, 0.33333) 0%, rgba(0, 0, 0, 0) 20%),
+			linear-gradient(-90deg, rgba(0, 0, 0, 0.33333) 0%, rgba(0, 0, 0, 0) 20%),
 			linear-gradient(0deg, rgba(0, 0, 0, 0.33333) 0%, rgba(0, 0, 0, 0) 20%);
 	}
 
