@@ -1,8 +1,15 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
+	import ButtonColored from './ButtonColored.svelte';
 	import CarouselImages from './CarouselImages.svelte';
 	import Icon from './Icon.svelte';
 	import type { AppartmentKind } from './types';
-	import { durationDisplay } from './utils';
+	import {
+		availableAtSentence,
+		distanceDisplay,
+		durationDisplay
+	} from './utils';
+	const emit = createEventDispatcher();
 
 	export let images: string[];
 	export let id: string;
@@ -16,27 +23,25 @@
 	export let distanceToN7: number;
 	export let hasFurniture: boolean;
 	export let hasParking: boolean;
-
-	let distanceDisplay: string = Intl.NumberFormat('fr-FR', {
-		style: 'unit',
-		unit: distanceToN7 < 0.5 ? 'meter' : 'kilometer'
-	}).format(distanceToN7 < 0.5 ? distanceToN7 * 1e3 : distanceToN7);
+	export let editable: boolean = false;
 
 	let secondsAvailableSince = (Date.now() - Date.parse(availableAt)) * 1e-3;
 
 	let currentImage = images[0];
 </script>
 
-<article>
+<article class:editable>
 	<section class="photos">
 		<CarouselImages cover {images} current={currentImage} />
 	</section>
-	<a href="/appartements/{id}">
+	<svelte:element this={editable ? 'div' : 'a'} href={editable ? '' : `/appartements/${id}`}>
 		<div class="content">
 			<section class="figures">
 				<section class="price">
 					<p class="typo-big-figure rent">{rent + charges}€</p>
-					<p class="charges">dont {charges}€ de charges</p>
+					<p class="charges">
+						dont {charges}€ de charges<br />soit {Math.round((rent + charges) / surface)} €/m²
+					</p>
 				</section>
 				<section class="space">
 					<p class="typo-big-figure surface">{surface}m²</p>
@@ -49,20 +54,7 @@
 			<section class="situation">
 				<span class="icon"><Icon name="calendar" /></span>
 				<p class="when">
-					{#if secondsAvailableSince > 0}
-						Libéré depuis le
-					{:else if secondsAvailableSince < 0}
-						Se libère le
-					{:else}
-						Se libère aujourd'hui
-					{/if}
-					{#if secondsAvailableSince !== 0}
-						{new Intl.DateTimeFormat('fr-FR', {
-							year: 'numeric',
-							month: 'long',
-							day: 'numeric'
-						}).format(new Date(availableAt))}
-					{/if}
+					{availableAtSentence(secondsAvailableSince, availableAt)}
 					{#if secondsAvailableSince !== 0}
 						<span class="muted"
 							>{#if secondsAvailableSince > 0}il y a{:else}dans{/if}
@@ -73,7 +65,7 @@
 				<span class="icon"><Icon name="location" /></span>
 				<p class="where">
 					{address}
-					<span class="muted">à {distanceDisplay}</span>
+					<span class="muted">à {distanceDisplay(distanceToN7)}</span>
 				</p>
 			</section>
 			<section class="aspects">
@@ -86,8 +78,19 @@
 					{hasParking ? 'Place de parking' : 'Pas de place de parking'}
 				</p>
 			</section>
+			{#if editable}
+				<section class="editable">
+					<ButtonColored dangerous on:click={() => emit('delete')}>Supprimer</ButtonColored>
+					<ButtonColored href="/appartements/{id}" on:click={() => emit('delete')}
+						>Voir l'annonce</ButtonColored
+					>
+					<ButtonColored href="/appartements/{id}/modifier" on:click={() => emit('edit')}
+						>Modifier</ButtonColored
+					>
+				</section>
+			{/if}
 		</div>
-	</a>
+	</svelte:element>
 </article>
 
 <style>
@@ -99,7 +102,7 @@
 
 		background: var(--bg);
 		border-radius: 1rem;
-		width: 400px;
+		max-width: 500px;
 		overflow: hidden;
 	}
 
@@ -164,8 +167,15 @@
 		height: 1.2em;
 	}
 
-	.content:hover,
-	.content:focus {
+	article:not(.editable) .content:hover,
+	article:not(.editable) .content:focus {
 		background: var(--ice);
+	}
+
+	section.editable {
+		display: flex;
+		justify-content: space-between;
+		gap: 0.5rem;
+		margin-top: 2rem;
 	}
 </style>

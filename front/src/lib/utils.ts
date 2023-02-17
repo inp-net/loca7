@@ -36,3 +36,31 @@ export function durationDisplay(seconds: number) {
 	}
 	return displayString;
 }
+
+export function distanceDisplay(distance: number): string {
+	return Intl.NumberFormat('fr-FR', {
+		style: 'unit',
+		unit: distance < 0.5 ? 'meter' : 'kilometer'
+	}).format(distance < 0.5 ? distance * 1e3 : distance);
+}
+
+export function availableAtSentence(availableSince: number, availableAt: string): string {
+	let out = '';
+	console.log(availableSince);
+	if (availableAt === new Date().toISOString()) {
+		out += "Se libère aujourd'hui";
+	} else if (availableSince > 0) {
+		out += 'Libéré depuis le ';
+	} else {
+		out += 'Se libère le ';
+	}
+	if (availableSince !== 0) {
+		out += new Intl.DateTimeFormat('fr-FR', {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric'
+		}).format(new Date(availableAt));
+	}
+
+	return out;
+}
