@@ -55,6 +55,10 @@
 		height: 100%;
 	}
 
+	ul {
+		list-style: none;
+	}
+
 	.image-gradient-overlay {
 		position: absolute;
 		left: 0;
