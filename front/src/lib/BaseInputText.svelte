@@ -1,24 +1,27 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import Icon from './Icon.svelte';
+	import { v4 as uuidv4 } from 'uuid';
 	const emit = createEventDispatcher();
 
 	export let type: HTMLInputTypeAttribute;
 	export let value: string | number;
-	export let id: string | undefined = undefined;
+	export let id: string = `input-${uuidv4()}`;
 	export let name: string | undefined = undefined;
 	export let initial: string | number | undefined = undefined;
 	export let unit: string = '';
 	export let placeholder: string = '';
 	export let actionIcon: string = '';
+	export let suggestions: string[] | undefined = undefined;
 
 	export let errorMessage: string = '';
+	$: console.log('initial', typeof initial, JSON.stringify(initial));
 
 	let errored = false;
 	$: errored = errorMessage !== '';
 
 	let resettable = false;
-	$: resettable = initial !== undefined && value !== initial;
+	$: resettable = typeof initial !== 'undefined' && value !== initial;
 
 	let focused = false;
 </script>
@@ -35,6 +38,13 @@
 			on:focus={() => (focused = true)}
 			on:blur={() => (focused = false)}
 		/>
+		{#if suggestions}
+			<datalist {id}>
+				{#each suggestions as suggestion}
+					<option value={suggestion} />
+				{/each}
+			</datalist>
+		{/if}
 		{#if actionIcon}
 			<button class="action" on:click={() => emit('action')}>
 				<Icon name={actionIcon} color="fg" />
@@ -85,7 +95,8 @@
 		margin: 0;
 	}
 
-	button.reset, button.action {
+	button.reset,
+	button.action {
 		background-color: transparent;
 		border: none;
 		padding: 0;
