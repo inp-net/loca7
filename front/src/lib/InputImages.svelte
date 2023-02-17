@@ -4,8 +4,10 @@
 	import Icon from './Icon.svelte';
 
 	type FileWithPreview = { file: File; previewURL: string; id: string };
-	export let filesWithPreview: FileWithPreview[] = [];
+	let filesWithPreview: FileWithPreview[] = [];
 	$: updateFiles(inputDom, filesWithPreview);
+	export let value: string[] = [];
+	$: value = filesWithPreview.map((f) => f.file.name);
 
 	let empty: boolean;
 	$: empty = filesWithPreview.length === 0;

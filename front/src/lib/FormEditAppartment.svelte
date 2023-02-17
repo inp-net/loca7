@@ -1,0 +1,113 @@
+<script lang="ts">
+	import InputAddress from './InputAddress.svelte';
+	import InputCheckbox from './InputCheckbox.svelte';
+	import InputDate from './InputDate.svelte';
+	import InputField from './InputField.svelte';
+	import InputImages from './InputImages.svelte';
+	import InputNumber from './InputNumber.svelte';
+	import InputRichText from './InputRichText.svelte';
+	import InputSelectOne from './InputSelectOne.svelte';
+	import { APPARTMENT_KINDS, type Appartment } from './types';
+
+	export let appartment: Appartment;
+	export let initial: Appartment = {
+		address: null,
+		availableAt: null,
+		charges: null,
+		deposit: null,
+		description: '',
+		distanceToN7: null,
+		hasFurniture: null,
+		hasParking: null,
+		kind: null,
+		id: null,
+		images: [],
+		owner: {
+			email: null,
+			id: null,
+			name: null,
+			phone: null
+		},
+		rent: null,
+		roomsCount: null,
+		surface: null
+	};
+</script>
+
+<div class="fields">
+	<InputField label="Type de logement">
+		<InputSelectOne options={APPARTMENT_KINDS} bind:value={appartment.kind} />
+	</InputField>
+
+	<div class="side-by-side">
+		<InputField label="Surface">
+			<InputNumber unit="m²" initial={initial.surface} bind:value={appartment.surface} positive />
+		</InputField>
+
+		<InputField label="Nb chambres">
+			<InputNumber
+				initial={initial.roomsCount}
+				bind:value={appartment.roomsCount}
+				positive
+				integer
+			/>
+		</InputField>
+	</div>
+
+	<div class="side-by-side">
+		<InputField label="Loyer">
+			<InputNumber unit="€" initial={initial.rent} bind:value={appartment.rent} positive />
+		</InputField>
+
+		<InputField label="Charges">
+			<InputNumber unit="€" initial={initial.charges} bind:value={appartment.charges} positive />
+		</InputField>
+
+		<InputField label="Caution">
+			<InputNumber unit="€" initial={initial.deposit} bind:value={appartment.deposit} positive />
+		</InputField>
+	</div>
+
+	<InputField label="Date de libération">
+		<InputDate bind:value={appartment.availableAt} initial={initial.availableAt} />
+	</InputField>
+
+	<InputField label="Adresse">
+		<InputAddress bind:value={appartment.address} initial={initial.address} />
+	</InputField>
+
+	<InputField label="Aspects">
+		<div class="wrap">
+			<InputCheckbox bind:value={appartment.hasFurniture} label="Meublé" />
+			<InputCheckbox bind:value={appartment.hasParking} label="Parking" />
+			<!-- TODO place pour vélo -->
+		</div>
+	</InputField>
+
+	<InputField label="Description">
+		<InputRichText bind:value={appartment.description} />
+	</InputField>
+
+	<InputField label="Photos">
+		<InputImages bind:value={appartment.images} />
+	</InputField>
+</div>
+
+<style>
+	.side-by-side {
+		display: flex;
+		gap: 1rem;
+	}
+
+	.wrap {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	.fields {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+</style>
