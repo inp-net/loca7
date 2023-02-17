@@ -7,6 +7,16 @@ export type AppartmentKind =
 	| 'T3 et plus'
 	| 'Colocation';
 
+export const APPARTMENT_KINDS = [
+	'Chambre',
+	'Studio',
+	'T1',
+	'T1 bis',
+	'T2',
+	'T3 et plus',
+	'Colocation'
+];
+
 export type Appartment = {
 	images: string[];
 	id: string;
