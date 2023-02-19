@@ -5,9 +5,11 @@
 	import InputRichTextToolbar from './InputRichTextToolbar.svelte';
 	import { registerRichText } from '@lexical/rich-text';
 	import { registerMarkdownShortcuts } from '@lexical/markdown';
+	import lexicalHTML from '@lexical/html';
 	import { ListNode, ListItemNode } from '@lexical/list';
 	import { LinkNode, AutoLinkNode } from '@lexical/link';
 	import lexical from 'lexical';
+	import Edit from './icons/edit.svelte';
 
 	const editor: LexicalEditor = createEditor({
 		namespace: 'editor',
@@ -19,10 +21,17 @@
 	onMount(() => {
 		editor.setRootElement(domEditor);
 		editor.update(() => {
-			let root = lexical['$getRoot']();
-			root.append(lexical['$createParagraphNode']().append(lexical['$createTextNode'](value)));
+			lexicalHTML['$generateNodesFromDOM'](
+				editor,
+				new DOMParser().parseFromString(value, 'text/html')
+			);
 		});
 		registerRichText(editor);
+		editor.registerUpdateListener(({ editorState }) => {
+			editorState.read(() => {
+				value = lexicalHTML['$generateHtmlFromNodes'](editor, null);
+			});
+		});
 	});
 
 	let domEditor: HTMLElement;

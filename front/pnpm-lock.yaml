@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@lexical/clipboard': ^0.8.0
   '@lexical/history': ^0.8.0
+  '@lexical/html': ^0.8.0
   '@lexical/link': ^0.8.0
   '@lexical/list': ^0.8.0
   '@lexical/markdown': ^0.8.0
@@ -13,6 +14,7 @@ specifiers:
   '@types/zxcvbn': ^4.4.1
   '@typescript-eslint/eslint-plugin': ^5.45.0
   '@typescript-eslint/parser': ^5.45.0
+  dialog-polyfill: ^0.5.6
   eslint: ^8.28.0
   eslint-config-prettier: ^8.5.0
   eslint-plugin-svelte3: ^4.0.0
@@ -31,10 +33,12 @@ specifiers:
 dependencies:
   '@lexical/clipboard': 0.8.0_lexical@0.8.0
   '@lexical/history': 0.8.0_lexical@0.8.0
+  '@lexical/html': 0.8.0_lexical@0.8.0
   '@lexical/link': 0.8.0_lexical@0.8.0
   '@lexical/list': 0.8.0_lexical@0.8.0
   '@lexical/markdown': 0.8.0_mejqkh7ruafnidbv6vj3gp2wvq
   '@lexical/rich-text': 0.8.0_mejqkh7ruafnidbv6vj3gp2wvq
+  dialog-polyfill: 0.5.6
   lexical: 0.8.0
   uuid: 9.0.0
   zxcvbn: 4.4.2
@@ -907,6 +911,10 @@ packages:
   /devalue/4.2.3:
     resolution: {integrity: sha512-JG6Q248aN0pgFL57e3zqTVeFraBe+5W2ugvv1mLXsJP6YYIYJhRZhAl7QP8haJrqob6X10F9NEkuCvNILZTPeQ==}
     dev: true
+
+  /dialog-polyfill/0.5.6:
+    resolution: {integrity: sha512-ZbVDJI9uvxPAKze6z146rmfUZjBqNEwcnFTVamQzXH+svluiV7swmVIGr7miwADgfgt1G2JQIytypM9fbyhX4w==}
+    dev: false
 
   /dir-glob/3.0.1:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
