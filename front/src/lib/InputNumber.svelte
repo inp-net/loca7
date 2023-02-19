@@ -13,14 +13,18 @@
 
 	let errorMessage: string = '';
 	$: {
-		if (value === null) {
-			errorMessage = 'Entrez un nombre';
-		} else if (integer && Math.ceil(value) !== value) {
-			errorMessage = 'Entrez un nombre entier';
-		} else if (positive && value < 0) {
-			errorMessage = 'Entrez un nombre positif';
-		} else {
+		if (value === undefined) {
 			errorMessage = '';
+		} else {
+			if (value === null) {
+				errorMessage = 'Entrez un nombre';
+			} else if (integer && Math.ceil(value) !== value) {
+				errorMessage = 'Entrez un nombre entier';
+			} else if (positive && value < 0) {
+				errorMessage = 'Entrez un nombre positif';
+			} else {
+				errorMessage = '';
+			}
 		}
 	}
 </script>

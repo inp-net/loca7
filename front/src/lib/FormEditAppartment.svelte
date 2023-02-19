@@ -11,26 +11,26 @@
 
 	export let appartment: Appartment;
 	export let initial: Appartment = {
-		address: null,
-		availableAt: null,
-		charges: null,
-		deposit: null,
+		address: undefined,
+		availableAt: undefined,
+		charges: undefined,
+		deposit: undefined,
 		description: '',
-		distanceToN7: null,
-		hasFurniture: null,
-		hasParking: null,
-		kind: null,
-		id: null,
+		distanceToN7: undefined,
+		hasFurniture: undefined,
+		hasParking: undefined,
+		kind: undefined,
+		id: undefined,
 		images: [],
 		owner: {
-			email: null,
-			id: null,
-			name: null,
-			phone: null
+			email: undefined,
+			id: undefined,
+			name: undefined,
+			phone: undefined
 		},
-		rent: null,
-		roomsCount: null,
-		surface: null
+		rent: undefined,
+		roomsCount: undefined,
+		surface: undefined
 	};
 </script>
 
@@ -102,7 +102,7 @@
 	.wrap {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 1rem;
+		gap: 2rem;
 	}
 
 	.fields {
