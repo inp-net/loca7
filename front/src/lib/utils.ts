@@ -64,3 +64,13 @@ export function availableAtSentence(availableSince: number, availableAt: string)
 
 	return out;
 }
+
+
+export function readableOn(color: string): string {
+	const rgb = color.replace(/^#/, '').match(/.{2}/g);
+	if (rgb === null) throw new Error('Invalid color, use hex notation');
+	const o = Math.round(
+		(parseInt(rgb[0], 16) * 299 + parseInt(rgb[1], 16) * 587 + parseInt(rgb[2], 16) * 114) / 1000
+	);
+	return o > 125 ? '#000000' : '#ffffff';
+}

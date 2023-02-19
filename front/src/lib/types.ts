@@ -7,6 +7,8 @@ export type AppartmentKind =
 	| 'T3 et plus'
 	| 'Colocation';
 
+export type PublicTransportType = 'bus' | 'bhnf' | 'metro' | 'tram' | 'telepherique' | 'tad';
+
 export const APPARTMENT_KINDS = [
 	'Chambre',
 	'Studio',
@@ -16,6 +18,22 @@ export const APPARTMENT_KINDS = [
 	'T3 et plus',
 	'Colocation'
 ];
+
+export const DISPLAY_PUBLIC_TRANSPORT_TYPE: Record<PublicTransportType, string> = {
+	bus: 'bus',
+	bhnf: 'tram-bus',
+	metro: 'métro',
+	tram: 'tramway',
+	telepherique: 'téléphérique',
+	tad: 'TAD'
+};
+
+export type PublicTransportStation = {
+	name: string;
+	line: string;
+	type: PublicTransportType;
+	color?: string;
+};
 
 export type Appartment = {
 	images: string[];
@@ -32,6 +50,12 @@ export type Appartment = {
 	hasFurniture: boolean;
 	hasParking: boolean;
 	description: string;
+	travelTimeToN7: {
+		byFoot: number | null;
+		byBike: number | null;
+		byPublicTransport: number | null;
+	};
+	nearbyStations: PublicTransportStation[];
 	owner: {
 		id: string;
 		name: string;

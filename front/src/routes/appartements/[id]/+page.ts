@@ -7,13 +7,13 @@ export const load: PageLoad<{ appartement: Appartment }> = ({ params }) => {
 			appartement: {
 				id: 'tr',
 				address: '2 Rue Charles Camichel',
-				availableAt: new Date().toISOString(),
+				availableAt: new Date(Date.now() + 25 * 60 * 60 * 1000).toISOString(),
 				rent: 0,
 				charges: 0,
 				distanceToN7: 0,
 				deposit: 0,
-				hasFurniture: true,
-				hasParking: false,
+				hasFurniture: false,
+				hasParking: true,
 				images: [],
 				kind: 'Colocation',
 				roomsCount: 11 + 3,
@@ -25,7 +25,21 @@ export const load: PageLoad<{ appartement: Appartment }> = ({ params }) => {
 					name: 'Ewen Le Bihan',
 					email: 'contact@tvn7.fr',
 					phone: '06 66 66 66 66'
-				}
+				},
+				travelTimeToN7: {
+					byFoot: 0 * 60,
+					byBike: 0 * 60,
+					byPublicTransport: 0 * 60
+				},
+				nearbyStations: [
+					{ type: 'metro', line: 'B', name: 'François Merdier' },
+					{ type: 'bhnf', line: 'L1', name: 'Place Dupuy' },
+					{ type: 'bhnf', line: 'L8', name: 'Place Dupuy' },
+					{ type: 'bhnf', line: 'L9', name: 'Place Dupuy' },
+					{ type: 'bus', line: '29', name: 'Place Dupuy' },
+					{ type: 'bus', line: '27', name: 'Guilhemery' }
+				],
+				velotoulouse: true
 			}
 		};
 	} else if (params.id === 'uwun') {
@@ -38,7 +52,7 @@ export const load: PageLoad<{ appartement: Appartment }> = ({ params }) => {
 				deposit: 0,
 				description: 'Mon appart :)))',
 				distanceToN7: 1.4,
-				images: [],
+				images: ['https://media.ewen.works/studio.jpeg', 'https://media.ewen.works/velo.jpeg'],
 				hasFurniture: true,
 				kind: 'T1 bis',
 				roomsCount: 1,
@@ -50,7 +64,19 @@ export const load: PageLoad<{ appartement: Appartment }> = ({ params }) => {
 					phone: null
 				},
 				rent: 590,
-				surface: 30
+				surface: 30,
+				travelTimeToN7: {
+					byFoot: 20 * 60,
+					byBike: 10 * 60,
+					byPublicTransport: 15 * 60
+				},
+				nearbyStations: [
+					{ type: 'metro', line: 'B', name: "Jeanne d'Arc" },
+					{ type: 'bhnf', line: 'L1', name: 'Concorde' },
+					...[14, 29, 45, 70].map((no) => ({ type: 'bus', line: `${no}`, name: 'Concorde' })),
+					{ type: 'bus', line: 'Cimetières', name: "Jeanne d'Arc" }
+				],
+				velotoulouse: false
 			}
 		};
 	}

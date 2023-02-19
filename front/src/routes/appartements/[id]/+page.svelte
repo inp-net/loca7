@@ -3,24 +3,35 @@
 	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
 	import type { PageData } from './$types';
-	import { durationDisplay, distanceDisplay, availableAtSentence } from '$lib/utils';
+	import { durationDisplay, distanceDisplay, availableAtSentence, readableOn } from '$lib/utils';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
-	import type { Appartment } from '$lib/types';
+	import {
+		DISPLAY_PUBLIC_TRANSPORT_TYPE,
+		type Appartment,
+		type PublicTransportStation
+	} from '$lib/types';
+	import publicTransportColor from '$lib/publicTransportColors';
 
 	export let data: PageData;
 	let appart: Appartment = data.appartement;
-	let secondsAvailableSince = (Date.now() - Date.parse(data.appartement.availableAt)) * 1e-3;
+	let secondsAvailableSince = (Date.now() - Date.parse(appart.availableAt)) * 1e-3;
+
+	function publicTransportStationSentence(station: PublicTransportStation) {
+		return `${station.type === 'metro' ? 'Station' : 'Arrêt'} «${station.name}» du ${
+			DISPLAY_PUBLIC_TRANSPORT_TYPE[station.type]
+		} ${station.line}`;
+	}
 </script>
 
-{#if data.appartement.id === 'tr'}
+{#if appart.id === 'tr'}
 	<h1>La TR</h1>
 	<p class="typo-details">Pour les gros rats qui dorment en TR pendant les H24</p>
 {:else}
-	<h1>Appartement #{data.appartement.id}</h1>
+	<h1>Appartement #{appart.id}</h1>
 {/if}
 
 <section class="carousel">
-	<CarouselImages contain images={data.appartement.images} current={data.appartement.images[0]} />
+	<CarouselImages contain images={appart.images} current={appart.images[0]} />
 </section>
 
 <div class="side-by-side">
@@ -28,21 +39,21 @@
 		<section class="figures">
 			<div class="row">
 				<InputField label="Type de logement">
-					<p class="typo-big-figure">{data.appartement.kind}</p>
+					<p class="typo-big-figure">{appart.kind}</p>
 				</InputField>
 				<InputField label="Surface">
-					<p class="typo-big-figure">{data.appartement.surface}m²</p>
+					<p class="typo-big-figure">{appart.surface}m²</p>
 				</InputField>
 			</div>
 			<div class="row">
 				<InputField label="Loyer">
-					<p class="typo-big-figure">{data.appartement.rent}€</p>
+					<p class="typo-big-figure">{appart.rent}€</p>
 				</InputField>
 				<InputField label="Charges">
-					<p class="typo-big-figure">{data.appartement.charges}€</p>
+					<p class="typo-big-figure">{appart.charges}€</p>
 				</InputField>
 				<InputField label="Caution">
-					<p class="typo-big-figure">{data.appartement.deposit}€</p>
+					<p class="typo-big-figure">{appart.deposit}€</p>
 				</InputField>
 			</div>
 		</section>
@@ -50,7 +61,7 @@
 			<div class="row">
 				<span class="icon"><Icon name="calendar" /></span>
 				<p class="when">
-					{availableAtSentence(secondsAvailableSince, data.appartement.availableAt)}
+					{availableAtSentence(secondsAvailableSince, appart.availableAt)}<wbr />
 					{#if secondsAvailableSince !== 0}
 						<span class="muted"
 							>{#if secondsAvailableSince > 0}il y a{:else}dans{/if}
@@ -63,58 +74,102 @@
 			<div class="row">
 				<span class="icon"><Icon name="location" /></span>
 				<p class="where">
-					{data.appartement.address}
-					<span class="muted">à {distanceDisplay(data.appartement.distanceToN7)}</span>
+					{appart.address}<wbr />
+					<span class="muted">à {distanceDisplay(appart.distanceToN7)} de l'école</span>
 				</p>
 				<ButtonSecondary icon="open-outside">Maps</ButtonSecondary>
 			</div>
-		</section>
-		<section class="aspects">
-			<!-- <h2>Aspects</h2> -->
-			<ul>
-				{#if data.appartement.hasFurniture}
-					<li class="aspect">
-						<div class="icon">
-							<Icon name="furniture" />
-						</div>
-						<p class="typo-field-label">Meublé</p>
-					</li>
-				{/if}
-				{#if data.appartement.hasParking}
-					<li class="aspect">
-						<div class="icon">
-							<Icon name="parking" />
-						</div>
-						<p class="typo-field-label">Parking</p>
-					</li>
-				{/if}
-			</ul>
+			{#if Object.values(appart.travelTimeToN7).some((v) => v !== null)}
+				<div class="row">
+					<span class="icon"><Icon name="travel" /></span>
+					<p class="traveltime typo-tabular-figures">
+						L'école est à
+						<br />
+						{#if appart.travelTimeToN7.byFoot !== null}
+							{durationDisplay(appart.travelTimeToN7.byFoot)} à pied
+						{/if}<br />
+						{#if appart.travelTimeToN7.byBike !== null}
+							{durationDisplay(appart.travelTimeToN7.byBike)} à vélo
+							{#if appart.velotoulouse}
+								<wbr />
+								<span class="muted">station VélÔToulouse à proximité</span>
+							{/if}
+						{/if}<br />
+						{#if appart.travelTimeToN7.byPublicTransport !== null}
+							{durationDisplay(appart.travelTimeToN7.byPublicTransport)} en transports<wbr />
+							<span class="muted">
+								{#each appart.nearbyStations as station}
+									<span
+										title={publicTransportStationSentence(station)}
+										class="transport-line"
+										style:--color={station.color ||
+											publicTransportColor(station.line, station.type) ||
+											'#000'}
+										style:--text-color={readableOn(
+											station.color || publicTransportColor(station.line, station.type) || '#000'
+										)}>{station.line}</span
+									>
+								{/each}
+								à proximité
+							</span>
+						{/if}
+					</p>
+				</div>
+			{/if}
 		</section>
 	</div>
 
 	<div class="column">
+		<section class="aspects">
+			<!-- <h2>Caractéristiques</h2> -->
+			<ul>
+				{#if appart.hasFurniture}
+					<li class="aspect">
+						<div class="icon">
+							<Icon name="furniture" />
+						</div>
+						<p class="typo-paragraph">Meublé</p>
+					</li>
+				{:else}
+					<li class="aspect">
+						<div class="icon">
+							<Icon name="furniture-cancel" />
+						</div>
+						<p class="typo-paragraph">Non-meublé</p>
+					</li>
+				{/if}
+				{#if appart.hasParking}
+					<li class="aspect">
+						<div class="icon">
+							<Icon name="parking" />
+						</div>
+						<p class="typo-paragraph">Parking</p>
+					</li>
+				{/if}
+			</ul>
+		</section>
 		<section class="description">
 			<h2>Description</h2>
-			<p>{data.appartement.description}</p>
+			<p>{appart.description}</p>
 		</section>
 		<section class="owner">
 			<h2 class="typo-field-label">Propriétaire</h2>
 			<p class="name typo-title">
-				{data.appartement.owner.name}
+				{appart.owner.name}
 				<ButtonSecondary icon="open-outside">Contacts</ButtonSecondary>
 			</p>
-			{#if data.appartement.owner.email}
+			{#if appart.owner.email}
 				<div class="row">
 					<div class="icon">
 						<Icon name="email" />
 					</div>
-					{data.appartement.owner.email}
+					{appart.owner.email}
 				</div>
 			{/if}
-			{#if data.appartement.owner.phone}
+			{#if appart.owner.phone}
 				<div class="row">
 					<div class="icon"><Icon name="phone" /></div>
-					{data.appartement.owner.phone}
+					{appart.owner.phone}
 				</div>
 			{/if}
 		</section>
@@ -188,6 +243,14 @@
 		height: 1.2em;
 	}
 
+	.transport-line {
+		background: var(--color);
+		color: var(--text-color);
+		padding: 0.0625em 0.5em;
+		margin: 1em 0;
+		margin-right: 0.5em;
+	}
+
 	p .muted {
 		color: var(--muted);
 	}
@@ -203,6 +266,10 @@
 		justify-content: space-between;
 	}
 
+	section.figures .row :global(.field:last-child > p) {
+		text-align: right;
+	}
+
 	section.aspects {
 		grid-area: left;
 	}
@@ -211,6 +278,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1rem;
+		padding-left: 0;
 	}
 
 	section.aspects .aspect {
