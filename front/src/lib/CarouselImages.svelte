@@ -118,7 +118,7 @@
 		width: 0.75rem;
 		height: 0.75rem;
 		border-radius: 10000px;
-		background: var(--bg);
+		background: #fff;
 		border: none;
 		transition: all 0.25s ease;
 	}
