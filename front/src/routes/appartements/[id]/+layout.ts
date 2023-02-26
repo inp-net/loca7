@@ -1,4 +1,5 @@
 import type { Appartment } from '$lib/types';
+import { ENSEEIHT } from '$lib/utils';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad<{ appartement: Appartment }> = ({ params }) => {
@@ -6,11 +7,11 @@ export const load: PageLoad<{ appartement: Appartment }> = ({ params }) => {
 		return {
 			appartement: {
 				id: 'tr',
-				address: '2 Rue Charles Camichel',
+				address: '2 Rue Charles Camichel, 31000 Toulouse',
 				availableAt: new Date(Date.now() + 25 * 60 * 60 * 1000).toISOString(),
 				rent: 0,
 				charges: 0,
-				distanceToN7: 0,
+				location: ENSEEIHT,
 				deposit: 0,
 				hasFurniture: false,
 				hasParking: true,
@@ -46,7 +47,7 @@ export const load: PageLoad<{ appartement: Appartment }> = ({ params }) => {
 		return {
 			appartement: {
 				id: 'uwun',
-				address: '10 Rue de Verdun',
+				address: '10 Rue de Verdun, 31000 Toulouse',
 				availableAt: '2099-01-01',
 				charges: 0,
 				deposit: 0,

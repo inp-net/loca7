@@ -2,7 +2,7 @@
 	import CarouselImages from '$lib/CarouselImages.svelte';
 	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
-	import type { PageData } from './$types';
+	import type { LayoutData, PageData } from './$types';
 	import { durationDisplay, distanceDisplay, availableAtSentence, readableOn } from '$lib/utils';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import {
@@ -12,7 +12,7 @@
 	} from '$lib/types';
 	import publicTransportColor from '$lib/publicTransportColors';
 
-	export let data: PageData;
+	export let data: LayoutData;
 	let appart: Appartment = data.appartement;
 	let secondsAvailableSince = (Date.now() - Date.parse(appart.availableAt)) * 1e-3;
 
