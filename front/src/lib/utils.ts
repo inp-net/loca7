@@ -65,6 +65,28 @@ export function availableAtSentence(availableSince: number, availableAt: string)
 	return out;
 }
 
+export type GeographicPoint = {
+	latitude: number;
+	longitude: number;
+};
+export function distanceBetween(a: GeographicPoint, b: GeographicPoint): number {
+	const earthRadiusKm = 6371;
+	const latitudeDistanceRadians = degreesToRadians(b.latitude - a.latitude);
+	const longitudeDistanceRadians = degreesToRadians(b.longitude - a.longitude);
+	const x =
+		Math.sin(latitudeDistanceRadians / 2) * Math.sin(latitudeDistanceRadians / 2) +
+		Math.cos(degreesToRadians(a.latitude)) *
+			Math.cos(degreesToRadians(b.latitude)) *
+			Math.sin(longitudeDistanceRadians / 2) *
+			Math.sin(longitudeDistanceRadians / 2);
+	const distanceRadians = 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+	const distanceMeters = earthRadiusKm * 1e3 * distanceRadians;
+	return distanceMeters;
+}
+
+function degreesToRadians(degrees: number): number {
+	return degrees * (Math.PI / 180);
+}
 
 export function readableOn(color: string): string {
 	const rgb = color.replace(/^#/, '').match(/.{2}/g);
@@ -74,3 +96,8 @@ export function readableOn(color: string): string {
 	);
 	return o > 125 ? '#000000' : '#ffffff';
 }
+
+export const ENSEEIHT: GeographicPoint = {
+	latitude: 1.455074,
+	longitude: 43.60263
+};

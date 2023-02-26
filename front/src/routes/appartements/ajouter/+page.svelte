@@ -7,7 +7,7 @@
 
 	let appartment: Appartment = {
 		availableAt: undefined,
-		address: undefined,
+		address: "",
 		charges: undefined,
 		deposit: undefined,
 		description: '',

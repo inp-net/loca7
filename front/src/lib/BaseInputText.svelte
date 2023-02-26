@@ -2,6 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import Icon from './Icon.svelte';
 	import { v4 as uuidv4 } from 'uuid';
+	import InputWithSuggestions from './InputWithSuggestions.svelte';
 	const emit = createEventDispatcher();
 
 	export let type: HTMLInputTypeAttribute;
@@ -15,6 +16,7 @@
 	export let suggestions: string[] | undefined = undefined;
 
 	export let errorMessage: string = '';
+	export let messageIsWarning: boolean = false;
 	$: console.log('initial', typeof initial, JSON.stringify(initial));
 
 	let errored = false;
@@ -24,26 +26,46 @@
 	$: resettable = typeof initial !== 'undefined' && value !== initial;
 
 	let focused = false;
+
+	let inputContainer: HTMLDivElement;
 </script>
 
-<div class="wrapper typo-paragraph" class:errored class:focused>
-	<div class="input-area">
-		<input
-			{type}
-			{name}
-			{id}
-			{value}
-			{placeholder}
-			on:input={(e) => (value = type.match(/^(number|range)$/) ? +e.target.value : e.target.value)}
-			on:focus={() => (focused = true)}
-			on:blur={() => (focused = false)}
-		/>
+<div
+	class="wrapper typo-paragraph"
+	class:errored
+	class:focused
+	style:--intense="var(--{messageIsWarning ? 'safran' : 'blood'})"
+	style:--pale="var(--{messageIsWarning ? 'plaster' : 'rose'})"
+>
+	<div class="input-area" bind:this={inputContainer}>
 		{#if suggestions}
-			<datalist {id}>
-				{#each suggestions as suggestion}
-					<option value={suggestion} />
-				{/each}
-			</datalist>
+			<InputWithSuggestions
+				on:close-suggestions
+				on:select
+				on:input
+				{inputContainer}
+				items={suggestions}
+				{id}
+				{name}
+				bind:text={value}
+				{placeholder}
+				on:focus={() => (focused = true)}
+				on:blur={() => (focused = false)}
+			/>
+		{:else}
+			<input
+				{type}
+				{name}
+				{id}
+				{value}
+				{placeholder}
+				on:input={(e) => {
+					value = type.match(/^(number|range)$/) ? +e.target.value : e.target.value;
+					emit('input', e);
+				}}
+				on:focus={() => (focused = true)}
+				on:blur={() => (focused = false)}
+			/>
 		{/if}
 		{#if actionIcon}
 			<button class="action" on:click={() => emit('action')}>
@@ -79,6 +101,7 @@
 	.input-area {
 		display: flex;
 		align-items: center;
+		position: relative;
 	}
 
 	input {
@@ -123,14 +146,14 @@
 
 	/** Errored */
 	.wrapper.errored {
-		border-color: var(--blood);
+		border-color: var(--intense);
 	}
 
 	.wrapper.errored .unit {
-		color: var(--blood);
+		color: var(--intense);
 	}
 	.error-area {
-		background-color: var(--blood);
+		background-color: var(--intense);
 	}
 	.error-area p {
 		color: #fff;
@@ -138,7 +161,7 @@
 
 	/** Both */
 	.wrapper.errored.focused,
-	.wrapper.errored.focused input {
-		background-color: var(--rose);
+	.wrapper.errored.focused :global(input) {
+		background-color: var(--pale);
 	}
 </style>
