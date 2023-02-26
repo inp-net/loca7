@@ -207,7 +207,7 @@
 		const { height: listHeight } = list.getBoundingClientRect();
 
 		if (inputButtom + listHeight > viewPortHeight) {
-			list.style.top = `-${inputHeight + listHeight}px`;
+			list.style.top = `-${listHeight}px`;
 		} else {
 			list.style.top = `${inputHeight}px`;
 		}
