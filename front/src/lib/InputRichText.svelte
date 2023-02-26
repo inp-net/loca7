@@ -1,14 +1,16 @@
 <script lang="ts">
 	import type { LexicalEditor } from 'lexical';
-	import { createEditor } from 'lexical';
+	import lexical from 'lexical';
+	const { createEditor } = lexical;
 	import { onMount } from 'svelte';
 	import InputRichTextToolbar from './InputRichTextToolbar.svelte';
 	import { registerRichText } from '@lexical/rich-text';
 	import { registerMarkdownShortcuts } from '@lexical/markdown';
 	import lexicalHTML from '@lexical/html';
-	import { ListNode, ListItemNode } from '@lexical/list';
-	import { LinkNode, AutoLinkNode } from '@lexical/link';
-	import lexical from 'lexical';
+	import lexicalList from '@lexical/list';
+	const { ListNode, ListItemNode } = lexicalList;
+	import lexicalLink from '@lexical/link';
+	const { LinkNode, AutoLinkNode } = lexicalLink;
 	import Edit from './icons/edit.svelte';
 
 	const editor: LexicalEditor = createEditor({
