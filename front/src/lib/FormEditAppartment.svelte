@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ButtonPrimary from './ButtonPrimary.svelte';
 	import InputAddress from './InputAddress.svelte';
 	import InputCheckbox from './InputCheckbox.svelte';
 	import InputDate from './InputDate.svelte';
@@ -10,6 +11,8 @@
 	import { APPARTMENT_KINDS, type Appartment } from './types';
 
 	export let appartment: Appartment;
+	export let action: string | undefined = undefined;
+	export let submitText: string = 'Confirmer';
 	export let initial: Appartment = {
 		address: undefined,
 		availableAt: undefined,
@@ -34,9 +37,9 @@
 	};
 </script>
 
-<div class="fields">
+<form class="fields" {action}>
 	<InputField label="Type de logement">
-		<InputSelectOne options={APPARTMENT_KINDS} bind:value={appartment.kind} />
+		<InputSelectOne options={[...APPARTMENT_KINDS, 'Manoir']} bind:value={appartment.kind} />
 	</InputField>
 
 	<div class="side-by-side">
@@ -74,8 +77,8 @@
 		<InputDate bind:value={appartment.availableAt} initial={initial.availableAt} />
 	</InputField>
 
-	<InputField label="Adresse">
-		<InputAddress bind:value={appartment.address} initial={initial.address} />
+	<InputField label="Adresse" id="address">
+		<InputAddress id="address" bind:value={appartment.address} initial={initial.address} />
 	</InputField>
 
 	<InputField label="Aspects">
@@ -93,7 +96,11 @@
 	<InputField label="Photos">
 		<InputImages bind:value={appartment.images} />
 	</InputField>
-</div>
+
+	<section class="submit">
+		<ButtonPrimary submits>{submitText}</ButtonPrimary>
+	</section>
+</form>
 
 <style>
 	.side-by-side {
@@ -111,5 +118,11 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+	}
+
+	.submit {
+		margin-top: 3rem;
+		display: flex;
+		justify-content: center;
 	}
 </style>

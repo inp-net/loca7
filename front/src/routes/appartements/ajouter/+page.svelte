@@ -7,11 +7,11 @@
 
 	let appartment: Appartment = {
 		availableAt: undefined,
-		address: "",
+		address: '',
 		charges: undefined,
 		deposit: undefined,
 		description: '',
-		distanceToN7: undefined,
+		location: null,
 		hasFurniture: undefined,
 		hasParking: undefined,
 		kind: undefined,
@@ -32,10 +32,7 @@
 <main>
 	<h1>Nouvelle annonce</h1>
 	<p>Votre annonce sera validée par un·e administrateur·ice avant d’être publiée</p>
-	<FormEditAppartment bind:appartment />
-	<section class="send">
-		<ButtonPrimary on:click={() => submit()}>Publier</ButtonPrimary>
-	</section>
+	<FormEditAppartment bind:appartment submitText="Poster" />
 </main>
 
 <style>
@@ -43,11 +40,5 @@
 		max-width: 600px;
 		margin: 0 auto;
 		padding: 0 1em;
-	}
-
-	.send {
-		margin-top: 5rem;
-		display: flex;
-		justify-content: center;
 	}
 </style>

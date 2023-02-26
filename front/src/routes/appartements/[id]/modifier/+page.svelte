@@ -12,13 +12,7 @@
 
 <main>
 	<h2>Modifier l'appartment #{appartment.id}</h2>
-	<form method="post">
-		<FormEditAppartment bind:appartment initial={initialAppartment} />
-
-		<section class="send">
-			<ButtonPrimary submits>Modifier</ButtonPrimary>
-		</section>
-	</form>
+	<FormEditAppartment bind:appartment initial={initialAppartment} submitText="Modifier" />
 </main>
 
 <style>
@@ -26,11 +20,5 @@
 		max-width: 1200px;
 		margin: 0 auto;
 		padding: 0 1em;
-	}
-
-	.send {
-		margin-top: 5rem;
-		display: flex;
-		justify-content: center;
 	}
 </style>
