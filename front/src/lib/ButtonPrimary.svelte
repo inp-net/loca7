@@ -1,8 +1,9 @@
 <script lang="ts">
 	export let id: string = "";
+	export let submits: boolean = false;
 </script>
 
-<button {id} class="typo-big-button" on:click>
+<button {id} class="typo-big-button" on:click type={submits ? 'submit' : 'button'}>
 	<slot />
 </button>
 
@@ -16,13 +17,14 @@
 		background: var(--diamond);
 		color: #000;
 
-        border: none;
-        border-radius: 1000px;
+		border: none;
+		border-radius: 1000px;
 
-        cursor: pointer;
+		cursor: pointer;
 	}
 
-    button:hover, button:focus {
-        background: var(--sky); /* TODO check contrast */
-    }
+	button:hover,
+	button:focus {
+		background: var(--sky); /* TODO check contrast */
+	}
 </style>
