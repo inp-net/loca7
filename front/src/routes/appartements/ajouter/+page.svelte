@@ -42,6 +42,7 @@
 	main {
 		max-width: 600px;
 		margin: 0 auto;
+		padding: 0 1em;
 	}
 
 	.send {
