@@ -25,7 +25,7 @@
 	// selected item state
 	export let selected: string | undefined = undefined;
 	export let value = undefined;
-	export let highlighted: string | undefined = undefined;
+	export let highlightIndex: number = 0;
 
 	// --- Internal State ----
 	const uniqueId = 'sautocomplete-' + Math.floor(Math.random() * 1000);
@@ -70,25 +70,23 @@
 	// $: text, search();
 	function selectHighlighted() {
 		selected = undefined; // triggers change even if the the same item is selected
-		selected = highlighted;
+		selected = items[highlightIndex];
 		dispatch('select', selected);
 		close();
 	}
 
 	function up() {
 		open();
-		let highlightIndex = items.findIndex((i) => i === highlighted);
 		if (highlightIndex > 0) {
-			highlighted = items[highlightIndex - 1];
+			highlightIndex--;
 		}
 		highlight();
 	}
 
 	function down() {
 		open();
-		let highlightIndex = items.findIndex((i) => i === highlighted);
 		if (highlightIndex < items.length - 1) {
-			highlighted = items[highlightIndex + 1];
+			highlightIndex++;
 		}
 
 		highlight();
@@ -121,7 +119,6 @@
 
 	function onKeyDown(e: KeyboardEvent) {
 		let key = e.key;
-		console.log(key);
 		if (key === 'Tab' && e.shiftKey) key = 'ShiftTab';
 		switch (key) {
 			case 'Tab':
@@ -183,7 +180,7 @@
 
 		// find selected item
 		if (selected) {
-			highlighted = selected;
+			highlightIndex = items.findIndex((i) => i === selected);
 			highlight();
 		}
 	}
@@ -250,7 +247,8 @@
 		{#each items as item, i}
 			<li
 				class="autocomplete-list-item"
-				class:selected={highlighted === item}
+				class:highlighted={highlightIndex === i}
+				class:selected={selected === item}
 				on:click={() => {
 					selected = item;
 					close();
@@ -262,7 +260,7 @@
 					}
 				}}
 				on:pointerenter={() => {
-					highlighted = item;
+					highlightIndex = i;
 				}}
 			>
 				{item}
@@ -302,9 +300,8 @@
 		line-height: 1;
 	}
 
-	.autocomplete-list-item.confirmed {
+	.autocomplete-list-item.highlighted {
 		background-color: var(--ice);
-		color: #fff;
 	}
 	.autocomplete-list-item.selected {
 		background-color: var(--sky);
@@ -330,5 +327,7 @@
 		-moz-appearance: textfield;
 		appearance: textfield;
 		width: 100%;
+		background: inherit;
+		outline: none;
 	}
 </style>
