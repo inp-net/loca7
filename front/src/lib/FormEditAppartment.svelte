@@ -44,14 +44,16 @@
 			<InputNumber unit="m²" initial={initial.surface} bind:value={appartment.surface} positive />
 		</InputField>
 
-		<InputField label="Nb chambres">
-			<InputNumber
-				initial={initial.roomsCount}
-				bind:value={appartment.roomsCount}
-				positive
-				integer
-			/>
-		</InputField>
+		{#if appartment.kind === 'Colocation'}
+			<InputField label="Nb chambres">
+				<InputNumber
+					initial={initial.roomsCount}
+					bind:value={appartment.roomsCount}
+					positive
+					integer
+				/>
+			</InputField>
+		{/if}
 	</div>
 
 	<div class="side-by-side">
