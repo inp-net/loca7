@@ -1,3 +1,5 @@
+import type { GeographicPoint } from './utils';
+
 export type AppartmentKind =
 	| 'Chambre'
 	| 'Studio'
@@ -46,7 +48,7 @@ export type Appartment = {
 	roomsCount: number;
 	availableAt: string;
 	address: string;
-	distanceToN7: number;
+	location: GeographicPoint | null;
 	hasFurniture: boolean;
 	hasParking: boolean;
 	description: string;

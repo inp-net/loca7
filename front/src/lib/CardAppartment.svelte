@@ -6,8 +6,11 @@
 	import type { AppartmentKind } from './types';
 	import {
 		availableAtSentence,
+		distanceBetween,
 		distanceDisplay,
-		durationDisplay
+		durationDisplay,
+		ENSEEIHT,
+		type GeographicPoint
 	} from './utils';
 	const emit = createEventDispatcher();
 
@@ -20,7 +23,7 @@
 	export let roomsCount: number;
 	export let availableAt: string;
 	export let address: string;
-	export let distanceToN7: number;
+	export let location: GeographicPoint | null;
 	export let hasFurniture: boolean;
 	export let hasParking: boolean;
 	export let editable: boolean = false;
@@ -65,7 +68,9 @@
 				<span class="icon"><Icon name="location" /></span>
 				<p class="where">
 					{address}
-					<span class="muted">à {distanceDisplay(distanceToN7)}</span>
+					{#if location}
+						<span class="muted">à {distanceDisplay(distanceBetween(location, ENSEEIHT))}</span>
+					{/if}
 				</p>
 			</section>
 			<section class="aspects">
