@@ -23,7 +23,9 @@
 	async function updateSuggestions() {
 		if (value.length <= 3) return;
 		const response = await (
-			await fetch(`https://api-adresse.data.gouv.fr/search/?q=${value}`)
+			await fetch(
+				`https://api-adresse.data.gouv.fr/search/?q=${value}&lat=${ENSEEIHT.latitude}&lon=${ENSEEIHT.longitude}`
+			)
 		).json();
 
 		results = response.features.filter(({ properties: { type } }) =>
