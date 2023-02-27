@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let id: string;
+	export let id: string = '';
 	export let href: string;
 	export let current: boolean = false;
 </script>
@@ -14,7 +14,8 @@
 		color: var(--fg);
 	}
 
-	a:hover, a:focus {
+	a:hover,
+	a:focus {
 		text-decoration: underline;
 		text-underline-offset: 0.2rem;
 		text-decoration-color: var(--fg);
@@ -22,7 +23,7 @@
 		font-weight: 700;
 	}
 
-	a[aria-current="true"] {
+	a[aria-current='true'] {
 		text-decoration: underline;
 		text-underline-offset: 0.2rem;
 		text-decoration-color: var(--diamond);
