@@ -109,6 +109,7 @@
 		-moz-appearance: textfield;
 		appearance: textfield;
 		width: 100%;
+		outline: none;
 	}
 
 	input::-webkit-outer-spin-button,
@@ -161,7 +162,7 @@
 
 	/** Both */
 	.wrapper.errored.focused,
-	.wrapper.errored.focused :global(input) {
+	.wrapper.errored.focused input {
 		background-color: var(--pale);
 	}
 </style>
