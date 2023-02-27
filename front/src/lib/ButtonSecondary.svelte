@@ -13,6 +13,7 @@
 	this={href ? 'a' : 'button'}
 	class="button-secondary typo-paragraph"
 	class:dangerous
+	{href}
 	{id}
 	on:focus={() => (hoverOrFocus = true)}
 	on:blur={() => (hoverOrFocus = false)}
