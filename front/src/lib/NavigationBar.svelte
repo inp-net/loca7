@@ -6,8 +6,8 @@
 </script>
 
 <nav>
-	<img src="/loca7-wordmark.png" alt="loca7" class="logo" />
 	{#if $user}
+	<a href="/"><img src="/loca7-wordmark.png" alt="loca7" class="logo" /></a>
 		<ul class="links">
 			<li>
 				<ButtonNavigation current={$page.url.toString() === '/'} href="/"
@@ -44,6 +44,12 @@
 		display: flex;
 		padding: 2rem 4rem;
 		justify-content: space-between;
+		position: fixed;
+		z-index: 100;
+		top: 0;
+		left: 0;
+		right: 0;
+		background: var(--bg);
 	}
 
 	.logo {

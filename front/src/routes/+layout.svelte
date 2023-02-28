@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import NavigationBar from '$lib/NavigationBar.svelte';
 </script>
 
@@ -38,6 +38,12 @@
 <style>
 	:global(body) {
 		height: 100vh;
+		flex-direction: column;
+		display: flex;
+	}
+	:global(main) {
+		flex-grow: 1;
+		padding-top: 100px;
 	}
 	img.logo {
 		max-width: 500px;
