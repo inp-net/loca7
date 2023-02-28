@@ -11,6 +11,7 @@
 	export let name: string | undefined = undefined;
 	export let shown = false;
 	export let label: string;
+	export let feedback: boolean = false;
 	export let required: boolean = false;
 
 	let analysis;
@@ -43,30 +44,32 @@
 		/>
 	</InputField>
 
-	<div class="feedback">
-		<div class="strength">
-			<span class="icon">
-				<Icon name="password-strength-{strength}" />
-			</span>
-			<p class="typo-details">
-				Complexité du mot de passe
-				<span class="colored" data-strength={strength}>{strengthDisplay}</span>
-			</p>
-		</div>
-		<div class="cracktime">
-			<p class="typo-details">
-				Pour trouver ce mot de passe, un hacker mettra <span
-					class="colored"
-					data-strength={strength}>{crackTimeDisplay}</span
-				>
-			</p>
-			<a href="/password-strength">
+	{#if feedback}
+		<div class="feedback">
+			<div class="strength">
 				<span class="icon">
-					<Icon name="question" />
+					<Icon name="password-strength-{strength}" />
 				</span>
-			</a>
+				<p class="typo-details">
+					Complexité du mot de passe
+					<span class="colored" data-strength={strength}>{strengthDisplay}</span>
+				</p>
+			</div>
+			<div class="cracktime">
+				<p class="typo-details">
+					Pour trouver ce mot de passe, un hacker mettra <span
+						class="colored"
+						data-strength={strength}>{crackTimeDisplay}</span
+					>
+				</p>
+				<a href="/password-strength">
+					<span class="icon">
+						<Icon name="question" />
+					</span>
+				</a>
+			</div>
 		</div>
-	</div>
+	{/if}
 </div>
 
 <style>
