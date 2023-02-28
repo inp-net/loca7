@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon from './Icon.svelte';
 
-	export let name: string;
+	export let name: string = '';
 	export let options: string[];
 	export let selection: string[] = [];
 </script>
