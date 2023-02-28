@@ -65,6 +65,6 @@
 	on:input={throttle(updateSuggestions, 200)}
 	on:select={(e) => {
 		[latitude, longitude] =
-			results[suggestions.findIndex((a) => a === e.detail)].geometry.coordinates;
+			results[suggestions.findIndex((a) => a === e.detail)]?.geometry.coordinates;
 	}}
 />

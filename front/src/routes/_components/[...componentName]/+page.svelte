@@ -115,7 +115,10 @@
 		border: 1px solid transparent;
 		display: inline-flex;
 		box-sizing: content-box;
-		padding-bottom: 500px;
+	}
+
+	:global(body) {
+		margin-bottom: 500px;
 	}
 
 	section.props {

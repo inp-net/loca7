@@ -5,6 +5,7 @@
 	import InputPhone from '$lib/InputPhone.svelte';
 	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
 	import { user } from '$lib/stores';
+	import InputPassword from '$lib/InputPassword.svelte';
 </script>
 
 <h2>Mon compte</h2>
@@ -22,4 +23,11 @@
 	</InputField>
 
 	<ButtonPrimary submits>Enregistrer</ButtonPrimary>
+</form>
+
+<form class="password">
+	<h3>Changer le mot de passe</h3>
+
+	<InputPassword required label="Mot de passe actuel" />
+	<InputPassword required label="Nouveau mot de passe" feedback />
 </form>

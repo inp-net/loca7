@@ -1,11 +1,11 @@
-import type { Appartment } from '$lib/types';
+import { randomAppartement, type Appartment } from '$lib/types';
 import { ENSEEIHT } from '$lib/utils';
 import type { PageLoad } from './$types';
 
-export const load: PageLoad<{ appartement: Appartment }> = ({ params }) => {
+export const load: PageLoad<{ appartment: Appartment }> = ({ params }) => {
 	if (params.id === 'tr') {
 		return {
-			appartement: {
+			appartment: {
 				id: 'tr',
 				address: '2 Rue Charles Camichel, 31000 Toulouse',
 				availableAt: new Date(Date.now() + 25 * 60 * 60 * 1000).toISOString(),
@@ -45,7 +45,7 @@ export const load: PageLoad<{ appartement: Appartment }> = ({ params }) => {
 		};
 	} else if (params.id === 'uwun') {
 		return {
-			appartement: {
+			appartment: {
 				id: 'uwun',
 				address: '10 Rue de Verdun, 31000 Toulouse',
 				availableAt: '2099-01-01',
@@ -79,6 +79,10 @@ export const load: PageLoad<{ appartement: Appartment }> = ({ params }) => {
 				],
 				velotoulouse: false
 			}
+		};
+	} else {
+		return {
+			appartment: randomAppartement()
 		};
 	}
 

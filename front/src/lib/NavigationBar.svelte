@@ -1,13 +1,14 @@
 <script lang="ts">
 	import ButtonNavigation from './ButtonNavigation.svelte';
 	import ButtonSecondary from './ButtonSecondary.svelte';
-	import { user } from './stores';
 	import { page } from '$app/stores';
+
+	let user = $page.data.user;
 </script>
 
 <nav>
-	{#if $user}
 	<a href="/"><img src="/loca7-wordmark.png" alt="loca7" class="logo" /></a>
+	{#if user}
 		<ul class="links">
 			<li>
 				<ButtonNavigation current={$page.url.toString() === '/'} href="/"
@@ -24,16 +25,16 @@
 	{/if}
 
 	<ul class="actions">
-		{#if $user}
+		{#if user}
+			<li>
+				<ButtonSecondary href="/account" icon="user">Mon compte</ButtonSecondary>
+			</li>
+		{:else}
 			<li>
 				<ButtonSecondary href="/login">Connexion</ButtonSecondary>
 			</li>
 			<li>
 				<ButtonSecondary href="/appartements/ajouter">Déposer une annonce</ButtonSecondary>
-			</li>
-		{:else}
-			<li>
-				<ButtonSecondary href="/account" icon="user">Mon compte</ButtonSecondary>
 			</li>
 		{/if}
 	</ul>

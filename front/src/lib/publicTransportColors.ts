@@ -14,34 +14,38 @@ export default function publicTransportColor(
 		case 'bhnf':
 			return '#F06526';
 		case 'tad':
-			return {
-				'105': '#F295BF',
-				'106': '#A7CD39',
-				'118': '#ED1C25',
-				'119': '#F47D31',
-				'120': '#004A8D',
-				'201': '#F295BF',
-				'202': '#A7CE39',
-				'204': '#ED1C25',
-				'205': '#41C8F4'
-			}[lineName];
+			return TADColorsByLine[lineName];
 
 		case 'metro':
-			return {
-				A: '#e51b24',
-				B: '#fddd04',
-				C: '#52b149'
-			}[lineName];
+			return metroColorsByLine[lineName];
 
 		case 'tram':
-			return {
-				T1: '#224c8f',
-				T2: '#4299da'
-			}[lineName];
+			return tramColorsByLine[lineName];
 	}
 }
 
-const busLinesByColor = {
+export const TADColorsByLine = {
+	'105': '#F295BF',
+	'106': '#A7CD39',
+	'118': '#ED1C25',
+	'119': '#F47D31',
+	'120': '#004A8D',
+	'201': '#F295BF',
+	'202': '#A7CE39',
+	'204': '#ED1C25',
+	'205': '#41C8F4'
+};
+export const tramColorsByLine = {
+	T1: '#224c8f',
+	T2: '#4299da'
+};
+export const metroColorsByLine = {
+	A: '#e51b24',
+	B: '#fddd04',
+	C: '#52b149'
+};
+
+export const busLinesByColor = {
 	'#007C52': ['12', '20', '21', '39', '48', '66', '112', '115', '310', 'zénith'],
 	'#E675A7': ['11', '63', '67', '70', '104', '201', '303', '306', '313', 'ville'],
 	'#3F2682': ['13', '25', '59', '60', '80', '102', '312'],

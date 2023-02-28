@@ -28,7 +28,10 @@
 		kind="T1"
 		roomsCount={0}
 		{images}
-		distanceToN7={0.19}
+		location={{
+			latitude: 1.456849,
+			longitude: 43.600965
+		}}
 		hasParking={false}
 	/>
 	<CardAppartment
@@ -42,14 +45,17 @@
 		kind="T3 et plus"
 		roomsCount={0}
 		images={images2}
-		distanceToN7={0.19}
+		location={{
+			latitude: 1.460059,
+			longitude: 43.604359
+		}}
 		hasParking
 		editable
 	/>
 </section>
 
 <section class="carousel">
-	<CarouselImages contain {images} current={images[0]} />
+	<CarouselImages contain {images} currentIndex={images[0]} />
 </section>
 
 <style>

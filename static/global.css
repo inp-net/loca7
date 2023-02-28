@@ -102,8 +102,7 @@ h2 {
   /* font-feature-settings: "ss04" 1; */
 }
 
-.typo-big-figure,
-dd {
+.typo-big-figure {
   font-size: var(--size-big-figure);
   font-weight: var(--weight-big-figure);
 }
@@ -129,14 +128,19 @@ a {
   color: unset;
 }
 
-p > a {
+p > a:not([class^="button"]),
+dd > a {
   color: var(--sky);
   text-decoration: none;
 }
 
-p > a:hover,
-p > a:focus {
+p > a:not([class^="button"]):hover,
+dd > a:not([class^="button"]):hover,
+p > a:not([class^="button"]):focus,
+dd > a:not([class^="button"]):focus {
   text-decoration: underline;
+  text-underline-offset: 0.5ch;
+  text-decoration-thickness: 0.125em;
 }
 
 h1,
@@ -146,12 +150,21 @@ h4,
 h5,
 h6,
 p,
-ul {
+ul,
+body {
   margin: 0;
   padding: 0;
+}
+
+ul {
+  padding-left: 1em;
 }
 
 * {
   font-family: var(--font-main);
   color: var(--fg);
+}
+
+body {
+  background-color: var(--bg);
 }

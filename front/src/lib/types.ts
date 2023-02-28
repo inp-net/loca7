@@ -1,4 +1,11 @@
+import { faker } from '@faker-js/faker';
 import type { GeographicPoint } from './utils';
+import {
+	TADColorsByLine,
+	busLinesByColor,
+	metroColorsByLine,
+	tramColorsByLine
+} from './publicTransportColors';
 
 export type AppartmentKind =
 	| 'Chambre'
@@ -72,3 +79,83 @@ export type User = {
 	phone: string;
 	email: string;
 };
+
+export type SearchCriteria = {
+	minimumSurface: number | undefined;
+	maximumRent: number | undefined;
+	type: AppartmentKind[];
+	furniture: boolean | null;
+	parking: boolean | null;
+	bicycleParking: boolean | null;
+};
+
+export const randomAppartement = () => ({
+	address: faker.address.streetAddress(true),
+	availableAt: faker.date.past().toISOString(),
+	charges: faker.datatype.number({ min: 10, max: 100 }),
+	deposit: faker.datatype.number({ min: 20, max: 1500 }),
+	description: faker.lorem.paragraphs(3),
+	hasFurniture: faker.datatype.boolean(),
+	hasParking: faker.datatype.boolean(),
+	kind: faker.helpers.arrayElement(APPARTMENT_KINDS) as AppartmentKind,
+	id: faker.datatype.uuid(),
+	images: Array(
+		faker.datatype.number({
+			max: 5,
+			min: 1
+		})
+	)
+		.fill('')
+		.map((_) => faker.image.city(640, 480, true)),
+	location: {
+		latitude: +faker.address.latitude(),
+		longitude: +faker.address.longitude()
+	},
+	nearbyStations: Array(faker.datatype.number({ max: 6, min: 0 }))
+		.fill({})
+		.map((_) => {
+			const type = faker.helpers.arrayElement(
+				Object.keys(DISPLAY_PUBLIC_TRANSPORT_TYPE)
+			) as PublicTransportType;
+			let line: string;
+			switch (type) {
+				case 'bhnf':
+					line = `L${faker.datatype.number({ max: 14, min: 1 })}`;
+					break;
+				case 'bus':
+					line = faker.helpers.arrayElement(Object.values(busLinesByColor).flat());
+					break;
+				case 'metro':
+					line = faker.helpers.arrayElement(Object.keys(metroColorsByLine));
+					break;
+				case 'tad':
+					line = faker.helpers.arrayElement(Object.keys(TADColorsByLine));
+					break;
+				case 'tram':
+					line = faker.helpers.arrayElement(Object.keys(tramColorsByLine));
+					break;
+				case 'telepherique':
+					line = 'Téléo';
+					break;
+			}
+			return {
+				name: faker.address.streetName(),
+				line,
+				type
+			};
+		}),
+	owner: {
+		name: faker.name.fullName(),
+		id: faker.datatype.uuid(),
+		phone: faker.phone.number(),
+		email: faker.internet.email()
+	},
+	rent: faker.datatype.number({ min: 300, max: 1500 }),
+	roomsCount: faker.datatype.number({ max: 5, min: 1 }),
+	surface: faker.datatype.number({ max: 100, min: 10 }),
+	travelTimeToN7: {
+		byBike: faker.datatype.number({ max: 30, min: 5 }) * 60,
+		byFoot: faker.datatype.number({ max: 30, min: 5 }) * 60,
+		byPublicTransport: faker.datatype.number({ max: 30, min: 5 }) * 60
+	}
+});

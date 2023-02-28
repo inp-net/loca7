@@ -2,7 +2,7 @@
 	import BaseInputText from './BaseInputText.svelte';
 
 	export let unit: string = '';
-	export let value: number;
+	export let value: number | undefined;
 	export let id: string | undefined = undefined;
 	export let name: string | undefined = undefined;
 	export let initial: number | undefined = undefined;
