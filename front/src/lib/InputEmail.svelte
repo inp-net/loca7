@@ -6,6 +6,7 @@
 	export let initial: string | undefined = undefined;
 	export let placeholder: string | undefined = undefined;
 	export let value: string;
+	export let required: boolean = false;
 </script>
 
-<BaseInputText type="email" bind:value {id} {name} {initial} {placeholder} />
+<BaseInputText type="email" bind:value {id} {name} {initial} {placeholder} {required} />

@@ -6,7 +6,7 @@
 	const emit = createEventDispatcher();
 
 	export let type: HTMLInputTypeAttribute;
-	export let value: string | number;
+	export let value: string | number | undefined;
 	export let id: string = `input-${uuidv4()}`;
 	export let name: string | undefined = undefined;
 	export let initial: string | number | undefined = undefined;
@@ -14,6 +14,7 @@
 	export let placeholder: string = '';
 	export let actionIcon: string = '';
 	export let suggestions: string[] | undefined = undefined;
+	export let required: boolean = false;
 
 	export let errorMessage: string = '';
 	export let messageIsWarning: boolean = false;
@@ -46,6 +47,7 @@
 				{inputContainer}
 				items={suggestions}
 				{id}
+				{required}
 				{name}
 				bind:text={value}
 				{placeholder}
@@ -68,12 +70,12 @@
 			/>
 		{/if}
 		{#if actionIcon}
-			<button class="action" on:click={() => emit('action')}>
+			<button type="button" class="action" on:click={() => emit('action')}>
 				<Icon name={actionIcon} color="fg" />
 			</button>
 		{/if}
 		{#if resettable}
-			<button class="reset" on:click={() => (value = initial)}>
+			<button type="button" class="reset" on:click={() => (value = initial)}>
 				<Icon name="reset" color="fg" />
 			</button>
 		{:else}

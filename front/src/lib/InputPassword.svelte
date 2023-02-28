@@ -11,6 +11,7 @@
 	export let name: string | undefined = undefined;
 	export let shown = false;
 	export let label: string;
+	export let required: boolean = false;
 
 	let analysis;
 	let strength: 'insufficient' | 'weak' | 'good';
@@ -35,6 +36,7 @@
 			type={shown ? 'text' : 'password'}
 			bind:value
 			{placeholder}
+			{required}
 			{id}
 			{name}
 			actionIcon={shown ? 'eye-cancel' : 'eye-open'}
