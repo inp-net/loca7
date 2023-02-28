@@ -4,43 +4,45 @@
 	export let contain: boolean = false;
 	export let cover: boolean = false;
 	export let images: string[];
-	export let current: string;
+	export let currentIndex: number = 0;
 </script>
 
 <div class="carousel">
 	<div class="image-gradient-overlay" />
 	<nav>
 		<button
-			aria-hidden={images.findIndex((src) => src === current) === 0}
+			aria-hidden={currentIndex === 0}
 			class="prev arrow"
-			on:click={() => (current = images[images.findIndex((src) => src === current) - 1])}
-			><Icon color="#fff" name="next" flip /></button
+			on:click={() => {
+				currentIndex--;
+			}}><Icon color="#fff" name="next" flip /></button
 		>
-		<ul class="dots">
-			{#each images as src}
+		<ul class="dots" aria-hidden={images.length < 2}>
+			{#each images as src, i}
 				<li>
 					<button
-						aria-current={current === src}
+						aria-current={currentIndex === i}
 						on:click={() => {
-							current = src;
+							currentIndex = i;
 						}}
 					/>
 				</li>
 			{/each}
 		</ul>
 		<button
-			aria-hidden={images.findIndex((src) => src === current) === images.length - 1}
+			aria-hidden={currentIndex === images.length - 1}
 			class="next arrow"
-			on:click={() => (current = images[images.findIndex((src) => src === current) + 1])}
-			><Icon color="#fff" name="next" /></button
+			on:click={() => {
+				currentIndex++;
+			}}><Icon color="#fff" name="next" /></button
 		>
 	</nav>
 	<ul class="images">
-		{#each images as src}
+		{#each images as src, i}
 			<li>
 				<img
 					style:object-fit={contain ? 'contain' : 'cover'}
-					aria-hidden={current !== src}
+					aria-hidden={currentIndex !== i}
 					{src}
 				/>
 			</li>
@@ -137,7 +139,8 @@
 		height: 100%;
 	}
 
-	button.arrow[aria-hidden='true'] {
+	button.arrow[aria-hidden='true'],
+	.dots[aria-hidden='true'] {
 		opacity: 0;
 		pointer-events: none;
 	}

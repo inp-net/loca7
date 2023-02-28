@@ -29,13 +29,11 @@
 	export let editable: boolean = false;
 
 	let secondsAvailableSince = (Date.now() - Date.parse(availableAt)) * 1e-3;
-
-	let currentImage = images[0];
 </script>
 
 <article class:editable>
 	<section class="photos">
-		<CarouselImages cover {images} current={currentImage} />
+		<CarouselImages cover {images} />
 	</section>
 	<svelte:element this={editable ? 'div' : 'a'} href={editable ? '' : `/appartements/${id}`}>
 		<div class="content">
