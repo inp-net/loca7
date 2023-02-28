@@ -31,7 +31,7 @@
 
 <style>
 	.button-secondary {
-		display: flex;
+		display: inline-flex;
 		align-items: center;
 		gap: 0.5em;
 		padding: 0.25rem 0.75rem;
