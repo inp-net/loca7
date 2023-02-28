@@ -89,8 +89,12 @@
 	</div>
 
 	<div class="results">
-		<h2>{results.length} Résultat{results.length === 1 ? '' : 's'}</h2>
-		<InputSelectOne bind:value={sortBy} options={sortOptions} />
+		<div class="sort">
+			<h2>{results.length} Résultat{results.length === 1 ? '' : 's'}</h2>
+			<InputField label="Trier par">
+				<InputSelectOne options={sortOptions} bind:value={sortBy} />
+			</InputField>
+		</div>
 		<ul class="results">
 			{#each results as appartment}
 				<li>
@@ -125,6 +129,7 @@
 		display: flex;
 		gap: 5rem;
 		position: relative;
+		justify-content: center;
 	}
 
 	.search {
@@ -133,13 +138,31 @@
 		align-self: flex-start;
 	}
 
+	@media (max-width: 1100px) {
+		.search {
+			position: static;
+		}
+		main {
+			flex-wrap: wrap;
+		}
+	}
+
 	.submit {
 		display: flex;
+	}
+
+	.sort {
+		position: sticky;
+		top: 100px;
+		background: var(--bg);
+		z-index: 20;
+		padding: 2rem;
 	}
 
 	.results {
 		display: flex;
 		flex-direction: column;
+		margin: 0 2rem;
 	}
 
 	.results h2 {

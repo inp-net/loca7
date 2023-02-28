@@ -40,6 +40,7 @@
 		height: 100vh;
 		flex-direction: column;
 		display: flex;
+		padding: 0 1rem;
 	}
 	:global(main) {
 		flex-grow: 1;
