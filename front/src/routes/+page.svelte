@@ -152,17 +152,14 @@
 	}
 
 	.sort {
-		position: sticky;
-		top: 100px;
 		background: var(--bg);
 		z-index: 20;
-		padding: 2rem;
 	}
 
 	.results {
 		display: flex;
 		flex-direction: column;
-		margin: 0 2rem;
+		padding: 0;
 	}
 
 	.results h2 {
