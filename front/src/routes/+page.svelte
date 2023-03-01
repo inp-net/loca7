@@ -40,19 +40,25 @@
 					: appartment.surface >= criteria.minimumSurface) &&
 				(criteria.type.length === 0 ? true : criteria.type.includes(appartment.kind))
 		)
-		.sort(({ charges, rent, surface, location, availableAt }) => {
-			switch (sortBy) {
-				case 'prix':
-					return charges + rent;
-				case 'surface':
-					return surface;
-				case "distance à l'n7":
-					return location === null ? Number.MAX_SAFE_INTEGER : distanceBetween(location, ENSEEIHT);
-				case 'délai avant libération':
-					return Date.now() - Date.parse(availableAt);
-				default:
-					return 0;
-			}
+		.sort((a, b) => {
+			const quantity = ({ charges, rent, surface, location, availableAt }: Appartment) => {
+				switch (sortBy) {
+					case 'prix':
+						return charges + rent;
+					case 'surface':
+						return surface;
+					case "distance à l'n7":
+						return location === null
+							? Number.MAX_SAFE_INTEGER
+							: distanceBetween(location, ENSEEIHT);
+					case 'délai avant libération':
+						return Date.now() - Date.parse(availableAt);
+					default:
+						return 0;
+				}
+			};
+
+			return quantity(a) - quantity(b);
 		});
 </script>
 
@@ -96,7 +102,7 @@
 			</InputField>
 		</div>
 		<ul class="results">
-			{#each results as appartment}
+			{#each results as appartment (appartment.id)}
 				<li>
 					<CardAppartment {...appartment} />
 				</li>
