@@ -10,8 +10,12 @@
 	let appartment: Appartment = { ...initialAppartment };
 </script>
 
+<svelte:head>
+	<title>Loca7 · Modification d'une annonce</title>
+</svelte:head>
+
 <main>
-	<h2>Modifier l'appartment #{appartment.id}</h2>
+	<h1>Modification d'une annonce</h1>
 	<FormEditAppartment bind:appartment initial={initialAppartment} submitText="Modifier" />
 </main>
 

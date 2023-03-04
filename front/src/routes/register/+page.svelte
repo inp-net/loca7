@@ -8,6 +8,10 @@
 	import InputText from '$lib/InputText.svelte';
 </script>
 
+<svelte:head>
+	<title>Loca7 · Inscription</title>
+</svelte:head>
+
 <main>
 	<h1>Inscription</h1>
 	<p>Déjà un compte? <ButtonSecondary href="/login">Connectez-vous</ButtonSecondary></p>

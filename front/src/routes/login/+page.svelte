@@ -12,6 +12,10 @@
 	let password: string = '';
 </script>
 
+<svelte:head>
+	<title>Loca7 · Connexion</title>
+</svelte:head>
+
 <main>
 	<h1>Connexion</h1>
 	<p>

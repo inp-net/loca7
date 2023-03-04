@@ -29,6 +29,10 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Loca7 · Nouvelle annonce</title>
+</svelte:head>
+
 <main>
 	<h1>Nouvelle annonce</h1>
 	<p>Votre annonce sera validée par un·e administrateur·ice avant d’être publiée</p>
@@ -39,6 +43,5 @@
 	main {
 		max-width: 600px;
 		margin: 0 auto;
-		padding: 0 1em;
 	}
 </style>
