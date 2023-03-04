@@ -1,8 +1,13 @@
-import { randomAppartement, type Appartment } from '$lib/types';
+import {
+	randomAppartement,
+	GeographicalPoint,
+	type Appartment,
+	type PublicTransportStation
+} from '$lib/types';
 import { ENSEEIHT } from '$lib/utils';
-import type { PageLoad } from './$types';
+import type { LayoutLoad } from './$types';
 
-export const load: PageLoad<{ appartment: Appartment }> = ({ params }) => {
+export const load: LayoutLoad<{ appartment: Appartment }> = ({ params }) => {
 	if (params.id === 'tr') {
 		return {
 			appartment: {
@@ -39,7 +44,7 @@ export const load: PageLoad<{ appartment: Appartment }> = ({ params }) => {
 					{ type: 'bhnf', line: 'L9', name: 'Place Dupuy' },
 					{ type: 'bus', line: '29', name: 'Place Dupuy' },
 					{ type: 'bus', line: '27', name: 'Guilhemery' }
-				],
+				] as PublicTransportStation[],
 				velotoulouse: true
 			}
 		};
@@ -62,7 +67,7 @@ export const load: PageLoad<{ appartment: Appartment }> = ({ params }) => {
 					id: 'monique',
 					email: 'reynes@cpasvrai.net',
 					name: 'Monique Reynes',
-					phone: null
+					phone: ''
 				},
 				rent: 590,
 				surface: 30,
@@ -76,15 +81,17 @@ export const load: PageLoad<{ appartment: Appartment }> = ({ params }) => {
 					{ type: 'bhnf', line: 'L1', name: 'Concorde' },
 					...[14, 29, 45, 70].map((no) => ({ type: 'bus', line: `${no}`, name: 'Concorde' })),
 					{ type: 'bus', line: 'Cimetières', name: "Jeanne d'Arc" }
-				],
-				velotoulouse: false
+				] as PublicTransportStation[],
+				velotoulouse: false,
+				location: GeographicalPoint({
+					latitude: 1.443092,
+					longitude: 43.611764
+				})
 			}
-		};
-	} else {
-		return {
-			appartment: randomAppartement()
 		};
 	}
 
-	return null;
+	return {
+		appartment: randomAppartement()
+	};
 };

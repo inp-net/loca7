@@ -68,6 +68,7 @@ export function availableAtSentence(availableSince: number, availableAt: string)
 export type GeographicPoint = {
 	latitude: number;
 	longitude: number;
+	tuple: () => [number, number];
 };
 export function distanceBetween(a: GeographicPoint, b: GeographicPoint): number {
 	const earthRadiusKm = 6371;
@@ -99,5 +100,8 @@ export function readableOn(color: string): string {
 
 export const ENSEEIHT: GeographicPoint = {
 	latitude: 1.455074,
-	longitude: 43.60263
+	longitude: 43.60263,
+	tuple() {
+		return [this.longitude, this.latitude];
+	}
 };

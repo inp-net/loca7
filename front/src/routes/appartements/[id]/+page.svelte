@@ -9,15 +9,18 @@
 		availableAtSentence,
 		readableOn,
 		distanceBetween,
-		ENSEEIHT
+		ENSEEIHT,
+		type GeographicPoint
 	} from '$lib/utils';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import {
 		DISPLAY_PUBLIC_TRANSPORT_TYPE,
+		GeographicalPoint,
 		type Appartment,
 		type PublicTransportStation
 	} from '$lib/types';
 	import publicTransportColor from '$lib/publicTransportColors';
+	import AppartmentsMap from '$lib/AppartmentsMap.svelte';
 
 	export let data: LayoutData;
 	let appart: Appartment = data.appartment;
@@ -28,7 +31,18 @@
 			DISPLAY_PUBLIC_TRANSPORT_TYPE[station.type]
 		} ${station.line}`;
 	}
+
+	function middleOf(...points: GeographicPoint[]): GeographicPoint {
+		return GeographicalPoint({
+			latitude: points.reduce((acc, p) => acc + p.latitude, 0) / points.length,
+			longitude: points.reduce((acc, p) => acc + p.longitude, 0) / points.length
+		});
+	}
 </script>
+
+<svelte:head>
+	<title>Loca7 · {appart.kind} de {appart.surface} m² à {appart.rent+appart.charges}€</title>
+</svelte:head>
 
 <main>
 	<section class="carousel">
@@ -184,6 +198,12 @@
 	<section class="actions">
 		<ButtonSecondary icon="report" dangerous>Signaler</ButtonSecondary>
 	</section>
+
+	{#if appart?.location}
+		<section class="map">
+			<AppartmentsMap appartments={[appart]} center={middleOf(appart.location, ENSEEIHT)} />
+		</section>
+	{/if}
 </main>
 
 <style>
@@ -313,5 +333,10 @@
 
 	section.actions :global(button) {
 		width: fit-content;
+	}
+
+	section.map {
+		width: 100%;
+		height: 600px;
 	}
 </style>

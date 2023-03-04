@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import type { GeographicPoint } from './utils';
+import { ENSEEIHT, type GeographicPoint } from './utils';
 import {
 	TADColorsByLine,
 	busLinesByColor,
@@ -89,7 +89,8 @@ export type SearchCriteria = {
 	bicycleParking: boolean | null;
 };
 
-export const randomAppartement = () => ({
+const randomAppartementSpread = 0.025;
+export const randomAppartement: () => Appartment = () => ({
 	address: faker.address.streetAddress(true),
 	availableAt: faker.date.past().toISOString(),
 	charges: faker.datatype.number({ min: 10, max: 100 }),
@@ -107,10 +108,22 @@ export const randomAppartement = () => ({
 	)
 		.fill('')
 		.map((_) => faker.image.city(640, 480, true)),
-	location: {
-		latitude: +faker.address.latitude(),
-		longitude: +faker.address.longitude()
-	},
+	location: GeographicalPoint({
+		latitude:
+			ENSEEIHT.latitude +
+			faker.datatype.number({
+				max: randomAppartementSpread,
+				min: -randomAppartementSpread,
+				precision: randomAppartementSpread / 10
+			}),
+		longitude:
+			ENSEEIHT.longitude +
+			faker.datatype.number({
+				max: randomAppartementSpread,
+				min: -randomAppartementSpread,
+				precision: randomAppartementSpread / 10
+			})
+	}),
 	nearbyStations: Array(faker.datatype.number({ max: 6, min: 0 }))
 		.fill({})
 		.map((_) => {
@@ -159,3 +172,14 @@ export const randomAppartement = () => ({
 		byPublicTransport: faker.datatype.number({ max: 30, min: 5 }) * 60
 	}
 });
+
+export function GeographicalPoint(point: { latitude: number; longitude: number }): GeographicPoint {
+	const { latitude, longitude } = point;
+	return {
+		latitude,
+		longitude,
+		tuple() {
+			return [longitude, latitude];
+		}
+	};
+}

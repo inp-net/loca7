@@ -27,21 +27,24 @@
 	export let hasFurniture: boolean;
 	export let hasParking: boolean;
 	export let editable: boolean = false;
+	export let small: boolean = false;
 
 	let secondsAvailableSince = (Date.now() - Date.parse(availableAt)) * 1e-3;
 </script>
 
-<article class:editable>
+<article class:editable class:small>
 	<section class="photos">
 		<CarouselImages cover {images} />
 	</section>
-	<svelte:element this={editable ? 'div' : 'a'} href={editable ? '' : `/appartements/${id}`}>
-		<div class="content">
+	<svelte:element class="content" this={editable ? 'div' : 'a'} href={editable ? '' : `/appartements/${id}`}>
 			<section class="figures">
 				<section class="price">
 					<p class="typo-big-figure rent">{rent + charges}€</p>
 					<p class="charges">
-						dont {charges}€ de charges<br />soit {Math.round((rent + charges) / surface)} €/m²
+						{#if !small}
+							dont {charges}€ de charges<br />
+						{/if}
+						soit {Math.round((rent + charges) / surface)} €/m²
 					</p>
 				</section>
 				<section class="space">
@@ -52,35 +55,37 @@
 					</p>
 				</section>
 			</section>
-			<section class="situation">
-				<span class="icon"><Icon name="calendar" /></span>
-				<p class="when">
-					{availableAtSentence(secondsAvailableSince, availableAt)}
-					{#if secondsAvailableSince !== 0}
-						<span class="muted"
-							>{#if secondsAvailableSince > 0}il y a{:else}dans{/if}
-							{durationDisplay(Math.abs(secondsAvailableSince))}</span
-						>
-					{/if}
-				</p>
-				<span class="icon"><Icon name="location" /></span>
-				<p class="where">
-					{address}
-					{#if location}
-						<span class="muted">à {distanceDisplay(distanceBetween(location, ENSEEIHT))}</span>
-					{/if}
-				</p>
-			</section>
-			<section class="aspects">
-				<p class="furniture">
-					<span class="icon"><Icon name="furniture" cancel={!hasFurniture} /></span>
-					{hasFurniture ? 'Meublé' : 'Non meublé'}
-				</p>
-				<p class="parking">
-					<span class="icon"><Icon name="parking" cancel={!hasParking} /></span>
-					{hasParking ? 'Place de parking' : 'Pas de place de parking'}
-				</p>
-			</section>
+			{#if !small}
+				<section class="situation">
+					<span class="icon"><Icon name="calendar" /></span>
+					<p class="when">
+						{availableAtSentence(secondsAvailableSince, availableAt)}
+						{#if secondsAvailableSince !== 0}
+							<span class="muted"
+								>{#if secondsAvailableSince > 0}il y a{:else}dans{/if}
+								{durationDisplay(Math.abs(secondsAvailableSince))}</span
+							>
+						{/if}
+					</p>
+					<span class="icon"><Icon name="location" /></span>
+					<p class="where">
+						{address}
+						{#if location}
+							<span class="muted">à {distanceDisplay(distanceBetween(location, ENSEEIHT))}</span>
+						{/if}
+					</p>
+				</section>
+				<section class="aspects">
+					<p class="furniture">
+						<span class="icon"><Icon name="furniture" cancel={!hasFurniture} /></span>
+						{hasFurniture ? 'Meublé' : 'Non meublé'}
+					</p>
+					<p class="parking">
+						<span class="icon"><Icon name="parking" cancel={!hasParking} /></span>
+						{hasParking ? 'Place de parking' : 'Pas de place de parking'}
+					</p>
+				</section>
+			{/if}
 			{#if editable}
 				<section class="editable">
 					<ButtonColored dangerous on:click={() => emit('delete')}>Supprimer</ButtonColored>
@@ -92,7 +97,6 @@
 					>
 				</section>
 			{/if}
-		</div>
 	</svelte:element>
 </article>
 
@@ -105,25 +109,33 @@
 
 		background: var(--bg);
 		border-radius: 1rem;
-		max-width: 500px;
+		/* width: 600px; */
+		max-width: 400px;
 		overflow: hidden;
 	}
 
 	.content {
-		padding: 1.5rem;
+		padding: 1.5em;
 		transition: all 0.25s ease;
 	}
 
 	section.photos {
 		position: relative;
-		width: 100%;
-		height: 300px;
+		/* width: 300px; */
+		height: 200px;
+		flex-grow: 1;
+		flex-shrink: 0;
+	}
+
+	article.small section.photos {
+		height: 150px;
 	}
 
 	section.figures {
 		display: flex;
 		justify-content: space-between;
-		margin-bottom: 2rem;
+		margin-bottom: 2em;
+		gap: 2rem;
 	}
 
 	section.space {
@@ -157,6 +169,7 @@
 		display: flex;
 		gap: 1rem;
 		margin-top: 1.5rem;
+		flex-wrap: wrap;
 	}
 
 	section.aspects p {

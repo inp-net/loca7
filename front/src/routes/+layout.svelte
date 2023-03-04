@@ -2,6 +2,13 @@
 	import NavigationBar from '$lib/NavigationBar.svelte';
 </script>
 
+<svelte:head>
+	<link rel="stylesheet" href="/vendor/leaflet.css" />
+	<link rel="stylesheet" href="/vendor/leaflet-gesture-handling.min.css" />
+	<script src="/vendor/leaflet.js"></script>
+	<script src="/vendor/leaflet-gesture-handling.js"></script>
+</svelte:head>
+
 <header>
 	<NavigationBar />
 </header>

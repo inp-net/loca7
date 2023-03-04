@@ -11,7 +11,7 @@
 	<div class="image-gradient-overlay" />
 	<nav>
 		<button
-			aria-hidden={currentIndex === 0}
+			aria-hidden={currentIndex <= 0}
 			class="prev arrow"
 			on:click={() => {
 				currentIndex--;
@@ -30,7 +30,7 @@
 			{/each}
 		</ul>
 		<button
-			aria-hidden={currentIndex === images.length - 1}
+			aria-hidden={currentIndex >= images.length - 1}
 			class="next arrow"
 			on:click={() => {
 				currentIndex++;
@@ -68,9 +68,9 @@
 		top: 0;
 		bottom: 0;
 		z-index: 2;
-		background: linear-gradient(90deg, rgba(0, 0, 0, 0.3333) 0%, rgba(0, 0, 0, 0) 20%),
-			linear-gradient(-90deg, rgba(0, 0, 0, 0.33333) 0%, rgba(0, 0, 0, 0) 20%),
-			linear-gradient(0deg, rgba(0, 0, 0, 0.33333) 0%, rgba(0, 0, 0, 0) 20%);
+		background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 20%),
+			linear-gradient(-90deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 20%),
+			linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 20%);
 	}
 
 	img {

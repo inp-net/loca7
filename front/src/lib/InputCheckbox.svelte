@@ -51,7 +51,11 @@
 		}}
 	/>
 	<div class="checkbox" data-state={JSON.stringify(value)}>
-		<Icon name={value ? "checkmark" : "close"} color="bg" strokeWidth="calc(var(--border-width) * 2)" />
+		<Icon
+			name={value ? 'checkmark' : 'close'}
+			color="bg"
+			strokeWidth="calc(var(--border-width) * 2)"
+		/>
 	</div>
 	<div class="labels">
 		<span class="label typo-paragraph">{label}</span>
@@ -88,7 +92,7 @@
 		border: var(--border-width) solid var(--fg);
 		position: relative;
 	}
-	.checkbox[data-state="null"]::after {
+	.checkbox[data-state='null']::after {
 		content: '';
 		width: var(--border-width);
 		height: 2rem;
@@ -97,13 +101,16 @@
 		position: absolute;
 		left: calc(2rem / 2 - var(--border-width) / 2);
 	}
-	.checkbox[data-state="true"], .checkbox[data-state="false"] {
+	.checkbox[data-state='true'],
+	.checkbox[data-state='false'] {
 		background: var(--fg);
 	}
 	label {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
+		min-width: 120px /* XXX: based on width of input when the label is smaller than "Peu importe" */;
+		cursor: pointer;
 	}
 	.labels {
 		display: flex;
