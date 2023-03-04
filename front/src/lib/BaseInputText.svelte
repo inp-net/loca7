@@ -112,6 +112,7 @@
 		appearance: textfield;
 		width: 100%;
 		outline: none;
+		background-color: var(--bg);
 	}
 
 	input::-webkit-outer-spin-button,

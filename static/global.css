@@ -84,7 +84,16 @@
   --cactus: rgba(13, 140, 56, 1);
   --plaster: rgba(252, 229, 169, 1);
   --moss: rgba(174, 249, 190, 1);
-  --sky: rgba(0, 159, 227, 1);
+  --sky: #009fe3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: rgba(255, 255, 255, 1);
+    --muted: rgba(255, 255, 255, 0.75);
+    --bg: rgba(0, 0, 0, 1);
+    --ice: rgb(28, 60, 75);
+  }
 }
 
 .typo-title,

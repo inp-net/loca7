@@ -277,7 +277,7 @@
 
 <style>
 	.autocomplete-list {
-		background: #fff;
+		background: var(--bg);
 		position: absolute;
 		width: 100%;
 		overflow-y: auto;
@@ -295,7 +295,7 @@
 	}
 	.autocomplete-list-item {
 		padding: 0.5em 1em;
-		color: #333;
+		color: var(--fg);
 		cursor: pointer;
 		line-height: 1;
 	}
