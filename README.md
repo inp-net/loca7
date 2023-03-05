@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="300" src="static/loca7-wordmark.svg">
+  <img width="300" src="public/loca7-wordmark.svg">
   <br>
   <a href="https://wakatime.com/@ewen_lbh/projects/adljqhspbi"><img src="https://wakatime.com/badge/user/0054cecb-dd63-44eb-9e94-ed53ccb8506a/project/92917f76-b95c-4e47-bc96-986e5e983a37.svg" alt="wakatime"></a>
   <a href="https://loca7.vercel.app"><img src="https://vercelbadge.vercel.app/api/ewen-lbh/loca7"></a>
