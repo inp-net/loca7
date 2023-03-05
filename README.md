@@ -1,6 +1,10 @@
-<p align="center">
-    <img width="300" src="static/loca7-wordmark.svg">
-</p>
+<div align="center">
+  <img width="300" src="static/loca7-wordmark.svg">
+  <br>
+  <a href="https://wakatime.com/@ewen_lbh/projects/adljqhspbi"><img src="https://wakatime.com/badge/user/0054cecb-dd63-44eb-9e94-ed53ccb8506a/project/92917f76-b95c-4e47-bc96-986e5e983a37.svg" alt="wakatime"></a>
+  <a href="https://loca7.vercel.app"><img src="https://vercelbadge.vercel.app/api/ewen-lbh/loca7"></a>
+<img alt="W3C Validation" src="https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Floca7.vercel.app&label=w3c%20validation">
+</div>
 
 Loca7 est le site de recherche de logement pour les étudiants de l'ENSEEIHT.
 
@@ -24,7 +28,7 @@ Il y a également une copie locale importable dans figma, au nom de `/prototype.
 ### Post d'annonces
 
 - [ ] Champ de description en texte riche WYSIWYG (pas de BBCode)
-- [ ] Autocomplétion pour l'adresse (permet de récupérer lat et long pour l'appartement) via l'API d'Open Street Map, [Nomatim](https://nominatim.org/release-docs/develop/) 
+- [ ] Autocomplétion pour l'adresse (permet de récupérer lat et long pour l'appartement) via l'API d'Open Street Map, [Nomatim](https://nominatim.org/release-docs/develop/)
       (à self-hoster pour faire de l'auto-complétion, ils rate-limite à 1 req/s, trop peu si plusieurs utilisateur en même temps même avec un debounce)
 - [ ] Filepicker pour les photos avec gestion du glisser-déposer
 
@@ -51,7 +55,6 @@ Il y a également une copie locale importable dans figma, au nom de `/prototype.
   - Avec des actions pour les admins: supprimer, rendre obsolète/remettre visible
   - Montrer/cacher les obsolètes, les afficher en grisé
 
-
 ## Stack
 
 - [Svelte](https://svelte.dev) pour le frontend
@@ -63,9 +66,9 @@ Il y a également une copie locale importable dans figma, au nom de `/prototype.
 
 - **static/** fichiers statiques (logos, favicons, etc)
 - **loca7/** backend
-    - **app/** connexion avec le frontend
-    - **data/** API
-    - **notifications/** gestion des notifications par mail
+  - **app/** connexion avec le frontend
+  - **data/** API
+  - **notifications/** gestion des notifications par mail
 - **front/** frontend
 
 ## Temps passé
