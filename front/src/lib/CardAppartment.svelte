@@ -107,7 +107,7 @@
 
 		box-shadow: -0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.25);
 
-		background: var(--bg);
+		background: var(--card-bg, var(--bg));
 		border-radius: 1rem;
 		/* width: 600px; */
 		max-width: 400px;
