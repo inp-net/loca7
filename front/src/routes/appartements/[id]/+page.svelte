@@ -55,6 +55,9 @@
 				<div class="row">
 					<InputField label="Type de logement">
 						<p class="typo-big-figure">{appart.kind}</p>
+						{#if appart.kind === 'Colocation'}
+							<p class="typo-paragraph">de {appart.roomsCount} chambres</p>
+						{/if}
 					</InputField>
 					<InputField label="Surface">
 						<p class="typo-big-figure">{appart.surface}m²</p>
