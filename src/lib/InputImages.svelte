@@ -32,7 +32,6 @@
 
 	function updateFiles(target: HTMLInputElement, filesWithPreview: FileWithPreview[]) {
 		if (!target) return;
-		console.log("updating <input>'s files");
 		target.files = fileListOf(filesWithPreview.map((f) => f.file));
 	}
 
@@ -61,11 +60,6 @@
 	class:empty
 	class:dragging
 	class:dragging-over-dropzone={draggingOverDropzone}
-	on:dragstart={() => console.log('dragstart')}
-	on:dragenter={() => console.log('dragenter')}
-	on:dragleave={() => console.log('dragleave')}
-	on:dragend={() => console.log('dragend')}
-	on:dragover={() => console.log('dragover')}
 	{name}
 >
 	<input
@@ -73,7 +67,6 @@
 		multiple
 		bind:this={inputDom}
 		on:change={(e) => {
-			console.log('on change fired');
 			updateFilePreviews(e.target.files);
 			updateFiles(e.target, filesWithPreview);
 		}}

@@ -46,7 +46,6 @@ export function distanceDisplay(distance_meters: number): string {
 
 export function availableAtSentence(availableSince: number, availableAt: Date): string {
 	let out = '';
-	console.log(availableSince);
 	if (
 		availableAt.getFullYear() === new Date().getFullYear() &&
 		availableAt.getMonth() === new Date().getMonth() &&

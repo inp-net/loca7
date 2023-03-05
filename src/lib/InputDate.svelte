@@ -15,8 +15,6 @@
 	let initialString: string;
 	$: initialString = initial ? initial.toISOString().split('T')[0] : '';
 
-	$: console.log(JSON.stringify(value));
-
 	export let errorMessage: string = '';
 	$: {
 		if (value === null) {

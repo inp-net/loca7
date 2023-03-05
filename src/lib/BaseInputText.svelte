@@ -19,7 +19,6 @@
 
 	export let errorMessage: string = '';
 	export let messageIsWarning: boolean = false;
-	$: console.log('initial', typeof initial, JSON.stringify(initial));
 
 	let errored = false;
 	$: errored = errorMessage !== '';
