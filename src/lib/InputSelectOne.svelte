@@ -1,13 +1,19 @@
 <script lang="ts">
 	export let value: string | null = null;
-	export let options: string[];
+	export let options: string[] | Record<string, string> = {};
+	export let name: string | undefined = undefined;
+
+	let optionsWithDisplay: Record<string, string> = {};
+	$: optionsWithDisplay = Array.isArray(options)
+		? Object.fromEntries(options.map((option) => [option, option]))
+		: options;
 </script>
 
 <fieldset>
-	{#each options as option}
+	{#each Object.entries(optionsWithDisplay) as [option, display]}
 		<label aria-current={option === value}>
-			<input type="radio" name="input" bind:group={value} value={option} />
-			{option}
+			<input type="radio" {name} bind:group={value} value={option} />
+			{display}
 		</label>
 	{/each}
 </fieldset>

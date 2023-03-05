@@ -8,4 +8,4 @@
 	export let value: string;
 </script>
 
-<BaseInputText type="tel" bind:value {id} {name} {initial} {placeholder} />
+<BaseInputText autocomplete="tel" type="tel" bind:value {id} {name} {initial} {placeholder} />

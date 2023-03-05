@@ -1,5 +1,7 @@
 <script lang="ts">
 	import NavigationBar from '$lib/NavigationBar.svelte';
+	import type { PageData } from './$types';
+	export let data: PageData;
 </script>
 
 <svelte:head>
@@ -10,7 +12,7 @@
 </svelte:head>
 
 <header>
-	<NavigationBar />
+	<NavigationBar user={data.user} />
 </header>
 
 <slot />

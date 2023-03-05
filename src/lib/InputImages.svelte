@@ -50,6 +50,8 @@
 		});
 		reader.readAsDataURL(file);
 	}
+
+	export let name: string | undefined = undefined;
 </script>
 
 <!-- TODO styles when dragging file -->
@@ -64,6 +66,7 @@
 	on:dragleave={() => console.log('dragleave')}
 	on:dragend={() => console.log('dragend')}
 	on:dragover={() => console.log('dragover')}
+	{name}
 >
 	<input
 		type="file"

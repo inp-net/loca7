@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String       @id @unique @default(cuid())
+  name        String
+  phone       String
+  email       String
+  appartments Appartment[]
+
+  sessions Session[]
+  keys     Key[]
+  Report   Report[]
+
+  @@map("user")
+}
+
+model Session {
+  id             String @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  user           User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("session")
+}
+
+model Key {
+  id              String  @id @unique
+  hashed_password String?
+  user_id         String
+  primary         Boolean
+  expires         BigInt?
+  user            User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("key")
+}
+
+model Appartment {
+  id             String                   @id @unique @default(cuid())
+  images         String[]
+  rent           Int
+  charges        Int
+  deposit        Int
+  surface        Int
+  kind           AppartmentKind
+  roomsCount     Int
+  availableAt    DateTime
+  createdAt      DateTime                 @default(now())
+  address        String
+  location       GeographicPoint?         @relation(fields: [locationId], references: [id])
+  locationId     String?
+  hasFurniture   Boolean
+  hasParking     Boolean
+  description    String
+  travelTimeToN7 TravelTimeToN7           @relation(fields: [travelTimeId], references: [id])
+  travelTimeId   String
+  nearbyStations PublicTransportStation[]
+  owner          User                     @relation(fields: [ownerId], references: [id])
+  ownerId        String
+  reports        Report[]
+}
+
+enum AppartmentKind {
+  chambre
+  studio
+  t1
+  t1bis
+  t2
+  t3etplus
+  colocation
+}
+
+model GeographicPoint {
+  id          String       @id @unique @default(cuid())
+  latitude    Float
+  longitude   Float
+  appartments Appartment[]
+}
+
+model Report {
+  id           String       @id @unique @default(cuid())
+  reason       ReportReason
+  message      String
+  createdAt    DateTime     @default(now())
+  appartment   Appartment   @relation(fields: [appartmentId], references: [id])
+  appartmentId String
+  author       User         @relation(fields: [authorId], references: [id])
+  authorId     String
+}
+
+enum ReportReason {
+  dangerous
+  obsolete
+  other
+}
+
+model TravelTimeToN7 {
+  id                String       @id @unique @default(cuid())
+  byFoot            Int?
+  byBike            Int?
+  byPublicTransport Int?
+  appartments       Appartment[]
+}
+
+model PublicTransportStation {
+  id           String              @id @unique @default(cuid())
+  name         String
+  line         String
+  type         PublicTransportType
+  color        String?
+  Appartment   Appartment?         @relation(fields: [appartmentId], references: [id])
+  appartmentId String?
+}
+
+enum PublicTransportType {
+  bus
+  bhnf
+  metro
+  tram
+  telepherique
+  tad
+}

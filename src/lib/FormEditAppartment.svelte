@@ -8,7 +8,7 @@
 	import InputNumber from './InputNumber.svelte';
 	import InputRichText from './InputRichText.svelte';
 	import InputSelectOne from './InputSelectOne.svelte';
-	import { APPARTMENT_KINDS, type Appartment } from './types';
+	import { DISPLAY_APPARTMENT_KIND, type Appartment } from './types';
 
 	export let appartment: Appartment;
 	export let action: string | undefined = undefined;
@@ -37,19 +37,26 @@
 	};
 </script>
 
-<form class="fields" {action}>
+<form class="fields" {action} method="post">
 	<InputField label="Type de logement">
-		<InputSelectOne options={[...APPARTMENT_KINDS, 'Manoir']} bind:value={appartment.kind} />
+		<InputSelectOne name="kind" options={DISPLAY_APPARTMENT_KIND} bind:value={appartment.kind} />
 	</InputField>
 
 	<div class="side-by-side">
 		<InputField label="Surface">
-			<InputNumber unit="m²" initial={initial.surface} bind:value={appartment.surface} positive />
+			<InputNumber
+				name="surface"
+				unit="m²"
+				initial={initial.surface}
+				bind:value={appartment.surface}
+				positive
+			/>
 		</InputField>
 
-		{#if appartment.kind === 'Colocation'}
+		{#if appartment.kind === 'colocation'}
 			<InputField label="Nb chambres">
 				<InputNumber
+					name="roomsCount"
 					initial={initial.roomsCount}
 					bind:value={appartment.roomsCount}
 					positive
@@ -61,40 +68,58 @@
 
 	<div class="side-by-side">
 		<InputField label="Loyer">
-			<InputNumber unit="€" initial={initial.rent} bind:value={appartment.rent} positive />
+			<InputNumber
+				name="rent"
+				unit="€"
+				initial={initial.rent}
+				bind:value={appartment.rent}
+				positive
+			/>
 		</InputField>
 
 		<InputField label="Charges">
-			<InputNumber unit="€" initial={initial.charges} bind:value={appartment.charges} positive />
+			<InputNumber
+				name="charges"
+				unit="€"
+				initial={initial.charges}
+				bind:value={appartment.charges}
+				positive
+			/>
 		</InputField>
 
 		<InputField label="Caution">
-			<InputNumber unit="€" initial={initial.deposit} bind:value={appartment.deposit} positive />
+			<InputNumber
+				name="deposit"
+				unit="€"
+				initial={initial.deposit}
+				bind:value={appartment.deposit}
+				positive
+			/>
 		</InputField>
 	</div>
 
 	<InputField label="Date de libération">
-		<InputDate bind:value={appartment.availableAt} initial={initial.availableAt} />
+		<InputDate name="availableAt" bind:value={appartment.availableAt} initial={initial.availableAt} />
 	</InputField>
 
 	<InputField label="Adresse" id="address">
-		<InputAddress id="address" bind:value={appartment.address} initial={initial.address} />
+		<InputAddress name="address" id="address" bind:value={appartment.address} initial={initial.address} />
 	</InputField>
 
 	<InputField label="Aspects">
 		<div class="wrap">
-			<InputCheckbox bind:value={appartment.hasFurniture} label="Meublé" />
-			<InputCheckbox bind:value={appartment.hasParking} label="Parking" />
+			<InputCheckbox name="hasFurniture" bind:value={appartment.hasFurniture} label="Meublé" />
+			<InputCheckbox name="hasParking" bind:value={appartment.hasParking} label="Parking" />
 			<!-- TODO place pour vélo -->
 		</div>
 	</InputField>
 
 	<InputField label="Description">
-		<InputRichText bind:value={appartment.description} />
+		<InputRichText name="description" bind:value={appartment.description} />
 	</InputField>
 
 	<InputField label="Photos">
-		<InputImages bind:value={appartment.images} />
+		<InputImages name="images" bind:value={appartment.images} />
 	</InputField>
 
 	<section class="submit">

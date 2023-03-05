@@ -3,6 +3,7 @@
 	import Icon from './Icon.svelte';
 
 	export let value: boolean | null = null;
+	export let name: string | undefined = undefined;
 	let previousValue: boolean | null = value;
 
 	const getTriState = (target: HTMLInputElement) => {
@@ -36,6 +37,7 @@
 <label class="input-checkbox">
 	<input
 		type="checkbox"
+		{name}
 		bind:this={checkboxElement}
 		on:change={(event) => {
 			event.preventDefault();

@@ -24,7 +24,7 @@
 		<ButtonSecondary href="/register">Créez-en un</ButtonSecondary>
 	</p>
 
-	<form action="?/login" method="POST">
+	<form method="post">
 		<InputField label="Email">
 			<InputEmail required bind:value={email} name="email" />
 		</InputField>

@@ -5,9 +5,10 @@
 	import InputWithSuggestions from './InputWithSuggestions.svelte';
 	const emit = createEventDispatcher();
 
-	export let type: HTMLInputTypeAttribute;
+	export let type: HTMLInputElement['type'];
 	export let value: string | number | undefined;
 	export let id: string = `input-${uuidv4()}`;
+	export let autocomplete: string | undefined = undefined;
 	export let name: string | undefined = undefined;
 	export let initial: string | number | undefined = undefined;
 	export let unit: string = '';
@@ -45,6 +46,7 @@
 				on:select
 				on:input
 				{inputContainer}
+				{autocomplete}
 				items={suggestions}
 				{id}
 				{required}
@@ -60,6 +62,7 @@
 				{name}
 				{id}
 				{value}
+				{autocomplete}
 				{placeholder}
 				on:input={(e) => {
 					value = type.match(/^(number|range)$/) ? +e.target.value : e.target.value;

@@ -11,13 +11,16 @@
 	import InputSelectOne from '$lib/InputSelectOne.svelte';
 	import { searchResults } from '$lib/stores';
 	import {
-		APPARTMENT_KINDS,
-		randomAppartement,
+		DISPLAY_APPARTMENT_KIND,
+		randomAppartment,
 		type Appartment,
 		type SearchCriteria
 	} from '$lib/types';
 	import { distanceBetween, ENSEEIHT } from '$lib/utils';
 	import { onMount } from 'svelte';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
 
 	let criteria: SearchCriteria = {
 		bicycleParking: null,
@@ -38,13 +41,16 @@
 			if (resultsTab === 'list') scroll = window.scrollY;
 		});
 	});
-	$: if (resultsTab === 'list') {
-		window.scrollTo(0, scroll);
-	} else {
-		window.scrollTo(0, 0);
-	}
+	// $: if (window) {
+	// 	if (resultsTab === 'list') {
+	// 		window.scrollTo(0, scroll);
+	// 	} else {
+	// 		window.scrollTo(0, 0);
+	// 	}
+	// }
 
-	const appartments: Appartment[] = Array(15).fill({}).map(randomAppartement);
+	let appartments: Appartment[] = [];
+	$: ({ appartments } = data);
 
 	$searchResults = [...appartments];
 	$: $searchResults = appartments
@@ -68,7 +74,7 @@
 							? Number.MAX_SAFE_INTEGER
 							: distanceBetween(location, ENSEEIHT);
 					case 'délai avant libération':
-						return Date.now() - Date.parse(availableAt);
+						return Date.now() - availableAt.valueOf();
 					default:
 						return 0;
 				}
@@ -95,7 +101,7 @@
 				</InputField>
 			</div>
 			<InputField label="Type de logement">
-				<InputSelectMultiple options={APPARTMENT_KINDS} bind:selection={criteria.type} />
+				<InputSelectMultiple options={DISPLAY_APPARTMENT_KIND} bind:selection={criteria.type} />
 			</InputField>
 			<InputField label="Aspects">
 				<div class="aspects">

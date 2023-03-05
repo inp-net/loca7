@@ -57,6 +57,7 @@
 	type="text"
 	unit={distanceToN7 !== null ? (distanceToN7 * 1e-3).toFixed(2) + 'km' : ''}
 	bind:value
+	autocomplete="off"
 	{id}
 	{name}
 	{initial}
@@ -68,3 +69,6 @@
 			results[suggestions.findIndex((a) => a === e.detail)]?.geometry.coordinates;
 	}}
 />
+
+<input type="hidden" name="{name}Latitude" value={latitude} />
+<input type="hidden" name="{name}Longitude" value={longitude} />

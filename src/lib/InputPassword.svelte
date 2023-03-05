@@ -40,6 +40,7 @@
 			{required}
 			{id}
 			{name}
+			autocomplete={feedback ? 'new-password' : 'current-password'}
 			actionIcon={shown ? 'eye-cancel' : 'eye-open'}
 		/>
 	</InputField>

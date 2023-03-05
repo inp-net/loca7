@@ -2,8 +2,8 @@
 	import ButtonNavigation from './ButtonNavigation.svelte';
 	import ButtonSecondary from './ButtonSecondary.svelte';
 	import { page } from '$app/stores';
-
-	let user = $page.data.user;
+	import type { User } from './types';
+	export let user: User | null;
 </script>
 
 <nav>
@@ -29,6 +29,11 @@
 			<li>
 				<ButtonSecondary href="/account" icon="user">Mon compte</ButtonSecondary>
 			</li>
+			<form method="post">
+				<li>
+					<ButtonSecondary formaction="/logout" icon="logout">Déconnexion</ButtonSecondary>
+				</li>
+			</form>
 		{:else}
 			<li>
 				<ButtonSecondary href="/login">Connexion</ButtonSecondary>

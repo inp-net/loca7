@@ -22,7 +22,7 @@
 		</InputField>
 
 		<InputField label="Nom complet">
-			<InputText required name="fullName" value="" />
+			<InputText autocomplete="name" required name="name" value="" />
 		</InputField>
 
 		<InputField label="Téléphone (optionel)">

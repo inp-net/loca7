@@ -2,18 +2,23 @@
 	import Icon from './Icon.svelte';
 
 	export let name: string = '';
-	export let options: string[];
+	export let options: string[] | Record<string, string>;
 	export let selection: string[] = [];
+
+	let optionsWithDisplay: Record<string, string> = {};
+	$: optionsWithDisplay = Array.isArray(options)
+		? Object.fromEntries(options.map((option) => [option, option]))
+		: options;
 </script>
 
 <fieldset>
-	{#each options as option}
-		<label aria-checked={selection.includes(option)}>
-			<div class="icon" aria-hidden={!selection.includes(option)}>
+	{#each Object.entries(optionsWithDisplay) as [value, display]}
+		<label aria-checked={selection.includes(value)}>
+			<div class="icon" aria-hidden={!selection.includes(value)}>
 				<Icon name="checkmark" color="bg" />
 			</div>
-			<input type="checkbox" {name} bind:group={selection} value={option} />
-			{option}
+			<input type="checkbox" {name} bind:group={selection} {value} />
+			{display}
 		</label>
 	{/each}
 </fieldset>

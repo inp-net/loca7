@@ -21,7 +21,7 @@
 	export let surface: number;
 	export let kind: AppartmentKind;
 	export let roomsCount: number;
-	export let availableAt: string;
+	export let availableAt: Date;
 	export let address: string;
 	export let location: GeographicPoint | null;
 	export let hasFurniture: boolean;
@@ -29,7 +29,7 @@
 	export let editable: boolean = false;
 	export let small: boolean = false;
 
-	let secondsAvailableSince = (Date.now() - Date.parse(availableAt)) * 1e-3;
+	let secondsAvailableSince = (Date.now() - availableAt.valueOf()) * 1e-3;
 </script>
 
 <article class:editable class:small>
@@ -55,7 +55,7 @@
 				<p class="typo-big-figure surface">{surface}m²</p>
 				<p class="type">
 					{kind}
-					{#if kind === 'Colocation'}de {roomsCount} chambres{/if}
+					{#if kind === 'colocation'}de {roomsCount} chambres{/if}
 				</p>
 			</section>
 		</section>

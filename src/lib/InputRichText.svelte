@@ -38,12 +38,14 @@
 
 	let domEditor: HTMLElement;
 	export let placeholder: string = '';
+	export let name: string | undefined = undefined;
 	export let value: string = '';
 </script>
 
 <div class="wrapper">
 	<InputRichTextToolbar {editor} />
 	<div class="editor" bind:this={domEditor} contenteditable="true" />
+	<input type="hidden" {name} {value} />
 </div>
 
 <style>

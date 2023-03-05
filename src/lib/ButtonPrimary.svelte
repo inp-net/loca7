@@ -1,15 +1,23 @@
 <script lang="ts">
 	export let id: string = '';
+	export let href: string | undefined = undefined;
 	export let submits: boolean = false;
 </script>
 
-<button {id} class="typo-big-button" on:click type={submits ? 'submit' : 'button'}>
+<svelte:element
+	this={href ? 'a' : 'button'}
+	{id}
+	{href}
+	class="button-primary typo-big-button"
+	on:click
+	type={submits ? 'submit' : 'button'}
+>
 	<slot />
-</button>
+</svelte:element>
 
 <style>
-	button {
-		display: flex;
+	.button-primary {
+		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		padding: 1rem 2rem;
@@ -23,8 +31,8 @@
 		cursor: pointer;
 	}
 
-	button:hover,
-	button:focus {
+	.button-primary:hover,
+	.button-primary:focus {
 		background: var(--sky); /* TODO check contrast */
 	}
 </style>

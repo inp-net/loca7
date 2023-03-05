@@ -3,7 +3,7 @@
 
 	export let id: string = '';
 	export let icon: string;
-	export let href: string;
+	export let href: string = '';
 
 	let hoverOrFocus = false;
 </script>

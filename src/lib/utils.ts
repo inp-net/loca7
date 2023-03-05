@@ -44,10 +44,14 @@ export function distanceDisplay(distance_meters: number): string {
 	}).format(distance_meters < 0.5 ? distance_meters : distance_meters * 1e-3);
 }
 
-export function availableAtSentence(availableSince: number, availableAt: string): string {
+export function availableAtSentence(availableSince: number, availableAt: Date): string {
 	let out = '';
 	console.log(availableSince);
-	if (availableAt === new Date().toISOString()) {
+	if (
+		availableAt.getFullYear() === new Date().getFullYear() &&
+		availableAt.getMonth() === new Date().getMonth() &&
+		availableAt.getDate() === new Date().getDate()
+	) {
 		out += "Se libère aujourd'hui";
 	} else if (availableSince > 0) {
 		out += 'Libéré depuis le ';
@@ -68,8 +72,8 @@ export function availableAtSentence(availableSince: number, availableAt: string)
 export type GeographicPoint = {
 	latitude: number;
 	longitude: number;
-	tuple: () => [number, number];
 };
+
 export function distanceBetween(a: GeographicPoint, b: GeographicPoint): number {
 	const earthRadiusKm = 6371;
 	const latitudeDistanceRadians = degreesToRadians(b.latitude - a.latitude);
@@ -100,8 +104,5 @@ export function readableOn(color: string): string {
 
 export const ENSEEIHT: GeographicPoint = {
 	latitude: 1.455074,
-	longitude: 43.60263,
-	tuple() {
-		return [this.longitude, this.latitude];
-	}
+	longitude: 43.60263
 };

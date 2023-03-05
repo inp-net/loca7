@@ -36,7 +36,7 @@
 <main>
 	<h1>Nouvelle annonce</h1>
 	<p>Votre annonce sera validée par un·e administrateur·ice avant d’être publiée</p>
-	<FormEditAppartment bind:appartment submitText="Poster" />
+	<FormEditAppartment bind:appartment submitText="Poster" action="postAppartment" />
 </main>
 
 <style>

@@ -38,7 +38,7 @@
 	// UI state
 	let opened = false;
 	export let loading = false;
-	export let text: string = '';
+	export let text: string | number = '';
 
 	// requests/responses counters
 
@@ -94,10 +94,6 @@
 
 	function highlight() {
 		const query = '.selected';
-
-		/**
-		 * @param {Element} el
-		 */
 		const el = list && list.querySelector(query);
 		if (el) {
 			if (typeof el.scrollIntoViewIfNeeded === 'function') {
@@ -219,9 +215,9 @@
 	class:is-loading={loading}
 	type="text"
 	{id}
-	autocomplete="off"
 	{placeholder}
 	{name}
+	autocomplete="off"
 	required
 	bind:this={input}
 	bind:value={text}

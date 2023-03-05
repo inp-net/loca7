@@ -4,16 +4,20 @@
 	export let icon: string = '';
 	export let id: string = '';
 	export let href: string = '';
+	export let formaction: string | undefined = undefined;
 	export let dangerous: boolean = false;
+	export let submits = false;
 
 	let hoverOrFocus = false;
 </script>
 
 <svelte:element
 	this={href ? 'a' : 'button'}
+	type={submits ? 'submit' : undefined}
 	class="button-secondary typo-paragraph"
 	class:dangerous
 	{href}
+	{formaction}
 	{id}
 	on:focus={() => (hoverOrFocus = true)}
 	on:blur={() => (hoverOrFocus = false)}

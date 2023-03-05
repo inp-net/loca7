@@ -11,30 +11,21 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request }) => {
-		const { name, email, password, phone } = Object.fromEntries(await request.formData()) as Record<
+	default: async ({ request, locals }) => {
+		const { email, password } = Object.fromEntries(await request.formData()) as Record<
 			string,
 			string
 		>;
 
 		try {
-			await auth.createUser({
-				key: {
-					providerId: 'email',
-					providerUserId: email,
-					password
-				},
-				attributes: {
-					phone,
-					name,
-					email
-				}
-			});
+			const key = await auth.validateKeyPassword('email', email, password);
+			const session = await auth.createSession(key.userId);
+			locals.setSession(session);
 		} catch (err) {
 			console.error(err);
-			return fail(400, { message: 'Could not register user' });
+			return fail(400, { message: 'Could not login user' });
 		}
 
-		throw redirect(302, '/login');
+		throw redirect(302, '/');
 	}
 };

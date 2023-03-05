@@ -8,25 +8,25 @@ import {
 } from './publicTransportColors';
 
 export type AppartmentKind =
-	| 'Chambre'
-	| 'Studio'
-	| 'T1'
-	| 'T1 bis'
-	| 'T2'
-	| 'T3 et plus'
-	| 'Colocation';
+	| 'chambre'
+	| 'studio'
+	| 't1'
+	| 't1bis'
+	| 't2'
+	| 't3etplus'
+	| 'colocation';
 
 export type PublicTransportType = 'bus' | 'bhnf' | 'metro' | 'tram' | 'telepherique' | 'tad';
 
-export const APPARTMENT_KINDS = [
-	'Chambre',
-	'Studio',
-	'T1',
-	'T1 bis',
-	'T2',
-	'T3 et plus',
-	'Colocation'
-];
+export const DISPLAY_APPARTMENT_KIND: Record<AppartmentKind, string> = {
+	chambre: 'Chambre',
+	studio: 'Studio',
+	t1: 'T1',
+	t1bis: 'T1 bis',
+	t2: 'T2',
+	t3etplus: 'T3 et plus',
+	colocation: 'Colocation'
+};
 
 export const DISPLAY_PUBLIC_TRANSPORT_TYPE: Record<PublicTransportType, string> = {
 	bus: 'bus',
@@ -41,7 +41,7 @@ export type PublicTransportStation = {
 	name: string;
 	line: string;
 	type: PublicTransportType;
-	color?: string;
+	color: string | null;
 };
 
 export type Appartment = {
@@ -53,7 +53,8 @@ export type Appartment = {
 	surface: number;
 	kind: AppartmentKind;
 	roomsCount: number;
-	availableAt: string;
+	availableAt: Date;
+	createdAt: Date;
 	address: string;
 	location: GeographicPoint | null;
 	hasFurniture: boolean;
@@ -90,15 +91,16 @@ export type SearchCriteria = {
 };
 
 const randomAppartementSpread = 0.025;
-export const randomAppartement: () => Appartment = () => ({
+export const randomAppartment: () => Appartment = () => ({
 	address: faker.address.streetAddress(true),
-	availableAt: faker.date.past().toISOString(),
+	availableAt: faker.date.past(),
+	createdAt: faker.date.past(),
 	charges: faker.datatype.number({ min: 10, max: 100 }),
 	deposit: faker.datatype.number({ min: 20, max: 1500 }),
 	description: faker.lorem.paragraphs(3),
 	hasFurniture: faker.datatype.boolean(),
 	hasParking: faker.datatype.boolean(),
-	kind: faker.helpers.arrayElement(APPARTMENT_KINDS) as AppartmentKind,
+	kind: faker.helpers.arrayElement(Object.keys(DISPLAY_APPARTMENT_KIND)) as AppartmentKind,
 	id: faker.datatype.uuid(),
 	images: Array(
 		faker.datatype.number({
@@ -107,8 +109,8 @@ export const randomAppartement: () => Appartment = () => ({
 		})
 	)
 		.fill('')
-		.map((_) => faker.image.city(640, 480, true)),
-	location: GeographicalPoint({
+		.map(() => faker.image.city(640, 480, true)),
+	location: {
 		latitude:
 			ENSEEIHT.latitude +
 			faker.datatype.number({
@@ -123,10 +125,10 @@ export const randomAppartement: () => Appartment = () => ({
 				min: -randomAppartementSpread,
 				precision: randomAppartementSpread / 10
 			})
-	}),
+	},
 	nearbyStations: Array(faker.datatype.number({ max: 6, min: 0 }))
 		.fill({})
-		.map((_) => {
+		.map(() => {
 			const type = faker.helpers.arrayElement(
 				Object.keys(DISPLAY_PUBLIC_TRANSPORT_TYPE)
 			) as PublicTransportType;
@@ -154,7 +156,8 @@ export const randomAppartement: () => Appartment = () => ({
 			return {
 				name: faker.address.streetName(),
 				line,
-				type
+				type,
+				color: null
 			};
 		}),
 	owner: {
@@ -172,14 +175,3 @@ export const randomAppartement: () => Appartment = () => ({
 		byPublicTransport: faker.datatype.number({ max: 30, min: 5 }) * 60
 	}
 });
-
-export function GeographicalPoint(point: { latitude: number; longitude: number }): GeographicPoint {
-	const { latitude, longitude } = point;
-	return {
-		latitude,
-		longitude,
-		tuple() {
-			return [longitude, latitude];
-		}
-	};
-}

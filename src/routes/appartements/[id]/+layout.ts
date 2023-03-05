@@ -1,5 +1,5 @@
 import {
-	randomAppartement,
+	randomAppartment,
 	GeographicalPoint,
 	type Appartment,
 	type PublicTransportStation
@@ -92,6 +92,6 @@ export const load: LayoutLoad<{ appartment: Appartment }> = ({ params }) => {
 	}
 
 	return {
-		appartment: randomAppartement()
+		appartment: randomAppartment()
 	};
 };

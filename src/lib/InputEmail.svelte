@@ -9,4 +9,4 @@
 	export let required: boolean = false;
 </script>
 
-<BaseInputText type="email" bind:value {id} {name} {initial} {placeholder} {required} />
+<BaseInputText autocomplete="email" type="email" bind:value {id} {name} {initial} {placeholder} {required} />
