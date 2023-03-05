@@ -17,6 +17,7 @@
 		type SearchCriteria
 	} from '$lib/types';
 	import { distanceBetween, ENSEEIHT } from '$lib/utils';
+	import { onMount } from 'svelte';
 
 	let criteria: SearchCriteria = {
 		bicycleParking: null,
@@ -30,6 +31,18 @@
 	let sortOptions = ['prix', 'surface', "distance à l'n7", 'délai avant libération'];
 	let sortBy = sortOptions[0];
 	let resultsTab = 'list';
+
+	let scroll = 0;
+	onMount(() => {
+		window.addEventListener('scroll', () => {
+			if (resultsTab === 'list') scroll = window.scrollY;
+		});
+	});
+	$: if (resultsTab === 'list') {
+		window.scrollTo(0, scroll);
+	} else {
+		window.scrollTo(0, 0);
+	}
 
 	const appartments: Appartment[] = Array(15).fill({}).map(randomAppartement);
 
