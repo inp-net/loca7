@@ -58,19 +58,19 @@ Il y a également une copie locale importable dans figma, au nom de `/prototype.
 ## Stack
 
 - [Svelte](https://svelte.dev) pour le frontend
-- [Django](https://djangoproject.com)+[DRF](https://django-rest-framework.org) pour le backend
+- [SvelteKit](https://kit.svelte.dev) pour le backend
 - [PostgreSQL](https://postgresql.org) pour la base de données
 - [MJML](https://mjml.io) pour la génération d'e-mails
 
 ## Architecture
 
-- **static/** fichiers statiques (logos, favicons, etc)
-- **loca7/** backend
-  - **app/** connexion avec le frontend
-  - **data/** API
-  - **notifications/** gestion des notifications par mail
-- **front/** frontend
+> Architecture standard de projets SvelteKit
+
+- **public/** fichiers statiques (logos, favicons, etc)
+- **src/lib/** composants
+- **src/routes/** pages
 
 ## Temps passé
 
 - **Prototype d'interface:** 16 heures
+- **Programmation:** [![wakatime](https://wakatime.com/badge/user/0054cecb-dd63-44eb-9e94-ed53ccb8506a/project/92917f76-b95c-4e47-bc96-986e5e983a37.svg)](https://wakatime.com/@ewen_lbh/projects/adljqhspbi)

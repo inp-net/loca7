@@ -1,4 +1,0 @@
-#!/bin/sh
-
-# This script ensures that the .env file is present in the current directory.
-test -f .env 

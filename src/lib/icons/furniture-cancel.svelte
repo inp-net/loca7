@@ -1,0 +1,22 @@
+<script lang="ts">
+	export let color: string = 'currentColor';
+	export let strokeWidth: number = 5;
+	export let flip: boolean = false;
+</script>
+
+<svg
+	style:transform={flip ? 'scaleX(-1)' : ''}
+	width="50"
+	height="50"
+	viewBox="0 0 50 50"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
+>
+	<path
+		fill-rule="evenodd"
+		clip-rule="evenodd"
+		d="M1 47V47.0153H1.01534L1 47ZM10.3338 33.5951H6V37.9289L1 42.9289V4.29601H6V28.5951H15.3338L10.3338 33.5951ZM19.5736 38.4974V47.0153H24.5736V33.4974L19.5736 38.4974ZM29.0373 29.0338V37H46.5V11.5711L41.5 16.5711V32H34.0373V24.0338L29.0373 29.0338ZM35.9289 8H19V19.0704H24.8585L19.8585 24.0704H14V3H40.9289L35.9289 8Z"
+		fill={color}
+	/>
+	<path d="M46 5L4 47" stroke={color} stroke-width={strokeWidth} />
+</svg>
