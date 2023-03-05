@@ -17,26 +17,26 @@
 
 <main>
 	<h1>Mon compte</h1>
-	
+
 	<form action="/update-profile">
 		<h2>Profil</h2>
 		<InputField label="Nom complet">
 			<InputText name="name" bind:value={user.name} />
 		</InputField>
-	
+
 		<InputField label="Adresse e-mail">
 			<InputEmail name="email" bind:value={user.email} />
 		</InputField>
 		<InputField label="Téléphone">
 			<InputPhone name="phone" bind:value={user.phone} />
 		</InputField>
-	
+
 		<ButtonSecondary submits icon="checkmark">Enregistrer</ButtonSecondary>
 	</form>
-	
+
 	<form class="password">
 		<h2>Changer de mot de passe</h2>
-	
+
 		<form action="/change-password">
 			<InputPassword
 				bind:value={oldPassword}
@@ -55,7 +55,6 @@
 		</form>
 	</form>
 </main>
-
 
 <style>
 	main {

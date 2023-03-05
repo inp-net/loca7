@@ -38,13 +38,4 @@
 	}
 </script>
 
-<BaseInputText
-	{placeholder}
-	type="number"
-	{unit}
-	bind:value
-	{id}
-	{name}
-	{initial}
-	{errorMessage}
-/>
+<BaseInputText {placeholder} type="number" {unit} bind:value {id} {name} {initial} {errorMessage} />

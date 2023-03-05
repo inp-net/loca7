@@ -25,7 +25,7 @@ git clone https://git.inpt.fr/INP-net/loca7
 cd loca7
 npm i # ou pnpm, ou yarn
 # remplacer user et password, ainsi que 5432 par le port de votre serveur postgresql
-echo "DATABASE_URL=postgres://user:password@localhost:5432/loca7" > .env 
+echo "DATABASE_URL=postgres://user:password@localhost:5432/loca7" > .env
 npm run pushdb
 npm run dev
 ```

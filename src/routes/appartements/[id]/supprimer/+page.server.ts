@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 					ownerId: user.id
 				}
 			]
-		},
+		}
 	});
 
 	if (appartment === null) {
@@ -47,7 +47,7 @@ export const actions: Actions = {
 						ownerId: user.id
 					}
 				]
-			},
+			}
 		});
 
 		if (appartment === null) {

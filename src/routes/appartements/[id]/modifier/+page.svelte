@@ -16,7 +16,12 @@
 
 <main>
 	<h1>Modification d'une annonce</h1>
-	<FormEditAppartment action="?/edit" bind:appartment initial={initialAppartment} submitText="Modifier" />
+	<FormEditAppartment
+		action="?/edit"
+		bind:appartment
+		initial={initialAppartment}
+		submitText="Modifier"
+	/>
 </main>
 
 <style>

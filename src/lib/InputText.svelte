@@ -10,4 +10,13 @@
 	export let autocomplete: string | undefined = undefined;
 </script>
 
-<BaseInputText type="text" bind:value {id} {autocomplete} {name} {initial} {placeholder} {required} />
+<BaseInputText
+	type="text"
+	bind:value
+	{id}
+	{autocomplete}
+	{name}
+	{initial}
+	{placeholder}
+	{required}
+/>

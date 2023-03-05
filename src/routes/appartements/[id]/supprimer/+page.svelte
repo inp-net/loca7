@@ -41,9 +41,9 @@
 		text-align: center;
 	}
 
-    section.actions {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-    }
+	section.actions {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+	}
 </style>

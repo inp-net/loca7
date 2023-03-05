@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import type { AppartmentKind } from '$lib/types';
-import { prisma } from "$lib/server/prisma";
+import { prisma } from '$lib/server/prisma';
 import xss from 'xss';
 
 export const load: PageServerLoad = async ({ locals }) => {

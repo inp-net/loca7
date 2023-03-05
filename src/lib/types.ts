@@ -57,8 +57,8 @@ export type Appartment = {
 	createdAt: Date;
 	address: string;
 	location: GeographicPoint | null;
-	hasFurniture: boolean|null;
-	hasParking: boolean|null;
+	hasFurniture: boolean | null;
+	hasParking: boolean | null;
 	description: string;
 	travelTimeToN7: {
 		byFoot: number | null;
