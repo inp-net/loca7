@@ -15,7 +15,6 @@
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import {
 		DISPLAY_PUBLIC_TRANSPORT_TYPE,
-		GeographicalPoint,
 		type Appartment,
 		type PublicTransportStation
 	} from '$lib/types';
@@ -24,7 +23,7 @@
 
 	export let data: LayoutData;
 	let appart: Appartment = data.appartment;
-	let secondsAvailableSince = (Date.now() - Date.parse(appart.availableAt)) * 1e-3;
+	let secondsAvailableSince = (Date.now() - appart.availableAt.valueOf()) * 1e-3;
 
 	function publicTransportStationSentence(station: PublicTransportStation) {
 		return `${station.type === 'metro' ? 'Station' : 'Arrêt'} «${station.name}» du ${
@@ -33,10 +32,10 @@
 	}
 
 	function middleOf(...points: GeographicPoint[]): GeographicPoint {
-		return GeographicalPoint({
+		return {
 			latitude: points.reduce((acc, p) => acc + p.latitude, 0) / points.length,
 			longitude: points.reduce((acc, p) => acc + p.longitude, 0) / points.length
-		});
+		};
 	}
 </script>
 
@@ -55,7 +54,7 @@
 				<div class="row">
 					<InputField label="Type de logement">
 						<p class="typo-big-figure">{appart.kind}</p>
-						{#if appart.kind === 'Colocation'}
+						{#if appart.kind === 'colocation'}
 							<p class="typo-paragraph">de {appart.roomsCount} chambres</p>
 						{/if}
 					</InputField>
@@ -112,10 +111,10 @@
 							{/if}<br />
 							{#if appart.travelTimeToN7.byBike !== null}
 								{durationDisplay(appart.travelTimeToN7.byBike)} à vélo
-								{#if appart.velotoulouse}
+								<!-- {#if appart.velotoulouse}
 									<wbr />
 									<span class="muted">station VélÔToulouse à proximité</span>
-								{/if}
+								{/if} -->
 							{/if}<br />
 							{#if appart.travelTimeToN7.byPublicTransport !== null}
 								{durationDisplay(appart.travelTimeToN7.byPublicTransport)} en transports<wbr />
