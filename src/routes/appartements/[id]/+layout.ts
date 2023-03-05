@@ -1,9 +1,4 @@
-import {
-	randomAppartment,
-	GeographicalPoint,
-	type Appartment,
-	type PublicTransportStation
-} from '$lib/types';
+import { randomAppartment, type Appartment, type PublicTransportStation } from '$lib/types';
 import { ENSEEIHT } from '$lib/utils';
 import type { LayoutLoad } from './$types';
 
@@ -13,7 +8,8 @@ export const load: LayoutLoad<{ appartment: Appartment }> = ({ params }) => {
 			appartment: {
 				id: 'tr',
 				address: '2 Rue Charles Camichel, 31000 Toulouse',
-				availableAt: new Date(Date.now() + 25 * 60 * 60 * 1000).toISOString(),
+				availableAt: new Date(Date.now() + 25 * 60 * 60 * 1000),
+				createdAt: new Date(Date.now() - 25 * 60 * 60 * 1000),
 				rent: 0,
 				charges: 0,
 				location: ENSEEIHT,
@@ -21,7 +17,7 @@ export const load: LayoutLoad<{ appartment: Appartment }> = ({ params }) => {
 				hasFurniture: false,
 				hasParking: true,
 				images: [],
-				kind: 'Colocation',
+				kind: 'colocation',
 				roomsCount: 11 + 3,
 				surface: 666,
 				description:
@@ -53,14 +49,15 @@ export const load: LayoutLoad<{ appartment: Appartment }> = ({ params }) => {
 			appartment: {
 				id: 'uwun',
 				address: '10 Rue de Verdun, 31000 Toulouse',
-				availableAt: '2099-01-01',
+				availableAt: new Date(Date.parse('2099-01-01')),
+				createdAt: new Date(Date.parse('2022-09-01')),
 				charges: 0,
 				deposit: 0,
 				description: 'Mon appart :)))',
 				distanceToN7: 1.4,
 				images: ['https://media.ewen.works/studio.jpeg', 'https://media.ewen.works/velo.jpeg'],
 				hasFurniture: true,
-				kind: 'T1 bis',
+				kind: 't1bis',
 				roomsCount: 1,
 				hasParking: false,
 				owner: {
@@ -83,10 +80,10 @@ export const load: LayoutLoad<{ appartment: Appartment }> = ({ params }) => {
 					{ type: 'bus', line: 'Cimetières', name: "Jeanne d'Arc" }
 				] as PublicTransportStation[],
 				velotoulouse: false,
-				location: GeographicalPoint({
+				location: {
 					latitude: 1.443092,
 					longitude: 43.611764
-				})
+				}
 			}
 		};
 	}
