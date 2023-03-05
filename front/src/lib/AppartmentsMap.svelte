@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import CardAppartment from './CardAppartment.svelte';
+	import CarouselImages from './CarouselImages.svelte';
 	import type { Appartment } from './types';
 	import { ENSEEIHT, type GeographicPoint } from './utils';
 	export let appartments: Appartment[];
@@ -53,7 +54,7 @@
 			alt: 'Ton école'
 		})
 			.addTo(map)
-			.bindPopup('Ton école');
+			.bindPopup(document.querySelector('#map + .map-marker-popups .map-enseeiht-popup'));
 		updateMarkers(appartments);
 	});
 
@@ -63,6 +64,21 @@
 <div id="map" class="map" bind:this={leaflet} />
 
 <aside class="map-marker-popups">
+	<div class="map-enseeiht-popup">
+		<div class="photos">
+			<CarouselImages
+				images={[
+					'/photos/enseeiht-entrée.png',
+					'/photos/enseeiht-cour.png',
+					'/photos/enseeiht-bâtiment-chercheurs.png'
+				]}
+			/>
+		</div>
+		<div class="text">
+			<p class="typo-big-figure">ENSEEIHT</p>
+			<p class="typo-paragraph">Ton école!</p>
+		</div>
+	</div>
 	{#each appartments as appart (appart.id)}
 		{#if appart.location}
 			<div class="map-appartment-popup" data-id={appart.id}>
@@ -90,7 +106,28 @@
 		margin: 0;
 		padding: 0;
 		line-height: unset;
-		width: 300px !important;
+		width: 100% !important;
+	}
+
+	.map-enseeiht-popup {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.map-enseeiht-popup .text {
+		padding: 1rem 2rem;
+	}
+
+	.map-enseeiht-popup .photos {
+		width: 100%;
+		max-width: 300px;
+		height: 150px;
+		overflow: hidden;
+	}
+
+	.map-appartment-popup {
+		width: 300px;
 	}
 
 	:global(#map .leaflet-popup-content p) {
