@@ -1,10 +1,17 @@
 <script lang="ts">
-    export let color: string = 'currentColor';
-    export let strokeWidth: number = 5;
-    export let flip: boolean = false;
-            </script>
+	export let color: string = 'currentColor';
+	export let strokeWidth: number = 5;
+	export let flip: boolean = false;
+</script>
 
-<svg style:transform={flip ? "scaleX(-1)" : ""} width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg
+	style:transform={flip ? 'scaleX(-1)' : ''}
+	width="50"
+	height="50"
+	viewBox="0 0 50 50"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
+>
 	<path d="M25 3.5L46.6506 41H3.34937L25 3.5Z" fill="#E6B024" />
 	<path
 		d="M23.0354 28.4317V13.9878H26.9691V28.4317H23.0354ZM25.0022 35.9302C24.1827 35.9302 23.4861 35.6639 22.9125 35.1312C22.3593 34.578 22.0827 33.8712 22.0827 33.0107C22.0827 32.1502 22.3593 31.4537 22.9125 30.921C23.4861 30.3678 24.1827 30.0912 25.0022 30.0912C25.8422 30.0912 26.5388 30.3678 27.092 30.921C27.6452 31.4537 27.9217 32.1502 27.9217 33.0107C27.9217 33.8712 27.6452 34.578 27.092 35.1312C26.5388 35.6639 25.8422 35.9302 25.0022 35.9302Z"

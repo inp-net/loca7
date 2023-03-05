@@ -1,7 +1,7 @@
 <script>
 	/**
 	 * From https://npmjs.com/package/svelte-sortable-list
-	*/
+	 */
 	import { quintOut } from 'svelte/easing';
 	import { crossfade } from 'svelte/transition';
 	import { flip } from 'svelte/animate';

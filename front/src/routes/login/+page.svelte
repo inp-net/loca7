@@ -61,12 +61,12 @@
 		justify-content: center;
 	}
 
-	main h1, main p {
+	main h1,
+	main p {
 		text-align: center;
 	}
 
 	h1 + p {
-
 		margin-bottom: 2rem;
 	}
 

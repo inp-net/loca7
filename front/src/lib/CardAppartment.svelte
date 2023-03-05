@@ -36,67 +36,71 @@
 	<section class="photos">
 		<CarouselImages cover {images} />
 	</section>
-	<svelte:element class="content" this={editable ? 'div' : 'a'} href={editable ? '' : `/appartements/${id}`}>
-			<section class="figures">
-				<section class="price">
-					<p class="typo-big-figure rent">{rent + charges}€</p>
-					<p class="charges">
-						{#if !small}
-							dont {charges}€ de charges<br />
-						{/if}
-						soit {Math.round((rent + charges) / surface)} €/m²
-					</p>
-				</section>
-				<section class="space">
-					<p class="typo-big-figure surface">{surface}m²</p>
-					<p class="type">
-						{kind}
-						{#if kind === 'Colocation'}de {roomsCount} chambres{/if}
-					</p>
-				</section>
+	<svelte:element
+		this={editable ? 'div' : 'a'}
+		class="content"
+		href={editable ? '' : `/appartements/${id}`}
+	>
+		<section class="figures">
+			<section class="price">
+				<p class="typo-big-figure rent">{rent + charges}€</p>
+				<p class="charges">
+					{#if !small}
+						dont {charges}€ de charges<br />
+					{/if}
+					soit {Math.round((rent + charges) / surface)} €/m²
+				</p>
 			</section>
-			{#if !small}
-				<section class="situation">
-					<span class="icon"><Icon name="calendar" /></span>
-					<p class="when">
-						{availableAtSentence(secondsAvailableSince, availableAt)}
-						{#if secondsAvailableSince !== 0}
-							<span class="muted"
-								>{#if secondsAvailableSince > 0}il y a{:else}dans{/if}
-								{durationDisplay(Math.abs(secondsAvailableSince))}</span
-							>
-						{/if}
-					</p>
-					<span class="icon"><Icon name="location" /></span>
-					<p class="where">
-						{address}
-						{#if location}
-							<span class="muted">à {distanceDisplay(distanceBetween(location, ENSEEIHT))}</span>
-						{/if}
-					</p>
-				</section>
-				<section class="aspects">
-					<p class="furniture">
-						<span class="icon"><Icon name="furniture" cancel={!hasFurniture} /></span>
-						{hasFurniture ? 'Meublé' : 'Non meublé'}
-					</p>
-					<p class="parking">
-						<span class="icon"><Icon name="parking" cancel={!hasParking} /></span>
-						{hasParking ? 'Place de parking' : 'Pas de place de parking'}
-					</p>
-				</section>
-			{/if}
-			{#if editable}
-				<section class="editable">
-					<ButtonColored dangerous on:click={() => emit('delete')}>Supprimer</ButtonColored>
-					<ButtonColored href="/appartements/{id}" on:click={() => emit('delete')}
-						>Voir l'annonce</ButtonColored
-					>
-					<ButtonColored href="/appartements/{id}/modifier" on:click={() => emit('edit')}
-						>Modifier</ButtonColored
-					>
-				</section>
-			{/if}
+			<section class="space">
+				<p class="typo-big-figure surface">{surface}m²</p>
+				<p class="type">
+					{kind}
+					{#if kind === 'Colocation'}de {roomsCount} chambres{/if}
+				</p>
+			</section>
+		</section>
+		{#if !small}
+			<section class="situation">
+				<span class="icon"><Icon name="calendar" /></span>
+				<p class="when">
+					{availableAtSentence(secondsAvailableSince, availableAt)}
+					{#if secondsAvailableSince !== 0}
+						<span class="muted"
+							>{#if secondsAvailableSince > 0}il y a{:else}dans{/if}
+							{durationDisplay(Math.abs(secondsAvailableSince))}</span
+						>
+					{/if}
+				</p>
+				<span class="icon"><Icon name="location" /></span>
+				<p class="where">
+					{address}
+					{#if location}
+						<span class="muted">à {distanceDisplay(distanceBetween(location, ENSEEIHT))}</span>
+					{/if}
+				</p>
+			</section>
+			<section class="aspects">
+				<p class="furniture">
+					<span class="icon"><Icon name="furniture" cancel={!hasFurniture} /></span>
+					{hasFurniture ? 'Meublé' : 'Non meublé'}
+				</p>
+				<p class="parking">
+					<span class="icon"><Icon name="parking" cancel={!hasParking} /></span>
+					{hasParking ? 'Place de parking' : 'Pas de place de parking'}
+				</p>
+			</section>
+		{/if}
+		{#if editable}
+			<section class="editable">
+				<ButtonColored dangerous on:click={() => emit('delete')}>Supprimer</ButtonColored>
+				<ButtonColored href="/appartements/{id}" on:click={() => emit('delete')}
+					>Voir l'annonce</ButtonColored
+				>
+				<ButtonColored href="/appartements/{id}/modifier" on:click={() => emit('edit')}
+					>Modifier</ButtonColored
+				>
+			</section>
+		{/if}
 	</svelte:element>
 </article>
 

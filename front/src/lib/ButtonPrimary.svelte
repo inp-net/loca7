@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let id: string = "";
+	export let id: string = '';
 	export let submits: boolean = false;
 </script>
 

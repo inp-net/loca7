@@ -25,16 +25,16 @@
 	main {
 		display: flex;
 		flex-wrap: wrap;
-        align-self: center;
+		align-self: center;
 		width: 100%;
 		row-gap: 3rem;
-        column-gap: 5rem;
+		column-gap: 5rem;
 	}
 
 	.item {
 		display: flex;
 		flex-direction: column;
-        align-items: center;
+		align-items: center;
 		width: 3rem;
 	}
 
