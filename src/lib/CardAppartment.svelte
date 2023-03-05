@@ -92,9 +92,9 @@
 		{/if}
 		{#if editable}
 			<section class="editable">
-				<ButtonColored dangerous on:click={() => emit('delete')}>Supprimer</ButtonColored>
+				<ButtonColored dangerous href="/appartements/{id}/supprimer">Supprimer</ButtonColored>
 				<ButtonColored href="/appartements/{id}" on:click={() => emit('delete')}
-					>Voir l'annonce</ButtonColored
+					>Annonce</ButtonColored
 				>
 				<ButtonColored href="/appartements/{id}/modifier" on:click={() => emit('edit')}
 					>Modifier</ButtonColored
@@ -140,6 +140,7 @@
 		justify-content: space-between;
 		margin-bottom: 2em;
 		gap: 2rem;
+		flex-wrap: wrap;
 	}
 
 	section.space {
@@ -150,7 +151,7 @@
 	}
 
 	section.figures section {
-		width: 50%;
+		/* width: 50%; */
 	}
 
 	section.situation {

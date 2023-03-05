@@ -11,7 +11,7 @@
 	const { ListNode, ListItemNode } = lexicalList;
 	import lexicalLink from '@lexical/link';
 	const { LinkNode, AutoLinkNode } = lexicalLink;
-	import Edit from './icons/edit.svelte';
+	import { browser } from '$app/environment';
 
 	const editor: LexicalEditor = createEditor({
 		namespace: 'editor',
@@ -23,6 +23,7 @@
 	onMount(() => {
 		editor.setRootElement(domEditor);
 		editor.update(() => {
+			if (!browser) return;
 			lexicalHTML['$generateNodesFromDOM'](
 				editor,
 				new DOMParser().parseFromString(value, 'text/html')
@@ -34,6 +35,14 @@
 				value = lexicalHTML['$generateHtmlFromNodes'](editor, null);
 			});
 		});
+	});
+
+	$: editor.update(() => {
+		if (!browser) return;
+		lexicalHTML['$generateNodesFromDOM'](
+			editor,
+			new DOMParser().parseFromString(value, 'text/html')
+		);
 	});
 
 	let domEditor: HTMLElement;

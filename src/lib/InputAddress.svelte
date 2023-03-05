@@ -11,6 +11,9 @@
 	export let name: string | undefined = undefined;
 	export let initial: string | undefined = undefined;
 	export let placeholder: string = '';
+	export let required: boolean = false;
+	export let showEmptyErrors: boolean = true;
+
 	let messageIsWarning = false;
 	let errorMessage: string = '';
 	let suggestions: string[] = [];
@@ -41,17 +44,19 @@
 		({ properties: { name, postcode, city } }) => `${name}, ${postcode} ${city}`
 	);
 
-	$: if (latitude && longitude) {
-		if (distanceToN7 && distanceToN7 > 20e3) {
-			errorMessage = `L'adresse saisie est très loin de l'ENSEEIHT. Vérifiez l'adresse saisie.`;
-			messageIsWarning = true;
-		} else {
-			errorMessage = '';
-		}
+	$: if (showEmptyErrors && required && !value) {
+		errorMessage = 'Ce champ est requis';
+		messageIsWarning = false;
+	} else if (distanceToN7 !== null && distanceToN7 > 20e3) {
+		errorMessage = `L'adresse saisie est très loin de l'ENSEEIHT. Vérifiez l'adresse saisie.`;
+		messageIsWarning = true;
+	} else {
+		errorMessage = '';
 	}
 </script>
 
 <BaseInputText
+	{required}
 	{suggestions}
 	{placeholder}
 	type="text"

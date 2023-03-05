@@ -53,7 +53,7 @@
 	}
 	:global(main) {
 		flex-grow: 1;
-		padding-top: 100px;
+		padding-top: 130px;
 	}
 	img.logo {
 		max-width: 500px;

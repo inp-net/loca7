@@ -6,7 +6,7 @@
 	import type { LayoutData } from '../$types';
 
 	export let data: LayoutData;
-	const initialAppartment: Appartment = data.appartement;
+	const initialAppartment: Appartment = data.appartment;
 	let appartment: Appartment = { ...initialAppartment };
 </script>
 
@@ -16,13 +16,16 @@
 
 <main>
 	<h1>Modification d'une annonce</h1>
-	<FormEditAppartment bind:appartment initial={initialAppartment} submitText="Modifier" />
+	<FormEditAppartment action="?/edit" bind:appartment initial={initialAppartment} submitText="Modifier" />
 </main>
 
 <style>
 	main {
 		max-width: 1200px;
 		margin: 0 auto;
-		padding: 0 1em;
+	}
+
+	h1 {
+		margin-bottom: 2rem;
 	}
 </style>

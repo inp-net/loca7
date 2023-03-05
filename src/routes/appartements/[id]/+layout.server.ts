@@ -1,8 +1,10 @@
-import { randomAppartment, type Appartment, type PublicTransportStation } from '$lib/types';
+import type { Appartment, PublicTransportStation } from '$lib/types';
 import { ENSEEIHT } from '$lib/utils';
 import type { LayoutLoad } from './$types';
+import { prisma } from '$lib/server/prisma';
+import { fail } from '@sveltejs/kit';
 
-export const load: LayoutLoad<{ appartment: Appartment }> = ({ params }) => {
+export const load: LayoutLoad<{ appartment: Appartment }> = async ({ params }) => {
 	if (params.id === 'tr') {
 		return {
 			appartment: {
@@ -87,8 +89,17 @@ export const load: LayoutLoad<{ appartment: Appartment }> = ({ params }) => {
 			}
 		};
 	}
+	const appartment = await prisma.appartment.findUnique({
+		where: { id: params.id },
+		include: {
+			owner: true,
+			location: true,
+			nearbyStations: true,
+			travelTimeToN7: true
+		}
+	});
 
-	return {
-		appartment: randomAppartment()
-	};
+	if (appartment === null) throw fail(404, { message: 'Appartment not found' });
+
+	return { appartment };
 };

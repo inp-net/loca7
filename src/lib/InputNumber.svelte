@@ -9,12 +9,19 @@
 	export let placeholder: string = '';
 
 	export let positive: boolean = false;
+	export let nonzero: boolean = false;
 	export let integer: boolean = false;
+	export let required: boolean = false;
+	export let showEmptyErrors: boolean = true;
 
 	let errorMessage: string = '';
 	$: {
 		if (value === undefined) {
-			errorMessage = '';
+			if (required && showEmptyErrors) {
+				errorMessage = 'Ce champ est requis';
+			} else {
+				errorMessage = '';
+			}
 		} else {
 			if (value === null) {
 				errorMessage = 'Entrez un nombre';
@@ -22,6 +29,8 @@
 				errorMessage = 'Entrez un nombre entier';
 			} else if (positive && value < 0) {
 				errorMessage = 'Entrez un nombre positif';
+			} else if (nonzero && value === 0) {
+				errorMessage = 'Entrez un nombre non nul';
 			} else {
 				errorMessage = '';
 			}

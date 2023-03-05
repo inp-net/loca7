@@ -20,10 +20,9 @@
 		deposit: undefined,
 		description: '',
 		distanceToN7: undefined,
-		hasFurniture: undefined,
-		hasParking: undefined,
+		hasFurniture: null,
+		hasParking: null,
 		kind: undefined,
-		id: undefined,
 		images: [],
 		owner: {
 			email: undefined,
@@ -35,31 +34,45 @@
 		roomsCount: undefined,
 		surface: undefined
 	};
+
+	let showEmptyErrors = false;
 </script>
 
 <form class="fields" {action} method="post">
 	<InputField label="Type de logement">
-		<InputSelectOne name="kind" options={DISPLAY_APPARTMENT_KIND} bind:value={appartment.kind} />
+		<InputSelectOne
+			required
+			{showEmptyErrors}
+			name="kind"
+			options={DISPLAY_APPARTMENT_KIND}
+			bind:value={appartment.kind}
+		/>
 	</InputField>
 
 	<div class="side-by-side">
 		<InputField label="Surface">
 			<InputNumber
+				required
+				{showEmptyErrors}
 				name="surface"
 				unit="m²"
 				initial={initial.surface}
 				bind:value={appartment.surface}
 				positive
+				nonzero
 			/>
 		</InputField>
 
 		{#if appartment.kind === 'colocation'}
 			<InputField label="Nb chambres">
 				<InputNumber
+					required
+					{showEmptyErrors}
 					name="roomsCount"
 					initial={initial.roomsCount}
 					bind:value={appartment.roomsCount}
 					positive
+					nonzero
 					integer
 				/>
 			</InputField>
@@ -70,9 +83,11 @@
 		<InputField label="Loyer">
 			<InputNumber
 				name="rent"
+				{showEmptyErrors}
 				unit="€"
 				initial={initial.rent}
 				bind:value={appartment.rent}
+				required
 				positive
 			/>
 		</InputField>
@@ -81,8 +96,10 @@
 			<InputNumber
 				name="charges"
 				unit="€"
+				{showEmptyErrors}
 				initial={initial.charges}
 				bind:value={appartment.charges}
+				required
 				positive
 			/>
 		</InputField>
@@ -91,19 +108,34 @@
 			<InputNumber
 				name="deposit"
 				unit="€"
+				{showEmptyErrors}
 				initial={initial.deposit}
 				bind:value={appartment.deposit}
+				required
 				positive
 			/>
 		</InputField>
 	</div>
 
 	<InputField label="Date de libération">
-		<InputDate name="availableAt" bind:value={appartment.availableAt} initial={initial.availableAt} />
+		<InputDate
+			name="availableAt"
+			{showEmptyErrors}
+			bind:value={appartment.availableAt}
+			initial={initial.availableAt}
+			required
+		/>
 	</InputField>
 
 	<InputField label="Adresse" id="address">
-		<InputAddress name="address" id="address" bind:value={appartment.address} initial={initial.address} />
+		<InputAddress
+			{showEmptyErrors}
+			name="address"
+			id="address"
+			bind:value={appartment.address}
+			initial={initial.address}
+			required
+		/>
 	</InputField>
 
 	<InputField label="Aspects">
@@ -123,7 +155,7 @@
 	</InputField>
 
 	<section class="submit">
-		<ButtonPrimary submits>{submitText}</ButtonPrimary>
+		<ButtonPrimary on:click={() => (showEmptyErrors = true)} submits>{submitText}</ButtonPrimary>
 	</section>
 </form>
 

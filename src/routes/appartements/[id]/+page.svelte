@@ -3,6 +3,7 @@
 	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
 	import type { LayoutData, PageData } from './$types';
+	import xss from 'xss';
 	import {
 		durationDisplay,
 		distanceDisplay,
@@ -14,6 +15,7 @@
 	} from '$lib/utils';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import {
+		DISPLAY_APPARTMENT_KIND,
 		DISPLAY_PUBLIC_TRANSPORT_TYPE,
 		type Appartment,
 		type PublicTransportStation
@@ -53,7 +55,7 @@
 			<section class="figures">
 				<div class="row">
 					<InputField label="Type de logement">
-						<p class="typo-big-figure">{appart.kind}</p>
+						<p class="typo-big-figure">{DISPLAY_APPARTMENT_KIND[appart.kind]}</p>
 						{#if appart.kind === 'colocation'}
 							<p class="typo-paragraph">de {appart.roomsCount} chambres</p>
 						{/if}
@@ -100,7 +102,7 @@
 					</p>
 					<ButtonSecondary icon="open-outside">Maps</ButtonSecondary>
 				</div>
-				{#if Object.values(appart.travelTimeToN7).some((v) => v !== null)}
+				{#if Object.entries(appart.travelTimeToN7).some(([k, v]) => k !== 'id' && v !== null)}
 					<div class="row">
 						<span class="icon"><Icon name="travel" /></span>
 						<p class="traveltime typo-tabular-figures">
@@ -169,10 +171,12 @@
 					{/if}
 				</ul>
 			</section>
-			<section class="description">
-				<h2>Description</h2>
-				<p>{appart.description}</p>
-			</section>
+			{#if xss(appart.description)}
+				<section class="description">
+					<h2>Description</h2>
+					<p>{@html xss(appart.description)}</p>
+				</section>
+			{/if}
 			<section class="owner">
 				<h2 class="typo-field-label">Propriétaire</h2>
 				<p class="name typo-title">

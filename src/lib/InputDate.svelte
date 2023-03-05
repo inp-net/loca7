@@ -8,6 +8,8 @@
 	export let placeholder: string = '';
 	export let future: boolean = false;
 	export let past: boolean = false;
+	export let required: boolean = false;
+	export let showEmptyErrors: boolean = true;
 
 	let dateString: string = value ? value.toISOString().split('T')[0] : '';
 	$: value = dateString ? new Date(dateString) : null;
@@ -17,9 +19,9 @@
 
 	export let errorMessage: string = '';
 	$: {
-		if (value === null) {
-			errorMessage = '';
-		} else {
+		if (value === null && showEmptyErrors && required) {
+			errorMessage = 'Ce champ est requis';
+		} else if (value !== null) {
 			if (future && value.valueOf() < Date.now()) {
 				errorMessage = 'La date doit être dans le futur';
 			} else if (past && value.valueOf() > Date.now()) {
@@ -27,6 +29,8 @@
 			} else {
 				errorMessage = '';
 			}
+		} else {
+			errorMessage = '';
 		}
 	}
 </script>
@@ -39,4 +43,5 @@
 	{name}
 	initial={initialString}
 	{errorMessage}
+	{required}
 />

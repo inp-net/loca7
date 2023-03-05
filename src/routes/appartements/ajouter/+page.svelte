@@ -3,26 +3,20 @@
 	import FormEditAppartment from '$lib/FormEditAppartment.svelte';
 	import type { Appartment } from '$lib/types';
 
-	const submit = () => {};
-
 	let appartment: Appartment = {
-		availableAt: undefined,
+		availableAt: null,
 		address: '',
 		charges: undefined,
 		deposit: undefined,
 		description: '',
-		location: null,
-		hasFurniture: undefined,
-		hasParking: undefined,
-		kind: undefined,
-		id: undefined,
-		images: [],
-		owner: {
-			email: undefined,
-			id: undefined,
-			name: undefined,
-			phone: undefined
+		location: {
+			latitude: null,
+			longitude: null
 		},
+		hasFurniture: null,
+		hasParking: null,
+		kind: undefined,
+		images: [],
 		rent: undefined,
 		roomsCount: undefined,
 		surface: undefined
@@ -36,7 +30,7 @@
 <main>
 	<h1>Nouvelle annonce</h1>
 	<p>Votre annonce sera validée par un·e administrateur·ice avant d’être publiée</p>
-	<FormEditAppartment bind:appartment submitText="Poster" action="postAppartment" />
+	<FormEditAppartment bind:appartment submitText="Poster" action="?/postAppartment" />
 </main>
 
 <style>

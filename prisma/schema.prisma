@@ -60,11 +60,12 @@ model Appartment {
   roomsCount     Int
   availableAt    DateTime
   createdAt      DateTime                 @default(now())
+  lastModifiedAt DateTime                 @default(now())
   address        String
   location       GeographicPoint?         @relation(fields: [locationId], references: [id])
   locationId     String?
-  hasFurniture   Boolean
-  hasParking     Boolean
+  hasFurniture   Boolean?
+  hasParking     Boolean?
   description    String
   travelTimeToN7 TravelTimeToN7           @relation(fields: [travelTimeId], references: [id])
   travelTimeId   String
@@ -72,6 +73,7 @@ model Appartment {
   owner          User                     @relation(fields: [ownerId], references: [id])
   ownerId        String
   reports        Report[]
+  approved       Boolean                  @default(false)
 }
 
 enum AppartmentKind {
