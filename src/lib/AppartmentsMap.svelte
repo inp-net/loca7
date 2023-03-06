@@ -14,6 +14,10 @@
 	let appartmentsLayer;
 	const markerSize = 40;
 
+	function locationTuple(point: GeographicPoint) {
+		return [point.latitude, point.longitude];
+	}
+
 	function updateMarkers(appartments: Appartment[]) {
 		if (!map || !appartmentsLayer) return;
 		appartmentsLayer.clearLayers();
@@ -21,7 +25,7 @@
 			// XXX timeout to make sure the popups have been updated before binding them to the markers
 			appartments.forEach((appart) => {
 				if (appart.location === null) return;
-				L.marker(appart.location.tuple(), {
+				L.marker(locationTuple(appart.location), {
 					icon: L.icon({
 						iconUrl:
 							appartments.length === 1
@@ -39,12 +43,12 @@
 	}
 
 	onMount(async () => {
-		map = L.map('map', { gestureHandling: !scrollIsZoom }).setView(center.tuple(), 15);
+		map = L.map('map', { gestureHandling: !scrollIsZoom }).setView(locationTuple(center), 15);
 		appartmentsLayer = L.layerGroup().addTo(map);
 		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
 		}).addTo(map);
-		L.marker(ENSEEIHT.tuple(), {
+		L.marker(locationTuple(ENSEEIHT), {
 			icon: L.icon({
 				iconUrl: '/icons/location-enseeiht.svg',
 				iconSize: [markerSize, markerSize],
