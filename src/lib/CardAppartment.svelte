@@ -3,7 +3,7 @@
 	import ButtonColored from './ButtonColored.svelte';
 	import CarouselImages from './CarouselImages.svelte';
 	import Icon from './Icon.svelte';
-	import type { AppartmentKind } from './types';
+	import { DISPLAY_APPARTMENT_KIND, type AppartmentKind } from './types';
 	import {
 		availableAtSentence,
 		distanceBetween,
@@ -54,7 +54,7 @@
 			<section class="space">
 				<p class="typo-big-figure surface">{surface}m²</p>
 				<p class="type">
-					{kind}
+					{DISPLAY_APPARTMENT_KIND[kind]}
 					{#if kind === 'colocation'}de {roomsCount} chambres{/if}
 				</p>
 			</section>
