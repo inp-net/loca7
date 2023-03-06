@@ -70,7 +70,6 @@ export const actions: Actions = {
 				id: params.id
 			},
 			data: {
-				lastModifiedAt: new Date(),
 				rent: Number(rent),
 				charges: Number(charges),
 				deposit: Number(deposit),
