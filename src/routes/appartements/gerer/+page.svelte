@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import CardAppartment from '$lib/CardAppartment.svelte';
 	import type { PageData } from './$types';
@@ -9,9 +10,9 @@
 
 <main>
 	<h1>
-		Mes annonces <ButtonSecondary icon="add" href="/appartements/ajouter"
-			>Nouvelle annonce</ButtonSecondary
-		>
+		Mes annonces {#if appartments.length}<ButtonSecondary icon="add" href="/appartements/ajouter"
+				>Nouvelle annonce</ButtonSecondary
+			>{/if}
 	</h1>
 
 	<ul class="appartments">
@@ -20,7 +21,9 @@
 				<CardAppartment {...appartment} editable />
 			</li>
 		{:else}
-			<!-- empty list -->
+			<li class="create-new">
+				<ButtonPrimary href="/appartements/ajouter">Déposer une annonce</ButtonPrimary>
+			</li>
 		{/each}
 	</ul>
 </main>
@@ -45,5 +48,9 @@
 		flex-wrap: wrap;
 		display: flex;
 		gap: 2rem;
+	}
+
+	.create-new {
+		margin: 0 auto;
 	}
 </style>
