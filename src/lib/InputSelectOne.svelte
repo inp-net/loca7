@@ -79,6 +79,9 @@
 	}
 	.wrapper.errored .error-area {
 		background: var(--blood);
+	}
+
+	.wrapper.errored .error-area p {
 		color: #fff;
 	}
 </style>
