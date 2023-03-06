@@ -5,6 +5,7 @@
 	import type { User } from './types';
 	import { afterUpdate, onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import LogoLoca7 from './LogoLoca7.svelte';
 
 	export let user: User | null = null;
 	let topbarElement: HTMLElement;
@@ -34,7 +35,9 @@
 </script>
 
 <nav class:scrolled class="topbar" bind:this={topbarElement} class:logged-in={user !== null}>
-	<a href="/"><img src="/loca7-wordmark.png" alt="loca7" class="logo" /></a>
+	<a href="/">
+		<LogoLoca7 />
+	</a>
 	{#if user}
 		<ButtonSecondary id="open-menu" on:click={() => (sidebarOpen = !sidebarOpen)} icon="menu"
 			>Menu</ButtonSecondary
@@ -83,7 +86,7 @@
 <nav class="sidebar" class:open={sidebarOpen}>
 	<ul>
 		<li class="logo">
-			<img src="/loca7-wordmark.png" alt="loca7" />
+			<LogoLoca7 />
 		</li>
 		<li>
 			<ButtonNavigation current={isCurrentPage($page, '/')} href="/">recherche</ButtonNavigation>
@@ -222,7 +225,7 @@
 		gap: 2rem;
 	}
 
-	nav.sidebar li.logo img {
+	nav.sidebar li.logo :global(svg) {
 		max-height: 1.5rem;
 		max-width: 100%;
 	}

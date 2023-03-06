@@ -1,4 +1,6 @@
 <script lang="ts">
+	import LogoLoca7 from '$lib/LogoLoca7.svelte';
+	import LogoNet7 from '$lib/LogoNet7.svelte';
 	import NavigationBar from '$lib/NavigationBar.svelte';
 	import type { PageData } from './$types';
 	export let data: PageData;
@@ -19,15 +21,13 @@
 
 <footer>
 	<section class="about">
-		<img src="/loca7-wordmark.png" alt="loca7" class="logo" />
+		<LogoLoca7 />
 		<p class="tagline">Le site de recherche de logement pour les n7iens</p>
 	</section>
 
 	<section class="net7">
 		<p>Site réalisé par</p>
-		<a href="https://bde.enseeiht.fr/clubs/net7"
-			><img src="/net7-wordmark.png" alt="net7" class="logo" /></a
-		>
+		<a href="https://bde.enseeiht.fr/clubs/net7"><LogoNet7 /></a>
 	</section>
 
 	<section class="credits">
