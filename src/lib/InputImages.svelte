@@ -103,10 +103,10 @@
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<path d="M29.5 100.21H5.5V5.71045H127.5V100.21H110" stroke="black" stroke-width="10" />
+			<path d="M29.5 100.21H5.5V5.71045H127.5V100.21H110" stroke="var(--fg)" stroke-width="10" />
 			<path
 				d="M66.5 157.29L66.5 42.1953M66.5 42.1953L101.5 77.5576M66.5 42.1953L31.5 77.5576"
-				stroke="black"
+				stroke="var(--fg)"
 				stroke-width="10"
 			/>
 		</svg>
