@@ -79,8 +79,7 @@ export const actions: Actions = {
 					nearbyStations: {
 						create: []
 					},
-					createdAt: new Date(),
-					approved: true // TODO remove this, for now its true to test things out
+					createdAt: new Date()
 				}
 			});
 		} catch (err) {
