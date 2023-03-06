@@ -60,10 +60,10 @@ export const actions: Actions = {
 							: undefined,
 					hasFurniture: Object.keys(formData).includes('hasFurniture')
 						? formData.hasFurniture === 'on'
-						: null,
+						: undefined,
 					hasParking: Object.keys(formData).includes('hasParking')
 						? formData.hasParking === 'on'
-						: null,
+						: undefined,
 					owner: {
 						connect: {
 							id: user.id
