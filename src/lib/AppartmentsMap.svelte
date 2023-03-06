@@ -15,7 +15,7 @@
 	const markerSize = 40;
 
 	function locationTuple(point: GeographicPoint) {
-		return [point.latitude, point.longitude];
+		return [point.longitude, point.latitude];
 	}
 
 	function updateMarkers(appartments: Appartment[]) {
