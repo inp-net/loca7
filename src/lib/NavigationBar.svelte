@@ -9,6 +9,7 @@
 	export let user: User | null = null;
 	let topbarElement: HTMLElement;
 	let sidebarOpen: boolean = false;
+	export const isCurrentPage = (page: typeof $page, path: string) => page.url.pathname === path;
 
 	onMount(() => {
 		if (browser) {
@@ -35,13 +36,11 @@
 		>
 		<ul class="links">
 			<li>
-				<ButtonNavigation current={$page.url.toString() === '/'} href="/"
-					>recherche</ButtonNavigation
-				>
+				<ButtonNavigation current={isCurrentPage($page, '/')} href="/">recherche</ButtonNavigation>
 			</li>
 			<li>
 				<ButtonNavigation
-					current={$page.url.toString() === '/appartements/gerer'}
+					current={isCurrentPage($page, '/appartements/gerer')}
 					href="/appartements/gerer">mes annonces</ButtonNavigation
 				>
 			</li>
