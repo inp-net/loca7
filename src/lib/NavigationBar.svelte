@@ -20,9 +20,14 @@
 	});
 
 	afterUpdate(() => {
-		document.body.querySelector('main').style.paddingTop = `${
-			topbarElement.getBoundingClientRect().height + 30
-		}px`;
+		const setPadding = () => {
+			const main = document.body.querySelector('main');
+			if (!main) return;
+			main.style.paddingTop = `${topbarElement.getBoundingClientRect().height + 30}px`;
+		};
+
+		setPadding();
+		window.addEventListener('resize', setPadding);
 	});
 
 	let scrolled: boolean = false;
@@ -53,9 +58,6 @@
 	{/if}
 
 	<ul class="actions">
-		<li>
-			<ButtonSecondary icon="add" href="/appartements/ajouter">Déposer une annonce</ButtonSecondary>
-		</li>
 		{#if user}
 			<li>
 				<ButtonSecondary href="/account" icon="user">Mon compte</ButtonSecondary>
@@ -66,6 +68,11 @@
 				</form>
 			</li>
 		{:else}
+			<li>
+				<ButtonSecondary icon="add" href="/appartements/ajouter"
+					>Déposer une annonce</ButtonSecondary
+				>
+			</li>
 			<li>
 				<ButtonSecondary href="/login">Connexion</ButtonSecondary>
 			</li>
