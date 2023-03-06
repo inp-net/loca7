@@ -24,8 +24,8 @@
 	export let availableAt: Date;
 	export let address: string;
 	export let location: GeographicPoint | null;
-	export let hasFurniture: boolean;
-	export let hasParking: boolean;
+	export let hasFurniture: boolean|null;
+	export let hasParking: boolean|null;
 	export let editable: boolean = false;
 	export let small: boolean = false;
 
