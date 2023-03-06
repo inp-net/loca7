@@ -19,13 +19,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 					nearbyStations: true,
 					travelTimeToN7: true,
 					reports: true
-				},
-				orderBy: { lastModifiedAt: 'desc' }
+				}
 			})
-		).map((appartment) => ({
-			...appartment,
-			// Don't include potentially identifying information from the reports
-			reports: appartment.reports.map(({ reason, message, id }) => ({ reason, message, id }))
-		}))
+		)
+			.map((appartment) => ({
+				...appartment,
+				// Don't include potentially identifying information from the reports
+				reports: appartment.reports.map(({ reason, message, id }) => ({ reason, message, id }))
+			}))
+			.sort((a, b) => a.lastModifiedAt.valueOf() - b.lastModifiedAt.valueOf())
 	};
 };
