@@ -67,8 +67,8 @@ model Appartment {
   hasFurniture   Boolean?
   hasParking     Boolean?
   description    String
-  travelTimeToN7 TravelTimeToN7           @relation(fields: [travelTimeId], references: [id])
-  travelTimeId   String
+  travelTimeToN7 TravelTimeToN7?          @relation(fields: [travelTimeId], references: [id])
+  travelTimeId   String?
   nearbyStations PublicTransportStation[]
   owner          User                     @relation(fields: [ownerId], references: [id])
   ownerId        String
