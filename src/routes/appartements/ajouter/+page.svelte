@@ -1,7 +1,7 @@
 <script lang="ts">
-	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
 	import FormEditAppartment from '$lib/FormEditAppartment.svelte';
 	import type { Appartment } from '$lib/types';
+	import type { Snapshot } from './$types';
 
 	let appartment: Appartment = {
 		availableAt: null,
@@ -20,6 +20,11 @@
 		rent: undefined,
 		roomsCount: undefined,
 		surface: undefined
+	};
+
+	export const snapshot: Snapshot = {
+		capture: () => appartment,
+		restore: (data) => (appartment = data)
 	};
 </script>
 
