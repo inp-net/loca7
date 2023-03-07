@@ -11,6 +11,9 @@
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"pushdb": "prisma db push && prisma generate",
+		"configure:dev": "cp .env.dev .env",
+		"configure:prod": "cp .env.prod .env",
+		"pushdb:all": "pnpm configure:dev && pnpm pushdb && pnpm configure:prod && pnpm pushdb && pnpm configure:dev",
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
