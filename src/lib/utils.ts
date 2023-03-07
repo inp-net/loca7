@@ -39,11 +39,12 @@ export function durationDisplay(seconds: number) {
 	return displayString;
 }
 
-export function distanceDisplay(distance_meters: number): string {
+export function distanceDisplay(distanceMeters: number): string {
 	return Intl.NumberFormat('fr-FR', {
 		style: 'unit',
-		unit: distance_meters < 0.5 ? 'meter' : 'kilometer'
-	}).format(distance_meters < 0.5 ? distance_meters : distance_meters * 1e-3);
+		unit: distanceMeters < 0.5 ? 'meter' : 'kilometer',
+		maximumFractionDigits: 2
+	}).format(distanceMeters < 0.5 ? distanceMeters : distanceMeters * 1e-3);
 }
 
 export function availableAtSentence(availableSince: number, availableAt: Date): string {
