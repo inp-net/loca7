@@ -152,6 +152,10 @@
 
 	<InputField label="Photos">
 		<InputImages name="images" bind:value={appartment.images} />
+		<p class="typo-details">
+			<br />L'upload de photos ne marche pas pour l'instant. Tu peux le laisser vide.
+		</p>
+		<!-- TODO: à supprimer -->
 	</InputField>
 
 	<section class="submit">
