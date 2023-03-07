@@ -108,7 +108,6 @@
 		if (e.composedPath().some((path) => path?.dataset?.suggestionsId === uniqueId)) {
 			highlight();
 		} else {
-			selectHighlighted();
 			close();
 		}
 	}
