@@ -9,10 +9,7 @@
 		charges: undefined,
 		deposit: undefined,
 		description: '',
-		location: {
-			latitude: null,
-			longitude: null
-		},
+		location: null,
 		hasFurniture: null,
 		hasParking: null,
 		kind: undefined,
