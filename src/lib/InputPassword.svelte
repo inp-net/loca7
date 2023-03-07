@@ -13,6 +13,7 @@
 	export let label: string;
 	export let feedback: boolean = false;
 	export let required: boolean = false;
+	export let errorMessage: string = '';
 
 	let analysis;
 	let strength: 'insufficient' | 'weak' | 'good';
@@ -33,6 +34,7 @@
 <div class="password-with-feedback">
 	<InputField {label}>
 		<BaseInputText
+			on:input
 			on:action={() => (shown = !shown)}
 			type={shown ? 'text' : 'password'}
 			bind:value
@@ -40,6 +42,7 @@
 			{required}
 			{id}
 			{name}
+			{errorMessage}
 			autocomplete={feedback ? 'new-password' : 'current-password'}
 			actionIcon={shown ? 'eye-cancel' : 'eye-open'}
 		/>
