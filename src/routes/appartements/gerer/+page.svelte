@@ -48,6 +48,7 @@
 		flex-wrap: wrap;
 		display: flex;
 		gap: 2rem;
+		justify-content: center;
 	}
 
 	.create-new {
