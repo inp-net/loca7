@@ -3,7 +3,7 @@
 	import CardAppartment from './CardAppartment.svelte';
 	import CarouselImages from './CarouselImages.svelte';
 	import type { Appartment, GeographicPoint } from './types';
-	import { ENSEEIHT} from './utils';
+	import { ENSEEIHT } from './utils';
 	export let appartments: Appartment[];
 
 	export let center: GeographicPoint = ENSEEIHT;
