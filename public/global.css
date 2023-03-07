@@ -33,6 +33,10 @@
 }
 
 :root {
+	color-scheme: light dark;
+}
+
+:root {
 	--font-main: 'Space Grotesk', sans-serif;
 	--border-width: 2px;
 
