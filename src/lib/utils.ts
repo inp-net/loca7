@@ -1,3 +1,5 @@
+import type { GeographicPoint } from './types';
+
 export function durationDisplay(seconds: number) {
 	const minute = 60;
 	const hour = minute * 60;
@@ -67,11 +69,6 @@ export function availableAtSentence(availableSince: number, availableAt: Date): 
 
 	return out;
 }
-
-export type GeographicPoint = {
-	latitude: number;
-	longitude: number;
-};
 
 export function distanceBetween(a: GeographicPoint, b: GeographicPoint): number {
 	const earthRadiusKm = 6371;

@@ -2,8 +2,8 @@
 	import { onMount } from 'svelte';
 	import CardAppartment from './CardAppartment.svelte';
 	import CarouselImages from './CarouselImages.svelte';
-	import type { Appartment } from './types';
-	import { ENSEEIHT, type GeographicPoint } from './utils';
+	import type { Appartment, GeographicPoint } from './types';
+	import { ENSEEIHT} from './utils';
 	export let appartments: Appartment[];
 
 	export let center: GeographicPoint = ENSEEIHT;

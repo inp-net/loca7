@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { ENSEEIHT, type GeographicPoint } from './utils';
+import { ENSEEIHT } from './utils';
 import {
 	TADColorsByLine,
 	busLinesByColor,
@@ -175,3 +175,8 @@ export const randomAppartment: () => Appartment = () => ({
 		byPublicTransport: faker.datatype.number({ max: 30, min: 5 }) * 60
 	}
 });
+
+export type GeographicPoint = {
+	latitude: number;
+	longitude: number;
+};
