@@ -16,13 +16,13 @@
 	export let errorMessage: string = '';
 
 	let analysis;
-	let strength: 'insufficient' | 'weak' | 'good';
+	let strength: 'dangerous' | 'weak' | 'good';
 	let crackTimeDisplay: string;
 
 	$: analysis = zxcvbn(value); // TODO use second argument (user inputs)
-	$: strength = analysis.score <= 1 ? 'insufficient' : analysis.score <= 2 ? 'weak' : 'good';
+	$: strength = analysis.score <= 1 ? 'dangerous' : analysis.score <= 2 ? 'weak' : 'good';
 	$: strengthDisplay = {
-		insufficient: 'insuffisante',
+		dangerous: 'dangereuse',
 		weak: 'faible',
 		good: 'suffisante'
 	}[strength];
@@ -77,7 +77,7 @@
 </div>
 
 <style>
-	.colored[data-strength='insufficient'] {
+	.colored[data-strength='dangerous'] {
 		color: var(--blood);
 	}
 
