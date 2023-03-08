@@ -43,6 +43,14 @@ export const actions: Actions = {
 			description
 		} = formData;
 
+		const tristateCheckboxToBoolean = (value: string) => {
+			return {
+				indeterminate: null,
+				on: true,
+				off: false
+			}[value];
+		};
+
 		let appartment;
 		try {
 			const appartInput: Prisma.AppartmentCreateArgs['data'] = {
@@ -77,14 +85,14 @@ export const actions: Actions = {
 				},
 				nearbyStations: {
 					create: []
-				}
+				},
+				hasFurniture: Object.keys(formData).includes('hasFurniture')
+					? tristateCheckboxToBoolean(formData.hasFurniture)
+					: null,
+				hasParking: Object.keys(formData).includes('hasParking')
+					? tristateCheckboxToBoolean(formData.hasParking)
+					: null
 			};
-			if (Object.keys(formData).includes('hasFurniture')) {
-				appartInput.hasFurniture = formData.hasFurniture === 'on';
-			}
-			if (Object.keys(formData).includes('hasParking')) {
-				appartInput.hasParking = formData.hasParking === 'on';
-			}
 			if (addressLatitude && addressLongitude) {
 				appartInput.location = {
 					create: {

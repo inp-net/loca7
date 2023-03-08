@@ -57,6 +57,7 @@ export const actions: Actions = {
 
 		const formDataRaw = await request.formData();
 		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;
+		console.log({ 'editing appartment': formData });
 		const files = formDataRaw.getAll('photos') as File[];
 
 		const {
@@ -73,6 +74,14 @@ export const actions: Actions = {
 		} = formData;
 
 		console.log(files);
+
+		const tristateCheckboxToBoolean = (value: string) => {
+			return {
+				indeterminate: null,
+				on: true,
+				off: false
+			}[value];
+		};
 
 		const appartment = await prisma.appartment.update({
 			where: {
@@ -102,6 +111,13 @@ export const actions: Actions = {
 				availableAt: new Date(Date.parse(availableAt)),
 				address,
 				description: xss(description),
+				hasFurniture: Object.keys(formData).includes('hasFurniture')
+					? tristateCheckboxToBoolean(formData.hasFurniture)
+					: undefined,
+				hasParking: Object.keys(formData).includes('hasParking')
+					? tristateCheckboxToBoolean(formData.hasParking)
+					: undefined,
+
 				location:
 					addressLatitude && addressLongitude
 						? {

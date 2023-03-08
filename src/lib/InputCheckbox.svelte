@@ -37,7 +37,6 @@
 <label class="input-checkbox">
 	<input
 		type="checkbox"
-		{name}
 		bind:this={checkboxElement}
 		on:change={(event) => {
 			event.preventDefault();
@@ -52,6 +51,7 @@
 			previousValue = value;
 		}}
 	/>
+	<input type="hidden" {name} value={value === null ? 'indeterminate' : value ? 'on' : 'off'} />
 	<div class="checkbox" data-state={JSON.stringify(value)}>
 		<Icon
 			name={value ? 'checkmark' : 'close'}
