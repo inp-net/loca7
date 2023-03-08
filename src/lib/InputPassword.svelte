@@ -49,7 +49,7 @@
 	</InputField>
 
 	{#if feedback}
-		<div class="feedback">
+		<div class="feedback" class:empty={value === ''}>
 			<div class="strength">
 				<span class="icon">
 					<Icon name="password-strength-{strength}" />
@@ -103,6 +103,9 @@
 		margin-top: 1rem;
 		display: flex;
 		flex-direction: column;
+	}
+	.feedback.empty {
+		opacity: 0;
 	}
 
 	.feedback > div {
