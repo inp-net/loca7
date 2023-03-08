@@ -1,6 +1,7 @@
-import { redirect, type Actions, fail } from '@sveltejs/kit';
+import { redirect, type Actions, fail, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { auth } from '$lib/server/lucia';
+import { LuciaError } from 'lucia-auth';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const session = await locals.validate();
@@ -23,7 +24,17 @@ export const actions: Actions = {
 			locals.setSession(session);
 		} catch (err) {
 			console.error(err);
-			return fail(400, { message: 'Could not login user' });
+			if (!(err instanceof LuciaError)) {
+				throw error(500);
+			}
+			switch (err.message) {
+				case 'AUTH_INVALID_PASSWORD':
+				case 'AUTH_OUTDATED_PASSWORD':
+					throw redirect(302, '/login#invalidPassword');
+
+				default:
+					throw error(400, { message: 'Connexion impossible.' });
+			}
 		}
 
 		throw redirect(302, '/');

@@ -2,7 +2,7 @@ import type { Appartment, PublicTransportStation } from '$lib/types';
 import { ENSEEIHT } from '$lib/utils';
 import type { LayoutLoad } from './$types';
 import { prisma } from '$lib/server/prisma';
-import { fail } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 
 export const load: LayoutLoad<{ appartment: Appartment }> = async ({ params }) => {
 	if (params.id === 'tr') {
@@ -99,7 +99,8 @@ export const load: LayoutLoad<{ appartment: Appartment }> = async ({ params }) =
 		}
 	});
 
-	if (appartment === null) throw fail(404, { message: 'Appartment not found' });
+	if (appartment === null)
+		throw error(404, { message: "Cette annonce n'existe pas, ou n'est pas (encore) publique" });
 
 	return { appartment };
 };

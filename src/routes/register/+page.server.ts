@@ -1,6 +1,7 @@
-import { redirect, type Actions, fail } from '@sveltejs/kit';
+import { redirect, type Actions, fail, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { auth } from '$lib/server/lucia';
+import { LuciaError } from 'lucia-auth';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const session = await locals.validate();
@@ -17,6 +18,10 @@ export const actions: Actions = {
 			string
 		>;
 
+		if (name === '') {
+			throw error(400, { message: 'Veuillez renseigner votre nom.' });
+		}
+
 		try {
 			await auth.createUser({
 				key: {
@@ -32,7 +37,16 @@ export const actions: Actions = {
 			});
 		} catch (err) {
 			console.error(err);
-			return fail(400, { message: 'Could not register user' });
+			if (!(err instanceof LuciaError)) {
+				throw error(500);
+			}
+
+			switch (err.message) {
+				case 'AUTH_DUPLICATE_KEY_ID':
+					throw redirect(302, '/register#duplicateEmail');
+				default:
+					throw error(400, { message: 'Inscription impossible.' });
+			}
 		}
 
 		throw redirect(302, '/login');

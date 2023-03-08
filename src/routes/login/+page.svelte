@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import InputEmail from '$lib/InputEmail.svelte';
@@ -31,12 +32,8 @@
 
 		<InputPassword required label="Mot de passe" bind:value={password} name="password" />
 
-		{#if form?.invalid}
-			<p class="error">Username and password is required.</p>
-		{/if}
-
-		{#if form?.credentials}
-			<p class="error">You have entered the wrong credentials.</p>
+		{#if $page.url.hash === '#invalidPassword'}
+			<p class="error">Mot de passe incorrect.</p>
 		{/if}
 
 		<ButtonPrimary submits>Se connecter</ButtonPrimary>
@@ -51,6 +48,10 @@
 		flex-direction: column;
 		justify-content: center;
 		gap: 2rem;
+	}
+
+	form .error {
+		color: var(--blood);
 	}
 
 	main {

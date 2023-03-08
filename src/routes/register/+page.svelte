@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import InputEmail from '$lib/InputEmail.svelte';
@@ -6,6 +7,8 @@
 	import InputPassword from '$lib/InputPassword.svelte';
 	import InputPhone from '$lib/InputPhone.svelte';
 	import InputText from '$lib/InputText.svelte';
+
+	let duplicateEmail: boolean = $page.url.hash === '#duplicateEmail';
 </script>
 
 <svelte:head>
@@ -18,7 +21,15 @@
 
 	<form method="post">
 		<InputField label="Email">
-			<InputEmail required name="email" value="" />
+			<InputEmail
+				errorMessage={duplicateEmail ? 'Cet e-mail a déjà été utilisé' : ''}
+				required
+				on:input={() => {
+					duplicateEmail = false;
+				}}
+				name="email"
+				value=""
+			/>
 		</InputField>
 
 		<InputField label="Nom complet">
