@@ -10,8 +10,8 @@ all_file_stems = list()
 while not (root_folder / ".git").exists() and root_folder.parent != root_folder:
     root_folder = root_folder.parent
 
-for file in (root_folder / "static/icons").glob("*.svg"):
-    (root_folder / "front/src/lib/icons" / file.with_suffix(".svelte").name).write_text(
+for file in (root_folder / "public/icons").glob("*.svg"):
+    (root_folder / "src/lib/icons" / file.with_suffix(".svelte").name).write_text(
         """<script lang="ts">
     export let color: string = 'currentColor';
     export let strokeWidth: number = 5;
@@ -25,6 +25,6 @@ for file in (root_folder / "static/icons").glob("*.svg"):
 
     all_file_stems.append(file.stem)
 
-(root_folder / "front/src/routes/_showcase/icons/all_icon_stems.ts").write_text(
+(root_folder / "src/routes/_showcase/icons/all_icon_stems.ts").write_text(
     f"export default {json.dumps(all_file_stems)}"
 )
