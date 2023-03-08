@@ -61,6 +61,7 @@
 				{name}
 				{id}
 				{value}
+				{required}
 				{autocomplete}
 				{placeholder}
 				on:input={(e) => {

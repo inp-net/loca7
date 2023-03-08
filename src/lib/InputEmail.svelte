@@ -7,13 +7,16 @@
 	export let placeholder: string | undefined = undefined;
 	export let value: string;
 	export let required: boolean = false;
+	export let errorMessage: string = '';
 </script>
 
 <BaseInputText
 	autocomplete="email"
 	type="email"
 	bind:value
+	on:input
 	{id}
+	{errorMessage}
 	{name}
 	{initial}
 	{placeholder}

@@ -8,15 +8,18 @@
 	export let value: string;
 	export let required: boolean = false;
 	export let autocomplete: string | undefined = undefined;
+	export let errorMessage: string = '';
 </script>
 
 <BaseInputText
 	type="text"
 	bind:value
+	on:input
 	{id}
 	{autocomplete}
 	{name}
 	{initial}
+	{errorMessage}
 	{placeholder}
 	{required}
 />

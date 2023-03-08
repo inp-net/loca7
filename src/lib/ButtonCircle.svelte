@@ -14,6 +14,7 @@
 	on:mouseenter={() => (hoverOrFocus = true)}
 	on:mouseleave={() => (hoverOrFocus = false)}
 	on:click
+	type="button"
 >
 	<Icon name={icon} color={hoverOrFocus ? '#fffa' : 'bg'} />
 </button>
