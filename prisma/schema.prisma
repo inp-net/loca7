@@ -11,17 +11,17 @@ datasource db {
 }
 
 model User {
-  id          String       @id @unique @default(cuid())
-  name        String
-  phone       String
-  email       String       @unique
-  admin       Boolean      @default(false)
-  god         Boolean      @default(false)
-  appartments Appartment[]
+  id    String  @id @unique @default(cuid())
+  name  String
+  phone String
+  email String  @unique
+  admin Boolean @default(false)
+  god   Boolean @default(false)
 
-  sessions Session[]
-  keys     Key[]
-  Report   Report[]
+  appartments Appartment[]
+  sessions    Session[]
+  keys        Key[]
+  Report      Report[]
 
   @@map("user")
 }
