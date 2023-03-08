@@ -10,15 +10,16 @@
 		availableAtSentence,
 		readableOn,
 		distanceBetween,
-		ENSEEIHT,
-		type GeographicPoint
+		ENSEEIHT
 	} from '$lib/utils';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import {
+		appartmentPhotoURL,
 		DISPLAY_APPARTMENT_KIND,
 		DISPLAY_PUBLIC_TRANSPORT_TYPE,
 		type Appartment,
-		type PublicTransportStation
+		type PublicTransportStation,
+		type GeographicPoint
 	} from '$lib/types';
 	import publicTransportColor from '$lib/publicTransportColors';
 	import AppartmentsMap from '$lib/AppartmentsMap.svelte';
@@ -47,7 +48,7 @@
 
 <main>
 	<section class="carousel">
-		<CarouselImages contain images={appart.images} />
+		<CarouselImages contain images={appart.photos.map(appartmentPhotoURL)} />
 	</section>
 
 	<div class="side-by-side">
@@ -56,9 +57,6 @@
 				<div class="row">
 					<InputField label="Type de logement">
 						<p class="typo-big-figure">{DISPLAY_APPARTMENT_KIND[appart.kind]}</p>
-						{#if appart.kind === 'colocation'}
-							<p class="typo-paragraph">de {appart.roomsCount} chambres</p>
-						{/if}
 					</InputField>
 					<InputField label="Surface">
 						<p class="typo-big-figure">{appart.surface}m²</p>
@@ -167,6 +165,14 @@
 								<Icon name="parking" />
 							</div>
 							<p class="typo-paragraph">Parking</p>
+						</li>
+					{/if}
+					{#if appart.kind === 'colocation'}
+						<li class="aspect">
+							<span class="iconlike">
+								{appart.roomsCount}
+							</span>
+							<p class="typo-paragraph">Chambres</p>
 						</li>
 					{/if}
 				</ul>
@@ -311,8 +317,15 @@
 	section.aspects .aspect {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		justify-content: space-between;
 		align-items: center;
+	}
+
+	section.aspects .iconlike {
+		--size: 50px;
+		font-size: var(--size);
+		font-weight: bold;
+		line-height: var(--size);
 	}
 
 	section.description {

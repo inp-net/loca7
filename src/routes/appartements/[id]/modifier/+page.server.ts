@@ -1,8 +1,12 @@
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { fail, redirect, type Actions, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import type { AppartmentKind } from '$lib/types';
+import { type AppartmentKind, appartmentPhotoURL, appartmentPhotoFilenameOnDisk } from '$lib/types';
 import { prisma } from '$lib/server/prisma';
+import { rmSync, readdirSync, writeFileSync, mkdirSync } from 'fs';
+import path from 'path';
 import xss from 'xss';
+import md5 from 'md5';
+import { getContentHash } from '$lib/utils';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { user, session } = await locals.validateUser();
@@ -26,12 +30,13 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			location: true,
 			nearbyStations: true,
 			travelTimeToN7: true,
-			reports: true
+			reports: true,
+			photos: true
 		}
 	});
 
 	if (appartment === null) {
-		throw fail(404, { message: 'Appartment not found or not owned by you' });
+		throw error(404, { message: "Cette annonce n'existe pas ou ne vous appartient pas" });
 	}
 
 	return {
@@ -50,7 +55,9 @@ export const actions: Actions = {
 			throw redirect(302, '/login');
 		}
 
-		const formData = Object.fromEntries(await request.formData()) as Record<string, string>;
+		const formDataRaw = await request.formData();
+		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;
+		const files = formDataRaw.getAll('photos') as File[];
 
 		const {
 			rent,
@@ -65,11 +72,27 @@ export const actions: Actions = {
 			description
 		} = formData;
 
-		await prisma.appartment.update({
+		console.log(files);
+
+		const appartment = await prisma.appartment.update({
 			where: {
 				id: params.id
 			},
 			data: {
+				photos: {
+					upsert: files.map((file) => ({
+						where: {
+							filename: file.name
+						},
+						update: {
+							contentType: file.type
+						},
+						create: {
+							filename: file.name,
+							contentType: file.type
+						}
+					}))
+				},
 				rent: Number(rent),
 				charges: Number(charges),
 				deposit: Number(deposit),
@@ -88,8 +111,65 @@ export const actions: Actions = {
 								}
 						  }
 						: undefined
+			},
+			include: {
+				photos: true
 			}
 		});
+
+		await prisma.appartment.update({
+			where: {
+				id: params.id
+			},
+			data: {
+				photos: {
+					deleteMany: {
+						filename: {
+							notIn: files.map((f) => f.name)
+						}
+					}
+				}
+			}
+		});
+
+		const appartmentPhotosDirectory = path.dirname(
+			path.join(
+				'public',
+				appartmentPhotoURL({
+					appartmentId: appartment.id,
+					contentType: '',
+					filename: ''
+				})
+			)
+		);
+
+		// Add new photos
+		for (const photo of appartment.photos) {
+			const file = files.find((file) => file.name === photo.filename);
+			if (!file) continue;
+			const buffer = Buffer.from(await file.arrayBuffer());
+			if (buffer.length === 0) continue;
+			if (buffer.byteLength > 10e6) {
+				throw error(400, { message: 'Les photos doivent faire moins de 10 Mo' });
+			}
+
+			mkdirSync(path.dirname(path.join('public', appartmentPhotoURL(photo))), {
+				recursive: true
+			});
+			writeFileSync(
+				path.join('public', appartmentPhotoURL(photo)),
+				Buffer.from(await file.arrayBuffer())
+			);
+		}
+
+		// Remove photo files that were removed from the database
+		for (const entry of readdirSync(appartmentPhotosDirectory)) {
+			if (appartment.photos.find((photo) => appartmentPhotoFilenameOnDisk(photo) === entry)) {
+				continue;
+			} else {
+				rmSync(path.join(appartmentPhotosDirectory, entry));
+			}
+		}
 
 		throw redirect(302, `/appartements/gerer`);
 	}

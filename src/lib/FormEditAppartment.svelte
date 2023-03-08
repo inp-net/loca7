@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ButtonPrimary from './ButtonPrimary.svelte';
+	import User from './icons/user.svelte';
 	import InputAddress from './InputAddress.svelte';
 	import InputCheckbox from './InputCheckbox.svelte';
 	import InputDate from './InputDate.svelte';
@@ -8,11 +9,12 @@
 	import InputNumber from './InputNumber.svelte';
 	import InputRichText from './InputRichText.svelte';
 	import InputSelectOne from './InputSelectOne.svelte';
-	import { DISPLAY_APPARTMENT_KIND, type Appartment } from './types';
+	import { appartmentPhotoURL, DISPLAY_APPARTMENT_KIND, type Appartment } from './types';
 
 	export let appartment: Appartment;
 	export let action: string | undefined = undefined;
 	export let submitText: string = 'Confirmer';
+	export let user: User;
 	export let initial: Appartment = {
 		address: undefined,
 		availableAt: undefined,
@@ -32,13 +34,14 @@
 		},
 		rent: undefined,
 		roomsCount: undefined,
-		surface: undefined
+		surface: undefined,
+		owner: user
 	};
 
 	let showEmptyErrors = false;
 </script>
 
-<form class="fields" {action} method="post">
+<form class="fields" {action} method="post" enctype="multipart/form-data">
 	<InputField label="Type de logement">
 		<InputSelectOne
 			required
@@ -151,11 +154,7 @@
 	</InputField>
 
 	<InputField label="Photos">
-		<InputImages name="images" bind:value={appartment.images} />
-		<p class="typo-details">
-			<br />L'upload de photos ne marche pas pour l'instant. Tu peux le laisser vide.
-		</p>
-		<!-- TODO: à supprimer -->
+		<InputImages name="photos" appartmentId={appartment.id} bind:value={appartment.photos} />
 	</InputField>
 
 	<section class="submit">

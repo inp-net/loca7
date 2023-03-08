@@ -8,7 +8,8 @@ export const load: PageServerLoad = async () => {
 				owner: true,
 				location: true,
 				nearbyStations: true,
-				travelTimeToN7: true
+				travelTimeToN7: true,
+				photos: true
 			}
 		})
 	};

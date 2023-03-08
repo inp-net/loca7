@@ -2,19 +2,35 @@
 	import SortableList from './SortableList.svelte';
 	import ButtonCircle from './ButtonCircle.svelte';
 	import Icon from './Icon.svelte';
+	import { appartmentPhotoURL, type Photo } from './types';
+	import { getContentHash, getDataURL } from './utils';
 
-	type FileWithPreview = { file: File; previewURL: string; id: string };
-	let filesWithPreview: FileWithPreview[] = [];
-	$: updateFiles(inputDom, filesWithPreview);
-	export let value: string[] = [];
-	$: value = filesWithPreview.map((f) => f.file.name);
-
+	export let name: string | undefined = undefined;
+	export let appartmentId: string;
+	export let value: Photo[] = [];
+	export let previewURLs: Record<string, string> = Object.fromEntries(
+		value.map((v) => [v.filename, appartmentPhotoURL(v)])
+	);
+	export let fileObjects: Record<string, File> = Object.fromEntries(
+		value.map((v) => [
+			v.filename,
+			new File([], v.filename, {
+				type: v.contentType
+			})
+		])
+	);
 	let empty: boolean;
-	$: empty = filesWithPreview.length === 0;
-
 	let dragging: boolean = false;
 	let draggingOverDropzone: boolean = false;
 	let inputDom: HTMLInputElement;
+
+	function updateDOM(target: HTMLInputElement, fileObjects: Record<string, File>) {
+		if (!target) return;
+		target.files = fileListOf(Object.values(fileObjects));
+	}
+
+	$: empty = value.length === 0;
+	$: updateDOM(inputDom, fileObjects);
 
 	function fileListOf(files: File[]): FileList {
 		const filelist = new DataTransfer();
@@ -22,35 +38,45 @@
 		return filelist.files;
 	}
 
-	function updateFilePreviews(files: FileList) {
-		[...files].forEach((file) => {
-			if (!filesWithPreview.find((f) => f.file.name === file.name)) {
-				readAndPreview(file);
-			}
-		});
+	async function addPhotos(files: FileList) {
+		console.log('updating photos');
+		value = [
+			...value,
+			...(
+				await Promise.all(
+					[...files].map(async (file) => {
+						const photo = {
+							appartmentId,
+							contentType: file.type,
+							filename: file.name
+						};
+
+						if (value.some((v) => v.filename === photo.filename)) {
+							return null;
+						}
+
+						if (!Object.keys(previewURLs).some((k) => k === photo.filename)) {
+							previewURLs[photo.filename] = await getDataURL(file);
+						}
+
+						if (!Object.keys(fileObjects).some((k) => k === photo.filename)) {
+							fileObjects[photo.filename] = file;
+						}
+
+						return photo;
+					})
+				)
+			).filter((v) => v !== null)
+		];
+		console.log(value);
 	}
 
-	function updateFiles(target: HTMLInputElement, filesWithPreview: FileWithPreview[]) {
-		if (!target) return;
-		target.files = fileListOf(filesWithPreview.map((f) => f.file));
+	async function deletePhoto(photo: Photo) {
+		value = value.filter((p) => p.filename !== photo.filename);
+		delete previewURLs[photo.filename];
+		delete fileObjects[photo.filename];
+		updateDOM(inputDom, fileObjects);
 	}
-
-	function readAndPreview(file: File) {
-		const reader = new FileReader();
-		reader.addEventListener('load', () => {
-			filesWithPreview = [
-				...filesWithPreview,
-				{
-					file,
-					previewURL: reader.result as string,
-					id: file.name
-				}
-			];
-		});
-		reader.readAsDataURL(file);
-	}
-
-	export let name: string | undefined = undefined;
 </script>
 
 <!-- TODO styles when dragging file -->
@@ -60,15 +86,14 @@
 	class:empty
 	class:dragging
 	class:dragging-over-dropzone={draggingOverDropzone}
-	{name}
 >
 	<input
 		type="file"
 		multiple
+		{name}
 		bind:this={inputDom}
 		on:change={(e) => {
-			updateFilePreviews(e.target.files);
-			updateFiles(e.target, filesWithPreview);
+			addPhotos(e.target.files);
 		}}
 		accept="image/*"
 	/>
@@ -78,20 +103,16 @@
 			Glissez-déposer vos fichiers ici<br />Ou cliquez dans cette zone
 		</p>
 	{:else}
-		<SortableList bind:list={filesWithPreview} key="id" let:item={file}>
+		<SortableList bind:list={value} key="filename" let:item={photo}>
 			<li class="item">
 				<button class="drag" title="Glissez pour réordonner les images">
 					<Icon name="drag-handle" />
 				</button>
-				<img src={file.previewURL} />
+				<img src={previewURLs[photo.filename]} />
 				<span class="name typo-paragraph">
-					{file.file.name}
+					{photo.filename}
 				</span>
-				<ButtonCircle
-					on:click={() =>
-						(filesWithPreview = filesWithPreview.filter((f) => f.file.name !== file.file.name))}
-					icon="delete"
-				/>
+				<ButtonCircle on:click={() => deletePhoto(photo)} icon="delete" />
 			</li>
 		</SortableList>
 	{/if}

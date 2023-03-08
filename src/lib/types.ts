@@ -6,6 +6,8 @@ import {
 	metroColorsByLine,
 	tramColorsByLine
 } from './publicTransportColors';
+import mime from 'mime-types';
+import md5 from 'md5';
 
 export type AppartmentKind =
 	| 'chambre'
@@ -44,8 +46,14 @@ export type PublicTransportStation = {
 	color: string | null;
 };
 
+export type Photo = {
+	filename: string;
+	contentType: string;
+	appartmentId: string;
+};
+
 export type Appartment = {
-	images: string[];
+	photos: Photo[];
 	id: string;
 	rent: number;
 	charges: number;
@@ -102,14 +110,7 @@ export const randomAppartment: () => Appartment = () => ({
 	hasParking: faker.datatype.boolean(),
 	kind: faker.helpers.arrayElement(Object.keys(DISPLAY_APPARTMENT_KIND)) as AppartmentKind,
 	id: faker.datatype.uuid(),
-	images: Array(
-		faker.datatype.number({
-			max: 5,
-			min: 1
-		})
-	)
-		.fill('')
-		.map(() => faker.image.city(640, 480, true)),
+	photos: [],
 	location: {
 		latitude:
 			ENSEEIHT.latitude +
@@ -180,3 +181,11 @@ export type GeographicPoint = {
 	latitude: number;
 	longitude: number;
 };
+
+export function appartmentPhotoURL(photo: Photo): string {
+	return `/photos/appartments/${photo.appartmentId}/${appartmentPhotoFilenameOnDisk(photo)}`;
+}
+
+export function appartmentPhotoFilenameOnDisk(photo: Photo): string {
+	return `${md5(photo.filename)}.${mime.extension(photo.contentType) || 'bin'}`;
+}

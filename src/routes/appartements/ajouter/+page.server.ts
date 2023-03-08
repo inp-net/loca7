@@ -1,9 +1,12 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
+import path from 'path';
 import type { Actions, PageServerLoad } from './$types';
-import type { AppartmentKind } from '$lib/types';
 import { prisma } from '$lib/server/prisma';
 import xss from 'xss';
-import type { Prisma } from '@prisma/client';
+import type { AppartmentKind, Prisma } from '@prisma/client';
+import { writeFileSync, mkdirSync } from 'fs';
+import { appartmentPhotoURL } from '$lib/types';
+import { getContentHash } from '$lib/utils';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const session = await locals.validate();
@@ -20,8 +23,12 @@ export const actions: Actions = {
 			throw redirect(302, '/');
 		}
 
-		const formData = Object.fromEntries(await request.formData()) as Record<string, string>;
+		const formDataRaw = await request.formData();
+		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;
 		console.log({ 'uploading appartment from form data': formData });
+
+		const files = formDataRaw.getAll('photos') as File[];
+		console.log(files);
 
 		const {
 			rent,
@@ -36,9 +43,17 @@ export const actions: Actions = {
 			description
 		} = formData;
 
+		let appartment;
 		try {
 			const appartInput: Prisma.AppartmentCreateArgs['data'] = {
-				images: [], // FIXME,
+				photos: {
+					createMany: {
+						data: files.map((file) => ({
+							filename: file.name,
+							contentType: file.type
+						}))
+					}
+				},
 				rent: Number(rent),
 				charges: Number(charges),
 				deposit: Number(deposit),
@@ -79,10 +94,35 @@ export const actions: Actions = {
 				};
 			}
 
-			await prisma.appartment.create({ data: appartInput });
+			appartment = await prisma.appartment.create({
+				data: appartInput,
+				include: { photos: true }
+			});
+			console.log(appartment);
 		} catch (err) {
 			console.error(err);
-			return fail(500, { message: 'Could not create appartment posting' });
+			throw error(500, { message: "Impossible de poster l'annonce" });
+		}
+
+		for (const photo of appartment.photos) {
+			const file = files.find((file) => file.name === photo.filename);
+			if (!file) continue;
+
+			const buffer = Buffer.from(await file.arrayBuffer());
+
+			if (buffer.length === 0) continue;
+
+			if (buffer.byteLength > 10e6) {
+				throw error(400, { message: 'Les photos doivent faire moins de 10 Mo' });
+			}
+
+			mkdirSync(path.dirname(path.join('public', appartmentPhotoURL(photo))), {
+				recursive: true
+			});
+			writeFileSync(
+				path.join('public', appartmentPhotoURL(photo)),
+				Buffer.from(await file.arrayBuffer())
+			);
 		}
 
 		throw redirect(302, '/appartements/gerer');

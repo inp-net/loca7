@@ -3,18 +3,23 @@
 	import ButtonColored from './ButtonColored.svelte';
 	import CarouselImages from './CarouselImages.svelte';
 	import Icon from './Icon.svelte';
-	import { DISPLAY_APPARTMENT_KIND, type AppartmentKind } from './types';
+	import {
+		appartmentPhotoURL,
+		DISPLAY_APPARTMENT_KIND,
+		type GeographicPoint,
+		type AppartmentKind,
+		type Photo
+	} from './types';
 	import {
 		availableAtSentence,
 		distanceBetween,
 		distanceDisplay,
 		durationDisplay,
-		ENSEEIHT,
-		type GeographicPoint
+		ENSEEIHT
 	} from './utils';
 	const emit = createEventDispatcher();
 
-	export let images: string[];
+	export let photos: Photo[] | null;
 	export let id: string;
 	export let rent: number;
 	export let charges: number;
@@ -34,7 +39,7 @@
 
 <article class:editable class:small>
 	<section class="photos">
-		<CarouselImages cover {images} />
+		<CarouselImages cover images={photos?.map(appartmentPhotoURL) || []} />
 	</section>
 	<svelte:element
 		this={editable ? 'div' : 'a'}
@@ -55,7 +60,7 @@
 				<p class="typo-big-figure surface">{surface}m²</p>
 				<p class="type">
 					{DISPLAY_APPARTMENT_KIND[kind]}
-					{#if kind === 'colocation'}de {roomsCount} chambres{/if}
+					{#if kind === 'colocation'}<br />de {roomsCount} chambres{/if}
 				</p>
 			</section>
 		</section>

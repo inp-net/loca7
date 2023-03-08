@@ -51,7 +51,7 @@ model Key {
 
 model Appartment {
   id             String                   @id @unique @default(cuid())
-  images         String[]
+  photos         Photo[]
   rent           Int
   charges        Int
   deposit        Int
@@ -60,7 +60,7 @@ model Appartment {
   roomsCount     Int
   availableAt    DateTime
   createdAt      DateTime                 @default(now())
-  lastModifiedAt DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
   address        String
   location       GeographicPoint?         @relation(fields: [locationId], references: [id])
   locationId     String?
@@ -74,6 +74,15 @@ model Appartment {
   ownerId        String
   reports        Report[]
   approved       Boolean                  @default(false)
+}
+
+model Photo {
+  filename     String     @id
+  contentType  String
+  appartment   Appartment @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
+  appartmentId String
+
+  @@unique([filename, appartmentId])
 }
 
 enum AppartmentKind {

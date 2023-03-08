@@ -18,7 +18,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 					location: true,
 					nearbyStations: true,
 					travelTimeToN7: true,
-					reports: true
+					reports: true,
+					photos: true
 				}
 			})
 		)
@@ -27,6 +28,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 				// Don't include potentially identifying information from the reports
 				reports: appartment.reports.map(({ reason, message, id }) => ({ reason, message, id }))
 			}))
-			.sort((a, b) => a.lastModifiedAt.valueOf() - b.lastModifiedAt.valueOf())
+			.sort((a, b) => a.updatedAt.valueOf() - b.updatedAt.valueOf())
 	};
 };

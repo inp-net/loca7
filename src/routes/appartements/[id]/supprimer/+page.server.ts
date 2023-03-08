@@ -1,6 +1,9 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
+import path from 'path';
 import type { PageServerLoad, Actions } from './$types';
 import { prisma } from '$lib/server/prisma';
+import { rmSync } from 'fs';
+import { appartmentPhotoURL } from '$lib/types';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();
@@ -23,7 +26,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	});
 
 	if (appartment === null) {
-		throw fail(404, { message: 'Appartment not found or not owned by you' });
+		throw error(404, { message: "Cette annonce n'existe pas ou ne vous appartient pas" });
 	}
 
 	return { appartment };
@@ -51,7 +54,7 @@ export const actions: Actions = {
 		});
 
 		if (appartment === null) {
-			throw fail(404, { message: 'Appartment not found or not owned by you' });
+			throw error(404, { message: "Cette annonce n'existe pas ou ne vous appartient pas" });
 		}
 
 		await prisma.appartment.delete({
@@ -59,6 +62,29 @@ export const actions: Actions = {
 				id: params.id
 			}
 		});
+
+		try {
+			await rmSync(
+				path.dirname(
+					path.join(
+						'public',
+						appartmentPhotoURL({
+							appartmentId: appartment.id,
+							contentType: '',
+							filename: ''
+						})
+					)
+				),
+				{
+					recursive: true
+				}
+			);
+		} catch (err) {
+			if (err?.code !== 'ENOENT') {
+				console.error(err);
+				throw error(500, { message: 'Une erreur est survenue' });
+			}
+		}
 
 		throw redirect(302, '/appartements/gerer');
 	}

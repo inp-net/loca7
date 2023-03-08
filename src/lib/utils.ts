@@ -1,4 +1,5 @@
 import type { GeographicPoint } from './types';
+import md5 from 'md5';
 
 export function durationDisplay(seconds: number) {
 	const minute = 60;
@@ -103,3 +104,18 @@ export const ENSEEIHT: GeographicPoint = {
 	latitude: 1.455074,
 	longitude: 43.60263
 };
+
+export async function getDataURL(file: File): Promise<string> {
+	console.log(`getting data url of ${file.name}`);
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.addEventListener('load', () => resolve(reader.result as string));
+		reader.addEventListener('error', (e) => reject(e));
+		reader.readAsDataURL(file);
+	});
+}
+
+export async function getContentHash(file: File): Promise<string> {
+	console.log(`getting hash of ${file.name}`);
+	return md5(new Uint8Array(await file.arrayBuffer()));
+}
