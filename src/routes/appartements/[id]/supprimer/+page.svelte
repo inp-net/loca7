@@ -38,7 +38,6 @@
 		flex-direction: column;
 		gap: 2rem;
 		align-items: center;
-		text-align: center;
 	}
 
 	section.actions {
