@@ -34,33 +34,33 @@ npm run dev
 
 ### Recherche
 
-- [ ] Intégration avec [OpenStreetMap](https://www.openstreetmap.org) via [mapbox](https://labs.mapbox.com/mapping)
-- [ ] Filtrage par type de logement, surface, prix, présence de parking, meublé, etc.
-- [ ] Tri par prix, surface, distance à l'ENSEEIHT, etc.
+- [x] Intégration avec [OpenStreetMap](https://www.openstreetmap.org) via [leafletJS](https://leafletjs.com)
+- [x] Filtrage par type de logement, surface, prix, présence de parking, meublé, etc.
+- [x] Tri par prix, surface, distance à l'ENSEEIHT, etc.
 - [ ] Temps de trajet avec l'n7, à pied, à vélo et en transports (calculé depuis l'adresse du logement avec [TravelTime](https://docs.traveltime.com/api/) (l'API de [Nomatim]() n'a pas les transports en commun))
 
 ### Post d'annonces
 
 - [ ] Champ de description en texte riche WYSIWYG (pas de BBCode)
-- [ ] Autocomplétion pour l'adresse (permet de récupérer lat et long pour l'appartement) via l'API d'Open Street Map, [Nomatim](https://nominatim.org/release-docs/develop/)
+- [x] Autocomplétion pour l'adresse (permet de récupérer lat et long pour l'appartement) via l'API d'Open Street Map, [Nomatim](https://nominatim.org/release-docs/develop/)
       (à self-hoster pour faire de l'auto-complétion, ils rate-limite à 1 req/s, trop peu si plusieurs utilisateur en même temps même avec un debounce)
-- [ ] Filepicker pour les photos avec gestion du glisser-déposer
+- [x] Filepicker pour les photos avec gestion du glisser-déposer
 
 ### Gestion des annonces
 
-- [ ] Liste des annonces, bouton pour déposer si aucune annonce, avec une vue liste presque comme l'interface utilisateur mais en moins compacte
+- [x] Liste des annonces, bouton pour déposer si aucune annonce, avec une vue liste presque comme l'interface utilisateur mais en moins compacte
 
 ### Comptes
 
 - [ ] Intégration avec le LDAP
 - [ ] Intégration avec [Google reCaptcha v3](https://developers.google.com/recaptcha/docs/v3) à la création et à la connexion
-- [ ] Évaluation de la complexité d'un mot de passe avec [zxcvbn](https://github.com/dropbox/zxcvbn)
+- [x] Évaluation de la complexité d'un mot de passe avec [zxcvbn](https://github.com/dropbox/zxcvbn)
 
 ### Notifications par mail
 
 - [ ] Notifications pour les administrateurs
 - [ ] Notifications pour les propriétaires
-- [?] Possibilité de mettre “à l'écoute” les logements respectant des critères et de recevoir un mail quand un nouveau logement correspondant à ceux-ci est posté
+- [ ] Possibilité de mettre “à l'écoute” les logements respectant des critères et de recevoir un mail quand un nouveau logement correspondant à ceux-ci est posté
 
 ### Interface administrateur
 
