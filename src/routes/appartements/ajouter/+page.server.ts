@@ -27,7 +27,8 @@ export const actions: Actions = {
 		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;
 		console.log({ 'uploading appartment from form data': formData });
 
-		const files = formDataRaw.getAll('photos') as File[];
+		const isDummyFile = (file: File) => file.size === 0;
+		const files = (formDataRaw.getAll('photos') as File[]).filter((f) => !isDummyFile(f));
 		console.log(files);
 
 		const {

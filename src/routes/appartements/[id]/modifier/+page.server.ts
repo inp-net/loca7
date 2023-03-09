@@ -58,7 +58,12 @@ export const actions: Actions = {
 		const formDataRaw = await request.formData();
 		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;
 		console.log({ 'editing appartment': formData });
-		const files = formDataRaw.getAll('photos') as File[];
+		let files = formDataRaw.getAll('photos') as File[];
+
+		// XXX: The files array should be empty in that case, but it's not, let's pretend it is
+		if (files.length === 1 && files[0].size === 0) {
+			files = [];
+		}
 
 		const {
 			rent,
@@ -159,31 +164,39 @@ export const actions: Actions = {
 			)
 		);
 
-		// Add new photos
-		for (const photo of appartment.photos) {
-			const file = files.find((file) => file.name === photo.filename);
-			if (!file) continue;
-			const buffer = Buffer.from(await file.arrayBuffer());
-			if (buffer.length === 0) continue;
-			if (buffer.byteLength > 10e6) {
-				throw error(400, { message: 'Les photos doivent faire moins de 10 Mo' });
+		if (appartment.photos.length === 0) {
+			try {
+				rmSync(appartmentPhotosDirectory, { recursive: true });
+			} catch (err) {
+				if (err?.code !== 'ENOENT') throw err;
+			}
+		} else {
+			// Add new photos
+			for (const photo of appartment.photos) {
+				const file = files.find((file) => file.name === photo.filename);
+				if (!file) continue;
+				const buffer = Buffer.from(await file.arrayBuffer());
+				if (buffer.length === 0) continue;
+				if (buffer.byteLength > 10e6) {
+					throw error(400, { message: 'Les photos doivent faire moins de 10 Mo' });
+				}
+
+				mkdirSync(path.dirname(path.join('public', appartmentPhotoURL(photo))), {
+					recursive: true
+				});
+				writeFileSync(
+					path.join('public', appartmentPhotoURL(photo)),
+					Buffer.from(await file.arrayBuffer())
+				);
 			}
 
-			mkdirSync(path.dirname(path.join('public', appartmentPhotoURL(photo))), {
-				recursive: true
-			});
-			writeFileSync(
-				path.join('public', appartmentPhotoURL(photo)),
-				Buffer.from(await file.arrayBuffer())
-			);
-		}
-
-		// Remove photo files that were removed from the database
-		for (const entry of readdirSync(appartmentPhotosDirectory)) {
-			if (appartment.photos.find((photo) => appartmentPhotoFilenameOnDisk(photo) === entry)) {
-				continue;
-			} else {
-				rmSync(path.join(appartmentPhotosDirectory, entry));
+			// Remove photo files that were removed from the database
+			for (const entry of readdirSync(appartmentPhotosDirectory)) {
+				if (appartment.photos.find((photo) => appartmentPhotoFilenameOnDisk(photo) === entry)) {
+					continue;
+				} else {
+					rmSync(path.join(appartmentPhotosDirectory, entry));
+				}
 			}
 		}
 
