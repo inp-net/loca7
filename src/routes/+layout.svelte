@@ -20,7 +20,7 @@
 	{:else if data.beta}
 		<div class="notice notice-beta">Ceci est une bêta. Le site est encore en développement.</div>
 	{/if}
-	<NavigationBar user={data.user} />
+	<NavigationBar user={data.user} noticeBarAbove={dev || data.beta} />
 </header>
 
 <slot />

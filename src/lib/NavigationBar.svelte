@@ -8,6 +8,8 @@
 	import LogoLoca7 from './LogoLoca7.svelte';
 
 	export let user: User | null = null;
+	export let noticeBarAbove: boolean = false;
+
 	let topbarElement: HTMLElement;
 	let sidebarOpen: boolean = false;
 	export const isCurrentPage = (page: typeof $page, path: string) => page.url.pathname === path;
@@ -24,7 +26,9 @@
 		const setPadding = () => {
 			const main = document.body.querySelector('main');
 			if (!main) return;
-			main.style.paddingTop = `${topbarElement.offsetTop + topbarElement.getBoundingClientRect().height + 30}px`;
+			main.style.paddingTop = `${
+				topbarElement.offsetTop + topbarElement.getBoundingClientRect().height + 30
+			}px`;
 		};
 
 		setPadding();
@@ -34,7 +38,13 @@
 	let scrolled: boolean = false;
 </script>
 
-<nav class:scrolled class="topbar" bind:this={topbarElement} class:logged-in={user !== null}>
+<nav
+	class:scrolled
+	class:noticeBarAbove
+	class="topbar"
+	bind:this={topbarElement}
+	class:logged-in={user !== null}
+>
 	<a href="/">
 		<LogoLoca7 />
 	</a>
@@ -140,7 +150,7 @@
 		flex-wrap: wrap;
 		position: fixed;
 		z-index: 10000;
-		top: 40px;
+		top: 0;
 		left: 0;
 		right: 0;
 		background: var(--bg);
@@ -148,6 +158,10 @@
 		gap: 1rem;
 		box-shadow: transparent;
 		transition: all 0.25s ease;
+	}
+
+	nav.topbar.noticeBarAbove {
+		top: 40px;
 	}
 
 	nav.topbar.scrolled {
