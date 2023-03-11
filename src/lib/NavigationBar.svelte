@@ -24,7 +24,7 @@
 		const setPadding = () => {
 			const main = document.body.querySelector('main');
 			if (!main) return;
-			main.style.paddingTop = `${topbarElement.getBoundingClientRect().height + 30}px`;
+			main.style.paddingTop = `${topbarElement.offsetTop + topbarElement.getBoundingClientRect().height + 30}px`;
 		};
 
 		setPadding();
@@ -140,7 +140,7 @@
 		flex-wrap: wrap;
 		position: fixed;
 		z-index: 10000;
-		top: 0;
+		top: 40px;
 		left: 0;
 		right: 0;
 		background: var(--bg);

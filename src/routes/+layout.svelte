@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { dev } from '$app/environment';
 	import LogoLoca7 from '$lib/LogoLoca7.svelte';
 	import LogoNet7 from '$lib/LogoNet7.svelte';
 	import NavigationBar from '$lib/NavigationBar.svelte';
@@ -14,6 +15,11 @@
 </svelte:head>
 
 <header>
+	{#if dev}
+		<div class="notice notice-dev">Hey, t'es en dev.</div>
+	{:else if data.beta}
+		<div class="notice notice-beta">Ceci est une bêta. Le site est encore en développement.</div>
+	{/if}
 	<NavigationBar user={data.user} />
 </header>
 
@@ -53,14 +59,28 @@
 	}
 	:global(main) {
 		flex-grow: 1;
-		padding-top: 130px;
+		padding-top: 170px;
 	}
-	img.logo {
-		max-width: 500px;
-		max-height: 50px;
+
+	.notice {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		margin: 0;
 		display: flex;
-		margin: 0 auto;
-		margin-bottom: 1rem;
+		justify-content: center;
+		align-items: center;
+		height: 40px;
+		text-align: center;
+		z-index: 100000;
+		background-color: var(--ice);
+		color: var(--cobalt);
+	}
+
+	.notice-dev {
+		background: var(--rose);
+		color: var(--blood);
 	}
 
 	footer {
