@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+echo +cd ~ewen/www/loca7.ewen.works
+cd ~ewen/www/loca7.ewen.works
+echo +git pull
+git pull
+echo +pnpm i
+pnpm i
+echo +pnpm build
+pnpm build
+echo +pnpm prisma migrate deploy
+pnpm prisma migrate deploy
+echo +rm -r build/client/photos
+rm -r build/client/photos
+echo '+ln -s `realpath public/photos` `realpath build/client/photos`'
+ln -s `realpath public/photos` `realpath build/client/photos`
+echo +pm2 restart loca7
+pm2 restart loca7
