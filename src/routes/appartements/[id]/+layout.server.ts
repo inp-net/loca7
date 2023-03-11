@@ -19,5 +19,10 @@ export const load: LayoutLoad<{ appartment: Appartment }> = async ({ params }) =
 	if (appartment === null)
 		throw error(404, { message: "Cette annonce n'existe pas, ou n'est pas (encore) publique" });
 
-	return { appartment };
+	return {
+		appartment: {
+			...appartment,
+			photos: appartment.photos.sort((a, b) => a.position - b.position)
+		}
+	};
 };

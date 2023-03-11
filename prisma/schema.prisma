@@ -81,6 +81,7 @@ model Photo {
   contentType  String
   appartment   Appartment @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
   appartmentId String
+  position     Int // Order of this photo in the list, 0-based.
 
   @@unique([filename, appartmentId])
 }

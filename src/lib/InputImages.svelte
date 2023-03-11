@@ -98,6 +98,12 @@
 		accept="image/*"
 	/>
 
+	<input
+		type="hidden"
+		name="{name}Order"
+		value={JSON.stringify(value.map((photo) => photo.filename))}
+	/>
+
 	{#if empty}
 		<p>
 			Glissez-déposer vos fichiers ici<br />Ou cliquez dans cette zone

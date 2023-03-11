@@ -31,6 +31,8 @@ export const actions: Actions = {
 		const files = (formDataRaw.getAll('photos') as File[]).filter((f) => !isDummyFile(f));
 		console.log(files);
 
+		const photosOrder = JSON.parse(formData.photosOrder) as string[];
+
 		const {
 			rent,
 			charges,
@@ -59,7 +61,8 @@ export const actions: Actions = {
 					createMany: {
 						data: files.map((file) => ({
 							filename: file.name,
-							contentType: file.type
+							contentType: file.type,
+							position: photosOrder.indexOf(file.name)
 						}))
 					}
 				},

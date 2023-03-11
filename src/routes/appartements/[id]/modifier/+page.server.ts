@@ -66,6 +66,8 @@ export const actions: Actions = {
 			files = [];
 		}
 
+		const photosOrder = JSON.parse(formData.photosOrder) as string[];
+
 		const {
 			rent,
 			charges,
@@ -100,11 +102,13 @@ export const actions: Actions = {
 							filename: file.name
 						},
 						update: {
-							contentType: file.type
+							contentType: file.type,
+							position: photosOrder.indexOf(file.name)
 						},
 						create: {
 							filename: file.name,
-							contentType: file.type
+							contentType: file.type,
+							position: photosOrder.indexOf(file.name)
 						}
 					}))
 				},
