@@ -31,7 +31,7 @@
 		type: []
 	};
 
-	let sortOptions = ['prix', 'surface', "distance à l'n7", 'délai avant libération'];
+	let sortOptions = ['prix', 'prix/m²', 'surface', "distance à l'n7", 'délai avant libération'];
 	let sortBy = sortOptions[0];
 	let resultsTab = 'list';
 
@@ -67,6 +67,8 @@
 				switch (sortBy) {
 					case 'prix':
 						return charges + rent;
+					case 'prix/m²':
+						return (charges + rent) / surface;
 					case 'surface':
 						return surface;
 					case "distance à l'n7":
