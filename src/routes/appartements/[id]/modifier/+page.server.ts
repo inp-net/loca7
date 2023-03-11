@@ -59,9 +59,10 @@ export const actions: Actions = {
 		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;
 		console.log({ 'editing appartment': formData });
 		let files = formDataRaw.getAll('photos') as File[];
+		const isDummyFile = (file: File) => file.size === 0 && file.type === 'application/octet-stream';
 
 		// XXX: The files array should be empty in that case, but it's not, let's pretend it is
-		if (files.length === 1 && files[0].size === 0) {
+		if (files.length === 1 && isDummyFile(files[0])) {
 			files = [];
 		}
 
