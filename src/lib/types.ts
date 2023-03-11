@@ -50,6 +50,7 @@ export type Photo = {
 	filename: string;
 	contentType: string;
 	appartmentId: string;
+	position: number;
 };
 
 export type Appartment = {
