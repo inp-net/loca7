@@ -24,7 +24,7 @@ export const actions: Actions = {
 
 		await prisma.user.update({
 			where: { id: user.id },
-			data: { name, email, phone }
+			data: { name, email, phone, emailIsValidated: email === user.email }
 		});
 
 		throw redirect(302, '/account');
