@@ -9,11 +9,12 @@ import { appartmentPhotoURL } from '$lib/types';
 import { getContentHash } from '$lib/utils';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const session = await locals.validate();
+	const { session, user } = await locals.validateUser();
 
-	if (!session) {
+	if (!(session && user)) {
 		throw redirect(302, '/login');
 	}
+	if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
 };
 
 export const actions: Actions = {
@@ -22,6 +23,7 @@ export const actions: Actions = {
 		if (!(user && session)) {
 			throw redirect(302, '/');
 		}
+		if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
 
 		const formDataRaw = await request.formData();
 		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;

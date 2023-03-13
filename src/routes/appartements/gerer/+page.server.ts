@@ -8,6 +8,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	if (!(user && session)) {
 		throw redirect(302, '/login');
 	}
+	if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
 
 	return {
 		appartments: (

@@ -7,6 +7,7 @@ import { LuciaError } from 'lucia-auth';
 export const load: PageServerLoad = async ({ locals }) => {
 	const { user, session } = await locals.validateUser();
 	if (!(user && session)) throw redirect(302, '/login');
+	if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
 	return { user };
 };
 
@@ -14,6 +15,7 @@ export const actions: Actions = {
 	async updateProfile({ locals, request }) {
 		const { user, session } = await locals.validateUser();
 		if (!(user && session)) throw redirect(302, '/login');
+		if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
 
 		const { name, email, phone } = Object.fromEntries(await request.formData()) as Record<
 			string,
@@ -31,6 +33,7 @@ export const actions: Actions = {
 	async changePassword({ locals, request }) {
 		const { user, session } = await locals.validateUser();
 		if (!(user && session)) throw redirect(302, '/login');
+		if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
 
 		const { oldPassword, newPassword } = Object.fromEntries(await request.formData()) as Record<
 			string,

@@ -4,7 +4,11 @@ import { auth } from '$lib/server/lucia';
 import { LuciaError } from 'lucia-auth';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const session = await locals.validate();
+	const { user, session } = await locals.validateUser();
+
+	if (user && !user.emailIsValidated) {
+		throw redirect(302, '/validate-email');
+	}
 
 	if (session) {
 		throw redirect(302, '/');

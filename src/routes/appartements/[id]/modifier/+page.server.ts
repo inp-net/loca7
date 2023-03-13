@@ -13,6 +13,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	if (!(user && session)) {
 		throw redirect(302, '/login');
 	}
+	if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
 
 	const appartment = await prisma.appartment.findFirst({
 		where: {
@@ -55,6 +56,7 @@ export const actions: Actions = {
 		if (!(user && session)) {
 			throw redirect(302, '/login');
 		}
+		if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
 
 		const formDataRaw = await request.formData();
 		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;
