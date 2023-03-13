@@ -1,23 +1,22 @@
 <mj-section>
-  <mj-column>
-    <mj-text mj-class="title">
-      {{fullname}}, votre adresse e-mail a été modifiée.
-    </mj-text>
-  </mj-column>
+	<mj-column>
+		<mj-text mj-class="title"> {{fullname}}, votre adresse e-mail a été modifiée. </mj-text>
+	</mj-column>
 </mj-section>
 
 <mj-section>
-  <mj-column>
-    <mj-text align="center">
-      Si vous n'êtes pas à l'origine de cette modification, contactez-nous au plus vite à l'adresse suivante
-    </mj-text>
-  </mj-column>
+	<mj-column>
+		<mj-text align="center">
+			Si vous n'êtes pas à l'origine de cette modification, contactez-nous au plus vite à l'adresse
+			suivante
+		</mj-text>
+	</mj-column>
 </mj-section>
 
 <mj-section>
-  <mj-column>
-    <mj-text align="center">
-      <a style="color:#009fe3" href="mailto:{{contactEmail}}">{{contactEmail}}</a>
-    </mj-text>
-  </mj-column>
+	<mj-column>
+		<mj-text align="center">
+			<a style="color: #009fe3" href="mailto:{{contactEmail}}">{{contactEmail}}</a>
+		</mj-text>
+	</mj-column>
 </mj-section>

@@ -26,14 +26,19 @@ export function sendMail({
 	subject: string;
 	data: Record<string, string>;
 }) {
-	const computedSubject = Handlebars.compile(subject)(data); 
+	const computedSubject = Handlebars.compile(subject)(data);
 	const layout = readFileSync('mail-templates/_layout.mjml').toString('utf-8');
 	return mailer.sendMail({
 		from: 'no-reply@loca7.enseeiht.fr',
 		to,
 		subject: computedSubject + ' @ ' + new Date().toISOString(),
-		html: mjml2html(Handlebars.compile(
-			layout.replace('%content%', readFileSync(path.join('mail-templates', template + '.mjml')).toString('utf-8')))
-		({ title: computedSubject, ...data })).html
+		html: mjml2html(
+			Handlebars.compile(
+				layout.replace(
+					'%content%',
+					readFileSync(path.join('mail-templates', template + '.mjml')).toString('utf-8')
+				)
+			)({ title: computedSubject, ...data })
+		).html
 	});
 }

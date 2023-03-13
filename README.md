@@ -27,7 +27,7 @@ Il y a également une copie locale importable dans figma, au nom de `/prototype.
 ```bash
 git clone https://git.inpt.fr/INP-net/loca7
 cd loca7
-pnpm i 
+pnpm i
 mv .env.example .env # remplacer les valeurs à l'intérieur si nécéssaire
 pnpm run pushdb
 pnpm concurrently -i npm:dev npm:mailhog # ou lancer pnpm dev et pnpm mailhog dans 2 terminaux
