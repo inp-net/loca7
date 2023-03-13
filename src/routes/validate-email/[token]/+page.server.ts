@@ -7,21 +7,38 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	if (!(user && session)) {
 		throw redirect(302, '/login');
 	}
+
 	const emailValidations = await prisma.emailValidation.findFirst({
 		where: {
 			user: {
 				id: user.id
 			},
-			id: params.token
+			id: params.token,
+			expires: {
+				gt: Date.now()
+			}
 		}
 	});
 	if (!emailValidations) {
 		throw redirect(302, '/validate-email#invalidToken');
 	}
 
-	await prisma.emailValidation.delete({
+	// Delete this validation as well as expired validations
+	await prisma.emailValidation.deleteMany({
 		where: {
-			id: emailValidations.id
+			OR: [
+				{
+					id: emailValidations.id
+				},
+				{
+					user: {
+						id: user.id
+					},
+					expires: {
+						lt: Date.now()
+					}
+				}
+			]
 		}
 	});
 

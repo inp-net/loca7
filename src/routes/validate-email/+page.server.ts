@@ -19,13 +19,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals }) => {
+	default: async ({ request, locals, url }) => {
 		const { user, session } = await locals.validateUser();
 		if (!(user && session)) {
 			throw redirect(302, '/login');
 		}
 
-		if (user.emailIsValidated) {
+		if (user.emailIsValidated && !url.hash) {
 			throw redirect(302, '/');
 		}
 
@@ -36,6 +36,18 @@ export const actions: Actions = {
 					connect: {
 						id: user.id
 					}
+				}
+			}
+		});
+
+		// Purge old validations
+		await prisma.emailValidation.deleteMany({
+			where: {
+				user: {
+					id: user.id
+				},
+				id: {
+					not: validation.id
 				}
 			}
 		});
