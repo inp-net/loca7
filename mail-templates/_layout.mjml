@@ -1,0 +1,28 @@
+<mjml>
+  <mj-head>
+    <mj-title>{{ title }}</mj-title>
+    <mj-attributes>
+      <mj-text font-family="Space Grotesk,sans" font-size="18px" />
+      <mj-class name="title" font-size="32px" />
+      <mj-class name="small" font-size="14px" />
+      <mj-button font-family="Space Grotesk,sans" background-color="#25c9ff" color="#000000" font-weight="800" border-radius="100px" font-size="21px" />
+    </mj-attributes>
+  </mj-head>
+
+  <mj-body>
+    <mj-section background-color="white" full-width="full-width">
+      <mj-column>
+        <mj-image src="https://loca7.ewen.works/loca7-wordmark.svg" alt="Logo de Loca7" width="200px" />
+      </mj-column>
+    </mj-section>
+    %content%
+    <mj-section full-width="full-width" background-color="#c2e8fc">
+      <mj-column>
+        <mj-spacer height="100px" />
+        <mj-text align="center" mj-class="small">
+          <a style="color:black" font-weight="bold" href="https://loca7.enseeiht.fr">loca7.enseeiht.fr</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

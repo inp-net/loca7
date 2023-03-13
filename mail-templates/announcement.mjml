@@ -1,0 +1,25 @@
+<mj-section background-color="#c2e8fc" full-width="full-width">
+  <mj-column>
+    <mj-text mj-class="title">
+      {{fullname}}, Loca7 fait peau neuve.
+    </mj-text>
+  </mj-column>
+  <mj-column>
+    <mj-text>
+      Vous pouvez maintenant gérer vos annonces directement depuis le site.
+    </mj-text>
+    <mj-text>
+      Créez votre compte, et commencez à gérer vos annonces.
+    </mj-text>
+    <mj-text>
+      On a gardé vos anciennes annonces, pas de panique.
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section background-color="#c2e8fc" full-width="full-width">
+  <mj-column>
+    <mj-button href="{{createAccountUrl}}">
+      Créer mon compte
+    </mj-button>
+  </mj-column>
+</mj-section>
