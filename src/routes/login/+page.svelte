@@ -32,8 +32,8 @@
 
 		<InputPassword required label="Mot de passe" bind:value={password} name="password" />
 
-		{#if $page.url.hash === '#invalidPassword'}
-			<p class="error">Mot de passe incorrect.</p>
+		{#if $page.url.hash === '#invalidCredentials'}
+			<p class="error">Coordonnées incorrectes.</p>
 		{/if}
 
 		<ButtonPrimary submits>Se connecter</ButtonPrimary>

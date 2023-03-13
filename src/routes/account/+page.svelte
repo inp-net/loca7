@@ -11,7 +11,7 @@
 	$: ({ user } = data);
 
 	let oldPassword: string = '';
-	let oldPasswordIsInvalid: boolean = $page.url.hash === '#invalidPassword';
+	let oldPasswordIsInvalid: boolean = $page.url.hash === '#invalidCredentials';
 	let newPassword: string = '';
 </script>
 

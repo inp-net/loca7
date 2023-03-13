@@ -30,7 +30,9 @@ export const actions: Actions = {
 			switch (err.message) {
 				case 'AUTH_INVALID_PASSWORD':
 				case 'AUTH_OUTDATED_PASSWORD':
-					throw redirect(302, '/login#invalidPassword');
+				case 'AUTH_INVALID_USER_ID':
+				case 'AUTH_INVALID_KEY_ID':
+					throw redirect(302, '/login#invalidCredentials');
 
 				default:
 					throw error(400, { message: 'Connexion impossible.' });
