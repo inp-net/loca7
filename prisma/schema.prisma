@@ -11,17 +11,19 @@ datasource db {
 }
 
 model User {
-  id    String  @id @unique @default(cuid())
-  name  String
-  phone String
-  email String  @unique
-  admin Boolean @default(false)
-  god   Boolean @default(false)
+  id               String  @id @unique @default(cuid())
+  name             String
+  phone            String
+  email            String  @unique
+  admin            Boolean @default(false)
+  god              Boolean @default(false)
+  emailIsValidated Boolean @default(false)
 
-  appartments Appartment[]
-  sessions    Session[]
-  keys        Key[]
-  Report      Report[]
+  appartments      Appartment[]
+  sessions         Session[]
+  keys             Key[]
+  emailValidations EmailValidation[]
+  Report           Report[]
 
   @@map("user")
 }
@@ -35,6 +37,15 @@ model Session {
 
   @@index([user_id])
   @@map("session")
+}
+
+model EmailValidation {
+  id      String @id @unique @default(cuid())
+  user_id String
+  expires BigInt
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
 }
 
 model Key {
