@@ -1,0 +1,11 @@
+{
+	"loca7": {
+		"name": "loca7",
+		"host": "localhost",
+		"port": "587",
+		"email": "no-reply@loca7.enseeiht.fr",
+		"username": "test",
+		"password": "test",
+		"mechanism": "PLAIN"
+	}
+}

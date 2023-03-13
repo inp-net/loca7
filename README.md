@@ -21,21 +21,16 @@ Il y a également une copie locale importable dans figma, au nom de `/prototype.
 ### Prérequis
 
 - Serveur PostgreSQL lancé
-- Serveur MailHog lancé (ou autre serveur mail de test)
-  - Activer un serveur _outgoing_ sur l'adresse mail `no-reply@loca7.enseeiht.fr` à `localhost:587`
+- [MailHog](https://github.com/mailhog/MailHog) installé
+- (Optionnel) [pnpm](https://pnpm.io/installation) installé
 
 ```bash
 git clone https://git.inpt.fr/INP-net/loca7
 cd loca7
-npm i # ou pnpm, ou yarn
-# remplacer user et password, ainsi que 5432 par le port de votre serveur postgresql
-echo "DATABASE_URL=postgres://user:password@localhost:5432/loca7" > .env
-echo "MAIL_HOST=... " >> .env
-echo "MAIL_USER=..." >> .env
-echo "MAIL_PORT=..." >> .env
-echo "MAIL_PASS=..." >> .env
-npm run pushdb
-npm run dev
+pnpm i 
+mv .env.example .env # remplacer les valeurs à l'intérieur si nécéssaire
+pnpm run pushdb
+pnpm concurrently -i npm:dev npm:mailhog # ou lancer pnpm dev et pnpm mailhog dans 2 terminaux
 ```
 
 ## Roadmap
