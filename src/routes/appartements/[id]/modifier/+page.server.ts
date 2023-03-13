@@ -42,6 +42,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	return {
 		appartment: {
 			...appartment,
+			photos: appartment.photos.sort((a, b) => a.position - b.position),
 			// Don't include potentially identifying information from the reports
 			reports: appartment.reports.map(({ reason, message, id }) => ({ reason, message, id }))
 		}
