@@ -17,6 +17,8 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		where: {
 			id: params.id
 		},
+		include: {
+			photos: true
 		}
 	});
 
