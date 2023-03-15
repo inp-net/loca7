@@ -8,6 +8,7 @@ import {
 } from './publicTransportColors';
 import mime from 'mime-types';
 import md5 from 'md5';
+import type { ReportReason } from '@prisma/client';
 
 export type AppartmentKind =
 	| 'chambre'
@@ -83,6 +84,15 @@ export type Appartment = {
 	};
 	reports: Report[];
 };
+
+export type Report = {
+    id: string;
+    type: ReportReason;
+    message: string;
+    createdAt: Date;
+    appartmentId: string;
+    authorId: string;
+}
 
 export type User = {
 	id: string;

@@ -214,7 +214,7 @@
 	</div>
 
 	<section class="actions">
-		<ButtonSecondary icon="report" dangerous>Signaler</ButtonSecondary>
+		<ButtonSecondary icon="report" dangerous href="/appartements/{appart.id}/signaler">Signaler</ButtonSecondary>
 	</section>
 
 	{#if appart?.location}
