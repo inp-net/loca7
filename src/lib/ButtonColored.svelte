@@ -6,7 +6,13 @@
 	export let href: string = '';
 
 	const backgroundColor = dangerous ? 'rose' : warns ? 'plaster' : successful ? 'moss' : 'ice';
-	const foregroundColor = dangerous ? 'blood' : warns ? 'safran' : successful ? 'cactus' : 'cobalt';
+	const foregroundColor = dangerous
+		? 'blood'
+		: warns
+		? 'safran'
+		: successful
+		? 'cactus'
+		: 'cobalt';
 	const pressedBackgroundColor = dangerous
 		? 'mushroom'
 		: warns

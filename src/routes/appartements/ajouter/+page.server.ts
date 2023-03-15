@@ -29,7 +29,8 @@ export const actions: Actions = {
 		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;
 		console.log({ 'uploading appartment from form data': formData });
 
-		const isDummyFile = (file: File) => file.size === 0 && file.type === 'application/octet-stream';
+		const isDummyFile = (file: File) =>
+			file.size === 0 && file.type === 'application/octet-stream';
 		const files = (formDataRaw.getAll('photos') as File[]).filter((f) => !isDummyFile(f));
 		console.log(files);
 
@@ -73,7 +74,9 @@ export const actions: Actions = {
 				deposit: Number(deposit),
 				surface: Number(surface),
 				kind: kind as AppartmentKind,
-				roomsCount: Object.keys(formData).includes('roomsCount') ? Number(formData.roomsCount) : 0,
+				roomsCount: Object.keys(formData).includes('roomsCount')
+					? Number(formData.roomsCount)
+					: 0,
 				availableAt: new Date(Date.parse(availableAt)),
 				address,
 				description: xss(description),

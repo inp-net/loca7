@@ -56,9 +56,9 @@ export const actions: Actions = {
 			to: user.email,
 			data: {
 				fullname: user.name,
-				validateEmailUrl: `${process.env.ORIGIN || 'http://localhost:5173'}/validate-email/${
-					validation.id
-				}`
+				validateEmailUrl: `${
+					process.env.ORIGIN || 'http://localhost:5173'
+				}/validate-email/${validation.id}`
 			},
 			subject: 'Loca7: Vérifiez votre adresse email',
 			template: 'validate-email'

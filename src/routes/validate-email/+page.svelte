@@ -22,10 +22,9 @@
 			On a envoyé un e-mail à <strong>{data.user.email}</strong> avec un lien de vérification.
 		</p>
 		<p>
-			Il sera valide pendant {new Intl.RelativeTimeFormat('fr-FR', { numeric: 'auto' }).format(
-				(VALIDATION_LINK_VALID_FOR_MILLISECONDS * 1e-3) / 60 / 60,
-				'hours'
-			)}
+			Il sera valide pendant {new Intl.RelativeTimeFormat('fr-FR', {
+				numeric: 'auto'
+			}).format((VALIDATION_LINK_VALID_FOR_MILLISECONDS * 1e-3) / 60 / 60, 'hours')}
 		</p>
 		<form method="post">
 			<ButtonSecondary submits icon="reset">Renvoyer le mail</ButtonSecondary>

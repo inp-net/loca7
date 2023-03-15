@@ -55,7 +55,8 @@ export const actions: Actions = {
 		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;
 		console.log({ 'editing appartment': formData });
 		let files = formDataRaw.getAll('photos') as File[];
-		const isDummyFile = (file: File) => file.size === 0 && file.type === 'application/octet-stream';
+		const isDummyFile = (file: File) =>
+			file.size === 0 && file.type === 'application/octet-stream';
 
 		// XXX: The files array should be empty in that case, but it's not, let's pretend it is
 		if (files.length === 1 && isDummyFile(files[0])) {
@@ -113,7 +114,9 @@ export const actions: Actions = {
 				deposit: Number(deposit),
 				surface: Number(surface),
 				kind: kind as AppartmentKind,
-				roomsCount: Object.keys(formData).includes('roomsCount') ? Number(formData.roomsCount) : 0,
+				roomsCount: Object.keys(formData).includes('roomsCount')
+					? Number(formData.roomsCount)
+					: 0,
 				availableAt: new Date(Date.parse(availableAt)),
 				address,
 				description: xss(description),
@@ -193,7 +196,11 @@ export const actions: Actions = {
 
 			// Remove photo files that were removed from the database
 			for (const entry of readdirSync(appartmentPhotosDirectory)) {
-				if (appartment.photos.find((photo) => appartmentPhotoFilenameOnDisk(photo) === entry)) {
+				if (
+					appartment.photos.find(
+						(photo) => appartmentPhotoFilenameOnDisk(photo) === entry
+					)
+				) {
 					continue;
 				} else {
 					rmSync(path.join(appartmentPhotosDirectory, entry));

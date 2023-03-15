@@ -14,7 +14,7 @@ export const POST: RequestHandler = async ({ params, locals }) => {
 		}
 	});
 
-	if (appartment === null )
+	if (appartment === null)
 		throw error(404, {
 			message: "Cette annonce n'existe pas."
 		});

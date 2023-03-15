@@ -80,7 +80,9 @@
 				<p class="where">
 					{address}
 					{#if location}
-						<span class="muted">à {distanceDisplay(distanceBetween(location, ENSEEIHT))}</span>
+						<span class="muted"
+							>à {distanceDisplay(distanceBetween(location, ENSEEIHT))}</span
+						>
 					{/if}
 				</p>
 			</section>
@@ -97,7 +99,9 @@
 		{/if}
 		{#if editable}
 			<section class="editable">
-				<ButtonColored dangerous href="/appartements/{id}/supprimer">Supprimer</ButtonColored>
+				<ButtonColored dangerous href="/appartements/{id}/supprimer"
+					>Supprimer</ButtonColored
+				>
 				<ButtonColored href="/appartements/{id}" on:click={() => emit('delete')}
 					>Annonce</ButtonColored
 				>

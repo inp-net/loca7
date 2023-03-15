@@ -143,7 +143,11 @@
 
 	<InputField label="Aspects">
 		<div class="wrap">
-			<InputCheckbox name="hasFurniture" bind:value={appartment.hasFurniture} label="Meublé" />
+			<InputCheckbox
+				name="hasFurniture"
+				bind:value={appartment.hasFurniture}
+				label="Meublé"
+			/>
 			<InputCheckbox name="hasParking" bind:value={appartment.hasParking} label="Parking" />
 			<!-- TODO place pour vélo -->
 		</div>
@@ -158,7 +162,8 @@
 	</InputField>
 
 	<section class="submit">
-		<ButtonPrimary on:click={() => (showEmptyErrors = true)} submits>{submitText}</ButtonPrimary>
+		<ButtonPrimary on:click={() => (showEmptyErrors = true)} submits>{submitText}</ButtonPrimary
+		>
 	</section>
 </form>
 

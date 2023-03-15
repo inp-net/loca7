@@ -56,7 +56,9 @@
 	$: $searchResults = appartments
 		.filter(
 			(appartment) =>
-				(criteria.furniture === null ? true : appartment.hasFurniture === criteria.furniture) &&
+				(criteria.furniture === null
+					? true
+					: appartment.hasFurniture === criteria.furniture) &&
 				(criteria.parking === null ? true : appartment.hasParking === criteria.parking) &&
 				(!criteria.maximumRent || appartment.rent <= criteria.maximumRent) &&
 				(!criteria.minimumSurface || appartment.surface >= criteria.minimumSurface) &&
@@ -103,12 +105,23 @@
 				</InputField>
 			</div>
 			<InputField label="Type de logement">
-				<InputSelectMultiple options={DISPLAY_APPARTMENT_KIND} bind:selection={criteria.type} />
+				<InputSelectMultiple
+					options={DISPLAY_APPARTMENT_KIND}
+					bind:selection={criteria.type}
+				/>
 			</InputField>
 			<InputField label="Aspects">
 				<div class="aspects">
-					<InputCheckbox labelNull="Peu importe" label="Meublé" bind:value={criteria.furniture} />
-					<InputCheckbox labelNull="Peu importe" label="Parking" bind:value={criteria.parking} />
+					<InputCheckbox
+						labelNull="Peu importe"
+						label="Meublé"
+						bind:value={criteria.furniture}
+					/>
+					<InputCheckbox
+						labelNull="Peu importe"
+						label="Parking"
+						bind:value={criteria.parking}
+					/>
 					<InputCheckbox
 						labelNull="Peu importe"
 						label="Parking vélo"

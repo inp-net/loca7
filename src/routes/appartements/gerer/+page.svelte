@@ -10,8 +10,9 @@
 
 <main>
 	<h1>
-		Mes annonces {#if appartments.length}<ButtonSecondary icon="add" href="/appartements/ajouter"
-				>Nouvelle annonce</ButtonSecondary
+		Mes annonces {#if appartments.length}<ButtonSecondary
+				icon="add"
+				href="/appartements/ajouter">Nouvelle annonce</ButtonSecondary
 			>{/if}
 	</h1>
 

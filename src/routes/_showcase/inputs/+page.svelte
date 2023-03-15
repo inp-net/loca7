@@ -48,7 +48,16 @@
 <section class="radio">
 	<InputField label="Type d'appartement">
 		<InputSelectOne
-			options={['Chambre', 'Studio', 'T1', 'T1 bis', 'T2', 'T3 et plus', 'Colocation', 'Manoir']}
+			options={[
+				'Chambre',
+				'Studio',
+				'T1',
+				'T1 bis',
+				'T2',
+				'T3 et plus',
+				'Colocation',
+				'Manoir'
+			]}
 			value="Manoir"
 		/>
 	</InputField>

@@ -117,7 +117,8 @@
 								{/if} -->
 							{/if}<br />
 							{#if appart.travelTimeToN7.byPublicTransport !== null}
-								{durationDisplay(appart.travelTimeToN7.byPublicTransport)} en transports<wbr />
+								{durationDisplay(appart.travelTimeToN7.byPublicTransport)} en transports<wbr
+								/>
 								<span class="muted">
 									{#each appart.nearbyStations as station}
 										<span
@@ -127,7 +128,12 @@
 												publicTransportColor(station.line, station.type) ||
 												'#000'}
 											style:--text-color={readableOn(
-												station.color || publicTransportColor(station.line, station.type) || '#000'
+												station.color ||
+													publicTransportColor(
+														station.line,
+														station.type
+													) ||
+													'#000'
 											)}>{station.line}</span
 										>
 									{/each}

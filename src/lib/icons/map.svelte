@@ -18,7 +18,11 @@
 			stroke={color}
 			stroke-width={strokeWidth}
 		/>
-		<path d="M11.25 14.75L5.5 9V45.5H44.5L35.5 36.5" stroke={color} stroke-width={strokeWidth} />
+		<path
+			d="M11.25 14.75L5.5 9V45.5H44.5L35.5 36.5"
+			stroke={color}
+			stroke-width={strokeWidth}
+		/>
 		<circle cx="27.25" cy="15.75" r="3.5" fill={color} />
 	</g>
 	<defs>

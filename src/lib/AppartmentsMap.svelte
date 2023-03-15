@@ -30,14 +30,18 @@
 						iconUrl:
 							appartments.length === 1
 								? `/icons/location.svg`
-								: `/icons/location-${appart.kind.toLowerCase().replaceAll(' ', '-')}.svg`,
+								: `/icons/location-${appart.kind
+										.toLowerCase()
+										.replaceAll(' ', '-')}.svg`,
 						iconSize: [markerSize, markerSize],
 						iconAnchor: [markerSize / 2, markerSize]
 					}),
 					alt: 'Appartement'
 				})
 					.addTo(appartmentsLayer)
-					.bindPopup(document.querySelector(`.map-appartment-popup[data-id="${appart.id}"]`));
+					.bindPopup(
+						document.querySelector(`.map-appartment-popup[data-id="${appart.id}"]`)
+					);
 			});
 		}, 20);
 	}
@@ -46,7 +50,8 @@
 		map = L.map('map', { gestureHandling: !scrollIsZoom }).setView(locationTuple(center), 15);
 		appartmentsLayer = L.layerGroup().addTo(map);
 		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+			attribution:
+				'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
 		}).addTo(map);
 		L.marker(locationTuple(ENSEEIHT), {
 			icon: L.icon({
@@ -140,6 +145,7 @@
 
 	:global(#map .enseeiht-icon) {
 		/* source: https://codepen.io/sosuke/pen/Pjoqqp */
-		filter: invert(52%) sepia(64%) saturate(3673%) hue-rotate(167deg) brightness(94%) contrast(101%);
+		filter: invert(52%) sepia(64%) saturate(3673%) hue-rotate(167deg) brightness(94%)
+			contrast(101%);
 	}
 </style>

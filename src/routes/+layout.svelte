@@ -18,7 +18,9 @@
 	{#if dev}
 		<div class="notice notice-dev">Hey, t'es en dev.</div>
 	{:else if data.beta}
-		<div class="notice notice-beta">Ceci est une bêta. Le site est encore en développement.</div>
+		<div class="notice notice-beta">
+			Ceci est une bêta. Le site est encore en développement.
+		</div>
 	{/if}
 	<NavigationBar user={data.user} noticeBarAbove={dev || data.beta} />
 </header>

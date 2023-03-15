@@ -111,7 +111,8 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		min-width: 120px /* XXX: based on width of input when the label is smaller than "Peu importe" */;
+		min-width: 120px
+			/* XXX: based on width of input when the label is smaller than "Peu importe" */;
 		cursor: pointer;
 	}
 	.labels {
