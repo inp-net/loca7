@@ -17,14 +17,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 	const appartment = await prisma.appartment.findFirst({
 		where: {
-			AND: [
-				{
-					id: params.id
-				},
-				{
-					ownerId: user.id
-				}
-			]
+			id: params.id
 		},
 		include: {
 			owner: true,
@@ -36,7 +29,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		}
 	});
 
-	if (appartment === null) {
+	if (appartment === null || (!user.admin && appartment.owner.id !== user.id)) {
 		throw error(404, { message: "Cette annonce n'existe pas ou ne vous appartient pas" });
 	}
 

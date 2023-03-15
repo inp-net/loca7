@@ -81,6 +81,7 @@ export type Appartment = {
 		phone: string;
 		email: string;
 	};
+	reports: Report[];
 };
 
 export type User = {
@@ -89,6 +90,7 @@ export type User = {
 	phone: string;
 	email: string;
 	emailIsValidated: boolean;
+	admin: boolean;
 };
 
 export type SearchCriteria = {
@@ -176,7 +178,8 @@ export const randomAppartment: () => Appartment = () => ({
 		byBike: faker.datatype.number({ max: 30, min: 5 }) * 60,
 		byFoot: faker.datatype.number({ max: 30, min: 5 }) * 60,
 		byPublicTransport: faker.datatype.number({ max: 30, min: 5 }) * 60
-	}
+	},
+	reports: []
 });
 
 export type GeographicPoint = {
