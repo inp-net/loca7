@@ -12,7 +12,15 @@
 
 	let topbarElement: HTMLElement;
 	let sidebarOpen: boolean = false;
-	export const isCurrentPage = (page: typeof $page, path: string) => page.url.pathname === path;
+	let currentPage: 'recherche' | 'administration' | 'mes annonces' | 'mon compte' = 'recherche';
+
+	$: currentPage = $page.url.pathname.startsWith('/administration')
+		? 'administration'
+		: $page.url.pathname.startsWith('/appartements/gerer')
+		? 'mes annonces'
+		: $page.url.pathname.startsWith('/account')
+		? 'mon compte'
+		: 'recherche';
 
 	onMount(() => {
 		if (browser) {
@@ -54,16 +62,26 @@
 		>
 		<ul class="links">
 			<li>
-				<ButtonNavigation current={isCurrentPage($page, '/')} href="/">recherche</ButtonNavigation>
-			</li>
-			<li>
-				<ButtonNavigation
-					current={isCurrentPage($page, '/appartements/gerer')}
-					href="/appartements/gerer">mes annonces</ButtonNavigation
+				<ButtonNavigation current={currentPage === 'recherche'} href="/"
+					>recherche</ButtonNavigation
 				>
 			</li>
 			<li>
-				<ButtonNavigation current={isCurrentPage($page, '/account')} href="/account"
+				{#if user?.admin}
+					<ButtonNavigation
+						current={currentPage === 'administration'}
+						href="/administration">administration</ButtonNavigation
+					>
+				{:else}
+					<ButtonNavigation
+						current={currentPage === 'mes annonces'}
+						href="/appartements/gerer"
+						>mes annonces
+					</ButtonNavigation>
+				{/if}
+			</li>
+			<li>
+				<ButtonNavigation current={currentPage === 'mon compte'} href="/account"
 					>mon compte</ButtonNavigation
 				>
 			</li>
@@ -77,7 +95,9 @@
 			</li>
 			<li>
 				<form method="post">
-					<ButtonSecondary formaction="/logout" icon="logout">Se déconnecter</ButtonSecondary>
+					<ButtonSecondary formaction="/logout" icon="logout"
+						>Se déconnecter</ButtonSecondary
+					>
 				</form>
 			</li>
 		{:else}
@@ -99,22 +119,32 @@
 			<LogoLoca7 />
 		</li>
 		<li>
-			<ButtonNavigation current={isCurrentPage($page, '/')} href="/">recherche</ButtonNavigation>
+			<ButtonNavigation current={currentPage === 'recherche'} href="/"
+				>recherche</ButtonNavigation
+			>
 		</li>
 		<li>
-			<ButtonNavigation
-				current={isCurrentPage($page, '/appartements/gerer')}
-				href="/appartements/gerer">mes annonces</ButtonNavigation
-			>
+			{#if user?.admin}
+				<ButtonNavigation current={currentPage === 'administration'} href="/administration"
+					>administration</ButtonNavigation
+				>
+			{:else}
+				<ButtonNavigation
+					current={currentPage === 'mes annonces'}
+					href="/appartements/gerer">mes annonces</ButtonNavigation
+				>
+			{/if}
 		</li>
 
 		<li>
-			<ButtonNavigation current={isCurrentPage($page, '/account')} href="/account"
+			<ButtonNavigation current={currentPage === 'mon compte'} href="/account"
 				>mon compte</ButtonNavigation
 			>
 		</li>
 		<li>
-			<ButtonSecondary icon="add" href="/appartements/ajouter">Déposer une annonce</ButtonSecondary>
+			<ButtonSecondary icon="add" href="/appartements/ajouter"
+				>Déposer une annonce</ButtonSecondary
+			>
 		</li>
 		<li>
 			<form method="post">
@@ -132,7 +162,8 @@
 				.composedPath()
 				.some(
 					(el) =>
-						el === document.querySelector('.sidebar') || el === document.querySelector('#open-menu')
+						el === document.querySelector('.sidebar') ||
+						el === document.querySelector('#open-menu')
 				) ||
 				(e.composedPath().some((el) => el === document.querySelector('.sidebar')) &&
 					e.composedPath().some((el) => el.tagName === 'A')))
