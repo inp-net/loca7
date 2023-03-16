@@ -86,6 +86,7 @@ model Appartment {
     ownerId        String
     reports        Report[]
     approved       Boolean                  @default(false)
+    archived       Boolean                  @default(false)
 }
 
 model Photo {
