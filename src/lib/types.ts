@@ -66,6 +66,8 @@ export type Appartment = {
 	availableAt: Date;
 	createdAt: Date;
 	address: string;
+	approved: boolean;
+	archived: boolean;
 	location: GeographicPoint | null;
 	hasFurniture: boolean | null;
 	hasParking: boolean | null;
@@ -124,6 +126,8 @@ export const randomAppartment: () => Appartment = () => ({
 	hasParking: faker.datatype.boolean(),
 	kind: faker.helpers.arrayElement(Object.keys(DISPLAY_APPARTMENT_KIND)) as AppartmentKind,
 	id: faker.datatype.uuid(),
+	archived: faker.datatype.boolean(),
+	approved: faker.datatype.boolean(),
 	photos: [],
 	location: {
 		latitude:

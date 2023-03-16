@@ -7,6 +7,7 @@ export const POST: RequestHandler = async ({ params, locals }) => {
 	if (!(user && session)) throw redirect(302, '/login');
 	if (!user.emailIsValidated) throw redirect(302, '/validate-email');
 	if (!user.admin) throw error(401, { message: "Vous n'êtes pas administrateur" });
+
 	const appartment = await prisma.appartment.findUnique({
 		where: { id: params.id },
 		include: {
@@ -22,7 +23,10 @@ export const POST: RequestHandler = async ({ params, locals }) => {
 	await prisma.appartment.update({
 		where: { id: params.id },
 		data: {
-			approved: true
+			// Only approve if the user is an admin, else leave it as it was before
+			// This prevents non-admins from approving their posts but still allows them to unmark them as archived
+			approved: user.admin ? true : undefined,
+			archived: false
 		}
 	});
 

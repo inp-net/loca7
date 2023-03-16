@@ -17,11 +17,9 @@
 
 	function archived(
 		eagerApproved: Record<string, boolean>,
-		appartment: { id: string; approved: boolean; availableAt: Date }
+		appartment: { id: string; approved: boolean; availableAt: Date; archived: boolean }
 	): boolean {
-		return (
-			!approved(eagerApproved, appartment) && appartment.availableAt.valueOf() < Date.now()
-		);
+		return appartment.archived;
 	}
 
 	$: appartmentsPending = appartments.filter(

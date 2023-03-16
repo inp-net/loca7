@@ -22,7 +22,7 @@ export const POST: RequestHandler = async ({ params, locals }) => {
 	await prisma.appartment.update({
 		where: { id: params.id },
 		data: {
-			archived: true
+			approved: true
 		}
 	});
 

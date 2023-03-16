@@ -25,6 +25,7 @@
 	import AppartmentsMap from '$lib/AppartmentsMap.svelte';
 
 	export let data: LayoutData;
+	let user: User | null = data.user;
 	let appart: Appartment = data.appartment;
 	let secondsAvailableSince = (Date.now() - appart.availableAt.valueOf()) * 1e-3;
 
@@ -47,6 +48,32 @@
 </svelte:head>
 
 <main>
+	{#if appart.archived || !appart.approved}
+		<section class="archived">
+			<p class="typo-paragraph">
+				{#if appart.archived}
+					Cette annonce est archivée
+				{:else}
+					Cette annonce n'a pas encore été approuvée
+				{/if}
+			</p>
+			{#if appart.archived || user?.admin}
+				<div class="actions">
+					<ButtonSecondary icon="delete" href="/appartements/{appart.id}/supprimer"
+						>Supprimer</ButtonSecondary
+					>
+					<ButtonSecondary
+						icon="eye-open"
+						on:click={async () => {
+							await fetch(`/appartements/${appart.id}/publier`, { method: 'POST' });
+						}}
+						>{#if appart.archived}Publier{:else}Approuver{/if}</ButtonSecondary
+					>
+				</div>
+			{/if}
+		</section>
+	{/if}
+
 	<section class="carousel">
 		<CarouselImages contain images={appart.photos.map(appartmentPhotoURL)} />
 	</section>
@@ -364,4 +391,62 @@
 		width: 100%;
 		height: 600px;
 	}
+
+	section.reports {
+		max-width: 1000px;
+		word-break: break-all;
+	}
+
+	section.reports h2 {
+		margin-bottom: 2rem;
+		text-align: center;
+	}
+
+	section.reports ul {
+		list-style: none;
+		padding-left: 0;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	.report {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		padding: 1rem;
+		border-radius: 1rem;
+		max-width: 300px;
+		min-height: 300px;
+		border: var(--border-width) solid var(--muted);
+	}
+
+	.report .actions {
+		margin-top: auto;
+	}
+	.report .body.empty {
+		font-style: italic;
+		color: var(--muted);
+	}
+
+	.report .actions {
+		display: flex;
+		flex-direction: row;
+	}
+
+	section.archived {
+		background: var(--ice);
+		padding: 0.5rem 1rem;
+		max-width: 1200px;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 3rem;
+	}
+
+	section.archived .actions {
+		display: flex;
+		gap: 1rem;
 </style>
