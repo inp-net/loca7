@@ -68,7 +68,7 @@
 						>Supprimer</ButtonSecondary
 					>
 					<ButtonSecondary
-						icon="eye-open"
+						icon={appart.archived ? 'eye-open' : 'checkmark'}
 						on:click={async () => {
 							await fetch(`/appartements/${appart.id}/publier`, { method: 'POST' });
 						}}
