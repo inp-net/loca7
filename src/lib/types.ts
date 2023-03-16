@@ -40,6 +40,12 @@ export const DISPLAY_PUBLIC_TRANSPORT_TYPE: Record<PublicTransportType, string> 
 	tad: 'TAD'
 };
 
+export const DISPLAY_REPORT_REASON: Record<ReportReason, string> = {
+	dangerous: 'Contenu dangereux',
+	obsolete: 'Annonce obsolète',
+	other: 'Autre'
+};
+
 export type PublicTransportStation = {
 	name: string;
 	line: string;
@@ -88,13 +94,13 @@ export type Appartment = {
 };
 
 export type Report = {
-    id: string;
-    type: ReportReason;
-    message: string;
-    createdAt: Date;
-    appartmentId: string;
-    authorId: string;
-}
+	id: string;
+	reason: ReportReason;
+	message: string;
+	createdAt: Date;
+	appartmentId: string;
+	authorId: string;
+};
 
 export type User = {
 	id: string;

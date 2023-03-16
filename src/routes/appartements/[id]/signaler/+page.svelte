@@ -35,8 +35,8 @@
 		<input type="hidden" name="appartmentId" value={data.appartment.id} />
 
 		<section class="submit">
-            <ButtonPrimary submits>Signaler</ButtonPrimary>
-        </section>
+			<ButtonPrimary submits>Signaler</ButtonPrimary>
+		</section>
 	</form>
 </main>
 
@@ -66,12 +66,12 @@
 		gap: 2rem;
 	}
 
-    form :global(.field) {
-        flex-grow: unset;
-    }
+	form :global(.field) {
+		flex-grow: unset;
+	}
 
-    form section.submit {
-        display: flex;
-        justify-content: center;
-    }
+	form section.submit {
+		display: flex;
+		justify-content: center;
+	}
 </style>

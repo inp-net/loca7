@@ -12,7 +12,8 @@ export const load: LayoutLoad<{ appartment: Appartment }> = async ({ params }) =
 			location: true,
 			nearbyStations: true,
 			travelTimeToN7: true,
-			photos: true
+			photos: true,
+			reports: true
 		}
 	});
 

@@ -19,13 +19,18 @@
 		DISPLAY_PUBLIC_TRANSPORT_TYPE,
 		type Appartment,
 		type PublicTransportStation,
-		type GeographicPoint
+		type GeographicPoint,
+		DISPLAY_REPORT_REASON,
+		type User
 	} from '$lib/types';
 	import publicTransportColor from '$lib/publicTransportColors';
 	import AppartmentsMap from '$lib/AppartmentsMap.svelte';
+	import type { Report } from '$lib/types';
+	import { onMount, onDestroy } from 'svelte';
 
 	export let data: LayoutData;
 	let user: User | null = data.user;
+	let reports: Report[] = data.appartment.reports;
 	let appart: Appartment = data.appartment;
 	let secondsAvailableSince = (Date.now() - appart.availableAt.valueOf()) * 1e-3;
 
@@ -241,7 +246,70 @@
 	</div>
 
 	<section class="actions">
-		<ButtonSecondary icon="report" dangerous href="/appartements/{appart.id}/signaler">Signaler</ButtonSecondary>
+		{#if user?.admin || appart.owner.id === user?.id}
+			<ButtonSecondary icon="edit" href="/appartements/{appart.id}/modifier"
+				>Modifier</ButtonSecondary
+			>
+			<ButtonSecondary icon="delete" href="/appartements/{appart.id}/supprimer"
+				>Supprimer</ButtonSecondary
+			>
+			{#if appart.archived}
+				<ButtonSecondary
+					icon="eye-open"
+					on:click={async () => {
+						await fetch(`/appartements/${appart.id}/publier`, {
+							method: 'post'
+						});
+					}}>Publier</ButtonSecondary
+				>
+			{:else}
+				<ButtonSecondary
+					icon="eye-cancel"
+					on:click={async () => {
+						await fetch(`/appartements/${appart.id}/archiver`, {
+							method: 'post'
+						});
+						window.location.reload();
+					}}>Archiver</ButtonSecondary
+				>
+			{/if}
+		{:else}
+			<ButtonSecondary icon="report" dangerous href="/appartements/{appart.id}/signaler"
+				>Signaler</ButtonSecondary
+			>
+		{/if}
+	</section>
+
+	<section class="reports">
+		<h2>Signalements</h2>
+		<ul>
+			{#each reports as report}
+				<li class="report">
+					<span class="reason typo-field-label"
+						>{DISPLAY_REPORT_REASON[report.reason]}</span
+					>
+					{#if report.message.length}
+						<div class="body">{@html report.message}</div>
+					{:else}
+						<div class="body empty">Aucun message</div>
+					{/if}
+					<div class="actions">
+						<ButtonSecondary
+							on:click={async () => {
+								await fetch(`/signalements/${report.id}/supprimer`, {
+									method: 'post'
+								});
+								reports = reports.filter((r) => r.id === report.id);
+							}}
+							dangerous
+							icon="delete">Supprimer</ButtonSecondary
+						>
+					</div>
+				</li>
+			{:else}
+				<li>Aucun signalement.</li>
+			{/each}
+		</ul>
 	</section>
 
 	{#if appart?.location}
@@ -381,6 +449,9 @@
 	section.actions {
 		display: flex;
 		align-items: center;
+		gap: 1rem;
+		flex-direction: row;
+		justify-content: center;
 	}
 
 	section.actions :global(button) {
@@ -449,4 +520,5 @@
 	section.archived .actions {
 		display: flex;
 		gap: 1rem;
+	}
 </style>
