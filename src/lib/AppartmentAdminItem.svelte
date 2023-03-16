@@ -60,7 +60,7 @@
 		>
 	</div>
 	<div class="actions" class:open>
-		<ButtonSecondary href="/appartements/{id}/modifier" icon="edit">Modifier</ButtonSecondary>
+		<ButtonSecondary href="/appartements/{id}" icon="add">Voir</ButtonSecondary>
 		{#if !approved}
 			<ButtonSecondary on:click={action('publier')} icon="eye-open">Publier</ButtonSecondary>
 		{:else}
