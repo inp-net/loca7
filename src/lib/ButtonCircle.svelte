@@ -26,9 +26,9 @@
 		border-color: transparent;
 
 		border-radius: 50%;
-		height: 2.5rem;
-		width: 2.5rem;
-		padding: 0.5rem;
+		height: 2rem;
+		width: 2rem;
+		padding: 0.25rem;
 
 		cursor: pointer;
 	}
