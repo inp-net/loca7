@@ -253,7 +253,19 @@
 			<ButtonSecondary icon="delete" href="/appartements/{appart.id}/supprimer"
 				>Supprimer</ButtonSecondary
 			>
-			{#if appart.archived}
+			{#if !appart.approved}
+				{#if user?.admin}
+					<ButtonSecondary
+						icon="checkmark"
+						on:click={async () => {
+							await fetch(`/appartements/${appart.id}/approuver`, {
+								method: 'post'
+							});
+							window.location.reload();
+						}}>Approuver</ButtonSecondary
+					>
+				{/if}
+			{:else if appart.archived}
 				<ButtonSecondary
 					icon="eye-open"
 					on:click={async () => {
