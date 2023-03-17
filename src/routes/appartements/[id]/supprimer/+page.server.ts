@@ -40,18 +40,11 @@ export const actions: Actions = {
 
 		const appartment = await prisma.appartment.findFirst({
 			where: {
-				AND: [
-					{
-						id: params.id
-					},
-					{
-						ownerId: user.id
-					}
-				]
+				id: params.id
 			}
 		});
 
-		if (appartment === null) {
+		if (appartment === null || (!user.admin && appartment.ownerId !== user.id)) {
 			throw error(404, { message: "Cette annonce n'existe pas ou ne vous appartient pas" });
 		}
 
@@ -67,10 +60,11 @@ export const actions: Actions = {
 					path.join(
 						'public',
 						appartmentPhotoURL({
-							appartmentId: appartment.id,
-							contentType: '',
-							filename: ''
-						})
+                            appartmentId: appartment.id,
+                            contentType: '',
+                            filename: '',
+                            position: 0
+                        })
 					)
 				),
 				{
