@@ -292,38 +292,39 @@
 		{/if}
 	</section>
 
-	<section class="reports">
-		<h2>Signalements</h2>
-		<ul>
-			{#each reports as report}
-				<li class="report">
-					<span class="reason typo-field-label"
-						>{DISPLAY_REPORT_REASON[report.reason]}</span
-					>
-					{#if report.message.length}
-						<div class="body">{@html report.message}</div>
-					{:else}
-						<div class="body empty">Aucun message</div>
-					{/if}
-					<div class="actions">
-						<ButtonSecondary
-							on:click={async () => {
-								await fetch(`/signalements/${report.id}/supprimer`, {
-									method: 'post'
-								});
-								reports = reports.filter((r) => r.id === report.id);
-							}}
-							dangerous
-							icon="delete">Supprimer</ButtonSecondary
+	{#if user?.admin}
+		<section class="reports">
+			<h2>Signalements</h2>
+			<ul>
+				{#each reports as report}
+					<li class="report">
+						<span class="reason typo-field-label"
+							>{DISPLAY_REPORT_REASON[report.reason]}</span
 						>
-					</div>
-				</li>
-			{:else}
-				<li>Aucun signalement.</li>
-			{/each}
-		</ul>
-	</section>
-
+						{#if report.message.length}
+							<div class="body">{@html report.message}</div>
+						{:else}
+							<div class="body empty">Aucun message</div>
+						{/if}
+						<div class="actions">
+							<ButtonSecondary
+								on:click={async () => {
+									await fetch(`/signalements/${report.id}/supprimer`, {
+										method: 'post'
+									});
+									reports = reports.filter((r) => r.id === report.id);
+								}}
+								dangerous
+								icon="delete">Supprimer</ButtonSecondary
+							>
+						</div>
+					</li>
+				{:else}
+					<li>Aucun signalement.</li>
+				{/each}
+			</ul>
+		</section>
+	{/if}
 	{#if appart?.location}
 		<section class="map">
 			<AppartmentsMap appartments={[appart]} center={middleOf(appart.location, ENSEEIHT)} />
