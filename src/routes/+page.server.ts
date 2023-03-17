@@ -5,6 +5,10 @@ export const load: PageServerLoad = async () => {
 	return {
 		appartments: (
 			await prisma.appartment.findMany({
+				where: {
+					archived: false,
+					approved: true
+				},
 				include: {
 					owner: true,
 					location: true,
