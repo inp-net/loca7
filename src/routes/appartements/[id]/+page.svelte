@@ -464,6 +464,7 @@
 		gap: 1rem;
 		flex-direction: row;
 		justify-content: center;
+		flex-wrap: wrap;
 	}
 
 	section.actions :global(button) {
