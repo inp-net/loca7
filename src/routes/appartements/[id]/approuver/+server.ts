@@ -16,7 +16,7 @@ export const POST: RequestHandler = async ({ params, locals }) => {
 
 	if (appartment === null)
 		throw error(404, {
-			message: "Cette annonce n'existe."
+			message: "Cette annonce n'existe pas."
 		});
 
 	await prisma.appartment.update({
