@@ -60,11 +60,11 @@ export const actions: Actions = {
 					path.join(
 						'public',
 						appartmentPhotoURL({
-                            appartmentId: appartment.id,
-                            contentType: '',
-                            filename: '',
-                            position: 0
-                        })
+							appartmentId: appartment.id,
+							contentType: '',
+							filename: '',
+							position: 0
+						})
 					)
 				),
 				{
