@@ -1,0 +1,18 @@
+{
+	"gitlab.customQueries": [
+		{
+			"name": "Open beta",
+			"type": "issues",
+			"scope": "assigned_to_me",
+			"milestone": "0.1",
+			"noItemText": "No issues."
+		},
+		{
+			"name": "Release",
+			"type": "issues",
+			"scope": "assigned_to_me",
+			"milestone": "1.0",
+			"noItemText": "No issues."
+		}
+	]
+}
