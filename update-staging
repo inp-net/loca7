@@ -2,6 +2,13 @@
 
 echo +cd ~ewen/www/loca7.ewen.works
 cd ~ewen/www/loca7.ewen.works
+echo checking for updates...
+if [ $(git fetch origin --quiet; git rev-list HEAD..@{u} --count) -le 0 ]; then
+  echo already up to date.
+  exit 0
+else
+  echo updates found.
+fi
 echo +git pull
 git pull
 echo +pnpm i
