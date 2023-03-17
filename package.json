@@ -65,6 +65,7 @@
 		"dialog-polyfill": "^0.5.6",
 		"dotenv": "^16.0.3",
 		"handlebars": "^4.7.7",
+		"ics": "^3.1.0",
 		"lexical": "^0.8.1",
 		"lodash": "^4.17.21",
 		"lucia-auth": "^0.7.3",
@@ -73,7 +74,9 @@
 		"mjml": "^4.13.0",
 		"nodemailer": "^6.9.1",
 		"sharp": "^0.31.3",
+		"slugify": "^1.6.5",
 		"uuid": "^9.0.0",
+		"vcard4": "^3.1.5",
 		"xss": "^1.0.14",
 		"zxcvbn": "^4.4.2"
 	}
