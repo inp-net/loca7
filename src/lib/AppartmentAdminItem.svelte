@@ -75,10 +75,10 @@
 		{/if}
 		<ButtonSecondary href="/appartements/{id}" icon="add">Voir</ButtonSecondary>
 		<ButtonSecondary href="/appartements/{id}/supprimer" icon="delete">Suppr.</ButtonSecondary>
-		<button class="collapse" on:click={() => (open = false)}>
-			<Icon name="next" />
-		</button>
 	</div>
+	<button class:open class="collapse" on:click={() => (open = false)}>
+		<Icon name="next" />
+	</button>
 </li>
 
 <style>
@@ -142,21 +142,31 @@
 		align-items: center;
 		width: 100%;
 	}
-	.collapse :global(svg) {
-		transform: rotate(-90deg);
-	}
+
 	.photo {
 		display: none;
 		height: 5rem;
 		width: 5rem;
 		object-fit: cover;
 	}
-	.actions {
-		overflow: hidden;
-		transition: height 500ms ease;
+	.actions.open,
+	.collapse.open {
+		opacity: 1;
 	}
+	.actions,
+	.collapse {
+		overflow: hidden;
+		opacity: 0;
+		transition: all 50ms ease;
+	}
+	.collapse :global(svg) {
+		transform: rotate(-90deg);
+		height: 3rem;
+	}
+
 	@media (max-width: 1000px) {
-		.actions:not(.open) {
+		.actions:not(.open),
+		.collapse:not(.open) {
 			height: 0;
 		}
 	}
@@ -189,7 +199,7 @@
 			align-items: center;
 			margin-top: 0;
 		}
-		.actions .collapse {
+		.collapse {
 			display: none;
 		}
 	}
