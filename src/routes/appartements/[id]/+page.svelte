@@ -73,7 +73,10 @@
 </script>
 
 <svelte:head>
-	<title>Loca7 · {appart.kind} de {appart.surface} m² à {appart.rent + appart.charges}€</title>
+	<title
+		>Loca7 · {DISPLAY_APPARTMENT_KIND[appart.kind]} de {appart.surface} m² à {appart.rent +
+			appart.charges}€</title
+	>
 </svelte:head>
 
 <main>
