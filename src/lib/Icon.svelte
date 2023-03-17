@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { dev } from '$app/environment';
+
 	export let name: string;
 	export let strokeWidth: string = '5';
 	export let color = 'fg';
@@ -16,7 +18,9 @@
 		{flip}
 	/>
 {:catch error}
-	<span style="color: red;">{error}</span>
+	{#if dev}
+		<span style="color: red;">{error}</span>
+	{/if}
 {/await}
 
 <style>
