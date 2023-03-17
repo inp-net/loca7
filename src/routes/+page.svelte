@@ -12,7 +12,6 @@
 	import { searchResults } from '$lib/stores';
 	import {
 		DISPLAY_APPARTMENT_KIND,
-		randomAppartment,
 		type Appartment,
 		type SearchCriteria
 	} from '$lib/types';

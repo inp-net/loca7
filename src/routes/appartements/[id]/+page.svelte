@@ -528,8 +528,8 @@
 		align-items: center;
 		justify-content: space-between;
 		margin-bottom: 3rem;
-        flex-wrap: wrap;
-        gap: 1rem;
+		flex-wrap: wrap;
+		gap: 1rem;
 	}
 
 	section.archived .actions {
