@@ -214,3 +214,11 @@ export function appartmentPhotoURL(photo: Photo): string {
 export function appartmentPhotoFilenameOnDisk(photo: Photo): string {
 	return `${md5(photo.filename)}.${mime.extension(photo.contentType) || 'bin'}`;
 }
+
+export function appartmentAccessible(user: User | null, appartment: Appartment) {
+	if (appartment.approved && !appartment.archived) return true;
+
+	if (user?.id === appartment.owner.id || user?.admin) return true;
+
+	return false;
+}

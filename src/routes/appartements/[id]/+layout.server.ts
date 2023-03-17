@@ -1,10 +1,11 @@
-import type { Appartment, PublicTransportStation } from '$lib/types';
+import { appartmentAccessible, type Appartment, type PublicTransportStation } from '$lib/types';
 import { ENSEEIHT } from '$lib/utils';
 import type { LayoutLoad } from './$types';
 import { prisma } from '$lib/server/prisma';
-import { error, fail } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 
-export const load: LayoutLoad<{ appartment: Appartment }> = async ({ params }) => {
+export const load: LayoutLoad<{ appartment: Appartment }> = async ({ params, locals }) => {
+	const { user } = await locals.validateUser();
 	const appartment = await prisma.appartment.findUnique({
 		where: { id: params.id },
 		include: {
@@ -17,7 +18,7 @@ export const load: LayoutLoad<{ appartment: Appartment }> = async ({ params }) =
 		}
 	});
 
-	if (appartment === null)
+	if (appartment === null || !appartmentAccessible(user, appartment))
 		throw error(404, { message: "Cette annonce n'existe pas, ou n'est pas (encore) publique" });
 
 	return {
