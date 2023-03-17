@@ -27,11 +27,16 @@
 	import AppartmentsMap from '$lib/AppartmentsMap.svelte';
 	import type { Report } from '$lib/types';
 	import { onMount, onDestroy } from 'svelte';
+	import { ics } from '$lib/ics';
+	import { page } from '$app/stores';
+	import { vcard } from '$lib/vcard';
 
 	export let data: LayoutData;
 	let user: User | null = data.user;
 	let reports: Report[] = data.appartment.reports;
 	let appart: Appartment = data.appartment;
+	let calendarICSEvent: { url: string; filename: string } = { url: '', filename: '' };
+	let contactVCard: { url: string; filename: string } = vcard(appart.owner);
 	let secondsAvailableSince = (Date.now() - appart.availableAt.valueOf()) * 1e-3;
 
 	function publicTransportStationSentence(station: PublicTransportStation) {
@@ -46,6 +51,25 @@
 			longitude: points.reduce((acc, p) => acc + p.longitude, 0) / points.length
 		};
 	}
+	onMount(async () => {
+		calendarICSEvent = await ics({
+			start: appart.availableAt,
+			duration: { days: 1 },
+			attendees: user ? [user, appart.owner] : [appart.owner],
+			organizer: {
+				name: 'Loca7',
+				email: 'contact@loca7.enseeiht.fr'
+			},
+			busy: 'TENTATIVE',
+			status: 'TENTATIVE',
+			location: appart.location,
+			description: `${DISPLAY_APPARTMENT_KIND[appart.kind]} de ${appart.surface} m² à ${
+				appart.rent + appart.charges
+			}€.\n\nPlus d'informations: ${$page.url.toString()}`,
+			title: `Visite d'un appartement Loca7`,
+			url: $page.url.toString()
+		});
+	});
 </script>
 
 <svelte:head>
@@ -118,7 +142,11 @@
 							>
 						{/if}
 					</p>
-					<ButtonSecondary icon="open-outside">Calendrier</ButtonSecondary>
+					<ButtonSecondary
+						icon="open-outside"
+						href={calendarICSEvent?.url}
+						download={calendarICSEvent?.filename}>Calendrier</ButtonSecondary
+					>
 				</div>
 				<div class="row">
 					<span class="icon"><Icon name="location" /></span>
@@ -130,7 +158,12 @@
 							>
 						{/if}
 					</p>
-					<ButtonSecondary icon="open-outside">Maps</ButtonSecondary>
+					<!-- TODO make it platform agnostic (Maps on iOS, default maps app on Android) -->
+					<ButtonSecondary
+						icon="open-outside"
+						href="https://google.com/maps/place/{encodeURIComponent(appart.address)}"
+						>Maps</ButtonSecondary
+					>
 				</div>
 				{#if Object.entries(appart.travelTimeToN7).some(([k, v]) => k !== 'id' && v !== null)}
 					<div class="row">
@@ -225,7 +258,11 @@
 				<h2 class="typo-field-label">Propriétaire</h2>
 				<p class="name typo-title">
 					{appart.owner.name}
-					<ButtonSecondary icon="open-outside">Contacts</ButtonSecondary>
+					<ButtonSecondary
+						icon="open-outside"
+						download={contactVCard.filename}
+						href={contactVCard.url}>Contacts</ButtonSecondary
+					>
 				</p>
 				{#if appart.owner.email}
 					<div class="row">
