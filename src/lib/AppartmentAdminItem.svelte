@@ -156,7 +156,6 @@
 	.actions,
 	.collapse {
 		overflow: hidden;
-		opacity: 0;
 		transition: all 50ms ease;
 	}
 	.collapse :global(svg) {
@@ -168,6 +167,7 @@
 		.actions:not(.open),
 		.collapse:not(.open) {
 			height: 0;
+			opacity: 0;
 		}
 	}
 
