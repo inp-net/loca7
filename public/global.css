@@ -140,15 +140,9 @@ a {
 }
 
 p > a:not([class^='button']),
-dd > a {
+dd > a,
+a.in-body {
 	color: var(--sky);
-	text-decoration: none;
-}
-
-p > a:not([class^='button']):hover,
-dd > a:not([class^='button']):hover,
-p > a:not([class^='button']):focus,
-dd > a:not([class^='button']):focus {
 	text-decoration: underline;
 	text-underline-offset: 0.5ch;
 	text-decoration-thickness: 0.125em;
