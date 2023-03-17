@@ -27,6 +27,7 @@
 		} else {
 			error = await response.text();
 		}
+		open = false;
 	};
 </script>
 
