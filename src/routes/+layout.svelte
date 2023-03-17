@@ -18,6 +18,7 @@
 	<link rel="stylesheet" href="/vendor/leaflet-gesture-handling.min.css" />
 	<script src="/vendor/leaflet.js"></script>
 	<script src="/vendor/leaflet-gesture-handling.js"></script>
+	<script src="/vendor/polyfills/inert.min.js"></script>
 </svelte:head>
 
 <section class="toasts">
