@@ -14,11 +14,12 @@
 	export let address: string;
 	export let rent: number;
 	export let charges: number;
+	export let archived: boolean;
 	export let photos: Photo[];
 	let open: boolean = false;
 	let error: string = '';
 
-	const action = (name: 'archiver' | 'publier') => async () => {
+	const action = (name: 'archiver' | 'publier' | 'approuver') => async () => {
 		const response = await fetch(`/appartements/${id}/${name}`, { method: 'post' });
 		if (response.status === 200) {
 			error = '';
@@ -60,14 +61,18 @@
 		>
 	</div>
 	<div class="actions" class:open>
-		<ButtonSecondary href="/appartements/{id}" icon="add">Voir</ButtonSecondary>
 		{#if !approved}
+			<ButtonSecondary on:click={action('approuver')} icon="checkmark"
+				>Valider</ButtonSecondary
+			>
+		{:else if archived}
 			<ButtonSecondary on:click={action('publier')} icon="eye-open">Publier</ButtonSecondary>
 		{:else}
 			<ButtonSecondary on:click={action('archiver')} submits icon="eye-cancel"
-				>{availableAt.valueOf() < Date.now() ? 'Archiver' : 'Dépublier'}</ButtonSecondary
+				>Archiver</ButtonSecondary
 			>
 		{/if}
+		<ButtonSecondary href="/appartements/{id}" icon="add">Voir</ButtonSecondary>
 		<ButtonSecondary href="/appartements/{id}/supprimer" icon="delete">Suppr.</ButtonSecondary>
 		<button class="collapse" on:click={() => (open = false)}>
 			<Icon name="next" />

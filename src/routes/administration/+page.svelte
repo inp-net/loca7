@@ -3,32 +3,25 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	let eagerApproved: Record<string, boolean> = {};
+	type Status = 'pending' | 'approved' | 'archived';
+	let eagerStatus: Record<string, Status> = {};
 	$: appartments = data.appartments.sort(
 		(a, b) => a.availableAt.valueOf() - b.availableAt.valueOf()
 	);
 
-	function approved(
-		eagerApproved: Record<string, boolean>,
-		appartment: { id: string; approved: boolean }
-	): boolean {
-		return eagerApproved?.[appartment.id] ?? appartment.approved;
+	function status(
+		eagerStatus: Record<string, Status>,
+		appartment: { id: string; approved: boolean; archived: boolean }
+	): Status {
+		return (
+			eagerStatus?.[appartment.id] ??
+			(!appartment.approved ? 'pending' : appartment.archived ? 'archived' : 'approved')
+		);
 	}
 
-	function archived(
-		eagerApproved: Record<string, boolean>,
-		appartment: { id: string; approved: boolean; availableAt: Date; archived: boolean }
-	): boolean {
-		return appartment.archived;
-	}
-
-	$: appartmentsPending = appartments.filter(
-		(a) => !archived(eagerApproved, a) && !approved(eagerApproved, a)
-	);
-	$: appartmentsArchived = appartments.filter(
-		(a) => archived(eagerApproved, a) && !approved(eagerApproved, a)
-	);
-	$: appartmentsOnline = appartments.filter((a) => approved(eagerApproved, a));
+	$: appartmentsPending = appartments.filter((a) => status(eagerStatus, a) === 'pending');
+	$: appartmentsArchived = appartments.filter((a) => status(eagerStatus, a) === 'archived');
+	$: appartmentsOnline = appartments.filter((a) => status(eagerStatus, a) === 'approved');
 </script>
 
 <svelte:head>
@@ -43,8 +36,8 @@
 			<AppartmentAdminItem
 				{...appartment}
 				approved={false}
-				on:publier={() => {
-					eagerApproved[appartment.id] = true;
+				on:approuver={() => {
+					eagerStatus[appartment.id] = 'approved';
 				}}
 			/>
 		{:else}
@@ -59,8 +52,9 @@
 			<AppartmentAdminItem
 				{...appartment}
 				approved={true}
+				archived={false}
 				on:archiver={() => {
-					eagerApproved[appartment.id] = false;
+					eagerStatus[appartment.id] = 'archived';
 				}}
 			/>
 		{:else}
@@ -74,9 +68,10 @@
 		{#each appartmentsArchived as appartment (appartment.id)}
 			<AppartmentAdminItem
 				{...appartment}
-				approved={false}
+				approved={true}
+				archived={true}
 				on:publier={() => {
-					eagerApproved[appartment.id] = true;
+					eagerStatus[appartment.id] = 'approved';
 				}}
 			/>
 		{:else}
