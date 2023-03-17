@@ -113,7 +113,11 @@
 	</ul>
 </nav>
 
-<nav class="sidebar" class:open={sidebarOpen}>
+<nav
+	class="sidebar"
+	aria-expanded={sidebarOpen ? 'true' : 'false'}
+	inert={!sidebarOpen || undefined}
+>
 	<ul>
 		<li class="logo">
 			<LogoLoca7 />
@@ -257,9 +261,10 @@
 		z-index: 11000;
 	}
 
-	nav.sidebar:not(.open) {
+	nav.sidebar:not([aria-expanded='true']) {
 		left: -200vw;
 		box-shadow: 0 0 0 100vw transparent;
+		pointer-events: none;
 	}
 
 	nav.sidebar ul {
