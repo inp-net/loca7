@@ -1,8 +1,13 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
+	import ButtonCircle from '$lib/ButtonCircle.svelte';
+	import Icon from '$lib/Icon.svelte';
 	import LogoLoca7 from '$lib/LogoLoca7.svelte';
 	import LogoNet7 from '$lib/LogoNet7.svelte';
 	import NavigationBar from '$lib/NavigationBar.svelte';
+	import { closeToast, toasts } from '$lib/toasts';
+	import { fly } from 'svelte/transition';
+	import xss from 'xss';
 	import type { PageData } from './$types';
 	export let data: PageData;
 </script>
@@ -13,6 +18,21 @@
 	<script src="/vendor/leaflet.js"></script>
 	<script src="/vendor/leaflet-gesture-handling.js"></script>
 </svelte:head>
+
+<section class="toasts">
+	{#each $toasts as toast (toast.id)}
+		<article transition:fly class="toast" data-type={toast.type}>
+			<Icon
+				color={{ error: '#fff', info: 'cobalt' }[toast.type]}
+				name={{ error: 'report', info: 'information' }[toast.type]}
+			/>
+			{@html xss(toast.message)}
+			{#if toast.closable}
+				<ButtonCircle icon="close" on:click={() => closeToast(toast.id)} />
+			{/if}
+		</article>
+	{/each}
+</section>
 
 <header>
 	{#if dev}
@@ -112,5 +132,36 @@
 
 	footer .net7 p {
 		margin-bottom: 1rem;
+	}
+
+	.toasts {
+		--inset: 1rem;
+		position: fixed;
+		left: var(--inset);
+		right: var(--inset);
+		bottom: calc(1.5 * var(--inset));
+		z-index: 1000;
+		display: flex;
+		flex-direction: column-reverse;
+		gap: 1rem;
+	}
+
+	.toasts article {
+		display: grid;
+		align-items: center;
+		grid-template-columns: 1.5rem 1fr min-content;
+		padding: 0.75rem 1rem;
+		border-radius: 1rem;
+		gap: 1rem;
+	}
+
+	.toasts article[data-type='error'] {
+		background: var(--mushroom);
+		color: #fff;
+	}
+
+	.toasts article[data-type='info'] {
+		background: var(--ice);
+		color: var(--cobalt);
 	}
 </style>

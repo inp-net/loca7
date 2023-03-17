@@ -3,6 +3,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import ButtonSecondary from './ButtonSecondary.svelte';
 	import Icon from './Icon.svelte';
+	import { addToast } from './toasts';
 	import { appartmentPhotoURL } from './types';
 	const emit = createEventDispatcher();
 
@@ -22,16 +23,15 @@
 	const action = (name: 'archiver' | 'publier' | 'approuver') => async () => {
 		const response = await fetch(`/appartements/${id}/${name}`, { method: 'post' });
 		if (response.status === 200) {
-			error = '';
 			emit(name);
 		} else {
-			error = await response.text();
+			addToast('error', (await response.json())?.message || 'Une erreur est survenue');
 		}
 		open = false;
 	};
 </script>
 
-<li class:reported={reports.length > 0} class:approved class:errored={!!error}>
+<li class:reported={reports.length > 0} class:approved>
 	<img src={appartmentPhotoURL(photos[0])} class="photo" />
 	<div
 		class="row-1"
