@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
+	import { page } from '$app/stores';
 	import ButtonCircle from '$lib/ButtonCircle.svelte';
 	import Icon from '$lib/Icon.svelte';
 	import LogoLoca7 from '$lib/LogoLoca7.svelte';
@@ -39,7 +40,29 @@
 		<div class="notice notice-dev">Hey, t'es en dev.</div>
 	{:else if data.beta}
 		<div class="notice notice-beta">
-			Ceci est une bêta. Le site est encore en développement.
+			<p>
+				Ceci est une bêta. Vous pouvez <a
+					class="in-body"
+					href="https://git.inpt.fr/inp-net/loca7/-/issues/new?issue[description]={encodeURIComponent(
+						`
+                Décrivez votre problème ici.
+                
+                /label ~bug ~from:beta
+                Submitted-From: ${$page.url}`
+					)}">signaler un bug</a
+				>
+				ou
+				<a
+					class="in-body"
+					href="https://git.inpt.fr/inp-net/loca7/-/issues/new?issue[description]={encodeURIComponent(
+						`
+                Décrivez votre idée ici.
+                
+                /label ~feature ~from:beta
+                Submitted-From: ${$page.url}`
+					)}">proposer une fonctionnalité</a
+				>
+			</p>
 		</div>
 	{/if}
 	<NavigationBar user={data.user} noticeBarAbove={dev || data.beta} />
@@ -88,15 +111,18 @@
 		position: fixed;
 		top: 0;
 		left: 0;
-		width: 100%;
+		right: 0;
 		margin: 0;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		height: 40px;
+		padding: 0.75rem;
 		text-align: center;
 		z-index: 100000;
 		background-color: var(--ice);
+	}
+
+	.notice * {
 		color: var(--cobalt);
 	}
 
