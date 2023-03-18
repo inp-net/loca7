@@ -3,10 +3,12 @@ import path from 'path';
 import type { Actions, PageServerLoad } from './$types';
 import { prisma } from '$lib/server/prisma';
 import xss from 'xss';
-import type { AppartmentKind, Prisma } from '@prisma/client';
+import type { AppartmentKind, GeographicPoint, Prisma } from '@prisma/client';
 import { writeFileSync, mkdirSync } from 'fs';
-import { appartmentPhotoURL } from '$lib/types';
-import { getContentHash } from '$lib/utils';
+import { appartmentPhotoURL, type Appartment } from '$lib/types';
+import { ENSEEIHT, getContentHash } from '$lib/utils';
+import { openRouteService, tisseo } from '$lib/server/traveltime';
+import type { TransportationType } from 'traveltime-api';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { session, user } = await locals.validateUser();
@@ -18,7 +20,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	postAppartment: async ({ request, locals }) => {
+	postAppartment: async ({ request, locals, fetch }) => {
 		const { user, session } = await locals.validateUser();
 		if (!(user && session)) {
 			throw redirect(302, '/');
@@ -48,6 +50,14 @@ export const actions: Actions = {
 			addressLongitude,
 			description
 		} = formData;
+
+		const location: GeographicPoint | null =
+			addressLatitude && addressLongitude
+				? {
+						latitude: Number(addressLatitude),
+						longitude: Number(addressLongitude)
+				  }
+				: null;
 
 		const tristateCheckboxToBoolean = (value: string) => {
 			return {
@@ -87,13 +97,10 @@ export const actions: Actions = {
 				},
 				travelTimeToN7: {
 					create: {
-						byBike: null,
 						byFoot: null,
+						byBike: null,
 						byPublicTransport: null
 					}
-				},
-				nearbyStations: {
-					create: []
 				},
 				hasFurniture: Object.keys(formData).includes('hasFurniture')
 					? tristateCheckboxToBoolean(formData.hasFurniture)
@@ -102,11 +109,23 @@ export const actions: Actions = {
 					? tristateCheckboxToBoolean(formData.hasParking)
 					: null
 			};
-			if (addressLatitude && addressLongitude) {
+			if (location) {
 				appartInput.location = {
-					create: {
-						latitude: parseFloat(addressLatitude),
-						longitude: parseFloat(addressLongitude)
+					create: location
+				};
+				appartInput.travelTimeToN7.create = {
+					byBike:
+						Math.floor(await openRouteService.travelTime('bike', location, ENSEEIHT)) ||
+						null,
+					byFoot:
+						Math.floor(await openRouteService.travelTime('foot', location, ENSEEIHT)) ||
+						null,
+					byPublicTransport: null
+					// byPublicTransport: Math.floor(await tisseo.travelTime(location, ENSEEIHT))
+				};
+				appartInput.nearbyStations = {
+					createMany: {
+						data: await tisseo.nearbyStations(location, fetch)
 					}
 				};
 			}

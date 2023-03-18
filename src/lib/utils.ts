@@ -72,6 +72,9 @@ export function availableAtSentence(availableSince: number, availableAt: Date): 
 	return out;
 }
 
+/**
+ * @returns Distance in meters
+ */
 export function distanceBetween(a: GeographicPoint, b: GeographicPoint): number {
 	const earthRadiusKm = 6371;
 	const latitudeDistanceRadians = degreesToRadians(b.latitude - a.latitude);
@@ -119,4 +122,47 @@ export async function getDataURL(file: File): Promise<string> {
 export async function getContentHash(file: File): Promise<string> {
 	console.log(`getting hash of ${file.name}`);
 	return md5(new Uint8Array(await file.arrayBuffer()));
+}
+
+// Thx to https://gist.github.com/xenozauros/f6e185c8de2a04cdfecf
+export function hexToHsl(hex: `#${string}`): {
+	hue: number;
+	saturation: number;
+	lightness: number;
+} {
+	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	if (result === null) throw new Error('Invalid color, use hex notation');
+	let r = parseInt(result[1], 16);
+	let g = parseInt(result[2], 16);
+	let b = parseInt(result[3], 16);
+	(r /= 255), (g /= 255), (b /= 255);
+	const max = Math.max(r, g, b),
+		min = Math.min(r, g, b);
+	let h, s;
+	const l = (max + min) / 2;
+	if (max == min) {
+		h = s = 0; // achromatic
+	} else {
+		const d = max - min;
+		s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+		switch (max) {
+			case r:
+				h = (g - b) / d + (g < b ? 6 : 0);
+				break;
+			case g:
+				h = (b - r) / d + 2;
+				break;
+			case b:
+				h = (r - g) / d + 4;
+				break;
+			default:
+				throw new Error('Unreachable code @ hexToHsl');
+		}
+		h /= 6;
+	}
+	return {
+		hue: h,
+		saturation: s,
+		lightness: l
+	};
 }

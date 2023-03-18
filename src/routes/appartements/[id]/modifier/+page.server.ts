@@ -1,12 +1,18 @@
 import { fail, redirect, type Actions, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { type AppartmentKind, appartmentPhotoURL, appartmentPhotoFilenameOnDisk } from '$lib/types';
+import {
+	type AppartmentKind,
+	appartmentPhotoURL,
+	appartmentPhotoFilenameOnDisk,
+	type GeographicPoint
+} from '$lib/types';
 import { prisma } from '$lib/server/prisma';
 import { rmSync, readdirSync, writeFileSync, mkdirSync } from 'fs';
 import path from 'path';
 import xss from 'xss';
 import md5 from 'md5';
-import { getContentHash } from '$lib/utils';
+import { ENSEEIHT, getContentHash } from '$lib/utils';
+import { openRouteService, tisseo } from '$lib/server/traveltime';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { user, session } = await locals.validateUser();
@@ -44,7 +50,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 };
 
 export const actions: Actions = {
-	edit: async ({ request, locals, params }) => {
+	edit: async ({ request, locals, params, fetch }) => {
 		const { user, session } = await locals.validateUser();
 		if (!(user && session)) {
 			throw redirect(302, '/login');
@@ -78,6 +84,14 @@ export const actions: Actions = {
 			description
 		} = formData;
 
+		const location: GeographicPoint | null =
+			addressLatitude && addressLongitude
+				? {
+						latitude: Number(addressLatitude),
+						longitude: Number(addressLongitude)
+				  }
+				: null;
+
 		console.log(files);
 
 		const tristateCheckboxToBoolean = (value: string) => {
@@ -87,6 +101,15 @@ export const actions: Actions = {
 				off: false
 			}[value];
 		};
+
+		if (location) {
+			// Clear old data
+			await prisma.publicTransportStation.deleteMany({
+				where: {
+					appartmentId: params.id
+				}
+			});
+		}
 
 		const appartment = await prisma.appartment.update({
 			where: {
@@ -127,15 +150,41 @@ export const actions: Actions = {
 					? tristateCheckboxToBoolean(formData.hasParking)
 					: undefined,
 
-				location:
-					addressLatitude && addressLongitude
-						? {
-								create: {
-									latitude: parseFloat(addressLatitude),
-									longitude: parseFloat(addressLongitude)
-								}
-						  }
-						: undefined
+				location: location
+					? {
+							create: location
+					  }
+					: undefined,
+				travelTimeToN7: location
+					? {
+							update: {
+								byBike:
+									Math.floor(
+										await openRouteService.travelTime(
+											'bike',
+											location,
+											ENSEEIHT
+										)
+									) || undefined,
+								byFoot:
+									Math.floor(
+										await openRouteService.travelTime(
+											'foot',
+											location,
+											ENSEEIHT
+										)
+									) || undefined,
+								byPublicTransport: null
+							}
+					  }
+					: undefined,
+				nearbyStations: location
+					? {
+							createMany: {
+								data: await tisseo.nearbyStations(location, fetch)
+							}
+					  }
+					: undefined
 			},
 			include: {
 				photos: true
@@ -163,7 +212,8 @@ export const actions: Actions = {
 				appartmentPhotoURL({
 					appartmentId: appartment.id,
 					contentType: '',
-					filename: ''
+					filename: '',
+					position: 0
 				})
 			)
 		);

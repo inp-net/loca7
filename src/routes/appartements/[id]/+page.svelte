@@ -10,7 +10,8 @@
 		availableAtSentence,
 		readableOn,
 		distanceBetween,
-		ENSEEIHT
+		ENSEEIHT,
+		hexToHsl
 	} from '$lib/utils';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import {
@@ -187,8 +188,10 @@
 							{#if appart.travelTimeToN7.byPublicTransport !== null}
 								{durationDisplay(appart.travelTimeToN7.byPublicTransport)} en transports<wbr
 								/>
-								<span class="muted">
-									{#each appart.nearbyStations as station}
+							{/if}
+							{#if appart.nearbyStations.length > 0}
+								<span class="muted stations">
+									{#each appart.nearbyStations.sort((a, b) => hexToHsl(a?.color ?? '#000').hue - hexToHsl(b?.color ?? '#000').hue) as station (station.id)}
 										<span
 											title={publicTransportStationSentence(station)}
 											class="transport-line"
@@ -203,7 +206,7 @@
 													) ||
 													'#000'
 											)}>{station.line}</span
-										>
+										><wbr />
 									{/each}
 									à proximité
 								</span>
@@ -430,11 +433,16 @@
 		height: 1.2em;
 	}
 
+	p.traveltime {
+		max-width: 400px;
+	}
+
 	.transport-line {
+		display: inline-block;
 		background: var(--color);
 		color: var(--text-color);
 		padding: 0.0625em 0.5em;
-		margin: 1em 0;
+		margin: 0.25em 0;
 		margin-right: 0.5em;
 	}
 

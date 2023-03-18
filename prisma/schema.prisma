@@ -121,9 +121,9 @@ model Report {
     reason       ReportReason
     message      String
     createdAt    DateTime     @default(now())
-    appartment   Appartment   @relation(fields: [appartmentId], references: [id])
+    appartment   Appartment   @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
     appartmentId String
-    author       User         @relation(fields: [authorId], references: [id])
+    author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
     authorId     String
 }
 
@@ -147,7 +147,7 @@ model PublicTransportStation {
     line         String
     type         PublicTransportType
     color        String?
-    Appartment   Appartment?         @relation(fields: [appartmentId], references: [id])
+    Appartment   Appartment?         @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
     appartmentId String?
 }
 

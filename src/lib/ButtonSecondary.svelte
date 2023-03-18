@@ -7,7 +7,7 @@
 	export let formaction: string | undefined = undefined;
 	export let dangerous: boolean = false;
 	export let submits = false;
-    export let download: string | undefined = undefined;
+	export let download: string | undefined = undefined;
 
 	let hoverOrFocus = false;
 </script>
@@ -18,7 +18,7 @@
 	class="button-secondary typo-paragraph"
 	class:dangerous
 	{href}
-    {download}
+	{download}
 	{formaction}
 	{id}
 	on:focus={() => (hoverOrFocus = true)}
