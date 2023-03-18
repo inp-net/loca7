@@ -368,7 +368,7 @@
 	{/if}
 	{#if appart?.location}
 		<section class="map">
-			<AppartmentsMap appartments={[appart]} center={middleOf(appart.location, ENSEEIHT)} />
+			<AppartmentsMap publicTransportStations appartments={[appart]} center={middleOf(appart.location, ENSEEIHT)} />
 		</section>
 	{/if}
 </main>

@@ -9,6 +9,7 @@
 
 	export let center: GeographicPoint = ENSEEIHT;
 	export let scrollIsZoom: boolean = false;
+	export let publicTransportStations: boolean = false;
 
 	let leaflet;
 	let map;
@@ -45,7 +46,7 @@
 						document.querySelector(`.map-appartment-popup[data-id="${appart.id}"]`)
 					);
 
-				if (appartments.length === 1) {
+				if (publicTransportStations) {
 					[
 						...new Set(appart.nearbyStations.map((s) => s.latitude + ',' + s.longitude))
 					].forEach((encodedStationLocation) => {
