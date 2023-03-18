@@ -14,6 +14,7 @@
 	let map;
 	let appartmentsLayer;
 	const markerSize = 40;
+	const boundsPadding = 0.001;
 
 	function locationTuple(point: GeographicPoint) {
 		return [point.longitude, point.latitude];
@@ -101,6 +102,28 @@
 		})
 			.addTo(map)
 			.bindPopup(document.querySelector('#map + .map-marker-popups .map-enseeiht-popup'));
+		const longitudes = [
+			...(appartments
+				.map((a) => a.location?.longitude)
+				.filter((l) => l === 0 || !!l) as number[]),
+			ENSEEIHT.longitude
+		];
+		const latitudes = [
+			...(appartments
+				.map((a) => a.location?.latitude)
+				.filter((l) => l === 0 || !!l) as number[]),
+			ENSEEIHT.latitude
+		];
+		map.fitBounds([
+			locationTuple({
+				longitude: Math.min(...longitudes) - boundsPadding,
+				latitude: Math.min(...latitudes) - boundsPadding
+			}),
+			locationTuple({
+				longitude: Math.max(...longitudes) + boundsPadding,
+				latitude: Math.max(...latitudes) + boundsPadding
+			})
+		]);
 		updateMarkers(appartments);
 	});
 
