@@ -1,21 +1,19 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { auth, guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
-import { auth } from '$lib/server/lucia';
 import { LuciaError } from 'lucia-auth';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { user, session } = await locals.validateUser();
-	if (!(user && session)) throw redirect(302, '/login');
-	if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
+	guards.emailValidated(user, session);
 	return { user };
 };
 
 export const actions: Actions = {
 	async updateProfile({ locals, request }) {
 		const { user, session } = await locals.validateUser();
-		if (!(user && session)) throw redirect(302, '/login');
-		if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
+		guards.emailValidated(user, session);
 
 		const { name, email, phone } = Object.fromEntries(await request.formData()) as Record<
 			string,
@@ -32,8 +30,7 @@ export const actions: Actions = {
 
 	async changePassword({ locals, request }) {
 		const { user, session } = await locals.validateUser();
-		if (!(user && session)) throw redirect(302, '/login');
-		if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
+		guards.emailValidated(user, session);
 
 		const { oldPassword, newPassword } = Object.fromEntries(await request.formData()) as Record<
 			string,

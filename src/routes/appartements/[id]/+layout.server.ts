@@ -1,7 +1,7 @@
 import { appartmentAccessible } from '$lib/types';
 import type { LayoutServerLoad } from './$types';
+import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
-import { error } from '@sveltejs/kit';
 
 export const load: LayoutServerLoad = async ({ params, locals }) => {
 	const { user } = await locals.validateUser();
@@ -16,8 +16,7 @@ export const load: LayoutServerLoad = async ({ params, locals }) => {
 		}
 	});
 
-	if (appartment === null || !appartmentAccessible(user, appartment))
-		throw error(404, { message: "Cette annonce n'existe pas, ou n'est pas (encore) publique" });
+	guards.appartmentAccessible(user, appartment);
 
 	return {
 		appartment: {

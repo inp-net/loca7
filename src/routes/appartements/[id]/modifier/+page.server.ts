@@ -1,6 +1,7 @@
 import { redirect, type Actions, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { type AppartmentKind, appartmentPhotoURL, appartmentPhotoFilenameOnDisk } from '$lib/types';
+import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import { rmSync, readdirSync, writeFileSync, mkdirSync } from 'fs';
 import path from 'path';
@@ -10,10 +11,7 @@ import { openRouteService, tisseo } from '$lib/server/traveltime';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { user, session } = await locals.validateUser();
-	if (!(user && session)) {
-		throw redirect(302, '/login');
-	}
-	if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
+	guards.emailValidated(user, session);
 
 	const appartment = await prisma.appartment.findFirst({
 		where: {
@@ -28,9 +26,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		}
 	});
 
-	if (appartment === null || (!user.admin && appartment.owner.id !== user.id)) {
-		throw error(404, { message: "Cette annonce n'existe pas ou ne vous appartient pas" });
-	}
+	guards.appartmentAccessible(user, appartment);
 
 	return {
 		appartment: {
@@ -45,10 +41,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 export const actions: Actions = {
 	edit: async ({ request, locals, params, fetch }) => {
 		const { user, session } = await locals.validateUser();
-		if (!(user && session)) {
-			throw redirect(302, '/login');
-		}
-		if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
+		guards.emailValidated(user, session);
 
 		const formDataRaw = await request.formData();
 		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;

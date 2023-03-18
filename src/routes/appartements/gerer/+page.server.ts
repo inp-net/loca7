@@ -1,14 +1,10 @@
-import { redirect } from '@sveltejs/kit';
+import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { session, user } = await locals.validateUser();
-
-	if (!(user && session)) {
-		throw redirect(302, '/login');
-	}
-	if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
+	guards.emailValidated(user, session);
 
 	return {
 		appartments: (

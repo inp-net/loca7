@@ -1,12 +1,10 @@
-import { auth } from '$lib/server/lucia';
+import { auth, guards } from '$lib/server/lucia';
 import { redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ locals }) => {
-	const session = await locals.validate();
-	if (!session) {
-		throw redirect(302, '/login');
-	}
+	const { user, session } = await locals.validateUser();
+	guards.loggedIn(user, session);
 
 	await auth.invalidateSession(session.sessionId);
 	locals.setSession(null);

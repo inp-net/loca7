@@ -1,15 +1,13 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { guards } from '$lib/server/lucia';
 import { sendMail } from '$lib/server/mail';
 import { prisma } from '$lib/server/prisma';
 import { VALIDATION_LINK_VALID_FOR_MILLISECONDS } from '$lib/constants';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { user, session } = await locals.validateUser();
-
-	if (!(user && session)) {
-		throw redirect(302, '/login');
-	}
+	guards.loggedIn(user, session);
 
 	if (user.emailIsValidated) {
 		throw redirect(302, '/');
@@ -21,9 +19,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
 	default: async ({ request, locals, url }) => {
 		const { user, session } = await locals.validateUser();
-		if (!(user && session)) {
-			throw redirect(302, '/login');
-		}
+		guards.loggedIn(user, session);
 
 		if (user.emailIsValidated && !url.hash) {
 			throw redirect(302, '/');

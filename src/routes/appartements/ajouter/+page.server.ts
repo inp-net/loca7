@@ -1,6 +1,7 @@
 import { error, redirect } from '@sveltejs/kit';
 import path from 'path';
 import type { Actions, PageServerLoad } from './$types';
+import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import xss from 'xss';
 import type { AppartmentKind, Prisma } from '@prisma/client';
@@ -11,20 +12,13 @@ import { openRouteService, tisseo } from '$lib/server/traveltime';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { session, user } = await locals.validateUser();
-
-	if (!(session && user)) {
-		throw redirect(302, '/login');
-	}
-	if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
+	guards.emailValidated(user, session);
 };
 
 export const actions: Actions = {
 	postAppartment: async ({ request, locals, fetch }) => {
 		const { user, session } = await locals.validateUser();
-		if (!(user && session)) {
-			throw redirect(302, '/');
-		}
-		if (!user?.emailIsValidated) throw redirect(302, '/validate-email');
+		guards.emailValidated(user, session);
 
 		const formDataRaw = await request.formData();
 		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;
