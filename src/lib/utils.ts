@@ -41,11 +41,12 @@ export function durationDisplay(seconds: number) {
 }
 
 export function distanceDisplay(distanceMeters: number): string {
+	const useMeters = distanceMeters < 1000;
 	return Intl.NumberFormat('fr-FR', {
 		style: 'unit',
-		unit: distanceMeters < 0.5 ? 'meter' : 'kilometer',
-		maximumFractionDigits: 2
-	}).format(distanceMeters < 0.5 ? distanceMeters : distanceMeters * 1e-3);
+		unit: useMeters ? 'meter' : 'kilometer',
+		maximumFractionDigits: useMeters ? 0 : 2
+	}).format(useMeters ? distanceMeters : distanceMeters * 1e-3);
 }
 
 export function availableAtSentence(availableSince: number, availableAt: Date): string {
