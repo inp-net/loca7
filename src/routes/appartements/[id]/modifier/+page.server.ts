@@ -1,13 +1,13 @@
-import { redirect, type Actions, error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
-import { type AppartmentKind, appartmentPhotoURL, appartmentPhotoFilenameOnDisk } from '$lib/types';
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
-import { rmSync, readdirSync, writeFileSync, mkdirSync } from 'fs';
+import { openRouteService, tisseo } from '$lib/server/traveltime';
+import { appartmentPhotoFilenameOnDisk, appartmentPhotoURL, type AppartmentKind } from '$lib/types';
+import { ENSEEIHT } from '$lib/utils';
+import { error, redirect, type Actions } from '@sveltejs/kit';
+import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'fs';
 import path from 'path';
 import xss from 'xss';
-import { ENSEEIHT } from '$lib/utils';
-import { openRouteService, tisseo } from '$lib/server/traveltime';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { user, session } = await locals.validateUser();

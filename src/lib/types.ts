@@ -1,14 +1,14 @@
 import { faker } from '@faker-js/faker';
-import { ENSEEIHT } from './utils';
+import type { ReportReason } from '@prisma/client';
+import md5 from 'md5';
+import mime from 'mime-types';
 import {
-	TADColorsByLine,
 	busLinesByColor,
 	metroColorsByLine,
+	TADColorsByLine,
 	tramColorsByLine
 } from './publicTransportColors';
-import mime from 'mime-types';
-import md5 from 'md5';
-import type { ReportReason } from '@prisma/client';
+import { ENSEEIHT } from './utils';
 
 export type AppartmentKind =
 	| 'chambre'
@@ -230,7 +230,10 @@ export function appartmentPhotoFilenameOnDisk(photo: Photo): string {
 	return `${md5(photo.filename)}.${mime.extension(photo.contentType) || 'bin'}`;
 }
 
-export function appartmentAccessible(user: User | null, appartment: Appartment) {
+export function appartmentAccessible(
+	user: User | null,
+	appartment: { approved: boolean; archived: boolean; owner: { id: string } }
+) {
 	if (appartment.approved && !appartment.archived) return true;
 
 	if (user?.id === appartment.owner.id || user?.admin) return true;

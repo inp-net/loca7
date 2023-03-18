@@ -1,5 +1,4 @@
 import type { PrismaClient } from '@prisma/client';
-import type { lucia } from 'lucia-auth/auth';
 
 declare global {
 	namespace App {

@@ -1,5 +1,5 @@
-import type { GeographicPoint } from './types';
 import md5 from 'md5';
+import type { GeographicPoint } from './types';
 
 export function durationDisplay(seconds: number) {
 	const minute = 60;

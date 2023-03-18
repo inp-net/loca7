@@ -1,7 +1,7 @@
-import { createEvent, type DateArray, type DurationObject } from 'ics';
 import type { EventAttributes } from 'ics';
+import { createEvent, type DateArray, type DurationObject } from 'ics';
 import slugify from 'slugify';
-import type { GeographicPoint, User } from './types';
+import type { GeographicPoint } from './types';
 
 function toDateArray(date: Date): DateArray {
 	return [date.getFullYear(), date.getMonth() + 1, date.getDate()];

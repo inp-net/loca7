@@ -1,10 +1,10 @@
-import { error, fail, redirect } from '@sveltejs/kit';
-import path from 'path';
-import type { PageServerLoad, Actions } from './$types';
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
-import { rmSync } from 'fs';
 import { appartmentPhotoURL } from '$lib/types';
+import { error, redirect } from '@sveltejs/kit';
+import { rmSync } from 'fs';
+import path from 'path';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { session, user } = await locals.validateUser();

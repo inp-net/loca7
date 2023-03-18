@@ -1,4 +1,4 @@
-import { readable, type Readable, writable, type Writable } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
 export type Toast = {
 	id: string;
 	type: 'error' | 'info';

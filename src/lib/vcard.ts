@@ -1,15 +1,14 @@
+import slugify from 'slugify';
 import {
-	VCARD,
-	TextType,
-	FNProperty,
-	TelProperty,
 	EmailProperty,
+	FNProperty,
 	IntegerType,
 	PrefParameter,
-	TypeParameter
+	TelProperty,
+	TextType,
+	TypeParameter,
+	VCARD
 } from 'vcard4';
-import type { User } from './types';
-import slugify from 'slugify';
 
 export function vcard(user: { name: string; phone?: string; email: string }): {
 	url: string;

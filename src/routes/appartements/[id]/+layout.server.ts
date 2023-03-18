@@ -1,7 +1,6 @@
-import { appartmentAccessible } from '$lib/types';
-import type { LayoutServerLoad } from './$types';
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
+import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ params, locals }) => {
 	const { user } = await locals.validateUser();

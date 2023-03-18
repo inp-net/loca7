@@ -1,9 +1,9 @@
-import nodemailer from 'nodemailer';
-import mjml2html from 'mjml';
-import Handlebars from 'handlebars';
-import { readFileSync } from 'fs';
-import path from 'path';
 import { dev } from '$app/environment';
+import { readFileSync } from 'fs';
+import Handlebars from 'handlebars';
+import mjml2html from 'mjml';
+import nodemailer from 'nodemailer';
+import path from 'path';
 
 export const mailer = nodemailer.createTransport({
 	host: process.env.MAIL_HOST,

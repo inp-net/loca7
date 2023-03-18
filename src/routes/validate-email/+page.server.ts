@@ -1,9 +1,9 @@
-import { redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
+import { VALIDATION_LINK_VALID_FOR_MILLISECONDS } from '$lib/constants';
 import { guards } from '$lib/server/lucia';
 import { sendMail } from '$lib/server/mail';
 import { prisma } from '$lib/server/prisma';
-import { VALIDATION_LINK_VALID_FOR_MILLISECONDS } from '$lib/constants';
+import { redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { user, session } = await locals.validateUser();

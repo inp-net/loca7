@@ -1,9 +1,9 @@
-import { redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import type { ReportReason } from '@prisma/client';
+import { redirect } from '@sveltejs/kit';
 import xss from 'xss';
+import type { Actions } from './$types';
 
 export const actions: Actions = {
 	default: async ({ locals, request }) => {

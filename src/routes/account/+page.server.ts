@@ -1,8 +1,8 @@
-import { redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
 import { auth, guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
+import { redirect } from '@sveltejs/kit';
 import { LuciaError } from 'lucia-auth';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { user, session } = await locals.validateUser();
