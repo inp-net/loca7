@@ -27,8 +27,8 @@
 		setTimeout(() => {
 			// XXX timeout to make sure the popups have been updated before binding them to the markers
 			appartments.forEach((appart) => {
-				if (appart.location === null) return;
-				L.marker(locationTuple(appart.location), {
+				if (appart.latitude === null || appart.longitude === null) return;
+				L.marker(locationTuple(appart), {
 					icon: L.icon({
 						iconUrl:
 							appartments.length === 1
@@ -63,9 +63,9 @@
 									(station) =>
 										`<div class="public-transport-marker" style="background-color: ${publicTransportColor(
 											station
-										)}; color: ${readableOn(publicTransportColor(station))}">${
-											station.line
-										}</div>`
+										)}; color: ${readableOn(
+											publicTransportColor(station) || '#000'
+										)}">${station.line}</div>`
 								)
 								.join(''),
 							iconSize: [45 + (45 + 8) * stations.length, 23] // XXX baked in values
@@ -104,15 +104,11 @@
 			.addTo(map)
 			.bindPopup(document.querySelector('#map + .map-marker-popups .map-enseeiht-popup'));
 		const longitudes = [
-			...(appartments
-				.map((a) => a.location?.longitude)
-				.filter((l) => l === 0 || !!l) as number[]),
+			...(appartments.map((a) => a.longitude).filter((l) => l === 0 || !!l) as number[]),
 			ENSEEIHT.longitude
 		];
 		const latitudes = [
-			...(appartments
-				.map((a) => a.location?.latitude)
-				.filter((l) => l === 0 || !!l) as number[]),
+			...(appartments.map((a) => a.latitude).filter((l) => l === 0 || !!l) as number[]),
 			ENSEEIHT.latitude
 		];
 		map.fitBounds([
@@ -150,7 +146,7 @@
 		</div>
 	</div>
 	{#each appartments as appart (appart.id)}
-		{#if appart.location}
+		{#if appart.latitude && appart.longitude}
 			<div class="map-appartment-popup" data-id={appart.id}>
 				<CardAppartment {...appart} small />
 			</div>

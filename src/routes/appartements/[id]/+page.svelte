@@ -45,8 +45,8 @@
 			`${station.type === 'metro' ? 'Station' : 'Arrêt'} «${station.name}» du ${
 				DISPLAY_PUBLIC_TRANSPORT_TYPE[station.type]
 			} ${station.line}` +
-			(appart.location !== null
-				? ` (à ${distanceDisplay(distanceBetween(station, appart.location))})`
+			(appart.latitude && appart.longitude
+				? ` (à ${distanceDisplay(distanceBetween(station, appart))})`
 				: '')
 		);
 	}
@@ -68,7 +68,7 @@
 			},
 			busy: 'TENTATIVE',
 			status: 'TENTATIVE',
-			location: appart.location,
+			location: appart.latitude && appart.longitude ? appart : null,
 			description: `${DISPLAY_APPARTMENT_KIND[appart.kind]} de ${appart.surface} m² à ${
 				appart.rent + appart.charges
 			}€.\n\nPlus d'informations: ${$page.url.toString()}`,
@@ -161,9 +161,9 @@
 					<span class="icon"><Icon name="location" /></span>
 					<p class="where">
 						{appart.address}<wbr />
-						{#if appart.location}
+						{#if appart.latitude&&appart.longitude}
 							<span class="muted"
-								>à {distanceDisplay(distanceBetween(appart.location, ENSEEIHT))} de l'école</span
+								>à {distanceDisplay(distanceBetween(appart, ENSEEIHT))} de l'école</span
 							>
 						{/if}
 					</p>
@@ -366,9 +366,13 @@
 			</ul>
 		</section>
 	{/if}
-	{#if appart?.location}
+	{#if appart?.latitude && appart?.longitude}
 		<section class="map">
-			<AppartmentsMap publicTransportStations appartments={[appart]} center={middleOf(appart.location, ENSEEIHT)} />
+			<AppartmentsMap
+				publicTransportStations
+				appartments={[appart]}
+				center={middleOf(appart, ENSEEIHT)}
+			/>
 		</section>
 	{/if}
 </main>

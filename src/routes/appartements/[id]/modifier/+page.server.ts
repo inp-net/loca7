@@ -27,7 +27,6 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		},
 		include: {
 			owner: true,
-			location: true,
 			nearbyStations: true,
 			travelTimeToN7: true,
 			reports: true,
@@ -84,13 +83,8 @@ export const actions: Actions = {
 			description
 		} = formData;
 
-		const location: GeographicPoint | null =
-			addressLatitude && addressLongitude
-				? {
-						latitude: Number(addressLatitude),
-						longitude: Number(addressLongitude)
-				  }
-				: null;
+		const latitude = addressLatitude && addressLongitude ? Number(addressLatitude) : null;
+		const longitude = addressLatitude && addressLongitude ? Number(addressLongitude) : null;
 
 		console.log(files);
 
@@ -102,7 +96,7 @@ export const actions: Actions = {
 			}[value];
 		};
 
-		if (location) {
+		if (latitude && longitude) {
 			// Clear old data
 			await prisma.publicTransportStation.deleteMany({
 				where: {
@@ -150,41 +144,43 @@ export const actions: Actions = {
 					? tristateCheckboxToBoolean(formData.hasParking)
 					: undefined,
 
-				location: location
-					? {
-							create: location
-					  }
-					: undefined,
-				travelTimeToN7: location
-					? {
-							update: {
-								byBike:
-									Math.floor(
-										await openRouteService.travelTime(
-											'bike',
-											location,
-											ENSEEIHT
-										)
-									) || undefined,
-								byFoot:
-									Math.floor(
-										await openRouteService.travelTime(
-											'foot',
-											location,
-											ENSEEIHT
-										)
-									) || undefined,
-								byPublicTransport: null
-							}
-					  }
-					: undefined,
-				nearbyStations: location
-					? {
-							createMany: {
-								data: await tisseo.nearbyStations(location, fetch)
-							}
-					  }
-					: undefined
+				latitude,
+				longitude,
+				travelTimeToN7:
+					latitude && longitude
+						? {
+								update: {
+									byBike:
+										Math.floor(
+											await openRouteService.travelTime(
+												'bike',
+												{ latitude, longitude },
+												ENSEEIHT
+											)
+										) || undefined,
+									byFoot:
+										Math.floor(
+											await openRouteService.travelTime(
+												'foot',
+												{ latitude, longitude },
+												ENSEEIHT
+											)
+										) || undefined,
+									byPublicTransport: null
+								}
+						  }
+						: undefined,
+				nearbyStations:
+					latitude && longitude
+						? {
+								createMany: {
+									data: await tisseo.nearbyStations(
+										{ latitude, longitude },
+										fetch
+									)
+								}
+						  }
+						: undefined
 			},
 			include: {
 				photos: true

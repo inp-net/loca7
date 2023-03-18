@@ -60,7 +60,14 @@
 				(!criteria.type.length || criteria.type.includes(appartment.kind))
 		)
 		.sort((a, b) => {
-			const quantity = ({ charges, rent, surface, location, availableAt }: Appartment) => {
+			const quantity = ({
+				charges,
+				rent,
+				surface,
+				latitude,
+				longitude,
+				availableAt
+			}: Appartment) => {
 				switch (sortBy) {
 					case 'prix':
 						return charges + rent;
@@ -69,9 +76,9 @@
 					case 'surface':
 						return surface;
 					case "distance à l'n7":
-						return location === null
+						return latitude && longitude
 							? Number.MAX_SAFE_INTEGER
-							: distanceBetween(location, ENSEEIHT);
+							: distanceBetween({ latitude, longitude }, ENSEEIHT);
 					case 'délai avant libération':
 						return Date.now() - availableAt.valueOf();
 					default:

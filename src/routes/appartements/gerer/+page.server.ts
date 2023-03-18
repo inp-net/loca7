@@ -16,7 +16,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 				where: { ownerId: user.id },
 				include: {
 					owner: true,
-					location: true,
 					nearbyStations: true,
 					travelTimeToN7: true,
 					reports: true,

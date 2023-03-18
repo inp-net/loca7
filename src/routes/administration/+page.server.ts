@@ -18,7 +18,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 		where: {},
 		include: {
 			_count: true,
-			location: true,
 			nearbyStations: true,
 			owner: true,
 			photos: true,

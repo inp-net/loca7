@@ -51,13 +51,8 @@ export const actions: Actions = {
 			description
 		} = formData;
 
-		const location: GeographicPoint | null =
-			addressLatitude && addressLongitude
-				? {
-						latitude: Number(addressLatitude),
-						longitude: Number(addressLongitude)
-				  }
-				: null;
+		const latitude = addressLatitude && addressLongitude ? Number(addressLatitude) : null;
+		const longitude = addressLatitude && addressLongitude ? Number(addressLongitude) : null;
 
 		const tristateCheckboxToBoolean = (value: string) => {
 			return {
@@ -89,6 +84,8 @@ export const actions: Actions = {
 					: 0,
 				availableAt: new Date(Date.parse(availableAt)),
 				address,
+				latitude,
+				longitude,
 				description: xss(description),
 				owner: {
 					connect: {
@@ -109,23 +106,29 @@ export const actions: Actions = {
 					? tristateCheckboxToBoolean(formData.hasParking)
 					: null
 			};
-			if (location) {
-				appartInput.location = {
-					create: location
-				};
+			if (latitude && longitude) {
 				appartInput.travelTimeToN7.create = {
 					byBike:
-						Math.floor(await openRouteService.travelTime('bike', location, ENSEEIHT)) ||
-						null,
+						Math.floor(
+							await openRouteService.travelTime(
+								'bike',
+								{ latitude, longitude },
+								ENSEEIHT
+							)
+						) || null,
 					byFoot:
-						Math.floor(await openRouteService.travelTime('foot', location, ENSEEIHT)) ||
-						null,
+						Math.floor(
+							await openRouteService.travelTime(
+								'foot',
+								{ latitude, longitude },
+								ENSEEIHT
+							)
+						) || null,
 					byPublicTransport: null
-					// byPublicTransport: Math.floor(await tisseo.travelTime(location, ENSEEIHT))
 				};
 				appartInput.nearbyStations = {
 					createMany: {
-						data: await tisseo.nearbyStations(location, fetch)
+						data: await tisseo.nearbyStations({ latitude, longitude }, fetch)
 					}
 				};
 			}

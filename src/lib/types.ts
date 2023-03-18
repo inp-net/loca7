@@ -76,7 +76,8 @@ export type Appartment = {
 	address: string;
 	approved: boolean;
 	archived: boolean;
-	location: GeographicPoint | null;
+	latitude: number | null;
+	longitude: number | null;
 	hasFurniture: boolean | null;
 	hasParking: boolean | null;
 	description: string;
@@ -137,22 +138,20 @@ export const randomAppartment: () => Appartment = () => ({
 	archived: faker.datatype.boolean(),
 	approved: faker.datatype.boolean(),
 	photos: [],
-	location: {
-		latitude:
-			ENSEEIHT.latitude +
-			faker.datatype.number({
-				max: randomAppartementSpread,
-				min: -randomAppartementSpread,
-				precision: randomAppartementSpread / 10
-			}),
-		longitude:
-			ENSEEIHT.longitude +
-			faker.datatype.number({
-				max: randomAppartementSpread,
-				min: -randomAppartementSpread,
-				precision: randomAppartementSpread / 10
-			})
-	},
+	latitude:
+		ENSEEIHT.latitude +
+		faker.datatype.number({
+			max: randomAppartementSpread,
+			min: -randomAppartementSpread,
+			precision: randomAppartementSpread / 10
+		}),
+	longitude:
+		ENSEEIHT.longitude +
+		faker.datatype.number({
+			max: randomAppartementSpread,
+			min: -randomAppartementSpread,
+			precision: randomAppartementSpread / 10
+		}),
 	nearbyStations: Array(faker.datatype.number({ max: 6, min: 0 }))
 		.fill({})
 		.map(() => {
@@ -184,7 +183,21 @@ export const randomAppartment: () => Appartment = () => ({
 				name: faker.address.streetName(),
 				line,
 				type,
-				color: null
+				color: null,
+				latitude:
+					ENSEEIHT.latitude +
+					faker.datatype.number({
+						max: randomAppartementSpread,
+						min: -randomAppartementSpread,
+						precision: randomAppartementSpread / 10
+					}),
+				longitude:
+					ENSEEIHT.longitude +
+					faker.datatype.number({
+						max: randomAppartementSpread,
+						min: -randomAppartementSpread,
+						precision: randomAppartementSpread / 10
+					})
 			};
 		}),
 	owner: {

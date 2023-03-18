@@ -22,16 +22,14 @@
 		address="Rue du Poit de Guilheméry, Toulouse"
 		surface={27}
 		hasFurniture
-		availableAt="2023-03-03"
+		availableAt={new Date(Date.parse('2021-03-03'))}
 		rent={650}
 		charges={30}
-		kind="T1"
+		kind="t1"
 		roomsCount={0}
 		{images}
-		location={{
-			latitude: 1.456849,
-			longitude: 43.600965
-		}}
+		latitude={1.456849}
+		longitude={43.600965}
 		hasParking={false}
 	/>
 	<CardAppartment
@@ -39,16 +37,14 @@
 		address="Rue Dupont, 31500 Toulouse"
 		surface={67}
 		hasFurniture
-		availableAt="2023-03-11"
+		availableAt={new Date(Date.parse('2021-03-03'))}
 		rent={900}
 		charges={50}
-		kind="T3 et plus"
+		kind="t3etplus"
 		roomsCount={0}
 		images={images2}
-		location={{
-			latitude: 1.460059,
-			longitude: 43.604359
-		}}
+		latitude={1.460059}
+		longitude={43.604359}
 		hasParking
 		editable
 	/>

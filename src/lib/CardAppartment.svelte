@@ -28,7 +28,8 @@
 	export let roomsCount: number;
 	export let availableAt: Date;
 	export let address: string;
-	export let location: GeographicPoint | null;
+	export let latitude: number | null;
+	export let longitude: number | null;
 	export let hasFurniture: boolean | null;
 	export let hasParking: boolean | null;
 	export let editable: boolean = false;
@@ -79,9 +80,11 @@
 				<span class="icon"><Icon name="location" /></span>
 				<p class="where">
 					{address}
-					{#if location}
+					{#if latitude && longitude}
 						<span class="muted"
-							>à {distanceDisplay(distanceBetween(location, ENSEEIHT))}</span
+							>à {distanceDisplay(
+								distanceBetween({ latitude, longitude }, ENSEEIHT)
+							)}</span
 						>
 					{/if}
 				</p>
@@ -157,10 +160,6 @@
 		flex-direction: column;
 		align-items: end;
 		text-align: right;
-	}
-
-	section.figures section {
-		/* width: 50%; */
 	}
 
 	section.situation {

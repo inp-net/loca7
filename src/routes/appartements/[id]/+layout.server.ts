@@ -10,7 +10,6 @@ export const load: LayoutLoad<{ appartment: Appartment }> = async ({ params, loc
 		where: { id: params.id },
 		include: {
 			owner: true,
-			location: true,
 			nearbyStations: true,
 			travelTimeToN7: true,
 			photos: true,

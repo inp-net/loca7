@@ -11,7 +11,6 @@ export const load: PageServerLoad = async () => {
 				},
 				include: {
 					owner: true,
-					location: true,
 					nearbyStations: true,
 					travelTimeToN7: true,
 					photos: true
