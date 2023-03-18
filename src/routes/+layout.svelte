@@ -92,6 +92,12 @@
 
 			<dt>logo, administration</dt>
 			<dd>Lubin Gauthier</dd>
+
+			<dt>données tierces de</dt>
+			<dd>
+				<a href="https://openrouteservice.org">openroute service</a>,
+				<a href="https://data.toulouse-metropole.fr">Toulouse Métropole</a>
+			</dd>
 		</dl>
 	</section>
 </footer>
