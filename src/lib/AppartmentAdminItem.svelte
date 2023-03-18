@@ -32,7 +32,7 @@
 </script>
 
 <li class:reported={reports.length > 0} class:approved>
-	<img src={appartmentPhotoURL(photos[0])} class="photo" />
+	<img src={photos.length ? appartmentPhotoURL(photos[0]) : ''} class="photo" />
 	<div
 		class="row-1"
 		on:click={() => {
