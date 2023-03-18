@@ -1,17 +1,11 @@
-import { fail, redirect, type Actions, error } from '@sveltejs/kit';
+import { redirect, type Actions, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import {
-	type AppartmentKind,
-	appartmentPhotoURL,
-	appartmentPhotoFilenameOnDisk,
-	type GeographicPoint
-} from '$lib/types';
+import { type AppartmentKind, appartmentPhotoURL, appartmentPhotoFilenameOnDisk } from '$lib/types';
 import { prisma } from '$lib/server/prisma';
 import { rmSync, readdirSync, writeFileSync, mkdirSync } from 'fs';
 import path from 'path';
 import xss from 'xss';
-import md5 from 'md5';
-import { ENSEEIHT, getContentHash } from '$lib/utils';
+import { ENSEEIHT } from '$lib/utils';
 import { openRouteService, tisseo } from '$lib/server/traveltime';
 
 export const load: PageServerLoad = async ({ locals, params }) => {

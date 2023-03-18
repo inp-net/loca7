@@ -1,4 +1,4 @@
-import { redirect, type Actions, fail, error } from '@sveltejs/kit';
+import { redirect, type Actions, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { auth } from '$lib/server/lucia';
 import { LuciaError } from 'lucia-auth';
@@ -31,7 +31,9 @@ export const actions: Actions = {
 				attributes: {
 					phone,
 					name,
-					email
+					email,
+					admin: false,
+					emailIsValidated: false
 				}
 			});
 		} catch (err) {

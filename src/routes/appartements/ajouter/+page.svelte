@@ -10,7 +10,7 @@
 		deposit: undefined,
 		description: '',
 		latitude: null,
-        longitude: null,
+		longitude: null,
 		hasFurniture: null,
 		hasParking: null,
 		kind: undefined,

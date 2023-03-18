@@ -3,12 +3,11 @@ import path from 'path';
 import type { Actions, PageServerLoad } from './$types';
 import { prisma } from '$lib/server/prisma';
 import xss from 'xss';
-import type { AppartmentKind, GeographicPoint, Prisma } from '@prisma/client';
+import type { AppartmentKind, Prisma } from '@prisma/client';
 import { writeFileSync, mkdirSync } from 'fs';
-import { appartmentPhotoURL, type Appartment } from '$lib/types';
-import { ENSEEIHT, getContentHash } from '$lib/utils';
+import { appartmentPhotoURL } from '$lib/types';
+import { ENSEEIHT } from '$lib/utils';
 import { openRouteService, tisseo } from '$lib/server/traveltime';
-import type { TransportationType } from 'traveltime-api';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { session, user } = await locals.validateUser();

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import ButtonPrimary from './ButtonPrimary.svelte';
-	import User from './icons/user.svelte';
 	import InputAddress from './InputAddress.svelte';
 	import InputCheckbox from './InputCheckbox.svelte';
 	import InputDate from './InputDate.svelte';
@@ -9,30 +8,30 @@
 	import InputNumber from './InputNumber.svelte';
 	import InputRichText from './InputRichText.svelte';
 	import InputSelectOne from './InputSelectOne.svelte';
-	import { appartmentPhotoURL, DISPLAY_APPARTMENT_KIND, type Appartment } from './types';
+	import {
+		appartmentPhotoURL,
+		DISPLAY_APPARTMENT_KIND,
+		type Appartment,
+		type User
+	} from './types';
 
 	export let appartment: Appartment;
 	export let action: string | undefined = undefined;
 	export let submitText: string = 'Confirmer';
 	export let user: User;
+	/*@ts-ignore*/
 	export let initial: Appartment = {
 		address: undefined,
 		availableAt: undefined,
 		charges: undefined,
 		deposit: undefined,
-		latitude: undefined,
-        longitude: undefined,
+		latitude: null,
+		longitude: null,
 		description: '',
 		hasFurniture: null,
 		hasParking: null,
 		kind: undefined,
 		images: [],
-		owner: {
-			email: undefined,
-			id: undefined,
-			name: undefined,
-			phone: undefined
-		},
 		rent: undefined,
 		roomsCount: undefined,
 		surface: undefined,

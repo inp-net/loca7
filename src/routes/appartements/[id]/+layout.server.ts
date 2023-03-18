@@ -1,10 +1,9 @@
-import { appartmentAccessible, type Appartment, type PublicTransportStation } from '$lib/types';
-import { ENSEEIHT } from '$lib/utils';
-import type { LayoutLoad } from './$types';
+import { appartmentAccessible } from '$lib/types';
+import type { LayoutServerLoad } from './$types';
 import { prisma } from '$lib/server/prisma';
 import { error } from '@sveltejs/kit';
 
-export const load: LayoutLoad<{ appartment: Appartment }> = async ({ params, locals }) => {
+export const load: LayoutServerLoad = async ({ params, locals }) => {
 	const { user } = await locals.validateUser();
 	const appartment = await prisma.appartment.findUnique({
 		where: { id: params.id },

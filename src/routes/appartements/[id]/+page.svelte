@@ -161,7 +161,7 @@
 					<span class="icon"><Icon name="location" /></span>
 					<p class="where">
 						{appart.address}<wbr />
-						{#if appart.latitude&&appart.longitude}
+						{#if appart.latitude && appart.longitude}
 							<span class="muted"
 								>à {distanceDisplay(distanceBetween(appart, ENSEEIHT))} de l'école</span
 							>
