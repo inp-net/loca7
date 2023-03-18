@@ -2,25 +2,31 @@ import type { PublicTransportType } from './types';
 
 // source of colors: wikipedia.org, wikimedia.org
 
-export default function publicTransportColor(
-	lineName: string,
-	type: PublicTransportType
-): string | undefined {
+export default function publicTransportColor({
+	line,
+	type,
+	color
+}: {
+	line: string;
+	type: PublicTransportType;
+	color: string | null;
+}): string | undefined {
+	if (color) return color;
 	switch (type) {
 		case 'bus':
 			return Object.entries(busLinesByColor).find(([_, lines]) =>
-				lines.includes(lineName.toLowerCase())
+				lines.includes(line.toLowerCase())
 			)?.[0];
 		case 'bhnf':
 			return '#F06526';
 		case 'tad':
-			return TADColorsByLine[lineName];
+			return TADColorsByLine[line];
 
 		case 'metro':
-			return metroColorsByLine[lineName];
+			return metroColorsByLine[line];
 
 		case 'tram':
-			return tramColorsByLine[lineName];
+			return tramColorsByLine[line];
 	}
 }
 

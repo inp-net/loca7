@@ -149,6 +149,8 @@ model PublicTransportStation {
     color        String?
     Appartment   Appartment?         @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
     appartmentId String?
+    latitude     Float
+    longitude    Float
 }
 
 enum PublicTransportType {

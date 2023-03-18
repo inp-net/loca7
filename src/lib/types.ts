@@ -51,6 +51,8 @@ export type PublicTransportStation = {
 	line: string;
 	type: PublicTransportType;
 	color: string | null;
+	latitude: number;
+	longitude: number;
 };
 
 export type Photo = {

@@ -133,7 +133,9 @@ class Tisseo {
 				type:
 					stop.route_type === 'bus' && /L\d{1,3}/.test(stop.route_short_name)
 						? 'bhnf'
-						: (stop.route_type as PublicTransportType)
+						: (stop.route_type as PublicTransportType),
+				latitude: stop.stop_lon,
+				longitude: stop.stop_lat
 			}));
 	}
 }

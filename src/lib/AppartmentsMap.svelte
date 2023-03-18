@@ -2,8 +2,9 @@
 	import { onMount } from 'svelte';
 	import CardAppartment from './CardAppartment.svelte';
 	import CarouselImages from './CarouselImages.svelte';
+	import publicTransportColor from './publicTransportColors';
 	import type { Appartment, GeographicPoint } from './types';
-	import { ENSEEIHT } from './utils';
+	import { ENSEEIHT, readableOn } from './utils';
 	export let appartments: Appartment[];
 
 	export let center: GeographicPoint = ENSEEIHT;
@@ -42,12 +43,48 @@
 					.bindPopup(
 						document.querySelector(`.map-appartment-popup[data-id="${appart.id}"]`)
 					);
-			});
-		}, 20);
+
+				if (appartments.length === 1) {
+					[
+						...new Set(appart.nearbyStations.map((s) => s.latitude + ',' + s.longitude))
+					].forEach((encodedStationLocation) => {
+						const [latitude, longitude] = encodedStationLocation
+							.split(',')
+							.map(parseFloat);
+						const stations = appart.nearbyStations.filter(
+							(s) => s.latitude === latitude && s.longitude === longitude
+						);
+						let icon = L.divIcon({
+							className: `public-transport-marker-wrapper location-${latitude}-${longitude}`,
+							html: stations
+								.map(
+									(station) =>
+										`<div class="public-transport-marker" style="background-color: ${publicTransportColor(
+											station
+										)}; color: ${readableOn(publicTransportColor(station))}">${
+											station.line
+										}</div>`
+								)
+								.join(''),
+							iconSize: [45 + (45 + 8) * stations.length, 23] // XXX baked in values
+						});
+
+						L.marker(locationTuple({ latitude, longitude }), { icon }).addTo(
+							appartmentsLayer
+						);
+					});
+				}
+			}, 20);
+		});
 	}
 
 	onMount(async () => {
 		map = L.map('map', { gestureHandling: !scrollIsZoom }).setView(locationTuple(center), 15);
+		map.on('zoomend', () => {
+			document.querySelectorAll('.public-transport-marker-wrapper').forEach((marker) => {
+				marker.style.opacity = map.getZoom() > 15 ? '1' : '0';
+			});
+		});
 		appartmentsLayer = L.layerGroup().addTo(map);
 		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			attribution:
@@ -147,5 +184,21 @@
 		/* source: https://codepen.io/sosuke/pen/Pjoqqp */
 		filter: invert(52%) sepia(64%) saturate(3673%) hue-rotate(167deg) brightness(94%)
 			contrast(101%);
+	}
+
+	:global(.public-transport-marker-wrapper) {
+		width: unset !important;
+		transition: opacity 0.2s ease-in-out;
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	:global(.public-transport-marker) {
+		padding: 0.75em;
+		font-weight: bold;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 15px;
 	}
 </style>

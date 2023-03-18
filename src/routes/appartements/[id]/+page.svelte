@@ -41,9 +41,14 @@
 	let secondsAvailableSince = (Date.now() - appart.availableAt.valueOf()) * 1e-3;
 
 	function publicTransportStationSentence(station: PublicTransportStation) {
-		return `${station.type === 'metro' ? 'Station' : 'Arrêt'} «${station.name}» du ${
-			DISPLAY_PUBLIC_TRANSPORT_TYPE[station.type]
-		} ${station.line}`;
+		return (
+			`${station.type === 'metro' ? 'Station' : 'Arrêt'} «${station.name}» du ${
+				DISPLAY_PUBLIC_TRANSPORT_TYPE[station.type]
+			} ${station.line}` +
+			(appart.location !== null
+				? ` (à ${distanceDisplay(distanceBetween(station, appart.location))})`
+				: '')
+		);
 	}
 
 	function middleOf(...points: GeographicPoint[]): GeographicPoint {
@@ -195,16 +200,9 @@
 										<span
 											title={publicTransportStationSentence(station)}
 											class="transport-line"
-											style:--color={station.color ||
-												publicTransportColor(station.line, station.type) ||
-												'#000'}
+											style:--color={publicTransportColor(station) || '#000'}
 											style:--text-color={readableOn(
-												station.color ||
-													publicTransportColor(
-														station.line,
-														station.type
-													) ||
-													'#000'
+												publicTransportColor(station) || '#000'
 											)}>{station.line}</span
 										><wbr />
 									{/each}
