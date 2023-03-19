@@ -2,6 +2,7 @@
 	import SortableList from './SortableList.svelte';
 	import ButtonCircle from './ButtonCircle.svelte';
 	import Icon from './Icon.svelte';
+	import { tooltip } from './tooltip';
 	import { appartmentPhotoURL, type Photo } from './types';
 	import { getContentHash, getDataURL } from './utils';
 
@@ -111,7 +112,7 @@
 	{:else}
 		<SortableList bind:list={value} key="filename" let:item={photo}>
 			<li class="item">
-				<button class="drag" title="Glissez pour réordonner les images">
+				<button class="drag" use:tooltip={'Glissez pour réordonner les images'}>
 					<Icon name="drag-handle" />
 				</button>
 				<img src={previewURLs[photo.filename]} />

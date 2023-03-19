@@ -42,7 +42,6 @@ specifiers:
   mjml: ^4.13.0
   nodemailer: ^6.9.1
   prettier: ^2.8.4
-  prettier-plugin-organize-imports: ^3.2.2
   prettier-plugin-prisma: ^4.10.0
   prettier-plugin-svelte: ^2.9.0
   prisma: ^4.11.0
@@ -50,6 +49,7 @@ specifiers:
   slugify: ^1.6.5
   svelte: ^3.56.0
   svelte-check: ^3.1.4
+  sveltejs-tippy: ^3.0.0
   tslib: ^2.5.0
   typescript: ^4.9.5
   uuid: ^9.0.0
@@ -86,6 +86,7 @@ dependencies:
   nodemailer: 6.9.1
   sharp: 0.31.3
   slugify: 1.6.5
+  sveltejs-tippy: 3.0.0
   uuid: 9.0.0
   vcard4: 3.1.5
   xss: 1.0.14
@@ -595,6 +596,10 @@ packages:
   /@polka/url/1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: true
+
+  /@popperjs/core/2.11.6:
+    resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
+    dev: false
 
   /@prisma/client/4.11.0_prisma@4.11.0:
     resolution: {integrity: sha512-0INHYkQIqgAjrt7NzhYpeDQi8x3Nvylc2uDngKyFDDj1tTRQ4uV1HnVmd1sQEraeVAN63SOK0dgCKQHlvjL0KA==}
@@ -3358,6 +3363,12 @@ packages:
     resolution: {integrity: sha512-LvXiJbjdvJKwB/0CQyYpDX0q+hFqCyWmybzC2G6eK1tJJA/RSRCytTfNmjHv+RHlLuA70vWG7nXp6gbeErYvRA==}
     engines: {node: '>= 8'}
 
+  /sveltejs-tippy/3.0.0:
+    resolution: {integrity: sha512-LAfQikm61AeqZW1hCFWUsmGEMmhMHDvrPV0JhbT38Ell9SqBjmFaY//+YKUxaJvx6nLMxGQdlcHA1rDg2Ml8tQ==}
+    dependencies:
+      tippy.js: 6.0.3
+    dev: false
+
   /tar-fs/2.1.1:
     resolution: {integrity: sha512-V0r2Y9scmbDRLCNex/+hYzvp/zyYjvFbHPNgVTKfQvVrb6guiE/fxP+XblDNR011utopbkex2nM4dHNV6GDsng==}
     dependencies:
@@ -3414,6 +3425,12 @@ packages:
     resolution: {integrity: sha512-UVq5AXt/gQlti7oxoIg5oi/9r0WpF7DGEVwXgqWSMmyN16+e3tl5lIvTaOpJ3TAtu5xFzWccFRM4R5NaWHF+4g==}
     engines: {node: '>=14.0.0'}
     dev: true
+
+  /tippy.js/6.0.3:
+    resolution: {integrity: sha512-buQF6HugTA4YeSA/s9xBhu0ferEAx7sRSn45G+Juh3p+Dz3vEKfxtqdg6JUnHIWDCV/r0u8Lrobs9AB4dtYcUQ==}
+    dependencies:
+      '@popperjs/core': 2.11.6
+    dev: false
 
   /to-regex-range/5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}

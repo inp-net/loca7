@@ -31,6 +31,7 @@
 	import { ics } from '$lib/ics';
 	import { page } from '$app/stores';
 	import { vcard } from '$lib/vcard';
+	import { tooltip } from '$lib/tooltip';
 
 	export let data: LayoutData;
 	let user: User | null = data.user;
@@ -198,7 +199,7 @@
 								<span class="muted stations">
 									{#each appart.nearbyStations.sort((a, b) => hexToHsl(a?.color ?? '#000').hue - hexToHsl(b?.color ?? '#000').hue) as station (station.id)}
 										<span
-											title={publicTransportStationSentence(station)}
+											use:tooltip={publicTransportStationSentence(station)}
 											class="transport-line"
 											style:--color={publicTransportColor(station) || '#000'}
 											style:--text-color={readableOn(
