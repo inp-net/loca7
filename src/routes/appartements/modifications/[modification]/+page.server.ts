@@ -6,6 +6,7 @@ import { renameSync } from 'fs';
 import path from 'path';
 import type { Actions, PageServerLoad } from './$types';
 import { writePhotosToDisk, deletePhotosFromDisk, copyPhotos } from '$lib/server/photos';
+import { prisma } from '$lib/server/prisma';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const { user, session } = await locals.validateUser();
