@@ -1,13 +1,12 @@
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
-import { openRouteService, tisseo } from '$lib/server/traveltime';
-import { appartmentPhotoFilenameOnDisk, appartmentPhotoURL, type AppartmentKind } from '$lib/types';
+import { type AppartmentKind, tristateCheckboxToBoolean } from '$lib/types';
 import { ENSEEIHT } from '$lib/utils';
-import { error, redirect, type Actions } from '@sveltejs/kit';
-import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'fs';
-import path from 'path';
+import type { Actions, PageServerLoad } from './$types';
+import { copyPhotos, writePhotosToDisk } from '$lib/server/photos';
 import xss from 'xss';
-import type { PageServerLoad } from './$types';
+import { redirect } from '@sveltejs/kit';
+import md5 from 'md5';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { user, session } = await locals.validateUser();
@@ -42,10 +41,17 @@ export const actions: Actions = {
 	edit: async ({ request, locals, params, fetch }) => {
 		const { user, session } = await locals.validateUser();
 		guards.emailValidated(user, session);
+		const appartment = await prisma.appartment.findUnique({
+			where: { id: params.id },
+			include: {
+				owner: true,
+				photos: true
+			}
+		});
+		guards.appartmentAccessible(user, appartment);
 
 		const formDataRaw = await request.formData();
 		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;
-		console.log({ 'editing appartment': formData });
 		let files = formDataRaw.getAll('photos') as File[];
 		const isDummyFile = (file: File) =>
 			file.size === 0 && file.type === 'application/octet-stream';
@@ -66,6 +72,8 @@ export const actions: Actions = {
 			availableAt,
 			address,
 			addressLatitude,
+			hasFurniture,
+			hasParking,
 			addressLongitude,
 			description
 		} = formData;
@@ -73,173 +81,46 @@ export const actions: Actions = {
 		const latitude = addressLatitude && addressLongitude ? Number(addressLatitude) : null;
 		const longitude = addressLatitude && addressLongitude ? Number(addressLongitude) : null;
 
-		console.log(files);
-
-		const tristateCheckboxToBoolean = (value: string) => {
-			return {
-				indeterminate: null,
-				on: true,
-				off: false
-			}[value];
-		};
-
-		if (latitude && longitude) {
-			// Clear old data
-			await prisma.publicTransportStation.deleteMany({
-				where: {
-					appartmentId: params.id
-				}
-			});
-		}
-
-		const appartment = await prisma.appartment.update({
-			where: {
-				id: params.id
-			},
+		const edit = await prisma.appartmentEdit.create({
 			data: {
-				photos: {
-					upsert: files.map((file) => ({
-						where: {
-							filename: file.name
-						},
-						update: {
-							contentType: file.type,
-							position: photosOrder.indexOf(file.name)
-						},
-						create: {
-							filename: file.name,
-							contentType: file.type,
-							position: photosOrder.indexOf(file.name)
-						}
-					}))
+				appartment: {
+					connect: {
+						id: appartment.id
+					}
 				},
-				rent: Number(rent),
+				address: xss(address),
+				availableAt: new Date(availableAt),
 				charges: Number(charges),
 				deposit: Number(deposit),
-				surface: Number(surface),
-				kind: kind as AppartmentKind,
-				roomsCount: Object.keys(formData).includes('roomsCount')
-					? Number(formData.roomsCount)
-					: 0,
-				availableAt: new Date(Date.parse(availableAt)),
-				address,
 				description: xss(description),
-				hasFurniture: Object.keys(formData).includes('hasFurniture')
-					? tristateCheckboxToBoolean(formData.hasFurniture)
-					: undefined,
-				hasParking: Object.keys(formData).includes('hasParking')
-					? tristateCheckboxToBoolean(formData.hasParking)
-					: undefined,
-
+				kind: kind as AppartmentKind,
 				latitude,
 				longitude,
-				travelTimeToN7:
-					latitude && longitude
-						? {
-								update: {
-									byBike:
-										Math.floor(
-											await openRouteService.travelTime(
-												'bike',
-												{ latitude, longitude },
-												ENSEEIHT
-											)
-										) || undefined,
-									byFoot:
-										Math.floor(
-											await openRouteService.travelTime(
-												'foot',
-												{ latitude, longitude },
-												ENSEEIHT
-											)
-										) || undefined,
-									byPublicTransport: null
-								}
-						  }
-						: undefined,
-				nearbyStations:
-					latitude && longitude
-						? {
-								createMany: {
-									data: await tisseo.nearbyStations(
-										{ latitude, longitude },
-										fetch
-									)
-								}
-						  }
-						: undefined
+				rent: Number(rent),
+				roomsCount: formDataRaw.get('roomsCount') ? Number(formData.roomsCount) : 0,
+				surface: Number(surface),
+				applied: false,
+				photos: {
+					createMany: {
+						data: files.map((file) => ({
+							filename: file.name,
+							position: photosOrder.indexOf(file.name),
+							contentType: file.type
+							// hash: md5() // TODO hash the file content
+						}))
+					}
+				},
+				hasFurniture: tristateCheckboxToBoolean(hasFurniture),
+				hasParking: tristateCheckboxToBoolean(hasParking)
 			},
 			include: {
 				photos: true
 			}
 		});
 
-		await prisma.appartment.update({
-			where: {
-				id: params.id
-			},
-			data: {
-				photos: {
-					deleteMany: {
-						filename: {
-							notIn: files.map((f) => f.name)
-						}
-					}
-				}
-			}
-		});
-
-		const appartmentPhotosDirectory = path.dirname(
-			path.join(
-				'public',
-				appartmentPhotoURL({
-					appartmentId: appartment.id,
-					contentType: '',
-					filename: '',
-					position: 0
-				})
-			)
-		);
-
-		if (appartment.photos.length === 0) {
-			try {
-				rmSync(appartmentPhotosDirectory, { recursive: true });
-			} catch (err) {
-				if (err?.code !== 'ENOENT') throw err;
-			}
-		} else {
-			// Add new photos
-			for (const photo of appartment.photos) {
-				const file = files.find((file) => file.name === photo.filename);
-				if (!file) continue;
-				const buffer = Buffer.from(await file.arrayBuffer());
-				if (buffer.length === 0) continue;
-				if (buffer.byteLength > 10e6) {
-					throw error(400, { message: 'Les photos doivent faire moins de 10 Mo' });
-				}
-
-				mkdirSync(path.dirname(path.join('public', appartmentPhotoURL(photo))), {
-					recursive: true
-				});
-				writeFileSync(
-					path.join('public', appartmentPhotoURL(photo)),
-					Buffer.from(await file.arrayBuffer())
-				);
-			}
-
-			// Remove photo files that were removed from the database
-			for (const entry of readdirSync(appartmentPhotosDirectory)) {
-				if (
-					appartment.photos.find(
-						(photo) => appartmentPhotoFilenameOnDisk(photo) === entry
-					)
-				) {
-					continue;
-				} else {
-					rmSync(path.join(appartmentPhotosDirectory, entry));
-				}
-			}
-		}
+		// This copy is necessary for photos that have no associated file (or rather the associated file is empty) because they were already uploaded (they were already in the appartment), and their content is not sent in the form data
+		await copyPhotos(edit.photos, appartment.photos);
+		await writePhotosToDisk(edit.photos, files);
 
 		throw redirect(302, `/appartements/gerer`);
 	}

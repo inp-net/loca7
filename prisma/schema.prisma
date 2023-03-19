@@ -76,7 +76,6 @@ model Appartment {
     address        String
     latitude       Float?
     longitude      Float?
-    locationId     String?
     hasFurniture   Boolean?
     hasParking     Boolean?
     description    String
@@ -88,16 +87,20 @@ model Appartment {
     reports        Report[]
     approved       Boolean                  @default(false)
     archived       Boolean                  @default(false)
+    history        AppartmentEdit[]
 }
 
 model Photo {
-    filename     String     @id
-    contentType  String
-    appartment   Appartment @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
-    appartmentId String
-    position     Int // Order of this photo in the list, 0-based.
+    id          String  @id @unique @default(cuid())
+    filename    String
+    contentType String
+    position    Int // Order of this photo in the list, 0-based.
+    hash        String?
 
-    @@unique([filename, appartmentId])
+    Appartment       Appartment?     @relation(fields: [appartmentId], references: [id])
+    appartmentId     String?
+    AppartmentEdit   AppartmentEdit? @relation(fields: [appartmentEditId], references: [id])
+    appartmentEditId String?
 }
 
 enum AppartmentKind {
@@ -108,6 +111,29 @@ enum AppartmentKind {
     t2
     t3etplus
     colocation
+}
+
+model AppartmentEdit {
+    id           String         @id @unique @default(cuid())
+    photos       Photo[]
+    rent         Int
+    charges      Int
+    deposit      Int
+    surface      Int
+    kind         AppartmentKind
+    roomsCount   Int
+    availableAt  DateTime
+    address      String
+    latitude     Float?
+    longitude    Float?
+    hasFurniture Boolean?
+    hasParking   Boolean?
+    description  String
+    applied      Boolean        @default(false)
+    createdAt    DateTime       @default(now())
+    appliedAt    DateTime?
+    appartment   Appartment     @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
+    appartmentId String
 }
 
 model Report {

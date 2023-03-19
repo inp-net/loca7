@@ -1,6 +1,6 @@
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
-import { appartmentPhotoURL } from '$lib/types';
+import { photoURL } from '$lib/photos';
 import { error, redirect } from '@sveltejs/kit';
 import { rmSync } from 'fs';
 import path from 'path';
@@ -37,41 +37,36 @@ export const actions: Actions = {
 				id: params.id
 			},
 			include: {
-				owner: true
+				owner: true,
+				history: {
+					include: {
+						photos: true
+					}
+				},
+				photos: true
 			}
 		});
 
 		guards.appartmentAccessible(user, appartment);
+
+		for (const photo of [
+			...appartment.photos,
+			...appartment.history.flatMap((h) => h.photos)
+		]) {
+			try {
+				rmSync(path.join('public', photoURL(photo)));
+			} catch (error) {
+				if (error?.code !== 'ENOENT') {
+					throw error;
+				}
+			}
+		}
 
 		await prisma.appartment.delete({
 			where: {
 				id: params.id
 			}
 		});
-
-		try {
-			await rmSync(
-				path.dirname(
-					path.join(
-						'public',
-						appartmentPhotoURL({
-							appartmentId: appartment.id,
-							contentType: '',
-							filename: '',
-							position: 0
-						})
-					)
-				),
-				{
-					recursive: true
-				}
-			);
-		} catch (err) {
-			if (err?.code !== 'ENOENT') {
-				console.error(err);
-				throw error(500, { message: 'Une erreur est survenue' });
-			}
-		}
 
 		throw redirect(302, '/appartements/gerer');
 	}

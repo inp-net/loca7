@@ -8,12 +8,8 @@
 	import InputNumber from './InputNumber.svelte';
 	import InputRichText from './InputRichText.svelte';
 	import InputSelectOne from './InputSelectOne.svelte';
-	import {
-		appartmentPhotoURL,
-		DISPLAY_APPARTMENT_KIND,
-		type Appartment,
-		type User
-	} from './types';
+	import { DISPLAY_APPARTMENT_KIND, type Appartment, type User } from './types';
+	import { photoURL } from './photos';
 
 	export let appartment: Appartment;
 	export let action: string | undefined = undefined;

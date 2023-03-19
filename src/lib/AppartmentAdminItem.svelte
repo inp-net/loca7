@@ -4,7 +4,7 @@
 	import ButtonSecondary from './ButtonSecondary.svelte';
 	import Icon from './Icon.svelte';
 	import { addToast } from './toasts';
-	import { appartmentPhotoURL } from './types';
+	import { photoURL } from './photos';
 	const emit = createEventDispatcher();
 
 	export let id: string;
@@ -32,7 +32,7 @@
 </script>
 
 <li class:reported={reports.length > 0} class:approved>
-	<img src={photos.length ? appartmentPhotoURL(photos[0]) : ''} class="photo" />
+	<img src={photos.length ? photoURL(photos[0]) : ''} class="photo" />
 	<div
 		class="row-1"
 		on:click={() => {

@@ -1,7 +1,7 @@
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import { openRouteService, tisseo } from '$lib/server/traveltime';
-import { appartmentPhotoURL } from '$lib/types';
+import { tristateCheckboxToBoolean } from '$lib/types';
 import { ENSEEIHT } from '$lib/utils';
 import type { AppartmentKind, Prisma } from '@prisma/client';
 import { error, redirect } from '@sveltejs/kit';
@@ -9,6 +9,7 @@ import { mkdirSync, writeFileSync } from 'fs';
 import path from 'path';
 import xss from 'xss';
 import type { Actions, PageServerLoad } from './$types';
+import { writePhotosToDisk } from '$lib/server/photos';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { session, user } = await locals.validateUser();
@@ -47,14 +48,6 @@ export const actions: Actions = {
 		const latitude = addressLatitude && addressLongitude ? Number(addressLatitude) : null;
 		const longitude = addressLatitude && addressLongitude ? Number(addressLongitude) : null;
 
-		const tristateCheckboxToBoolean = (value: string) => {
-			return {
-				indeterminate: null,
-				on: true,
-				off: false
-			}[value];
-		};
-
 		let appartment;
 		try {
 			const appartInput: Prisma.AppartmentCreateArgs['data'] = {
@@ -76,7 +69,7 @@ export const actions: Actions = {
 					? Number(formData.roomsCount)
 					: 0,
 				availableAt: new Date(Date.parse(availableAt)),
-				address,
+				address: xss(address),
 				latitude,
 				longitude,
 				description: xss(description),
@@ -136,26 +129,7 @@ export const actions: Actions = {
 			throw error(500, { message: "Impossible de poster l'annonce" });
 		}
 
-		for (const photo of appartment.photos) {
-			const file = files.find((file) => file.name === photo.filename);
-			if (!file) continue;
-
-			const buffer = Buffer.from(await file.arrayBuffer());
-
-			if (buffer.length === 0) continue;
-
-			if (buffer.byteLength > 10e6) {
-				throw error(400, { message: 'Les photos doivent faire moins de 10 Mo' });
-			}
-
-			mkdirSync(path.dirname(path.join('public', appartmentPhotoURL(photo))), {
-				recursive: true
-			});
-			writeFileSync(
-				path.join('public', appartmentPhotoURL(photo)),
-				Buffer.from(await file.arrayBuffer())
-			);
-		}
+		await writePhotosToDisk(appartment.photos, files);
 
 		throw redirect(302, '/appartements/gerer');
 	}

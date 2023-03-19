@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
 import type { ReportReason } from '@prisma/client';
 import md5 from 'md5';
-import mime from 'mime-types';
 import {
 	busLinesByColor,
 	metroColorsByLine,
@@ -56,10 +55,13 @@ export type PublicTransportStation = {
 };
 
 export type Photo = {
+	id: string;
 	filename: string;
 	contentType: string;
-	appartmentId: string;
 	position: number;
+	hash: string;
+	appartmentId: string | null;
+	appartmentEditId: string | null;
 };
 
 export type Appartment = {
@@ -94,6 +96,29 @@ export type Appartment = {
 		email: string;
 	};
 	reports: Report[];
+	history: AppartmentEdit[];
+};
+
+export type AppartmentEdit = {
+	id: string;
+	rent: number;
+	charges: number;
+	deposit: number;
+	surface: number;
+	kind: AppartmentKind;
+	roomsCount: number;
+	availableAt: Date;
+	address: string;
+	latitude: number | null;
+	longitude: number | null;
+	hasFurniture: boolean | null;
+	hasParking: boolean | null;
+	description: string;
+	applied: boolean;
+	createdAt: Date;
+	appliedAt: Date | null;
+	appartmentId: string | null;
+	photos: Photo[];
 };
 
 export type Report = {
@@ -222,14 +247,6 @@ export type GeographicPoint = {
 	longitude: number;
 };
 
-export function appartmentPhotoURL(photo: Photo): string {
-	return `/photos/appartments/${photo.appartmentId}/${appartmentPhotoFilenameOnDisk(photo)}`;
-}
-
-export function appartmentPhotoFilenameOnDisk(photo: Photo): string {
-	return `${md5(photo.filename)}.${mime.extension(photo.contentType) || 'bin'}`;
-}
-
 export function appartmentAccessible(
 	user: User | null,
 	appartment: { approved: boolean; archived: boolean; owner: { id: string } }
@@ -240,3 +257,13 @@ export function appartmentAccessible(
 
 	return false;
 }
+
+export const tristateCheckboxToBoolean = (value: string) => {
+	return (
+		{
+			indeterminate: null,
+			on: true,
+			off: false
+		}[value] ?? null
+	);
+};

@@ -1,0 +1,18 @@
+actor user
+actor admin
+collections AppartmentEdit
+collections Appartment
+entity files
+collections Photos
+
+user -> AppartmentEdit : create
+AppartmentEdit -> Photos : create
+AppartmentEdit -> files : copy photos from appartment
+AppartmentEdit -> files : write photos to disk
+hnote across: some time later...
+admin -> AppartmentEdit : approve
+AppartmentEdit -> Appartment : apply
+Appartment -> files : remove old photos
+Appartment -> Photos : remove old, add new
+Appartment -> files : copy new photos
+AppartmentEdit -> AppartmentEdit : change applied field

@@ -4,12 +4,12 @@
 	import CarouselImages from './CarouselImages.svelte';
 	import Icon from './Icon.svelte';
 	import {
-		appartmentPhotoURL,
 		DISPLAY_APPARTMENT_KIND,
 		type GeographicPoint,
 		type AppartmentKind,
 		type Photo
 	} from './types';
+	import { photoURL } from './photos';
 	import {
 		availableAtSentence,
 		distanceBetween,
@@ -40,7 +40,7 @@
 
 <article class:editable class:small>
 	<section class="photos">
-		<CarouselImages cover images={photos?.map(appartmentPhotoURL) || []} />
+		<CarouselImages cover images={photos?.map(photoURL) || []} />
 	</section>
 	<svelte:element
 		this={editable ? 'div' : 'a'}

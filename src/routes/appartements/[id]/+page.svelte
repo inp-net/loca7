@@ -1,9 +1,5 @@
 <script lang="ts">
-	import CarouselImages from '$lib/CarouselImages.svelte';
-	import Icon from '$lib/Icon.svelte';
-	import InputField from '$lib/InputField.svelte';
-	import type { LayoutData, PageData } from './$types';
-	import xss from 'xss';
+	import type { Report } from '$lib/types';
 	import {
 		durationDisplay,
 		distanceDisplay,
@@ -15,23 +11,28 @@
 	} from '$lib/utils';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import {
-		appartmentPhotoURL,
 		DISPLAY_APPARTMENT_KIND,
 		DISPLAY_PUBLIC_TRANSPORT_TYPE,
 		type Appartment,
-		type PublicTransportStation,
 		type GeographicPoint,
+		type PublicTransportStation,
 		DISPLAY_REPORT_REASON,
 		type User
 	} from '$lib/types';
+	import { photoURL } from '$lib/photos';
 	import publicTransportColor from '$lib/publicTransportColors';
 	import AppartmentsMap from '$lib/AppartmentsMap.svelte';
-	import type { Report } from '$lib/types';
-	import { onMount, onDestroy } from 'svelte';
 	import { ics } from '$lib/ics';
 	import { page } from '$app/stores';
 	import { vcard } from '$lib/vcard';
+	import { onMount } from 'svelte';
+	import type { LayoutData } from './$types';
+	import CarouselImages from '$lib/CarouselImages.svelte';
+	import InputField from '$lib/InputField.svelte';
+	import Icon from '$lib/Icon.svelte';
 	import { tooltip } from '$lib/tooltip';
+	import xss from 'xss';
+	import AppartmentEditItem from '$lib/AppartmentEditItem.svelte';
 
 	export let data: LayoutData;
 	let user: User | null = data.user;
@@ -88,7 +89,7 @@
 
 <main>
 	{#if appart.archived || !appart.approved}
-		<section class="archived">
+		<section class="notice notice-archived">
 			<p class="typo-paragraph">
 				{#if appart.archived}
 					Cette annonce est archivée
@@ -115,8 +116,17 @@
 		</section>
 	{/if}
 
+	{#if (appart?.history ?? []).filter((h) => !h.applied).length > 0}
+		<section class="notice notice-pending-modifications">
+			<p class="typo-paragraph">Cette annonce a des modifications en attente</p>
+			<div class="actions">
+				<ButtonSecondary icon="add" href="#modifications">Voir</ButtonSecondary>
+			</div>
+		</section>
+	{/if}
+
 	<section class="carousel">
-		<CarouselImages contain images={appart.photos.map(appartmentPhotoURL)} />
+		<CarouselImages contain images={appart.photos.map(photoURL)} />
 	</section>
 
 	<div class="side-by-side">
@@ -370,6 +380,33 @@
 			</ul>
 		</section>
 	{/if}
+
+	{#if user?.admin || appart.owner.id === user?.id}
+		<section class="history" id="modifications">
+			<h2>Modifications</h2>
+			<h3>En attente de validation</h3>
+			<ul>
+				{#each appart.history
+					.filter((a) => !a.applied)
+					.sort((a, b) => -(a.createdAt.valueOf() - b.createdAt.valueOf())) as edit (edit.id)}
+					<AppartmentEditItem {user} {edit} current={appart} />
+				{:else}
+					<li class="empty">Aucune modification.</li>
+				{/each}
+			</ul>
+			<!-- TODO compare againt parent modification for applied modifications -->
+			<!-- <h3>Appliquées</h3>
+			<ul>
+				{#each appart.history
+					.filter((a) => a.applied)
+					.sort((a, b) => -(a.createdAt.valueOf() - b.createdAt.valueOf())) as edit (edit.id)}
+					<AppartmentEditItem {edit} current={appart} />
+				{:else}
+					<li class="empty">Aucune modification.</li>
+				{/each}
+			</ul> -->
+		</section>
+	{/if}
 	{#if appart?.latitude && appart?.longitude}
 		<section class="map">
 			<AppartmentsMap
@@ -529,6 +566,7 @@
 	section.map {
 		width: 100%;
 		height: 600px;
+		margin-top: 4rem;
 	}
 
 	section.reports {
@@ -573,7 +611,42 @@
 		flex-direction: row;
 	}
 
-	section.archived {
+	section.history {
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	section.history h2 {
+		text-align: center;
+		margin-bottom: 1rem;
+	}
+
+	section.history h3 {
+		text-align: center;
+		margin-bottom: 2rem;
+	}
+
+	section.history ul {
+		list-style: none;
+		padding-left: 0;
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: column;
+		justify-content: center;
+		gap: 3rem;
+		flex: 1 1 0;
+		margin-bottom: 3rem;
+	}
+
+	section.history li.empty {
+		text-align: center;
+	}
+
+	section.history ul :global(> li) {
+		flex-basis: 0;
+	}
+
+	section.notice {
 		background: var(--ice);
 		padding: 0.5rem 1rem;
 		max-width: 1200px;
@@ -587,7 +660,7 @@
 		gap: 1rem;
 	}
 
-	section.archived .actions {
+	section.notice .actions {
 		display: flex;
 		gap: 1rem;
 	}

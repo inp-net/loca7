@@ -1,16 +1,17 @@
 <script lang="ts">
-	import SortableList from './SortableList.svelte';
 	import ButtonCircle from './ButtonCircle.svelte';
 	import Icon from './Icon.svelte';
+	import SortableList from './SortableList.svelte';
 	import { tooltip } from './tooltip';
-	import { appartmentPhotoURL, type Photo } from './types';
-	import { getContentHash, getDataURL } from './utils';
+	import type { Photo } from './types';
+	import { photoURL } from './photos';
+	import { getDataURL } from './utils';
 
 	export let name: string | undefined = undefined;
 	export let appartmentId: string;
 	export let value: Photo[] = [];
 	export let previewURLs: Record<string, string> = Object.fromEntries(
-		value.map((v) => [v.filename, appartmentPhotoURL(v)])
+		value.map((v) => [v.filename, photoURL(v)])
 	);
 	export let fileObjects: Record<string, File> = Object.fromEntries(
 		value.map((v) => [

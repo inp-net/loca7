@@ -4,6 +4,9 @@ import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ params, locals }) => {
 	const { user } = await locals.validateUser();
+	const appart = await prisma.appartment.findUnique({
+		where: { id: params.id }
+	});
 	const appartment = await prisma.appartment.findUnique({
 		where: { id: params.id },
 		include: {
@@ -11,7 +14,15 @@ export const load: LayoutServerLoad = async ({ params, locals }) => {
 			nearbyStations: true,
 			travelTimeToN7: true,
 			photos: true,
-			reports: true
+			reports: user?.admin,
+			history:
+				user?.admin || user?.id === appart?.ownerId
+					? {
+							include: {
+								photos: true
+							}
+					  }
+					: false
 		}
 	});
 
