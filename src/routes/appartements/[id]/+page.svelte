@@ -96,7 +96,7 @@
 					Cette annonce n'a pas encore été approuvée
 				{/if}
 			</p>
-			{#if appart.archived || user?.admin}
+			{#if appart.archived || (!appart.approved && user?.admin)}
 				<div class="actions">
 					<ButtonSecondary icon="delete" href="/appartements/{appart.id}/supprimer"
 						>Supprimer</ButtonSecondary
@@ -105,6 +105,8 @@
 						icon={appart.archived ? 'eye-open' : 'checkmark'}
 						on:click={async () => {
 							await fetch(`/appartements/${appart.id}/publier`, { method: 'POST' });
+							appart.archived = false;
+							appart.approved = true;
 						}}
 						>{#if appart.archived}Publier{:else}Approuver{/if}</ButtonSecondary
 					>
@@ -303,7 +305,7 @@
 							await fetch(`/appartements/${appart.id}/approuver`, {
 								method: 'post'
 							});
-							window.location.reload();
+							appart.approved = true;
 						}}>Approuver</ButtonSecondary
 					>
 				{/if}
@@ -314,6 +316,7 @@
 						await fetch(`/appartements/${appart.id}/publier`, {
 							method: 'post'
 						});
+						appart.archived = false;
 					}}>Publier</ButtonSecondary
 				>
 			{:else}
@@ -323,7 +326,7 @@
 						await fetch(`/appartements/${appart.id}/archiver`, {
 							method: 'post'
 						});
-						window.location.reload();
+						appart.archived = true;
 					}}>Archiver</ButtonSecondary
 				>
 			{/if}
