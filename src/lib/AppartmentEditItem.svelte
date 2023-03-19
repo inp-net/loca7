@@ -71,7 +71,7 @@
 				if (value instanceof Date) {
 					return Intl.DateTimeFormat('fr-FR', { dateStyle: 'medium' }).format(value);
 				}
-				return value?.toString() ?? '<span class="missing">(inconnu)</span>';
+				return value?.toString() ?? '';
 		}
 	}
 
