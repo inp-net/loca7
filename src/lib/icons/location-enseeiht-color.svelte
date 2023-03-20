@@ -1,0 +1,33 @@
+<script lang="ts">
+	export let color: string = 'currentColor';
+	export let strokeWidth: number = 5;
+	export let flip: boolean = false;
+</script>
+
+<svg
+	style:transform={flip ? 'scaleX(-1)' : ''}
+	width="50"
+	height="50"
+	viewBox="0 0 50 50"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
+>
+	<g clip-path="url(#clip0_212_3109)">
+		<path
+			d="M24.3571 45.5C15.3572 36.5 11.5 27.8214 11.5 17.5357C11.5 12.7143 15.0357 2.75 24.3571 2.75C31.75 2.75 38.5 6.28572 38.5 17.5357C38.5 31.9357 29.1786 40.6785 24.3571 45.5Z"
+			fill="#25C9FF"
+			stroke="#25C9FF"
+			stroke-width={strokeWidth}
+		/>
+		<path
+			d="M0.270838 16.6813L13.7987 13.4672C14.9274 13.1047 17.5184 12.6117 18.8532 13.5402C18.7766 14.2737 18.679 15.1716 18.5649 16.1781M16.3441 31.6883C17.1384 27.955 18.0317 20.8815 18.5649 16.1781M18.5649 16.1781C20.1586 15.3205 20.5298 14.1327 22.2146 14.1571C23.3351 14.3627 25.9632 14.2207 25.4447 23.8641C25.2632 27.24 37.2109 24.9717 45.8026 22.2451M28.4005 13.6781C31.3903 14.1002 38.5029 14.2787 43.0352 11.6165C38.8237 17.996 30.386 31.7774 30.3269 35.868"
+			stroke={color}
+			stroke-width="4"
+		/>
+	</g>
+	<defs>
+		<clipPath id="clip0_212_3109">
+			<rect width="50" height="50" fill="white" />
+		</clipPath>
+	</defs>
+</svg>
