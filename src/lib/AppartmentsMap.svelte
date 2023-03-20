@@ -92,9 +92,10 @@
 			attribution:
 				'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
 		}).addTo(map);
+
 		L.marker(locationTuple(ENSEEIHT), {
 			icon: L.icon({
-				iconUrl: '/icons/location-enseeiht.svg',
+				iconUrl: '/icons/location-enseeiht-color.svg',
 				iconSize: [markerSize, markerSize],
 				iconAnchor: [markerSize / 2, markerSize],
 				className: 'enseeiht-icon'
@@ -103,6 +104,7 @@
 		})
 			.addTo(map)
 			.bindPopup(document.querySelector('#map + .map-marker-popups .map-enseeiht-popup'));
+
 		const longitudes = [
 			...(appartments.map((a) => a.longitude).filter((l) => l === 0 || !!l) as number[]),
 			ENSEEIHT.longitude
@@ -198,12 +200,6 @@
 
 	:global(#map .leaflet-popup-content p) {
 		margin: unset;
-	}
-
-	:global(#map .enseeiht-icon) {
-		/* source: https://codepen.io/sosuke/pen/Pjoqqp */
-		filter: invert(52%) sepia(64%) saturate(3673%) hue-rotate(167deg) brightness(94%)
-			contrast(101%);
 	}
 
 	:global(.public-transport-marker-wrapper) {
