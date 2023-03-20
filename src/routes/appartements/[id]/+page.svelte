@@ -71,7 +71,9 @@
 			busy: 'TENTATIVE',
 			status: 'TENTATIVE',
 			location: appart.latitude && appart.longitude ? appart : null,
-			description: `${appartmentTitle(appart)}\n\nPlus d'informations: ${$page.url.toString()}`,
+			description: `${appartmentTitle(
+				appart
+			)}\n\nPlus d'informations: ${$page.url.toString()}`,
 			title: `Visite d'un appartement Loca7`,
 			url: $page.url.toString()
 		});
@@ -79,8 +81,7 @@
 </script>
 
 <svelte:head>
-	<title
-		>Loca7 · {appartmentTitle(appart)}</title >
+	<title>Loca7 · {appartmentTitle(appart)}</title>
 </svelte:head>
 
 <main>
@@ -132,9 +133,11 @@
 					<InputField label="Type de logement">
 						<p class="typo-big-figure">{DISPLAY_APPARTMENT_KIND[appart.kind]}</p>
 					</InputField>
-					<InputField label="Surface">
-						<p class="typo-big-figure">{appart.surface}m²</p>
-					</InputField>
+					{#if appart.surface}
+						<InputField label="Surface">
+							<p class="typo-big-figure">{appart.surface}m²</p>
+						</InputField>
+					{/if}
 				</div>
 				<div class="row">
 					<InputField label="Loyer">

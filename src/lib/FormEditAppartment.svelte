@@ -10,6 +10,7 @@
 	import InputSelectOne from './InputSelectOne.svelte';
 	import { DISPLAY_APPARTMENT_KIND, type Appartment, type User } from './types';
 	import { photoURL } from './photos';
+	import { ENSEEIHT } from './utils';
 
 	export let appartment: Appartment;
 	export let action: string | undefined = undefined;
@@ -116,6 +117,10 @@
 		</InputField>
 	</div>
 
+	{#if appartment.kind === 'colocation'}
+		<p class="typo-details">Veuillez rentrer le loyer total, pas un prix par chambre.</p>
+	{/if}
+
 	<InputField label="Date de libération">
 		<InputDate
 			name="availableAt"
@@ -152,6 +157,19 @@
 	<InputField label="Description">
 		<InputRichText name="description" bind:value={appartment.description} />
 	</InputField>
+
+    <div class="typo-details">
+        Inutile de préciser les informations suivantes:
+        <ul>
+            <li>Loyer, charges, caution</li>
+            <li>Temps de trajet vers l'ENSEEIHT à pied, en vélo, en transports</li>
+            <li>Arrêts de transports en commun à proximité</li>
+            <li>Type de logement, surface, nombre de chambres</li>
+            <li>Adresse</li>
+            <li>Statut de logement meublé, présence de place de parking</li>
+        </ul>
+        Elles seront affichées dans la page de l'annonce.
+    </div>
 
 	<InputField label="Photos">
 		<InputImages name="photos" appartmentId={appartment.id} bind:value={appartment.photos} />

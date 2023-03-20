@@ -59,13 +59,15 @@
 					{/if}
 				</p>
 			</section>
-			<section class="space">
-				<p class="typo-big-figure surface">{surface}m²</p>
-				<p class="type">
-					{DISPLAY_APPARTMENT_KIND[kind]}
-					{#if kind === 'colocation'}<br />de {roomsCount} chambres{/if}
-				</p>
-			</section>
+			{#if surface}
+				<section class="space">
+					<p class="typo-big-figure surface">{surface}m²</p>
+					<p class="type">
+						{DISPLAY_APPARTMENT_KIND[kind]}
+						{#if roomsCount && kind === 'colocation'}<br />de {roomsCount} chambres{/if}
+					</p>
+				</section>
+			{/if}
 		</section>
 		{#if !small}
 			<section class="situation">
