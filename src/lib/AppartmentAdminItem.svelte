@@ -134,9 +134,9 @@
 		justify-content: center;
 		flex-wrap: wrap;
 	}
-	.actions :global(button) {
-		background: transparent;
-	}
+    .actions {
+        color: var(--fg);
+    }
 	.collapse {
 		background: none;
 		border: none;
