@@ -46,6 +46,7 @@
 		"eslint-config-prettier": "^8.7.0",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"html-to-text": "^9.0.4",
+		"mime2ext": "^2.0.0",
 		"password": "^0.1.1",
 		"pre-commit": "^1.2.2",
 		"prettier": "^2.8.4",

@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { convert as html2text } from 'html-to-text';
 import { distanceBetween, ENSEEIHT } from '../src/lib/utils';
 import { DISPLAY_PUBLIC_TRANSPORT_TYPE } from '../src/lib/types';
-// import { openRouteService, tisseo } from "$lib/server/traveltime.ts"
+// import { openRouteService } from '../src/lib/server/traveltime';
 import xss from 'xss';
 import type { User, TravelTimeToN7, Report, AppartmentKind } from '@prisma/client';
 import tisseoStops from '../public/tisseo-stops.json' assert { type: 'json' };
@@ -13,6 +13,13 @@ import createPassword from 'password';
 import oldLogements from './old-data/logements.json' assert { type: 'json' };
 import oldPhotos from './old-data/photos.json' assert { type: 'json' };
 import bbcode2html from 'bitter-bbcode';
+import { copyFileSync, existsSync, mkdirSync, rmSync } from 'fs';
+import mime2ext from 'mime2ext';
+import path from 'path';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const prisma = new PrismaClient();
 const auth = lucia({
@@ -62,7 +69,7 @@ async function nearbyStations(location: GeographicPoint): Promise<PublicTranspor
 	return allStops
 		.map((stop) => ({
 			...stop,
-			position: { latitude: stop.stop_lon, longitude: stop.stop_lat }
+			position: { latitude: stop.stop_lat, longitude: stop.stop_lon }
 		}))
 		.filter((stop) => Object.keys(DISPLAY_PUBLIC_TRANSPORT_TYPE).includes(stop.route_type))
 		.filter((stop) => Math.abs(distanceBetween(location, stop.position)) < 500)
@@ -186,7 +193,9 @@ function findRoomsCountInDescription(description: string): number {
 		.replaceAll(/\bneuf\b/gi, '9')
 		.replaceAll(/\bdix\b/gi, '10')
 		.replaceAll(/\bun\b/gi, '1')
-		.replaceAll(/\bune\b/gi, '1');
+		.replaceAll(/\bune\b/gi, '1')
+		// Fix up some typos
+		.replaceAll(/\bùeubl/gi, 'meubl');
 
 	// extract number
 	const result = /\b(\d+)\s+chambre/gi.exec(description);
@@ -216,7 +225,7 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 	const latitude = optionalNumberStr(appart.latitude);
 	const longitude = optionalNumberStr(appart.longitude);
 	console.info(`\tCreating appartment ${appart.adresse} (#${appart.id})`);
-	await prisma.appartment.create({
+	const appartment = await prisma.appartment.create({
 		data: {
 			address: appart.adresse,
 			availableAt: new Date(appart.free_date),
@@ -224,8 +233,9 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 			deposit: optionalNumberStr(appart.montant_caution) || 0,
 			description: xss(bbcode2html(appart.description)),
 			kind: KIND_MAP[appart.typel] ?? 'autre',
-			latitude,
-			longitude,
+			// FIXME tkt
+			latitude: longitude,
+			longitude: latitude,
 			rent: Number(appart.loyer),
 			surface: optionalNumberStr(appart.surface) || 0,
 			roomsCount: findRoomsCountInDescription(appart.description),
@@ -255,7 +265,7 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 							(photo, i) =>
 								({
 									contentType: 'image/jpeg',
-									filename: photo.photo,
+									filename: path.basename(photo.photo),
 									position: i,
 									hash: null /* TODO */
 								} as Photo)
@@ -283,6 +293,24 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 			travelTimeToN7: true
 		}
 	});
+
+	for (const photoInDb of appartment.photos) {
+        const photo = photos.find(p => path.basename(p.photo) === photoInDb.filename)
+        const photoOnDiskFilename = path.join(__dirname, 'old-data', photo?.photo);
+
+		if (photo === undefined || !photo || !existsSync(photoOnDiskFilename)) {
+			console.log(`\t\t⚠️  Photo at ${photoOnDiskFilename} {${JSON.stringify(photoInDb)}} was not imported correctly`);
+		} else {
+			const targetFilename = path.join(
+				__dirname,
+				'../public/photos/appartments',
+				photoInDb.id + '.jpeg'
+			);
+
+			mkdirSync(path.dirname(targetFilename), { recursive: true });
+			copyFileSync(photoOnDiskFilename, targetFilename);
+		}
+	}
 }
 
 async function importData(ghost: User, appartments: AppartmentOld[], photos: PhotoOld[]) {
@@ -301,36 +329,30 @@ async function importData(ghost: User, appartments: AppartmentOld[], photos: Pho
 		);
 		const appart = apparts[0];
 		const attributes = {
-			email: appart.contact_mail || `${appart.uuid_proprietaire}@ghosts.loca7.enseeiht.fr`,
+			email: appart.contact_mail || `ghost.${appart.uuid_proprietaire}@loca7.enseeiht.fr`,
 			name: appart.contact_prenom + ' ' + appart.contact_nom,
 			phone: appart.contact_port || appart.contact_tel
 		};
-		if (appart.contact_mail) {
-			const password = createPassword(3);
-			await auth.createUser({
-				key: {
-					providerId: 'email',
-					password,
-					providerUserId: appart.contact_mail
-				},
-				attributes
-			});
-			const user = await prisma.user.findUnique({
-				where: {
-					email: appart.contact_mail
-				}
-			});
-			if (user === null) throw new Error('User not found');
-			userPasswords[user.id] = password;
-			await appartment(ghost, appart, photos, user);
-		} else {
-			console.log('\t⚠️ No email, creating ghost user');
-			const user = await prisma.user.create({
-				data: attributes
-			});
-			userPasswords[user.id] = null;
-			await appartment(ghost, appart, photos, user);
+		const password = createPassword(3);
+		if (!appart.contact_mail) {
+			console.log('\t⚠️  No email, creating ghost user');
 		}
+		await auth.createUser({
+			key: {
+				providerId: 'email',
+				password,
+				providerUserId: attributes.email
+			},
+			attributes
+		});
+		const user = await prisma.user.findUnique({
+			where: {
+				email: attributes.email
+			}
+		});
+		if (user === null) throw new Error('User not found');
+		userPasswords[user.id] = password;
+		await appartment(ghost, appart, photos, user);
 	}
 	return userPasswords;
 }
@@ -351,6 +373,9 @@ async function nukeDb() {
 	} catch (error) {
 		console.log({ error });
 	}
+
+	rmSync(path.join(__dirname, '../public/photos/appartments'), { recursive: true });
+	mkdirSync(path.join(__dirname, '../public/photos/appartments'));
 }
 
 async function main() {

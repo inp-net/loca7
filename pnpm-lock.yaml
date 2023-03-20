@@ -41,6 +41,7 @@ specifiers:
   lucia-auth: ^0.7.3
   md5: ^2.3.0
   mime-types: ^2.1.35
+  mime2ext: ^2.0.0
   mjml: ^4.13.0
   node-htmldiff: ^0.9.4
   nodemailer: ^6.9.1
@@ -118,6 +119,7 @@ devDependencies:
   eslint-config-prettier: 8.7.0_eslint@8.36.0
   eslint-plugin-svelte3: 4.0.0_pdvxdpbnzjwxjm7tkjwumh3vqi
   html-to-text: 9.0.4
+  mime2ext: 2.0.0
   password: 0.1.1
   pre-commit: 1.2.2
   prettier: 2.8.4
@@ -2362,6 +2364,10 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
+  /mime-standard/1.0.2:
+    resolution: {integrity: sha512-xUmjXVgIU9bL370jglTuRunmIJyOx9CKPH5IgaQtfx7IwUmKfMKuJddFXCFALFks/9fZ/zk3/ko9NoTskVx51g==}
+    dev: true
+
   /mime-types/2.1.35:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
     engines: {node: '>= 0.6'}
@@ -2379,6 +2385,12 @@ packages:
     resolution: {integrity: sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==}
     engines: {node: '>=10.0.0'}
     hasBin: true
+    dev: true
+
+  /mime2ext/2.0.0:
+    resolution: {integrity: sha512-v4f86Jsi/wtqbeXVJXcd7ZxMGAnTJ55LlMJS2tNYEQQoevDq6DdsxJxIAACjRUMPL43QJVzL6nF5x78BNf4R2Q==}
+    dependencies:
+      mime-standard: 1.0.2
     dev: true
 
   /mimic-response/3.1.0:
