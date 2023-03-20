@@ -111,6 +111,7 @@ enum AppartmentKind {
     t2
     t3etplus
     colocation
+    autre
 }
 
 model AppartmentEdit {

@@ -13,3 +13,5 @@ public/photos/appartments
 public/tisseo-stops.json
 
 scripts/*.txt
+scripts/importOldData.py
+scripts/old-data/

@@ -17,8 +17,16 @@
 		"pushdb:all": "pnpm configure:dev && pnpm pushdb && pnpm configure:prod && pnpm pushdb && pnpm configure:dev",
 		"format": "prettier --plugin-search-dir . --write .",
 		"start": "node -r dotenv/config build",
-		"start:beta": "STAGE=beta ORIGIN=https://loca7.ewen.works pnpm start"
+		"start:beta": "STAGE=beta ORIGIN=https://loca7.ewen.works pnpm start",
+		"check-prisma-imports": "for file in **/*.server.ts; do if ! grep -q 'import { prisma } from' $file; then echo warn: no prisma import in $file; fi; done"
 	},
+	"prisma": {
+		"seed": "ts-node --transpile-only scripts/importOldData.ts"
+	},
+	"pre-commit": [
+		"format",
+		""
+	],
 	"devDependencies": {
 		"@faker-js/faker": "^7.6.0",
 		"@sveltejs/adapter-auto": "^2.0.0",
@@ -33,15 +41,20 @@
 		"@types/zxcvbn": "^4.4.1",
 		"@typescript-eslint/eslint-plugin": "^5.55.0",
 		"@typescript-eslint/parser": "^5.55.0",
+		"bitter-bbcode": "^0.0.1",
 		"eslint": "^8.36.0",
 		"eslint-config-prettier": "^8.7.0",
 		"eslint-plugin-svelte3": "^4.0.0",
+		"html-to-text": "^9.0.4",
+		"password": "^0.1.1",
+		"pre-commit": "^1.2.2",
 		"prettier": "^2.8.4",
 		"prettier-plugin-prisma": "^4.10.0",
 		"prettier-plugin-svelte": "^2.9.0",
 		"prisma": "^4.11.0",
 		"svelte": "^3.56.0",
 		"svelte-check": "^3.1.4",
+		"ts-node": "^10.9.1",
 		"tslib": "^2.5.0",
 		"typescript": "^4.9.5",
 		"vite": "^4.1.4",
