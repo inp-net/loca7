@@ -30,12 +30,12 @@
 				if (appart.latitude === null || appart.longitude === null) return;
 				L.marker(locationTuple(appart), {
 					icon: L.icon({
-						iconUrl:
-							appartments.length === 1
-								? `/icons/location.svg`
-								: `/icons/location-${appart.kind
-										.toLowerCase()
-										.replaceAll(' ', '-')}.svg`,
+						iconUrl: '/icons/location-white-background.svg',
+						// appartments.length === 1
+						// 	? `/icons/location.svg`
+						// 	: `/icons/location-${appart.kind
+						// 			.toLowerCase()
+						// 			.replaceAll(' ', '-')}.svg`,
 						iconSize: [markerSize, markerSize],
 						iconAnchor: [markerSize / 2, markerSize]
 					}),
