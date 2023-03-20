@@ -23,11 +23,14 @@
 		);
 	}
 
-	$: appartmentsPending = appartments.filter(
-		(a) =>
-			status(eagerStatus, a) === 'pending' ||
-			(status(eagerStatus, a) !== 'archived' && a.history.some((h) => !h.applied))
-	);
+	$: appartmentsPending = appartments
+		.filter(
+			(a) =>
+				status(eagerStatus, a) === 'pending' ||
+				(status(eagerStatus, a) !== 'archived' && a.history.some((h) => !h.applied))
+		)
+		.sort((a, b) => a.reports.length - b.reports.length)
+		.reverse();
 	$: appartmentsArchived = appartments.filter((a) => status(eagerStatus, a) === 'archived');
 	$: appartmentsOnline = appartments.filter(
 		(a) => status(eagerStatus, a) === 'approved' && a.history.every((h) => h.applied)
