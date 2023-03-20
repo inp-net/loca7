@@ -18,7 +18,7 @@ import mime2ext from 'mime2ext';
 import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import nqdm from "nqdm"
+import nqdm from 'nqdm';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -222,9 +222,37 @@ async function travelTimes(appart: AppartmentOld): Promise<Omit<TravelTimeToN7, 
 	// }
 }
 
+function detectKindFromDescription(appart: AppartmentOld): AppartmentKind | null {
+	if (appart.typel !== 'au') return null;
+
+	const description = appart.description.toLowerCase();
+
+	if (/\bt1 bis\b/.test(description)) return 't1bis';
+
+	if (/\bt1\b/.test(description)) return 't1';
+
+	if (/\bt2\b/.test(description)) return 't2';
+
+	if (/\bt\d\b/.test(description)) return 't3etplus';
+
+	if (/\bstudio\b/.test(description)) return 'studio';
+
+	if (/\bcolocation\b/.test(description)) return 'colocation';
+
+	return null;
+}
+
 async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[], user: User) {
-	const latitude = optionalNumberStr(appart.latitude);
-	const longitude = optionalNumberStr(appart.longitude);
+	let latitude = optionalNumberStr(appart.latitude);
+	let longitude = optionalNumberStr(appart.longitude);
+	if (latitude && Math.abs(latitude - 43) > 1) {
+		console
+			.log
+			// `⚠️ Appartment ${appart.adresse} (#${appart.id}) has aberrant latitude ${latitude}, discarding geocoordinates`
+			();
+		latitude = null;
+		longitude = null;
+	}
 	// console.info(`\tCreating appartment ${appart.adresse} (#${appart.id})`);
 	const appartment = await prisma.appartment.create({
 		data: {
@@ -233,7 +261,7 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 			charges: optionalNumberStr(appart.montant_charges) || 0,
 			deposit: optionalNumberStr(appart.montant_caution) || 0,
 			description: xss(bbcode2html(appart.description)),
-			kind: KIND_MAP[appart.typel] ?? 'autre',
+			kind: detectKindFromDescription(appart) ?? KIND_MAP[appart.typel] ?? 'autre',
 			// FIXME tkt
 			latitude: longitude,
 			longitude: latitude,
@@ -334,13 +362,15 @@ async function importData(ghost: User, appartments: AppartmentOld[], photos: Pho
 		// );
 		const appart = apparts[0];
 		const attributes = {
-			email: appart.contact_mail || `ghost.${appart.uuid_proprietaire}@loca7.enseeiht.fr`,
-			name: appart.contact_prenom + ' ' + appart.contact_nom,
-			phone: appart.contact_port || appart.contact_tel
+			email:
+				appart.contact_mail?.trim() ||
+				`ghost.${appart.uuid_proprietaire}@loca7.enseeiht.fr`,
+			name: (appart.contact_prenom + ' ' + appart.contact_nom).trim(),
+			phone: (appart.contact_port || appart.contact_tel).trim()
 		};
 		const password = createPassword(3);
 		if (!appart.contact_mail) {
-			// console.log('\t⚠️  No email, creating ghost user');
+			// console.log(`⚠️ ${attributes.name} has no email, creating a ghost user`);
 		}
 		await auth.createUser({
 			key: {
