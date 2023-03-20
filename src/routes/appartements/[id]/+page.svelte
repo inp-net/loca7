@@ -569,7 +569,7 @@
 	}
 
 	section.reports {
-		max-width: 1000px;
+		max-width: 1200px;
 		word-break: break-all;
 	}
 
@@ -584,6 +584,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
+		gap: 1rem;
 	}
 
 	.report {
