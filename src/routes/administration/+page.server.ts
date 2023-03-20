@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			photos: true,
 			reports: true,
 			travelTimeToN7: true,
-            history: true
+			history: true
 		}
 	});
 

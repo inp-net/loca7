@@ -158,18 +158,18 @@
 		<InputRichText name="description" bind:value={appartment.description} />
 	</InputField>
 
-    <div class="typo-details">
-        Inutile de préciser les informations suivantes:
-        <ul>
-            <li>Loyer, charges, caution</li>
-            <li>Temps de trajet vers l'ENSEEIHT à pied, en vélo, en transports</li>
-            <li>Arrêts de transports en commun à proximité</li>
-            <li>Type de logement, surface, nombre de chambres</li>
-            <li>Adresse</li>
-            <li>Statut de logement meublé, présence de place de parking</li>
-        </ul>
-        Elles seront affichées dans la page de l'annonce.
-    </div>
+	<div class="typo-details">
+		Inutile de préciser les informations suivantes:
+		<ul>
+			<li>Loyer, charges, caution</li>
+			<li>Temps de trajet vers l'ENSEEIHT à pied, en vélo, en transports</li>
+			<li>Arrêts de transports en commun à proximité</li>
+			<li>Type de logement, surface, nombre de chambres</li>
+			<li>Adresse</li>
+			<li>Statut de logement meublé, présence de place de parking</li>
+		</ul>
+		Elles seront affichées dans la page de l'annonce.
+	</div>
 
 	<InputField label="Photos">
 		<InputImages name="photos" appartmentId={appartment.id} bind:value={appartment.photos} />

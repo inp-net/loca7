@@ -295,11 +295,15 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 	});
 
 	for (const photoInDb of appartment.photos) {
-        const photo = photos.find(p => path.basename(p.photo) === photoInDb.filename)
-        const photoOnDiskFilename = path.join(__dirname, 'old-data', photo?.photo);
+		const photo = photos.find((p) => path.basename(p.photo) === photoInDb.filename);
+		const photoOnDiskFilename = path.join(__dirname, 'old-data', photo?.photo);
 
 		if (photo === undefined || !photo || !existsSync(photoOnDiskFilename)) {
-			console.log(`\t\t⚠️  Photo at ${photoOnDiskFilename} {${JSON.stringify(photoInDb)}} was not imported correctly`);
+			console.log(
+				`\t\t⚠️  Photo at ${photoOnDiskFilename} {${JSON.stringify(
+					photoInDb
+				)}} was not imported correctly`
+			);
 		} else {
 			const targetFilename = path.join(
 				__dirname,
