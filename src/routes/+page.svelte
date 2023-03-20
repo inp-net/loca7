@@ -213,7 +213,7 @@
 
 	.search {
 		position: sticky;
-		top: 100px;
+		top: 180px;
 		align-self: flex-start;
 	}
 
