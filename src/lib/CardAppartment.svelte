@@ -54,7 +54,9 @@
 					{#if !small}
 						dont {charges}€ de charges<br />
 					{/if}
-					soit {Math.round((rent + charges) / surface)} €/m²
+					{#if surface > 0}
+						soit {Math.round((rent + charges) / surface)} €/m²
+					{/if}
 				</p>
 			</section>
 			<section class="space">

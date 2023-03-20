@@ -72,7 +72,7 @@
 					case 'prix':
 						return charges + rent;
 					case 'prix/m²':
-						return (charges + rent) / surface;
+						return surface ? (charges + rent) / surface : 0;
 					case 'surface':
 						return surface;
 					case "distance à l'n7":
