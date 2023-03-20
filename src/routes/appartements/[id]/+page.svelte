@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Report } from '$lib/types';
+	import { appartmentTitle, type Report } from '$lib/types';
 	import {
 		durationDisplay,
 		distanceDisplay,
@@ -71,9 +71,7 @@
 			busy: 'TENTATIVE',
 			status: 'TENTATIVE',
 			location: appart.latitude && appart.longitude ? appart : null,
-			description: `${DISPLAY_APPARTMENT_KIND[appart.kind]} de ${appart.surface} m² à ${
-				appart.rent + appart.charges
-			}€.\n\nPlus d'informations: ${$page.url.toString()}`,
+			description: `${appartmentTitle(appart)}\n\nPlus d'informations: ${$page.url.toString()}`,
 			title: `Visite d'un appartement Loca7`,
 			url: $page.url.toString()
 		});
@@ -82,9 +80,7 @@
 
 <svelte:head>
 	<title
-		>Loca7 · {DISPLAY_APPARTMENT_KIND[appart.kind]} de {appart.surface} m² à {appart.rent +
-			appart.charges}€</title
-	>
+		>Loca7 · {appartmentTitle(appart)}</title >
 </svelte:head>
 
 <main>

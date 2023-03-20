@@ -16,7 +16,8 @@ export type AppartmentKind =
 	| 't1bis'
 	| 't2'
 	| 't3etplus'
-	| 'colocation';
+	| 'colocation'
+	| 'autre';
 
 export type PublicTransportType = 'bus' | 'bhnf' | 'metro' | 'tram' | 'telepherique' | 'tad';
 
@@ -27,7 +28,8 @@ export const DISPLAY_APPARTMENT_KIND: Record<AppartmentKind, string> = {
 	t1bis: 'T1 bis',
 	t2: 'T2',
 	t3etplus: 'T3 et plus',
-	colocation: 'Colocation'
+	colocation: 'Colocation',
+	autre: 'Autre'
 };
 
 export const DISPLAY_PUBLIC_TRANSPORT_TYPE: Record<PublicTransportType, string> = {
@@ -256,6 +258,12 @@ export function appartmentAccessible(
 	if (user?.id === appartment.owner.id || user?.admin) return true;
 
 	return false;
+}
+
+export function appartmentTitle(appartment: Appartment): string {
+	return `${appartment.kind == 'autre' ? 'Bien' : DISPLAY_APPARTMENT_KIND[appartment.kind]} de ${
+		appartment.surface
+	}m² à ${appartment.rent}€/mois`;
 }
 
 export const tristateCheckboxToBoolean = (value: string) => {
