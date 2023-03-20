@@ -11,7 +11,11 @@
 
 	function status(
 		eagerStatus: Record<string, Status>,
-		appartment: { id: string; approved: boolean; archived: boolean }
+		appartment: {
+			id: string;
+			approved: boolean;
+			archived: boolean;
+		}
 	): Status {
 		return (
 			eagerStatus?.[appartment.id] ??
@@ -19,9 +23,15 @@
 		);
 	}
 
-	$: appartmentsPending = appartments.filter((a) => status(eagerStatus, a) === 'pending');
+	$: appartmentsPending = appartments.filter(
+		(a) =>
+			status(eagerStatus, a) === 'pending' ||
+			(status(eagerStatus, a) !== 'archived' && a.history.some((h) => !h.applied))
+	);
 	$: appartmentsArchived = appartments.filter((a) => status(eagerStatus, a) === 'archived');
-	$: appartmentsOnline = appartments.filter((a) => status(eagerStatus, a) === 'approved');
+	$: appartmentsOnline = appartments.filter(
+		(a) => status(eagerStatus, a) === 'approved' && a.history.every((h) => h.applied)
+	);
 </script>
 
 <svelte:head>

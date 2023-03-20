@@ -5,6 +5,7 @@
 	import Icon from './Icon.svelte';
 	import { addToast } from './toasts';
 	import { photoURL } from './photos';
+	import type { AppartmentEdit } from './types';
 	const emit = createEventDispatcher();
 
 	export let id: string;
@@ -16,6 +17,7 @@
 	export let rent: number;
 	export let charges: number;
 	export let archived: boolean;
+	export let history: AppartmentEdit[];
 	export let photos: Photo[];
 	let open: boolean = false;
 	let error: string = '';
@@ -62,12 +64,16 @@
 		>
 	</div>
 	<div class="actions" class:open>
-		{#if !approved}
-			<ButtonSecondary on:click={action('approuver')} icon="checkmark"
-				>Valider</ButtonSecondary
+		{#if history.some((h) => !h.applied)}
+			<ButtonSecondary href="/appartements/{id}#modifications" icon="editor-list"
+				>Modifications</ButtonSecondary
 			>
 		{:else if archived}
 			<ButtonSecondary on:click={action('publier')} icon="eye-open">Publier</ButtonSecondary>
+		{:else if !approved}
+			<ButtonSecondary on:click={action('approuver')} icon="checkmark"
+				>Valider</ButtonSecondary
+			>
 		{:else}
 			<ButtonSecondary on:click={action('archiver')} submits icon="eye-cancel"
 				>Archiver</ButtonSecondary
