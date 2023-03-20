@@ -18,6 +18,7 @@ import mime2ext from 'mime2ext';
 import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import nqdm from "nqdm"
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -224,7 +225,7 @@ async function travelTimes(appart: AppartmentOld): Promise<Omit<TravelTimeToN7, 
 async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[], user: User) {
 	const latitude = optionalNumberStr(appart.latitude);
 	const longitude = optionalNumberStr(appart.longitude);
-	console.info(`\tCreating appartment ${appart.adresse} (#${appart.id})`);
+	// console.info(`\tCreating appartment ${appart.adresse} (#${appart.id})`);
 	const appartment = await prisma.appartment.create({
 		data: {
 			address: appart.adresse,
@@ -299,11 +300,11 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 		const photoOnDiskFilename = path.join(__dirname, 'old-data', photo?.photo);
 
 		if (photo === undefined || !photo || !existsSync(photoOnDiskFilename)) {
-			console.log(
-				`\t\t⚠️  Photo at ${photoOnDiskFilename} {${JSON.stringify(
-					photoInDb
-				)}} was not imported correctly`
-			);
+			// console.log(
+			// 	`\t\t⚠️  Photo at ${photoOnDiskFilename} {${JSON.stringify(
+			// 		photoInDb
+			// 	)}} was not imported correctly`
+			// );
 		} else {
 			const targetFilename = path.join(
 				__dirname,
@@ -327,10 +328,10 @@ async function importData(ghost: User, appartments: AppartmentOld[], photos: Pho
 	}, {} as Record<string, AppartmentOld[]>);
 
 	// create users
-	for (const apparts of Object.values(appartmentsByOwner)) {
-		console.info(
-			`Creating user ${apparts[0].contact_prenom} ${apparts[0].contact_nom} (#${apparts[0].uuid_proprietaire})`
-		);
+	for (const apparts of nqdm(Object.values(appartmentsByOwner))) {
+		// console.info(
+		// 	`Creating user ${apparts[0].contact_prenom} ${apparts[0].contact_nom} (#${apparts[0].uuid_proprietaire})`
+		// );
 		const appart = apparts[0];
 		const attributes = {
 			email: appart.contact_mail || `ghost.${appart.uuid_proprietaire}@loca7.enseeiht.fr`,
@@ -339,7 +340,7 @@ async function importData(ghost: User, appartments: AppartmentOld[], photos: Pho
 		};
 		const password = createPassword(3);
 		if (!appart.contact_mail) {
-			console.log('\t⚠️  No email, creating ghost user');
+			// console.log('\t⚠️  No email, creating ghost user');
 		}
 		await auth.createUser({
 			key: {
