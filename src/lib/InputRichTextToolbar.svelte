@@ -34,7 +34,8 @@
 
 <style>
 	.toolbar {
-		background: var(--fg);
+		background: var(--bg);
+		border-bottom: var(--border-width) solid var(--fg);
 		display: flex;
 		list-style: none;
 		padding: 0.75rem;
