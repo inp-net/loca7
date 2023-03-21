@@ -124,10 +124,33 @@
 					/>
 				</div>
 			</InputField>
-			<section class="submit">
-				<ButtonPrimary submits>Rechercher</ButtonPrimary>
-			</section>
 		</form>
+
+		<section class="switch-tabs">
+			{#if resultsTab === 'list'}
+				<ButtonPrimary
+					icon="map"
+					on:click={() => {
+						resultsTab = 'map';
+						console.log(`scrolling to top of map`);
+						window.scrollTo({
+							top: document.getElementById('map')?.scrollTop
+						});
+					}}>Voir sur la carte</ButtonPrimary
+				>
+			{:else}
+				<ButtonPrimary
+					icon="back"
+					on:click={() => {
+						resultsTab = 'list';
+						console.log(`scrolling to ${$searchResultsScrollPosition}`);
+						window.scrollTo({
+							top: $searchResultsScrollPosition
+						});
+					}}>Retour à la liste</ButtonPrimary
+				>
+			{/if}
+		</section>
 	</div>
 
 	<div class="results">
@@ -239,8 +262,10 @@
 		}
 	}
 
-	.submit {
+	.switch-tabs {
 		display: flex;
+		justify-content: center;
+		margin-top: 2rem;
 	}
 
 	.sort {
