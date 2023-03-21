@@ -6,7 +6,7 @@
 <h1>Icons</h1>
 
 <main>
-	{#each iconNames as name}
+	{#each iconNames.sort() as name}
 		<div class="item">
 			<div class="icon">
 				<Icon {name} color="fg" />
