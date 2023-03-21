@@ -159,7 +159,7 @@
 	</InputField>
 
 	<div class="typo-details">
-		Inutile de préciser les informations suivantes:
+		Inutile de préciser les informations suivantes dans la description:
 		<ul>
 			<li>Loyer, charges, caution</li>
 			<li>Temps de trajet vers l'ENSEEIHT à pied, en vélo, en transports</li>
