@@ -4,6 +4,7 @@
 	import InputField from '$lib/InputField.svelte';
 	import InputRichText from '$lib/InputRichText.svelte';
 	import InputSelectOne from '$lib/InputSelectOne.svelte';
+	import { appartmentTitle } from '$lib/types';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -11,6 +12,8 @@
 
 <main>
 	<h1>Signaler une annonce</h1>
+
+	<p>Vous signalez l'annonce <em>{appartmentTitle(data.appartment)}</em></p>
 
 	<section class="appart">
 		<CardAppartment {...data.appartment} />
@@ -42,12 +45,30 @@
 
 <style>
 	main {
-		margin: 0 auto;
-		display: grid;
-		grid-template-areas: 'h1 h1' 'appart form';
-		grid-template-columns: 1fr 1fr;
-		justify-content: center;
-		gap: 3rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	@media (max-width: 800px) {
+		section.appart {
+			display: none;
+		}
+	}
+
+	@media (min-width: 800px) {
+		main {
+			margin: 0 auto;
+			display: grid;
+			grid-template-areas: 'h1 h1' 'appart form';
+			grid-template-columns: 2fr 3fr;
+			justify-content: center;
+            gap: 3rem;
+		}
+
+        h1 + p {
+            display: none;
+        }
 	}
 
 	h1 {
