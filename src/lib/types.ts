@@ -84,6 +84,7 @@ export type Appartment = {
 	longitude: number | null;
 	hasFurniture: boolean | null;
 	hasParking: boolean | null;
+	hasBicycleParking: boolean | null;
 	description: string;
 	travelTimeToN7: {
 		byFoot: number | null;

@@ -62,32 +62,33 @@ model Key {
 }
 
 model Appartment {
-    id             String                   @id @unique @default(cuid())
-    photos         Photo[]
-    rent           Int
-    charges        Int
-    deposit        Int
-    surface        Int
-    kind           AppartmentKind
-    roomsCount     Int
-    availableAt    DateTime
-    createdAt      DateTime                 @default(now())
-    updatedAt      DateTime                 @updatedAt
-    address        String
-    latitude       Float?
-    longitude      Float?
-    hasFurniture   Boolean?
-    hasParking     Boolean?
-    description    String
-    travelTimeToN7 TravelTimeToN7           @relation(fields: [travelTimeId], references: [id])
-    travelTimeId   String
-    nearbyStations PublicTransportStation[]
-    owner          User                     @relation(fields: [ownerId], references: [id])
-    ownerId        String
-    reports        Report[]
-    approved       Boolean                  @default(false)
-    archived       Boolean                  @default(false)
-    history        AppartmentEdit[]
+    id                String                   @id @unique @default(cuid())
+    photos            Photo[]
+    rent              Int
+    charges           Int
+    deposit           Int
+    surface           Int
+    kind              AppartmentKind
+    roomsCount        Int
+    availableAt       DateTime
+    createdAt         DateTime                 @default(now())
+    updatedAt         DateTime                 @updatedAt
+    address           String
+    latitude          Float?
+    longitude         Float?
+    hasFurniture      Boolean?
+    hasParking        Boolean?
+    hasBicycleParking Boolean?
+    description       String
+    travelTimeToN7    TravelTimeToN7           @relation(fields: [travelTimeId], references: [id])
+    travelTimeId      String
+    nearbyStations    PublicTransportStation[]
+    owner             User                     @relation(fields: [ownerId], references: [id])
+    ownerId           String
+    reports           Report[]
+    approved          Boolean                  @default(false)
+    archived          Boolean                  @default(false)
+    history           AppartmentEdit[]
 }
 
 model Photo {
