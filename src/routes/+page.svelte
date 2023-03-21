@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import AppartmentsMap from '$lib/AppartmentsMap.svelte';
 	import ButtonFloating from '$lib/ButtonFloating.svelte';
 	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
@@ -9,40 +10,26 @@
 	import InputNumber from '$lib/InputNumber.svelte';
 	import InputSelectMultiple from '$lib/InputSelectMultiple.svelte';
 	import InputSelectOne from '$lib/InputSelectOne.svelte';
-	import { searchResults } from '$lib/stores';
+	import {
+		searchResults,
+		searchCriteria,
+		searchSortBy,
+		SORT_OPTIONS,
+		searchResultsScrollPosition
+	} from '$lib/stores';
 	import { DISPLAY_APPARTMENT_KIND, type Appartment, type SearchCriteria } from '$lib/types';
 	import { distanceBetween, ENSEEIHT } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-
-	let criteria: SearchCriteria = {
-		bicycleParking: null,
-		furniture: null,
-		maximumRent: undefined,
-		minimumSurface: undefined,
-		parking: null,
-		type: []
-	};
-
-	let sortOptions = ['prix', 'prix/m²', 'surface', "distance à l'n7", 'délai avant libération'];
-	let sortBy = sortOptions[0];
 	let resultsTab = 'list';
 
-	let scroll = 0;
 	onMount(() => {
 		window.addEventListener('scroll', () => {
-			if (resultsTab === 'list') scroll = window.scrollY;
+			if (resultsTab === 'list') $searchResultsScrollPosition = window.scrollY;
 		});
 	});
-	// $: if (window) {
-	// 	if (resultsTab === 'list') {
-	// 		window.scrollTo(0, scroll);
-	// 	} else {
-	// 		window.scrollTo(0, 0);
-	// 	}
-	// }
 
 	let appartments: Appartment[] = [];
 	$: ({ appartments } = data);
@@ -51,13 +38,19 @@
 	$: $searchResults = appartments
 		.filter(
 			(appartment) =>
-				(criteria.furniture === null
+				($searchCriteria.furniture === null
 					? true
-					: appartment.hasFurniture === criteria.furniture) &&
-				(criteria.parking === null ? true : appartment.hasParking === criteria.parking) &&
-				(!criteria.maximumRent || appartment.rent <= criteria.maximumRent) &&
-				(!criteria.minimumSurface || appartment.surface >= criteria.minimumSurface) &&
-				(!criteria.type.length || criteria.type.includes(appartment.kind))
+					: appartment.hasFurniture === $searchCriteria.furniture) &&
+				($searchCriteria.parking === null
+					? true
+					: appartment.hasParking === $searchCriteria.parking) &&
+				($searchCriteria.bicycleParking === null
+					? true
+					: appartment.hasBicycleParking === $searchCriteria.bicycleParking) &&
+				(!$searchCriteria.maximumRent || appartment.rent <= $searchCriteria.maximumRent) &&
+				(!$searchCriteria.minimumSurface ||
+					appartment.surface >= $searchCriteria.minimumSurface) &&
+				(!$searchCriteria.type.length || $searchCriteria.type.includes(appartment.kind))
 		)
 		.sort((a, b) => {
 			const quantity = ({
@@ -68,7 +61,7 @@
 				longitude,
 				availableAt
 			}: Appartment) => {
-				switch (sortBy) {
+				switch ($searchSortBy) {
 					case 'prix':
 						return charges + rent;
 					case 'prix/m²':
@@ -100,16 +93,16 @@
 		<form action="?/search">
 			<div class="surface-and-price">
 				<InputField label="Surface minimale">
-					<InputNumber unit="m²" positive bind:value={criteria.minimumSurface} />
+					<InputNumber unit="m²" positive bind:value={$searchCriteria.minimumSurface} />
 				</InputField>
 				<InputField label="Loyer maximum">
-					<InputNumber unit="€" positive bind:value={criteria.maximumRent} />
+					<InputNumber unit="€" positive bind:value={$searchCriteria.maximumRent} />
 				</InputField>
 			</div>
 			<InputField label="Type de logement">
 				<InputSelectMultiple
 					options={DISPLAY_APPARTMENT_KIND}
-					bind:selection={criteria.type}
+					bind:selection={$searchCriteria.type}
 				/>
 			</InputField>
 			<InputField label="Aspects">
@@ -117,17 +110,17 @@
 					<InputCheckbox
 						labelNull="Peu importe"
 						label="Meublé"
-						bind:value={criteria.furniture}
+						bind:value={$searchCriteria.furniture}
 					/>
 					<InputCheckbox
 						labelNull="Peu importe"
 						label="Parking"
-						bind:value={criteria.parking}
+						bind:value={$searchCriteria.parking}
 					/>
 					<InputCheckbox
 						labelNull="Peu importe"
 						label="Parking vélo"
-						bind:value={criteria.bicycleParking}
+						bind:value={$searchCriteria.bicycleParking}
 					/>
 				</div>
 			</InputField>
@@ -142,7 +135,7 @@
 		{#if resultsTab === 'list'}
 			<div class="sort">
 				<InputField label="Trier par">
-					<InputSelectOne options={sortOptions} bind:value={sortBy} />
+					<InputSelectOne options={SORT_OPTIONS} bind:value={$searchSortBy} />
 				</InputField>
 			</div>
 			<ul class="results">
@@ -159,12 +152,26 @@
 		{/if}
 		<div class="goto-map">
 			{#if resultsTab === 'list'}
-				<ButtonFloating icon="map" on:click={() => (resultsTab = 'map')}
-					>Voir sur la carte</ButtonFloating
+				<ButtonFloating
+					icon="map"
+					on:click={() => {
+						resultsTab = 'map';
+						console.log(`scrolling to top of map`);
+						window.scrollTo({
+							top: document.getElementById('map')?.scrollTop
+						});
+					}}>Voir sur la carte</ButtonFloating
 				>
 			{:else}
-				<ButtonFloating icon="back" on:click={() => (resultsTab = 'list')}
-					>Retour à la liste</ButtonFloating
+				<ButtonFloating
+					icon="back"
+					on:click={() => {
+						resultsTab = 'list';
+						console.log(`scrolling to ${$searchResultsScrollPosition}`);
+						window.scrollTo({
+							top: $searchResultsScrollPosition
+						});
+					}}>Retour à la liste</ButtonFloating
 				>
 			{/if}
 		</div>
