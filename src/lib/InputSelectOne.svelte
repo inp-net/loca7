@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let value: string | null = null;
-	export let options: string[] | Record<string, string> = {};
+	export let options: string[] | Record<string, string> | readonly string[] = {};
 	export let name: string | undefined = undefined;
 	export let required: boolean = false;
 	export let showEmptyErrors: boolean = true;
