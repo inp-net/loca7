@@ -7,7 +7,7 @@ import {
 	TADColorsByLine,
 	tramColorsByLine
 } from './publicTransportColors';
-import { ENSEEIHT } from './utils';
+import { ENSEEIHT, lowerFirstChar } from './utils';
 
 export type AppartmentKind =
 	| 'chambre'
@@ -261,10 +261,30 @@ export function appartmentAccessible(
 	return false;
 }
 
-export function appartmentTitle(appartment: Appartment): string {
-	return `${appartment.kind == 'autre' ? 'Bien' : DISPLAY_APPARTMENT_KIND[appartment.kind]} de ${
-		appartment.surface
-	}m² à ${appartment.rent}€/mois`;
+export function appartmentTitle(appartment: Appartment, insideSentence = false): string {
+	const lowercaseDisplayAppartmentKind = Object.fromEntries(
+		Object.entries(DISPLAY_APPARTMENT_KIND).map(([key, value]) => {
+			switch (key) {
+				case 't1':
+				case 't1bis':
+				case 't2':
+				case 't3plus':
+					return [key, value];
+
+				default:
+					return [key, lowerFirstChar(value)];
+			}
+		})
+	);
+	return `${
+		appartment.kind == 'autre'
+			? insideSentence
+				? 'bien'
+				: 'Bien'
+			: (insideSentence ? lowercaseDisplayAppartmentKind : DISPLAY_APPARTMENT_KIND)[
+					appartment.kind
+			  ]
+	} de ${appartment.surface}m² à ${appartment.rent}€/mois`;
 }
 
 export const tristateCheckboxToBoolean = (value: string) => {

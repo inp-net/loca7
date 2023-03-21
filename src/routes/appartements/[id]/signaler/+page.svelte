@@ -10,10 +10,14 @@
 	export let data: PageData;
 </script>
 
+<svelte:head>
+	<title>Loca7 · Signaler l'annonce “{appartmentTitle(data.appartment, true)}”</title>
+</svelte:head>
+
 <main>
 	<h1>Signaler une annonce</h1>
 
-	<p>Vous signalez l'annonce <em>{appartmentTitle(data.appartment)}</em></p>
+	<p>Vous signalez l'annonce <em>{appartmentTitle(data.appartment, true)}</em></p>
 
 	<section class="appart">
 		<CardAppartment {...data.appartment} />
@@ -63,12 +67,12 @@
 			grid-template-areas: 'h1 h1' 'appart form';
 			grid-template-columns: 2fr 3fr;
 			justify-content: center;
-            gap: 3rem;
+			gap: 3rem;
 		}
 
-        h1 + p {
-            display: none;
-        }
+		h1 + p {
+			display: none;
+		}
 	}
 
 	h1 {

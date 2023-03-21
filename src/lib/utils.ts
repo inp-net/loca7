@@ -167,3 +167,7 @@ export function hexToHsl(hex: `#${string}`): {
 		lightness: l
 	};
 }
+
+export function lowerFirstChar(str: string): string {
+	return str.charAt(0).toLowerCase() + str.slice(1);
+}
