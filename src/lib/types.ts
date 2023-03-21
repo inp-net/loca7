@@ -69,6 +69,7 @@ export type Photo = {
 export type Appartment = {
 	photos: Photo[];
 	id: string;
+	number: number;
 	rent: number;
 	charges: number;
 	deposit: number;

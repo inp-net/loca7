@@ -257,6 +257,7 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 	const appartment = await prisma.appartment.create({
 		data: {
 			address: appart.adresse,
+			number: optionalNumberStr(appart.id) || undefined,
 			availableAt: new Date(appart.free_date),
 			charges: optionalNumberStr(appart.montant_charges) || 0,
 			deposit: optionalNumberStr(appart.montant_caution) || 0,

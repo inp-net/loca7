@@ -9,6 +9,7 @@
 	const emit = createEventDispatcher();
 
 	export let id: string;
+	export let number: number;
 	export let owner: { name: string };
 	export let availableAt: Date;
 	export let reports: any[];
@@ -44,7 +45,7 @@
 			if (e.key === 'Enter') open = !open;
 		}}
 	>
-		<span class="data">{id}</span>
+		<span class="data">#{number}</span>
 		<span class="data">{address}</span>
 		<span class="data reports">{reports.length}</span>
 	</div>
@@ -102,13 +103,15 @@
 	li .row-1,
 	li .row-2 {
 		cursor: pointer;
+		align-items: start;
+		justify-content: start;
 	}
 	li .row-1 {
-		grid-template-columns: 2fr 7fr 1fr;
+		grid-template-columns: 2fr 9fr 1fr;
 		align-items: end;
 	}
 	li .row-2 {
-		grid-template-columns: 2fr 5fr 3fr;
+		grid-template-columns: 2fr 7fr 3fr;
 	}
 	li.reported {
 		background-color: var(--rose);
@@ -134,9 +137,9 @@
 		justify-content: center;
 		flex-wrap: wrap;
 	}
-    .actions {
-        color: var(--fg);
-    }
+	.actions {
+		color: var(--fg);
+	}
 	.collapse {
 		background: none;
 		border: none;
@@ -181,7 +184,7 @@
 		li {
 			display: grid;
 			grid-template-areas: 'photo row-1 actions' 'photo row-2 actions';
-			/* grid-template-columns: 1fr 1fr; */
+			grid-template-columns: 5rem 9fr max-content;
 			column-gap: 2rem;
 		}
 		li .row-1,

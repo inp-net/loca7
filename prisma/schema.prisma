@@ -63,6 +63,7 @@ model Key {
 
 model Appartment {
     id                String                   @id @unique @default(cuid())
+    number            Int                      @unique @default(autoincrement())
     photos            Photo[]
     rent              Int
     charges           Int
