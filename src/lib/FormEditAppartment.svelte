@@ -137,6 +137,8 @@
 			name="address"
 			id="address"
 			bind:value={appartment.address}
+			bind:latitude={appartment.latitude}
+			bind:longitude={appartment.longitude}
 			initial={initial.address}
 			required
 		/>
