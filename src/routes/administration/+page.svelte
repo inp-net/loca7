@@ -2,6 +2,8 @@
 	import AppartmentAdminItem from '$lib/AppartmentAdminItem.svelte';
 	import type { PageData } from './$types';
 	import type { Appartment } from '$lib/types';
+	import InputSelectMultiple from '$lib/InputSelectMultiple.svelte';
+	import InputField from '$lib/InputField.svelte';
 
 	export let data: PageData;
 	type Status = 'pending' | 'approved' | 'archived';
@@ -9,6 +11,11 @@
 	$: appartments = data.appartments.sort(
 		(a, b) => a.availableAt.valueOf() - b.availableAt.valueOf()
 	);
+
+	$: yearsAvailable = [
+		...new Set(appartments.map((a) => a.updatedAt.getFullYear().toString()))
+	].sort();
+	let years: string[] = [];
 
 	function status(
 		eagerStatus: Record<string, Status>,
@@ -35,14 +42,17 @@
 				status(eagerStatus, a) === 'pending' ||
 				(status(eagerStatus, a) !== 'archived' && a.history.some((h) => !h.applied))
 		)
+		.filter((a) => years.length === 0 || years.includes(a.updatedAt.getFullYear().toString()))
 		.sort(byReportsThenUpdatedAt)
 		.reverse();
 	$: appartmentsArchived = appartments
 		.filter((a) => status(eagerStatus, a) === 'archived')
+		.filter((a) => years.length === 0 || years.includes(a.updatedAt.getFullYear().toString()))
 		.sort(byReportsThenUpdatedAt)
 		.reverse();
 	$: appartmentsOnline = appartments
 		.filter((a) => status(eagerStatus, a) === 'approved' && a.history.every((h) => h.applied))
+		.filter((a) => years.length === 0 || years.includes(a.updatedAt.getFullYear().toString()))
 		.sort(byReportsThenUpdatedAt)
 		.reverse();
 </script>
@@ -52,6 +62,14 @@
 </svelte:head>
 
 <main>
+	<h1>Administration</h1>
+
+	<section class="filters">
+		<InputField label="Dernière modification">
+			<InputSelectMultiple options={yearsAvailable} bind:selection={years} />
+		</InputField>
+	</section>
+
 	<h2>{appartmentsPending.length || ''} en attente</h2>
 
 	<ul>
@@ -107,6 +125,17 @@
 	main {
 		margin: 0 auto;
 		max-width: 1200px;
+	}
+
+	section.filters {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	h1 {
+		text-align: center;
+		margin-bottom: 3rem;
 	}
 
 	li.empty {
