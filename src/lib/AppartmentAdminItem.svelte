@@ -35,7 +35,7 @@
 </script>
 
 <li class:reported={reports.length > 0} class:approved>
-	<img src={photos.length ? photoURL(photos[0]) : ''} class="photo" />
+	<img src={photos.length > 0 ? photoURL(photos[0]) : '/missing-photo.png'} class="photo" />
 	<div
 		class="row-1"
 		on:click={() => {

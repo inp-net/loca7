@@ -123,7 +123,7 @@
 	{/if}
 
 	<section class="carousel">
-		<CarouselImages contain images={appart.photos.map(photoURL)} />
+		<CarouselImages contain images={appart.photos.length > 1 ? appart.photos.map(photoURL) : ["/missing-photo.png"]} />
 	</section>
 
 	<div class="side-by-side">
