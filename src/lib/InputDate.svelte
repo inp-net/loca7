@@ -11,8 +11,8 @@
 	export let required: boolean = false;
 	export let showEmptyErrors: boolean = true;
 
-	let dateString: string = value ? value.toISOString().split('T')[0] : '';
-	$: value = dateString ? new Date(dateString) : null;
+	let dateString: string;
+	$: dateString = value ? value.toISOString().split('T')[0] : '';
 
 	let initialString: string;
 	$: initialString = initial ? initial.toISOString().split('T')[0] : '';
@@ -38,7 +38,10 @@
 <BaseInputText
 	{placeholder}
 	type="date"
-	bind:value={dateString}
+	value={dateString}
+	on:input={(e) => {
+		value = new Date(e.target.value);
+	}}
 	{id}
 	{name}
 	initial={initialString}
