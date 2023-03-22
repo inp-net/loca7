@@ -94,10 +94,8 @@
 				<ButtonSecondary href="/account" icon="user">Mon compte</ButtonSecondary>
 			</li>
 			<li>
-				<form method="post">
-					<ButtonSecondary formaction="/logout" icon="logout"
-						>Se déconnecter</ButtonSecondary
-					>
+				<form method="post" action="/logout">
+					<ButtonSecondary submits icon="logout">Se déconnecter</ButtonSecondary>
 				</form>
 			</li>
 		{:else}
