@@ -14,7 +14,7 @@
 
 <svelte:element
 	this={href ? 'a' : 'button'}
-	type={submits ? 'submit' : undefined}
+	type={submits ? 'submit' : 'button'}
 	class="button-secondary typo-paragraph"
 	class:dangerous
 	{href}
