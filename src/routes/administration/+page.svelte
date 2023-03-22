@@ -17,6 +17,8 @@
 	].sort();
 	let years: string[] = [];
 
+	let openAppartmentId: string = '';
+
 	function status(
 		eagerStatus: Record<string, Status>,
 		appartment: {
@@ -80,6 +82,9 @@
 				on:approuver={() => {
 					eagerStatus[appartment.id] = 'approved';
 				}}
+				open={openAppartmentId === appartment.id}
+				on:close={() => (openAppartmentId = '')}
+				on:open={() => (openAppartmentId = appartment.id)}
 			/>
 		{:else}
 			<li class="empty">Aucune annonce.</li>
@@ -97,6 +102,9 @@
 				on:archiver={() => {
 					eagerStatus[appartment.id] = 'archived';
 				}}
+				open={openAppartmentId === appartment.id}
+				on:close={() => (openAppartmentId = '')}
+				on:open={() => (openAppartmentId = appartment.id)}
 			/>
 		{:else}
 			<li class="empty">Aucune annonce.</li>
@@ -114,6 +122,9 @@
 				on:publier={() => {
 					eagerStatus[appartment.id] = 'approved';
 				}}
+				open={openAppartmentId === appartment.id}
+				on:close={() => (openAppartmentId = '')}
+				on:open={() => (openAppartmentId = appartment.id)}
 			/>
 		{:else}
 			<li class="empty">Aucune annonce.</li>

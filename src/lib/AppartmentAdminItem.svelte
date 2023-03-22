@@ -20,7 +20,7 @@
 	export let archived: boolean;
 	export let history: AppartmentEdit[];
 	export let photos: Photo[];
-	let open: boolean = false;
+	export let open: boolean = false;
 	let error: string = '';
 
 	const action = (name: 'archiver' | 'publier' | 'approuver') => async () => {
@@ -31,6 +31,7 @@
 			addToast('error', (await response.json())?.message || 'Une erreur est survenue');
 		}
 		open = false;
+		emit('close');
 	};
 </script>
 
@@ -40,9 +41,13 @@
 		class="row-1"
 		on:click={() => {
 			open = !open;
+			emit(open ? 'open' : 'close');
 		}}
 		on:keypress={(e) => {
-			if (e.key === 'Enter') open = !open;
+			if (e.key === 'Enter') {
+				open = !open;
+				emit(open ? 'open' : 'close');
+			}
 		}}
 	>
 		<span class="data">#{number}</span>
@@ -53,9 +58,13 @@
 		class="row-2"
 		on:click={() => {
 			open = !open;
+			emit(open ? 'open' : 'close');
 		}}
 		on:keypress={(e) => {
-			if (e.key === 'Enter') open = !open;
+			if (e.key === 'Enter') {
+				open = !open;
+				emit(open ? 'open' : 'close');
+			}
 		}}
 	>
 		<span class="data">{rent}€+{charges}€</span>
@@ -83,7 +92,14 @@
 		<ButtonSecondary href="/appartements/{id}" icon="add">Voir</ButtonSecondary>
 		<ButtonSecondary href="/appartements/{id}/supprimer" icon="delete">Suppr.</ButtonSecondary>
 	</div>
-	<button class:open class="collapse" on:click={() => (open = false)}>
+	<button
+		class:open
+		class="collapse"
+		on:click={() => {
+			open = false;
+			emit('close');
+		}}
+	>
 		<Icon name="next" />
 	</button>
 </li>
