@@ -65,5 +65,7 @@
 
 	.editor {
 		padding: 0.75rem;
+		height: 400px;
+		overflow: scroll;
 	}
 </style>
