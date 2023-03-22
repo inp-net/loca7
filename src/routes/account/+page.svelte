@@ -31,7 +31,9 @@
 			<InputPhone name="phone" bind:value={user.phone} />
 		</InputField>
 
-		<ButtonSecondary submits icon="checkmark">Enregistrer</ButtonSecondary>
+		<section class="submit">
+			<ButtonSecondary submits icon="checkmark">Enregistrer</ButtonSecondary>
+		</section>
 	</form>
 
 	<form method="post" action="?/changePassword" class="password">
@@ -54,7 +56,9 @@
 			label="Nouveau mot de passe"
 			feedback
 		/>
-		<ButtonSecondary submits icon="checkmark">Enregistrer</ButtonSecondary>
+		<section class="submit">
+			<ButtonSecondary submits icon="checkmark">Enregistrer</ButtonSecondary>
+		</section>
 	</form>
 </main>
 
@@ -78,5 +82,10 @@
 		flex-direction: column;
 		justify-content: center;
 		gap: 1rem;
+	}
+
+	section.submit {
+		display: flex;
+		justify-content: center;
 	}
 </style>
