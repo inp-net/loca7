@@ -73,9 +73,9 @@
 			linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 20%);
 	}
 
-    .single-image .image-gradient-overlay {
-        display: none;
-    }
+	.single-image .image-gradient-overlay {
+		display: none;
+	}
 
 	img {
 		position: absolute;

@@ -116,7 +116,7 @@
 				<button class="drag" use:tooltip={'Glissez pour réordonner les images'}>
 					<Icon name="drag-handle" />
 				</button>
-                <span class="position">{index + 1}</span>
+				<span class="position">{index + 1}</span>
 				<img src={previewURLs[photo.filename]} />
 				<span class="name typo-paragraph">
 					{photo.filename}
@@ -200,11 +200,11 @@
 		margin-bottom: 1rem;
 	}
 
-    .item .position {
-        font-size: 1.5rem;
-        font-weight: bold;
-        text-align: center;
-    }
+	.item .position {
+		font-size: 1.5rem;
+		font-weight: bold;
+		text-align: center;
+	}
 
 	.item span {
 		overflow: hidden;

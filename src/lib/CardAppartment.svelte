@@ -40,7 +40,10 @@
 
 <article class:editable class:small>
 	<section class="photos">
-		<CarouselImages cover images={photos.length > 0 ? photos?.map(photoURL) : ["/missing-photo.png"]} />
+		<CarouselImages
+			cover
+			images={photos.length > 0 ? photos?.map(photoURL) : ['/missing-photo.png']}
+		/>
 	</section>
 	<svelte:element
 		this={editable ? 'div' : 'a'}
