@@ -92,7 +92,7 @@
 			<li class="photos">
 				<span class="label">Photos</span>
 				<div class="before">
-					{#each current.photos as photo}
+					{#each current.photos.sort((a, b) => a.position - b.position) as photo (photo.position)}
 						<img src={photoURL(photo)} />
 					{/each}
 				</div>
@@ -100,7 +100,7 @@
 					<Icon name="next" />
 				</div>
 				<div class="after">
-					{#each edit.photos as photo}
+					{#each edit.photos.sort((a, b) => a.position - b.position) as photo (photo.position)}
 						<img src={photoURL(photo)} />
 					{/each}
 				</div>
