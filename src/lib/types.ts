@@ -286,7 +286,7 @@ export function appartmentTitle(appartment: Appartment, insideSentence = false):
 			: (insideSentence ? lowercaseDisplayAppartmentKind : DISPLAY_APPARTMENT_KIND)[
 					appartment.kind
 			  ]
-	} de ${appartment.surface}m² à ${appartment.rent}€/mois`;
+	} de ${appartment.surface}m² à ${appartment.rent + appartment.charges}€/mois`;
 }
 
 export const tristateCheckboxToBoolean = (value: string) => {
