@@ -123,7 +123,10 @@
 	{/if}
 
 	<section class="carousel">
-		<CarouselImages contain images={appart.photos.length > 1 ? appart.photos.map(photoURL) : ["/missing-photo.png"]} />
+		<CarouselImages
+			contain
+			images={appart.photos.length > 1 ? appart.photos.map(photoURL) : ['/missing-photo.png']}
+		/>
 	</section>
 
 	<div class="side-by-side">
@@ -225,9 +228,6 @@
 					</div>
 				{/if}
 			</section>
-		</div>
-
-		<div class="column">
 			<section class="aspects">
 				<!-- <h2>Caractéristiques</h2> -->
 				<ul>
@@ -264,6 +264,9 @@
 					{/if}
 				</ul>
 			</section>
+		</div>
+
+		<div class="column">
 			{#if xss(appart.description)}
 				<section class="description">
 					<h2>Description</h2>
@@ -534,6 +537,10 @@
 
 	section.description {
 		grid-area: right;
+	}
+
+	section.description :global(p) {
+		font-size: 1.05em;
 	}
 
 	section h2 {
