@@ -298,3 +298,44 @@ export const tristateCheckboxToBoolean = (value: string) => {
 		}[value] ?? null
 	);
 };
+
+/**
+ * Returns the edit that was made just before the given edit, based on the appliedAt date. Only works for edits that have been applied.
+ */
+export function editBefore(history: AppartmentEdit[], edit: AppartmentEdit) {
+	return history.filter((e) => e.appliedAt !== null).find((e) => e.appliedAt < edit.appliedAt);
+}
+
+export const EMPTY_APPARTMENT: Appartment = {
+	id: '',
+	address: '',
+	availableAt: undefined,
+	createdAt: undefined,
+	charges: undefined,
+	deposit: undefined,
+	description: '',
+	hasFurniture: null,
+	hasParking: null,
+	kind: '',
+	archived: false,
+	approved: false,
+	photos: [],
+	latitude: undefined,
+	longitude: undefined,
+	nearbyStations: [],
+	owner: {
+		name: '',
+		id: '',
+		phone: '',
+		email: ''
+	},
+	rent: undefined,
+	roomsCount: 0,
+	surface: undefined,
+	travelTimeToN7: {
+		byBike: null,
+		byFoot: null,
+		byPublicTransport: null
+	},
+	reports: []
+};

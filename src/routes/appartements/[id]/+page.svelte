@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { appartmentTitle, type Report } from '$lib/types';
+	import { appartmentTitle, editBefore, EMPTY_APPARTMENT, type Report } from '$lib/types';
 	import {
 		durationDisplay,
 		distanceDisplay,
@@ -396,17 +396,20 @@
 					<li class="empty">Aucune modification.</li>
 				{/each}
 			</ul>
-			<!-- TODO compare againt parent modification for applied modifications -->
-			<!-- <h3>Appliquées</h3>
+			<h3>Appliquées</h3>
 			<ul>
 				{#each appart.history
 					.filter((a) => a.applied)
 					.sort((a, b) => -(a.createdAt.valueOf() - b.createdAt.valueOf())) as edit (edit.id)}
-					<AppartmentEditItem {edit} current={appart} />
+					<AppartmentEditItem
+						{user}
+						{edit}
+						current={editBefore(appart.history, edit) ?? EMPTY_APPARTMENT}
+					/>
 				{:else}
 					<li class="empty">Aucune modification.</li>
 				{/each}
-			</ul> -->
+			</ul>
 		</section>
 	{/if}
 	{#if appart?.latitude && appart?.longitude}
