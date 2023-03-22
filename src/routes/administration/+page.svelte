@@ -1,6 +1,7 @@
 <script lang="ts">
 	import AppartmentAdminItem from '$lib/AppartmentAdminItem.svelte';
 	import type { PageData } from './$types';
+	import type { Appartment } from '$lib/types';
 
 	export let data: PageData;
 	type Status = 'pending' | 'approved' | 'archived';
@@ -23,18 +24,27 @@
 		);
 	}
 
+	const byReportsThenUpdatedAt = (a: Appartment, b: Appartment) =>
+		a.reports.length === b.reports.length
+			? a.updatedAt.valueOf() - b.updatedAt.valueOf()
+			: a.reports.length - b.reports.length;
+
 	$: appartmentsPending = appartments
 		.filter(
 			(a) =>
 				status(eagerStatus, a) === 'pending' ||
 				(status(eagerStatus, a) !== 'archived' && a.history.some((h) => !h.applied))
 		)
-		.sort((a, b) => a.reports.length - b.reports.length)
+		.sort(byReportsThenUpdatedAt)
 		.reverse();
-	$: appartmentsArchived = appartments.filter((a) => status(eagerStatus, a) === 'archived');
-	$: appartmentsOnline = appartments.filter(
-		(a) => status(eagerStatus, a) === 'approved' && a.history.every((h) => h.applied)
-	);
+	$: appartmentsArchived = appartments
+		.filter((a) => status(eagerStatus, a) === 'archived')
+		.sort(byReportsThenUpdatedAt)
+		.reverse();
+	$: appartmentsOnline = appartments
+		.filter((a) => status(eagerStatus, a) === 'approved' && a.history.every((h) => h.applied))
+		.sort(byReportsThenUpdatedAt)
+		.reverse();
 </script>
 
 <svelte:head>

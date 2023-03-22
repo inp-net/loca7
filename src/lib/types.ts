@@ -78,6 +78,7 @@ export type Appartment = {
 	roomsCount: number;
 	availableAt: Date;
 	createdAt: Date;
+	updatedAt: Date;
 	address: string;
 	approved: boolean;
 	archived: boolean;

@@ -11,7 +11,7 @@
 	export let id: string;
 	export let number: number;
 	export let owner: { name: string };
-	export let availableAt: Date;
+	export let updatedAt: Date;
 	export let reports: any[];
 	export let approved: boolean;
 	export let address: string;
@@ -61,7 +61,7 @@
 		<span class="data">{rent}€+{charges}€</span>
 		<span class="data">{owner.name}</span>
 		<span class="data"
-			>{Intl.DateTimeFormat('fr-FR', { dateStyle: 'short' }).format(availableAt)}</span
+			>{Intl.DateTimeFormat('fr-FR', { dateStyle: 'short' }).format(updatedAt)}</span
 		>
 	</div>
 	<div class="actions" class:open>
