@@ -184,6 +184,9 @@
 </form>
 
 <style>
+	form {
+		max-width: 800px;
+	}
 	.side-by-side {
 		display: flex;
 		gap: 1rem;
