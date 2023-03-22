@@ -15,7 +15,11 @@
 	$: yearsAvailable = [
 		...new Set(appartments.map((a) => a.updatedAt.getFullYear().toString()))
 	].sort();
-	let years: string[] = [];
+
+	let years: string[] =
+		new Date().getMonth() >= 9
+			? [new Date().getFullYear().toString()]
+			: [new Date().getFullYear().toString(), (new Date().getFullYear() - 1).toString()];
 
 	let openAppartmentId: string = '';
 
