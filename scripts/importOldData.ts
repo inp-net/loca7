@@ -350,7 +350,7 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 async function importData(ghost: User, appartments: AppartmentOld[], photos: PhotoOld[]) {
 	const userPasswords: Record<string, null> = {};
 	const appartmentsByOwner = appartments.reduce((acc, appart) => {
-		const key = appart.contact_mail || appart.uuid_proprietaire;
+		const key = appart.contact_mail?.trim().toLocaleLowerCase() || appart.uuid_proprietaire;
 		if (!acc[key]) acc[key] = [];
 		acc[key].push(appart);
 		return acc;
@@ -364,7 +364,7 @@ async function importData(ghost: User, appartments: AppartmentOld[], photos: Pho
 		const appart = apparts[0];
 		const attributes = {
 			email:
-				appart.contact_mail?.trim() ||
+				appart.contact_mail?.trim().toLocaleLowerCase() ||
 				`ghost.${appart.uuid_proprietaire}@loca7.enseeiht.fr`,
 			name: (appart.contact_prenom + ' ' + appart.contact_nom).trim(),
 			phone: (appart.contact_port || appart.contact_tel).trim()
