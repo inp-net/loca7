@@ -22,27 +22,22 @@
 
 	onMount(() => {
 		editor.setRootElement(domEditor);
+		registerRichText(editor);
 		editor.update(() => {
-			if (!browser) return;
-			lexicalHTML['$generateNodesFromDOM'](
+			const root = lexical['$getRoot']();
+			let nodes = lexicalHTML['$generateNodesFromDOM'](
 				editor,
 				new DOMParser().parseFromString(value, 'text/html')
 			);
+			nodes.forEach((node) => {
+				root.append(node);
+			});
 		});
-		registerRichText(editor);
 		editor.registerUpdateListener(({ editorState }) => {
 			editorState.read(() => {
 				value = lexicalHTML['$generateHtmlFromNodes'](editor, null);
 			});
 		});
-	});
-
-	$: editor.update(() => {
-		if (!browser) return;
-		lexicalHTML['$generateNodesFromDOM'](
-			editor,
-			new DOMParser().parseFromString(value, 'text/html')
-		);
 	});
 
 	let domEditor: HTMLElement;
