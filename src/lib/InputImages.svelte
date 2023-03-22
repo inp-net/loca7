@@ -111,11 +111,12 @@
 			Glissez-déposer vos fichiers ici<br />Ou cliquez dans cette zone
 		</p>
 	{:else}
-		<SortableList bind:list={value} key="filename" let:item={photo}>
+		<SortableList bind:list={value} key="filename" let:item={photo} let:index>
 			<li class="item">
 				<button class="drag" use:tooltip={'Glissez pour réordonner les images'}>
 					<Icon name="drag-handle" />
 				</button>
+                <span class="position">{index + 1}</span>
 				<img src={previewURLs[photo.filename]} />
 				<span class="name typo-paragraph">
 					{photo.filename}
@@ -191,13 +192,19 @@
 
 	.item {
 		display: grid;
-		grid-template-columns: 2rem 5rem auto 3rem;
+		grid-template-columns: 2rem 2rem 5rem auto 3rem;
 		align-items: center;
 		gap: 0.5rem;
 		position: relative;
 		z-index: 10;
 		margin-bottom: 1rem;
 	}
+
+    .item .position {
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+    }
 
 	.item span {
 		overflow: hidden;
