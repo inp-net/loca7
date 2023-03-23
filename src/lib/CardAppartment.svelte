@@ -32,6 +32,7 @@
 	export let longitude: number | null;
 	export let hasFurniture: boolean | null;
 	export let hasParking: boolean | null;
+	export let hasBicycleParking: boolean | null;
 	export let editable: boolean = false;
 	export let small: boolean = false;
 
@@ -97,14 +98,10 @@
 				</p>
 			</section>
 			<section class="aspects">
-				<p class="furniture">
-					<span class="icon"><Icon name="furniture" cancel={!hasFurniture} /></span>
-					{hasFurniture ? 'Meublé' : 'Non meublé'}
-				</p>
-				<p class="parking">
-					<span class="icon"><Icon name="parking" cancel={!hasParking} /></span>
-					{hasParking ? 'Place de parking' : 'Pas de place de parking'}
-				</p>
+					<p class="bicycle-parking">
+						<span class="icon"><Icon name="bike" cancel={!hasBicycleParking} /></span>
+						{hasBicycleParking ? 'Place pour vélo' : 'Pas de place pour vélo'}
+					</p>
 			</section>
 		{/if}
 		{#if editable}

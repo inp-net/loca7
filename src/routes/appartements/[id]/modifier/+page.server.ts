@@ -74,6 +74,7 @@ export const actions: Actions = {
 			addressLatitude,
 			hasFurniture,
 			hasParking,
+			hasBicycleParking,
 			addressLongitude,
 			description
 		} = formData;
@@ -111,7 +112,8 @@ export const actions: Actions = {
 					}
 				},
 				hasFurniture: tristateCheckboxToBoolean(hasFurniture),
-				hasParking: tristateCheckboxToBoolean(hasParking)
+				hasParking: tristateCheckboxToBoolean(hasParking),
+				hasBicycleParking: tristateCheckboxToBoolean(hasBicycleParking)
 			},
 			include: {
 				photos: true

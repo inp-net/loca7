@@ -117,26 +117,27 @@ enum AppartmentKind {
 }
 
 model AppartmentEdit {
-    id           String         @id @unique @default(cuid())
-    photos       Photo[]
-    rent         Int
-    charges      Int
-    deposit      Int
-    surface      Int
-    kind         AppartmentKind
-    roomsCount   Int
-    availableAt  DateTime
-    address      String
-    latitude     Float?
-    longitude    Float?
-    hasFurniture Boolean?
-    hasParking   Boolean?
-    description  String
-    applied      Boolean        @default(false)
-    createdAt    DateTime       @default(now())
-    appliedAt    DateTime?
-    appartment   Appartment     @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
-    appartmentId String
+    id                String         @id @unique @default(cuid())
+    photos            Photo[]
+    rent              Int
+    charges           Int
+    deposit           Int
+    surface           Int
+    kind              AppartmentKind
+    roomsCount        Int
+    availableAt       DateTime
+    address           String
+    latitude          Float?
+    longitude         Float?
+    hasFurniture      Boolean?
+    hasParking        Boolean?
+    hasBicycleParking Boolean?
+    description       String
+    applied           Boolean        @default(false)
+    createdAt         DateTime       @default(now())
+    appliedAt         DateTime?
+    appartment        Appartment     @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
+    appartmentId      String
 }
 
 model Report {

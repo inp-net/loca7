@@ -231,19 +231,14 @@
 			<section class="aspects">
 				<!-- <h2>Caractéristiques</h2> -->
 				<ul>
-					{#if appart.hasFurniture}
+					{#if appart.hasFurniture !== null}
 						<li class="aspect">
 							<div class="icon">
-								<Icon name="furniture" />
+								<Icon
+									name={appart.hasFurniture ? 'furniture' : 'furniture-cancel'}
+								/>
 							</div>
 							<p class="typo-paragraph">Meublé</p>
-						</li>
-					{:else}
-						<li class="aspect">
-							<div class="icon">
-								<Icon name="furniture-cancel" />
-							</div>
-							<p class="typo-paragraph">Non-meublé</p>
 						</li>
 					{/if}
 					{#if appart.hasParking}
@@ -260,6 +255,17 @@
 								{appart.roomsCount}
 							</span>
 							<p class="typo-paragraph">Chambres</p>
+						</li>
+					{/if}
+					{#if appart.hasBicycleParking}
+						<li
+							class="aspect"
+							use:tooltip={'Local/parking à vélo ou assez de place pour le ranger'}
+						>
+							<span class="icon">
+								<Icon name="bike" />
+							</span>
+							<p class="typo-paragraph">Place pour vélo</p>
 						</li>
 					{/if}
 				</ul>

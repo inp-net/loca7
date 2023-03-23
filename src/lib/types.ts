@@ -118,6 +118,7 @@ export type AppartmentEdit = {
 	longitude: number | null;
 	hasFurniture: boolean | null;
 	hasParking: boolean | null;
+	hasBicycleParking: boolean | null;
 	description: string;
 	applied: boolean;
 	createdAt: Date;

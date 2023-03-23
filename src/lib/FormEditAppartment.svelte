@@ -27,6 +27,7 @@
 		description: '',
 		hasFurniture: null,
 		hasParking: null,
+		hasBicycleParking: null,
 		kind: undefined,
 		images: [],
 		rent: undefined,
@@ -152,7 +153,11 @@
 				label="Meublé"
 			/>
 			<InputCheckbox name="hasParking" bind:value={appartment.hasParking} label="Parking" />
-			<!-- TODO place pour vélo -->
+			<InputCheckbox
+				name="hasBicycleParking"
+				bind:value={appartment.hasBicycleParking}
+				label="Place pour vélo"
+			/>
 		</div>
 	</InputField>
 

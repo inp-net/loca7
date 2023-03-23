@@ -20,6 +20,7 @@
 		deposit: 'Caution',
 		hasFurniture: 'Meublé',
 		hasParking: 'Parking',
+		hasBicycleParking: 'Place pour vélo',
 		kind: 'Type',
 		roomsCount: 'Nombre de chambres',
 		surface: 'Surface',

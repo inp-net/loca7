@@ -71,6 +71,7 @@ export const actions: Actions = {
 				description: edit.description,
 				hasFurniture: edit.hasFurniture,
 				hasParking: edit.hasParking,
+				hasBicycleParking: edit.hasBicycleParking,
 				history: undefined,
 				id: undefined,
 				kind: edit.kind,

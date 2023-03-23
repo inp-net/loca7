@@ -90,6 +90,9 @@ export const actions: Actions = {
 					: null,
 				hasParking: Object.keys(formData).includes('hasParking')
 					? tristateCheckboxToBoolean(formData.hasParking)
+					: null,
+				hasBicycleParking: Object.keys(formData).includes('hasBicycleParking')
+					? tristateCheckboxToBoolean(formData.hasParking)
 					: null
 			};
 			if (latitude && longitude) {
