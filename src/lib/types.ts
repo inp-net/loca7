@@ -142,6 +142,7 @@ export type User = {
 	email: string;
 	emailIsValidated: boolean;
 	admin: boolean;
+	god: boolean;
 };
 
 export type SearchCriteria = {

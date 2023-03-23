@@ -16,7 +16,14 @@
 </script>
 
 <main>
-	<h1>Mon compte</h1>
+	<section class="header">
+		<h1>Mon compte</h1>
+		{#if user.admin || user.god}
+			<p class="status">
+				Vous êtes {#if user.god}Dieu{:else}administrateur{/if}.
+			</p>
+		{/if}
+	</section>
 
 	<form method="post" action="?/updateProfile">
 		<h2>Profil</h2>
@@ -74,6 +81,11 @@
 	}
 
 	h1 {
+		text-align: center;
+		margin-bottom: 0.5rem;
+	}
+
+	.status {
 		text-align: center;
 	}
 
