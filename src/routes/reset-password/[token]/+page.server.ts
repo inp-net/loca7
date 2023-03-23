@@ -48,8 +48,6 @@ export const actions: Actions = {
 
 		const newPassword = (await request.formData()).get('password')?.toString();
 
-		console.log('setting new password to ', newPassword);
-
 		if (!newPassword) {
 			throw error(400, { message: "Aucun mot de passe n'a été fourni." });
 		}
