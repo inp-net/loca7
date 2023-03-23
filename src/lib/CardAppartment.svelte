@@ -98,10 +98,24 @@
 				</p>
 			</section>
 			<section class="aspects">
+				{#if hasFurniture !== null}
+					<p class="furniture">
+						<span class="icon"><Icon name="furniture" cancel={!hasFurniture} /></span>
+						{hasFurniture ? 'Meublé' : 'Non meublé'}
+					</p>
+				{/if}
+				{#if hasParking !== null}
+					<p class="parking">
+						<span class="icon"><Icon name="parking" cancel={!hasParking} /></span>
+						{hasParking ? 'Place de parking' : 'Pas de place de parking'}
+					</p>
+				{/if}
+				{#if hasBicycleParking !== null}
 					<p class="bicycle-parking">
 						<span class="icon"><Icon name="bike" cancel={!hasBicycleParking} /></span>
 						{hasBicycleParking ? 'Place pour vélo' : 'Pas de place pour vélo'}
 					</p>
+				{/if}
 			</section>
 		{/if}
 		{#if editable}
