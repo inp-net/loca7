@@ -18,7 +18,8 @@
 		"format": "prettier --plugin-search-dir . --write .",
 		"start": "node -r dotenv/config build",
 		"start:beta": "STAGE=beta ORIGIN=https://loca7.ewen.works pnpm start",
-		"check-prisma-imports": "for file in **/*.server.ts; do if ! grep -q 'import { prisma } from' $file; then echo warn: no prisma import in $file; fi; done"
+		"check-prisma-imports": "for file in **/*.server.ts; do if ! grep -q 'import { prisma } from' $file; then echo warn: no prisma import in $file; fi; done",
+		"update-mail-templates": "ts-node mail-templates/updateTypes.ts"
 	},
 	"prisma": {
 		"seed": "ts-node --transpile-only scripts/importOldData.ts"
