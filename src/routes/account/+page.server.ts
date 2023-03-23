@@ -28,7 +28,7 @@ export const actions: Actions = {
 		throw redirect(302, '/account');
 	},
 
-	async changePassword({ locals, request }) {
+	async changePassword({ locals, request, fetch }) {
 		const { user, session } = await locals.validateUser();
 		guards.emailValidated(user, session);
 
@@ -50,6 +50,6 @@ export const actions: Actions = {
 					throw error;
 			}
 		}
-		throw redirect(302, '/logout');
+		await fetch('/logout', { method: 'POST' });
 	}
 };
