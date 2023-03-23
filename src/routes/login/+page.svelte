@@ -11,6 +11,8 @@
 
 	let email: string = '';
 	let password: string = '';
+
+	let passwordResetSuccessful: boolean = $page.url.hash === '#passwordResetSuccessful';
 </script>
 
 <svelte:head>
@@ -18,6 +20,13 @@
 </svelte:head>
 
 <main>
+	{#if passwordResetSuccessful}
+		<p class="password-reset-successful">
+			Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous
+			connecter.
+		</p>
+	{/if}
+
 	<h1>Connexion</h1>
 	<p>
 		Pas de compte?
@@ -36,11 +45,26 @@
 			<p class="error">Coordonnées incorrectes.</p>
 		{/if}
 
-		<ButtonPrimary submits>Se connecter</ButtonPrimary>
+		<p class="reset">
+			Mot de passe perdu ? <ButtonSecondary href="/reset-password"
+				>Réinitialisez-le</ButtonSecondary
+			>
+		</p>
+
+		<section class="submit">
+			<ButtonPrimary submits>Se connecter</ButtonPrimary>
+		</section>
 	</form>
 </main>
 
 <style>
+	.password-reset-successful {
+		background-color: var(--moss);
+		color: var(--cactus);
+		padding: 1rem 2rem;
+		margin-bottom: 3rem;
+	}
+
 	form {
 		max-width: 400px;
 		margin: 0 auto;
@@ -73,5 +97,10 @@
 
 	h1 {
 		margin-bottom: 1rem;
+	}
+
+	section.submit {
+		display: flex;
+		justify-content: center;
 	}
 </style>

@@ -25,6 +25,7 @@ model User {
     keys             Key[]
     emailValidations EmailValidation[]
     Report           Report[]
+    PasswordReset    PasswordReset[]
 
     @@map("user")
 }
@@ -45,6 +46,15 @@ model EmailValidation {
     user_id String
     expires BigInt
     user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+    @@index([user_id])
+}
+
+model PasswordReset {
+    id      String @id @unique @default(cuid())
+    expires BigInt
+    user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+    user_id String
 
     @@index([user_id])
 }

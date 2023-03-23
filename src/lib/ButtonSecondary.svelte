@@ -40,6 +40,7 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5em;
+		margin: 0.5rem;
 		padding: 0.25rem 0.75rem;
 
 		background: var(--bg);
