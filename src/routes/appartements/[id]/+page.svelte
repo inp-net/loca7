@@ -289,7 +289,7 @@
 						href={contactVCard.url}>Contacts</ButtonSecondary
 					>
 				</p>
-				{#if appart.owner.email}
+				{#if appart.owner.email && !appart.owner.email.match(/^ghost\.\w+@loca7.enseeiht.fr$/)}
 					<div class="row">
 						<div class="icon">
 							<Icon name="email" />
