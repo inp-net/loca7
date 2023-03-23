@@ -295,12 +295,23 @@
 							<Icon name="email" />
 						</div>
 						{appart.owner.email}
+
+						<ButtonSecondary
+							icon="email"
+							href="mailto:{encodeURIComponent(appart.owner.email)}"
+							>Envoyer un mail</ButtonSecondary
+						>
 					</div>
 				{/if}
 				{#if appart.owner.phone}
 					<div class="row">
 						<div class="icon"><Icon name="phone" /></div>
 						{appart.owner.phone}
+						<ButtonSecondary
+							icon="phone"
+							href="tel:{encodeURIComponent(appart.owner.phone)}"
+							>Appeler</ButtonSecondary
+						>
 					</div>
 				{/if}
 			</section>
@@ -563,6 +574,17 @@
 	section.owner .name {
 		display: flex;
 		justify-content: space-between;
+	}
+
+	section.owner .row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		margin-top: 1rem;
+	}
+
+	section.owner .row :global(:last-child) {
+		margin-left: auto;
 	}
 
 	section.actions {
