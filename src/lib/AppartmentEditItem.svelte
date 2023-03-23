@@ -115,9 +115,19 @@
 	</ul>
 
 	<section class="actions">
-		<form action="/appartements/modifications/{edit.id}?/delete" method="post">
-			<ButtonSecondary icon="delete" dangerous submits>Supprimer</ButtonSecondary>
-		</form>
+		{#if !edit.applied || user?.admin}
+			<form action="/appartements/modifications/{edit.id}?/delete" method="post">
+				<ButtonSecondary
+					icon={!edit.applied && user?.admin ? 'close' : 'delete'}
+					dangerous={!edit.applied}
+					submits
+				>
+					{#if edit.applied}
+						Supprimer de l'historique
+					{:else if user?.admin}Rejeter{:else}Annuler la demande{/if}
+				</ButtonSecondary>
+			</form>
+		{/if}
 		{#if !edit.applied && user?.admin}
 			<form action="/appartements/modifications/{edit.id}?/apply" method="post">
 				<ButtonSecondary icon="checkmark" submits>Appliquer</ButtonSecondary>
