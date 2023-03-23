@@ -8,6 +8,7 @@
 	export let dangerous: boolean = false;
 	export let submits = false;
 	export let download: string | undefined = undefined;
+	export let insideProse = false;
 
 	let hoverOrFocus = false;
 </script>
@@ -17,6 +18,7 @@
 	type={submits ? 'submit' : 'button'}
 	class="button-secondary typo-paragraph"
 	class:dangerous
+	class:inside-prose={insideProse}
 	{href}
 	{download}
 	{formaction}
@@ -40,7 +42,6 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5em;
-		margin: 0.5rem;
 		padding: 0.25rem 0.75rem;
 
 		background: var(--bg);
@@ -48,6 +49,10 @@
 		border-radius: 1000px;
 
 		cursor: pointer;
+	}
+
+	.button-secondary.inside-prose {
+		margin: 0.5rem;
 	}
 
 	.button-secondary:hover,

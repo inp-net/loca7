@@ -17,7 +17,7 @@
 
 <main>
 	<h1>Inscription</h1>
-	<p>Déjà un compte? <ButtonSecondary href="/login">Connectez-vous</ButtonSecondary></p>
+	<p>Déjà un compte? <ButtonSecondary insideProse href="/login">Connectez-vous</ButtonSecondary></p>
 
 	<form method="post">
 		<InputField label="Email">

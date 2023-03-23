@@ -31,7 +31,7 @@
 	<p>
 		Pas de compte?
 
-		<ButtonSecondary href="/register">Créez-en un</ButtonSecondary>
+		<ButtonSecondary insideProse href="/register">Créez-en un</ButtonSecondary>
 	</p>
 
 	<form method="post">
