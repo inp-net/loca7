@@ -2,6 +2,8 @@ import { prisma } from '$lib/server/prisma';
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { auth, guards } from '$lib/server/lucia';
+import { sendMail } from '$lib/server/mail';
+import { CONTACT_EMAIL } from '$lib/constants';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const passwordResets = await prisma.passwordReset.findFirst({
@@ -53,6 +55,15 @@ export const actions: Actions = {
 		}
 
 		await auth.updateKeyPassword('email', passwordReset.user.email, newPassword);
+		await sendMail({
+			to: passwordReset.user.email,
+			subject: 'Loca7: Votre mot de passe a été changé',
+			data: {
+				fullname: passwordReset.user.name,
+				contactEmail: CONTACT_EMAIL
+			},
+			template: 'password-changed'
+		});
 
 		throw redirect(302, '/login#passwordResetSuccessful');
 	}

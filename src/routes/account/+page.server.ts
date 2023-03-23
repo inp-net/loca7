@@ -3,6 +3,8 @@ import { prisma } from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
 import { LuciaError } from 'lucia-auth';
 import type { Actions, PageServerLoad } from './$types';
+import { sendMail } from '$lib/server/mail';
+import { CONTACT_EMAIL } from '$lib/constants';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { user, session } = await locals.validateUser();
@@ -25,6 +27,31 @@ export const actions: Actions = {
 			data: { name, email, phone, emailIsValidated: email === user.email }
 		});
 
+		if (email !== user.email) {
+			// XXX this should be done through lucia-auth
+			await prisma.key.updateMany({
+				where: {
+					user: {
+						id: user.id
+					}
+				},
+				data: {
+					id: `email:${email}`
+				}
+			});
+
+			await sendMail({
+				to: user.email,
+				subject: 'Loca7: Votre adresse email a été changée',
+				data: {
+					fullname: user.name,
+					contactEmail: CONTACT_EMAIL,
+					newEmail: email
+				},
+				template: 'email-changed'
+			});
+		}
+
 		throw redirect(302, '/account');
 	},
 
@@ -40,6 +67,15 @@ export const actions: Actions = {
 		try {
 			await auth.validateKeyPassword('email', user.email, oldPassword);
 			await auth.updateKeyPassword('email', user.email, newPassword);
+			await sendMail({
+				to: user.email,
+				subject: 'Loca7: Votre mot de passe a été changé',
+				data: {
+					fullname: user.name,
+					contactEmail: CONTACT_EMAIL
+				},
+				template: 'password-changed'
+			});
 		} catch (error) {
 			if (!(error instanceof LuciaError)) throw error;
 
