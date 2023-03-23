@@ -43,10 +43,8 @@
 				);
 			return serialize(current.photos) !== serialize(edit.photos);
 		}
-		if (current[field] instanceof Date) {
-			return current[field]?.valueOf() !== edit[field]?.valueOf();
-		}
-		return current[field] !== edit[field];
+		console.log('modified', field, modification(field));
+		return /<(ins|del)/g.test(modification(field));
 	}
 
 	function display(
