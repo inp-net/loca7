@@ -27,8 +27,9 @@ specifiers:
   '@types/zxcvbn': ^4.4.1
   '@typescript-eslint/eslint-plugin': ^5.55.0
   '@typescript-eslint/parser': ^5.55.0
+  autolinker: ^4.0.0
+  bbcode.js: ^0.4.0
   bcrypt: ^5.1.0
-  bitter-bbcode: ^0.0.1
   dialog-polyfill: ^0.5.6
   dotenv: ^16.0.3
   eslint: ^8.36.0
@@ -82,6 +83,8 @@ dependencies:
   '@lucia-auth/adapter-prisma': 0.4.0_lucia-auth@0.7.3
   '@lucia-auth/sveltekit': 0.6.10_l75u44cskfqf4qsekkldyl7esm
   '@prisma/client': 4.11.0_prisma@4.11.0
+  autolinker: 4.0.0
+  bbcode.js: 0.4.0
   bcrypt: 5.1.0
   dialog-polyfill: 0.5.6
   dotenv: 16.0.3
@@ -119,7 +122,6 @@ devDependencies:
   '@types/zxcvbn': 4.4.1
   '@typescript-eslint/eslint-plugin': 5.55.0_342y7v4tc7ytrrysmit6jo4wri
   '@typescript-eslint/parser': 5.55.0_vgl77cfdswitgr47lm5swmv43m
-  bitter-bbcode: 0.0.1
   eslint: 8.36.0
   eslint-config-prettier: 8.7.0_eslint@8.36.0
   eslint-plugin-svelte3: 4.0.0_pdvxdpbnzjwxjm7tkjwumh3vqi
@@ -1130,11 +1132,21 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: true
 
+  /autolinker/4.0.0:
+    resolution: {integrity: sha512-fl5Kh6BmEEZx+IWBfEirnRUU5+cOiV0OK7PEt0RBKvJMJ8GaRseIOeDU3FKf4j3CE5HVefcjHmhYPOcaVt0bZw==}
+    dependencies:
+      tslib: 2.5.0
+    dev: false
+
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
   /base64-js/1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
+    dev: false
+
+  /bbcode.js/0.4.0:
+    resolution: {integrity: sha512-FcVoi1cinrUuYF5yEQj+hQSyE6vX7HNXGtWV8tAnffn9hR0bURK7S3UsdlqK4FUrYUzFYcWn6btxOPcu+DodQA==}
     dev: false
 
   /bcrypt/5.1.0:
@@ -1152,11 +1164,6 @@ packages:
   /binary-extensions/2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
-
-  /bitter-bbcode/0.0.1:
-    resolution: {integrity: sha512-/QQWzcCT68bahbe5dKoTgC3VAmrc2FzDCjmn2WduG9sSi50Jv0UjlSrYlXdZ/+B4+azr52a6BNVSD1jduHDrhQ==}
-    hasBin: true
-    dev: true
 
   /bl/4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}

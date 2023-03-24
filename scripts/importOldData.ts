@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { convert as html2text } from 'html-to-text';
 import { distanceBetween, ENSEEIHT } from '../src/lib/utils';
 import { DISPLAY_PUBLIC_TRANSPORT_TYPE } from '../src/lib/types';
+import Autolinker from 'autolinker';
 // import { openRouteService } from '../src/lib/server/traveltime';
 import xss from 'xss';
 import type { User, TravelTimeToN7, Report, AppartmentKind } from '@prisma/client';
@@ -12,7 +13,7 @@ import luciaPrismaAdapter from '@lucia-auth/adapter-prisma';
 import createPassword from 'password';
 import oldLogements from './old-data/logements.json' assert { type: 'json' };
 import oldPhotos from './old-data/photos.json' assert { type: 'json' };
-import bbcode2html from 'bitter-bbcode';
+import bbcode from 'bbcode.js';
 import { copyFileSync, existsSync, mkdirSync, rmSync } from 'fs';
 import mime2ext from 'mime2ext';
 import path from 'path';
@@ -37,6 +38,34 @@ const auth = lucia({
 		} as User;
 	}
 });
+
+function bbcode2html(text: bbcodestr): string {
+	return Autolinker.link(
+		text
+			.replaceAll(/\r?\n/gi, '<br>')
+			.replaceAll(/\[b\](.+?)\[\/b\]/gi, '<strong>$1</strong>')
+			.replaceAll(/\[i\](.+?)\[\/i\]/gi, '<em>$1</em>')
+			.replaceAll(/\[u\](.+?)\[\/u\]/gi, '<u>$1</u>')
+			.replaceAll(/\[s\](.+?)\[\/s\]/gi, '<s>$1</s>')
+			.replaceAll(/\[url=(.+?)\](.+?)\[\/url\]/gi, '<a href="$1">$2</a>')
+			.replaceAll(/\[url\](.+?)\[\/url\]/gi, '<a href="$1">$1</a>')
+			.replaceAll(/\[img\](.+?)\[\/img\]/gi, '<img src="$1" />')
+			.replaceAll(/\[color=(.+?)\](.+?)\[\/color\]/gi, '<span style="color: $1">$2</span>')
+			.replaceAll(/\[quote\](.+?)\[\/quote\]/gi, '<blockquote>$1</blockquote>')
+			.replaceAll(/\[list\]/gi, '<ul>')
+			.replaceAll(/\[\/list\]/gi, '</ul>')
+			.replaceAll(/\[\*\]/gi, '<li>')
+			.replaceAll(
+				/\[size=(.+?)\](.+?)\[\/size\]/gi,
+				'<span style="font-size: $1px">$2</span>'
+			)
+			.replaceAll(/\[br\]/gi, '<br>')
+			.replaceAll(/\[h([1-6])\](.+?)\[\/h([1-6])\]/gi, '<h$1>$2</h$3>'),
+		{
+			newWindow: false
+		}
+	);
+}
 
 async function nearbyStations(location: GeographicPoint): Promise<PublicTransportStation[]> {
 	const allStops = tisseoStops as {
@@ -254,10 +283,10 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 	let latitude = optionalNumberStr(appart.latitude);
 	let longitude = optionalNumberStr(appart.longitude);
 	if (latitude && Math.abs(latitude - 43) > 1) {
-		console
-			.log
-			// `⚠️ Appartment ${appart.adresse} (#${appart.id}) has aberrant latitude ${latitude}, discarding geocoordinates`
-			();
+		// console
+		// 	.log
+		// 	`⚠️ Appartment ${appart.adresse} (#${appart.id}) has aberrant latitude ${latitude}, discarding geocoordinates`
+		// 	();
 		latitude = null;
 		longitude = null;
 	}
