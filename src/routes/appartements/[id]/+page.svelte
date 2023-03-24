@@ -226,6 +226,20 @@
 							{/if}
 						</p>
 					</div>
+				{:else if appart.longitude && appart.latitude}
+					<div class="row">
+						<span class="icon">
+							<Icon name="travel" />
+						</span>
+						<div class="content">
+							<ButtonSecondary
+								on:click={async () => {
+									await fetch(`/appartements/${appart.id}/generate-travel-times`);
+									window.location.reload();
+								}}>Obtenir les temps de trajet</ButtonSecondary
+							>
+						</div>
+					</div>
 				{/if}
 			</section>
 			<section class="aspects">
@@ -438,6 +452,15 @@
 			/>
 		</section>
 	{/if}
+
+	<section class="meta">
+		<p class="typo-details">
+			Annonce n°<a href="/appartements/{appart.number}">{appart.number}</a> &bull;
+			<a href="https://bde.enseeiht.fr/services/logement/{appart.number}"
+				>voir sur l'ancien site</a
+			>
+		</p>
+	</section>
 </main>
 
 <style>
@@ -706,5 +729,12 @@
 	section.notice .actions {
 		display: flex;
 		gap: 1rem;
+	}
+
+	section.meta {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 	}
 </style>
