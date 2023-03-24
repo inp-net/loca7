@@ -242,6 +242,14 @@ function detectKindFromDescription(appart: AppartmentOld): AppartmentKind | null
 	return null;
 }
 
+function detectBicycleParkingFromDescription(appart: AppartmentOld): boolean | null {
+	return (
+		/(\b(parking|cour|local|garage|parc|rack|parcage|rangement|emplacement|range-?)\s*([àa]|pour\s*(mettre\s*(éventuellement)?\s*(des)?)?)?\s*v[ée]los?\b)|(\b(garer|ranger|parquer|déposer)\s*(un|votre|les|des|son|ton)?\s*v[ée]los?\b)/gi.test(
+			appart.description.toLowerCase()
+		) || null
+	);
+}
+
 async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[], user: User) {
 	let latitude = optionalNumberStr(appart.latitude);
 	let longitude = optionalNumberStr(appart.longitude);
@@ -274,6 +282,7 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 			createdAt: new Date(appart.pub_date),
 			hasFurniture: optionalBooleanStr(appart.meuble),
 			hasParking: optionalBooleanStr(appart.place_parking),
+			hasBicycleParking: detectBicycleParkingFromDescription(appart),
 			owner: {
 				connect: {
 					id: user.id
