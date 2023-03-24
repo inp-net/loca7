@@ -168,6 +168,7 @@
 	<div class="typo-details">
 		Inutile de préciser les informations suivantes dans la description:
 		<ul>
+			<li>Votre numéro de téléphone ou addresse mail</li>
 			<li>Loyer, charges, caution</li>
 			<li>Temps de trajet vers l'ENSEEIHT à pied, en vélo, en transports</li>
 			<li>Arrêts de transports en commun à proximité</li>
