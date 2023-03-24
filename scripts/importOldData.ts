@@ -67,6 +67,13 @@ function bbcode2html(text: bbcodestr): string {
 	);
 }
 
+function fixEmailTypos(email: string): string {
+	return email
+		.replace(/@g[ml]ail.com/gi, '@gmail.com')
+		.replace(/@[0o]range.fr/gi, '@orange.fr')
+		.replace(/@9[io][bn]line.fr/gi, '@9online.fr');
+}
+
 async function nearbyStations(location: GeographicPoint): Promise<PublicTransportStation[]> {
 	const allStops = tisseoStops as {
 		stop_id: `stop_point:SP_${number}`;
@@ -401,9 +408,10 @@ async function importData(ghost: User, appartments: AppartmentOld[], photos: Pho
 		// );
 		const appart = apparts[0];
 		const attributes = {
-			email:
+			email: fixEmailTypos(
 				appart.contact_mail?.trim().toLocaleLowerCase() ||
-				`ghost.${appart.uuid_proprietaire}@loca7.enseeiht.fr`,
+					`ghost.${appart.uuid_proprietaire}@loca7.enseeiht.fr`
+			),
 			name: (appart.contact_prenom + ' ' + appart.contact_nom).trim(),
 			phone: (appart.contact_port || appart.contact_tel).trim()
 		};
