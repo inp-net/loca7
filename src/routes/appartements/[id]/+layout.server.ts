@@ -5,10 +5,16 @@ import type { LayoutServerLoad } from './$types';
 export const load: LayoutServerLoad = async ({ params, locals }) => {
 	const { user } = await locals.validateUser();
 	const appart = await prisma.appartment.findUnique({
-		where: { id: params.id }
+		where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
+		include: {
+			owner: true
+		}
 	});
+
+	guards.appartmentExists(appart);
+
 	const appartment = await prisma.appartment.findUnique({
-		where: { id: params.id },
+		where: { id: appart.id },
 		include: {
 			owner: true,
 			nearbyStations: true,
