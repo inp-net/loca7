@@ -99,7 +99,7 @@
 				</form>
 			</li>
 		{:else}
-			<li>
+			<li class="post">
 				<ButtonSecondary icon="add" href="/appartements/ajouter"
 					>Déposer une annonce</ButtonSecondary
 				>
@@ -149,8 +149,8 @@
 			>
 		</li>
 		<li>
-			<form method="post">
-				<ButtonSecondary formaction="/logout" icon="logout">Se déconnecter</ButtonSecondary>
+			<form method="post" action="/logout">
+				<ButtonSecondary submits icon="logout">Se déconnecter</ButtonSecondary>
 			</form>
 		</li>
 	</ul>
@@ -225,9 +225,12 @@
 			margin-bottom: 0.5rem;
 		}
 		nav.topbar {
-			flex-direction: column;
 			align-items: center;
 			text-align: center;
+			padding: 1.5rem 2rem;
+		}
+		nav.topbar .post {
+			display: none;
 		}
 		.logged-in .links,
 		.logged-in .actions {
