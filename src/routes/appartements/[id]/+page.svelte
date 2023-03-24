@@ -576,11 +576,16 @@
 		justify-content: space-between;
 	}
 
+	section.owner .row:first-of-type {
+		margin-top: 1rem;
+	}
+
 	section.owner .row {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		margin-top: 1rem;
+		margin-top: 0.5rem;
+		line-height: 0.95;
 	}
 
 	section.owner .row :global(:last-child) {
