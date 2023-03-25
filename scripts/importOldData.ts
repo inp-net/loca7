@@ -1,7 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 import { convert as html2text } from 'html-to-text';
 import { distanceBetween, ENSEEIHT } from '../src/lib/utils';
-import { DISPLAY_PUBLIC_TRANSPORT_TYPE } from '../src/lib/types';
+import {
+	DISPLAY_PUBLIC_TRANSPORT_TYPE,
+	GeographicPoint,
+	Photo,
+	PublicTransportStation,
+	PublicTransportType
+} from '../src/lib/types';
 import Autolinker from 'autolinker';
 // import { openRouteService } from '../src/lib/server/traveltime';
 import xss from 'xss';
@@ -233,24 +239,6 @@ function findRoomsCountInDescription(description: string): number {
 	return Number(result[1]);
 }
 
-async function travelTimes(appart: AppartmentOld): Promise<Omit<TravelTimeToN7, 'id'>> {
-	let traveltimes: Omit<TravelTimeToN7, 'id'> = {
-		byBike: null,
-		byFoot: null,
-		byPublicTransport: null
-	};
-
-	return traveltimes;
-
-	// TODO
-	// let latitude = optionalNumberStr(appart.latitude);
-	// let longitude = optionalNumberStr(appart.longitude);
-
-	// if (latitude && longitude) {
-	//     traveltimes.byBike = await openRouteService.travelTime("bike", )
-	// }
-}
-
 function detectKindFromDescription(appart: AppartmentOld): AppartmentKind | null {
 	if (appart.typel !== 'au') return null;
 
@@ -318,7 +306,11 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 				}
 			},
 			travelTimeToN7: {
-				create: travelTimes(appart)
+				create: {
+					byBike: null,
+					byPublicTransport: null,
+					byFoot: null
+				}
 			},
 			nearbyStations: {
 				createMany: {
@@ -364,10 +356,10 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 
 	for (const photoInDb of appartment.photos) {
 		const photo = photos.find((p) => path.basename(p.photo) === photoInDb.filename);
+		if (!photo) continue;
 		const photoOnDiskFilename = path.join(__dirname, 'old-data', photo?.photo);
 
-		if (photo === undefined || !photo || !existsSync(photoOnDiskFilename)) {
-		} else {
+		if (photo !== undefined && photo && existsSync(photoOnDiskFilename)) {
 			const targetFilename = path.join(
 				__dirname,
 				'../public/photos/appartments',
