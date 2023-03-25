@@ -42,7 +42,8 @@
 		b: { reports: Report[]; updatedAt: Date }
 	) =>
 		a.reports.length === b.reports.length
-			? a.updatedAt.valueOf() - b.updatedAt.valueOf()
+			? Math.max(a.updatedAt.valueOf(), ...a.reports.map((r) => r.createdAt.valueOf())) -
+			  Math.max(b.updatedAt.valueOf(), ...b.reports.map((r) => r.createdAt.valueOf()))
 			: a.reports.length - b.reports.length;
 
 	$: appartmentsPending = appartments
