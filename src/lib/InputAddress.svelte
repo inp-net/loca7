@@ -26,7 +26,10 @@
 		latitude && longitude ? distanceBetween({ latitude, longitude }, ENSEEIHT) : null;
 
 	async function updateSuggestions() {
-		if (value.length <= 3) return;
+		if (value.length <= 3) {
+			results = [];
+			return;
+		}
 		const response = await (
 			await fetch(
 				`https://api-adresse.data.gouv.fr/search/?q=${value}&lat=${ENSEEIHT.latitude}&lon=${ENSEEIHT.longitude}`
@@ -37,14 +40,19 @@
 			['housenumber', 'street'].includes(type)
 		);
 
-		if (results.length === 1) {
-			[latitude, longitude] = results[0].geometry.coordinates;
-		}
+		// if (results.length === 1) {
+		// 	[latitude, longitude] = results[0].geometry.coordinates;
+		// }
 	}
 
 	$: suggestions = results.map(
 		({ properties: { name, postcode, city } }) => `${name}, ${postcode} ${city}`
 	);
+
+	$: if (value === '') {
+		latitude = null;
+		longitude = null;
+	}
 
 	$: if (showEmptyErrors && required && !value) {
 		errorMessage = 'Ce champ est requis';
@@ -73,6 +81,10 @@
 	{messageIsWarning}
 	on:input={throttle(updateSuggestions, 200)}
 	on:select={(e) => {
+		if (e.detail === null) {
+			[latitude, longitude] = [null, null];
+			return;
+		}
 		[latitude, longitude] =
 			results[suggestions.findIndex((a) => a === e.detail)]?.geometry.coordinates;
 	}}
