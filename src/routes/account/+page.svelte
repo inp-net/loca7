@@ -15,6 +15,10 @@
 	let newPassword: string = '';
 </script>
 
+<svelte:head>
+    <title>Loca7 · Mon compte</title>
+</svelte:head>
+
 <main>
 	<section class="header">
 		<h1>Mon compte</h1>

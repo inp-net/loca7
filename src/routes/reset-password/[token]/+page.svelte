@@ -3,6 +3,10 @@
 	import InputPassword from '$lib/InputPassword.svelte';
 </script>
 
+<svelte:head>
+    <title>Loca7 · Choisir un nouveau mot de passe</title>
+</svelte:head>
+
 <main>
 	<h1>Choisissez votre mot de passe.</h1>
 

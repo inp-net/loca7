@@ -16,6 +16,10 @@
 	let email: string = $page.url.searchParams.get('email') ?? '';
 </script>
 
+<svelte:head>
+    <title>Loca7 · Réinitialisez votre mot de passe</title>
+</svelte:head>
+
 <main>
 	<h1>Réinitialisez votre mot de passe.</h1>
 
