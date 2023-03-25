@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Icon from '$lib/Icon.svelte';
-	import { NAMES as iconNames } from './types';
+	import { NAMES as iconNames } from '$lib/icons/types';
 </script>
 
 <h1>Icons</h1>
