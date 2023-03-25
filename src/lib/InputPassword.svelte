@@ -16,6 +16,7 @@
 	export let required: boolean = false;
 	export let schema: Zod.ZodString = z.string();
 	export let showEmptyErrors = true;
+    export let errorMessage: string | undefined = undefined;
 
 	let analysis;
 	let strength: 'dangerous' | 'weak' | 'good';
@@ -45,6 +46,7 @@
 			{id}
 			{name}
 			{schema}
+            {errorMessage}
 			autocomplete={feedback ? 'new-password' : 'current-password'}
 			actionIcon={shown ? 'eye-cancel' : 'eye-open'}
 		/>
