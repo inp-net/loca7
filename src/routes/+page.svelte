@@ -132,7 +132,6 @@
 					icon="map"
 					on:click={() => {
 						resultsTab = 'map';
-						console.log(`scrolling to top of map`);
 						window.scrollTo({
 							top: document.getElementById('map')?.scrollTop
 						});
@@ -143,7 +142,6 @@
 					icon="back"
 					on:click={() => {
 						resultsTab = 'list';
-						console.log(`scrolling to ${$searchResultsScrollPosition}`);
 						window.scrollTo({
 							top: $searchResultsScrollPosition
 						});
@@ -179,7 +177,6 @@
 					icon="map"
 					on:click={() => {
 						resultsTab = 'map';
-						console.log(`scrolling to top of map`);
 						window.scrollTo({
 							top: document.getElementById('map')?.scrollTop
 						});
@@ -190,7 +187,6 @@
 					icon="back"
 					on:click={() => {
 						resultsTab = 'list';
-						console.log(`scrolling to ${$searchResultsScrollPosition}`);
 						window.scrollTo({
 							top: $searchResultsScrollPosition
 						});

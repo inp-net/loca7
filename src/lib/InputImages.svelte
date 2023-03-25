@@ -41,7 +41,6 @@
 	}
 
 	async function addPhotos(files: FileList) {
-		console.log('updating photos');
 		value = [
 			...value,
 			...(
@@ -70,7 +69,6 @@
 				)
 			).filter((v) => v !== null)
 		];
-		console.log(value);
 	}
 
 	async function deletePhoto(photo: Photo) {

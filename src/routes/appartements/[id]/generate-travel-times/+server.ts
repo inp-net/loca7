@@ -16,7 +16,6 @@ export const GET: RequestHandler = async ({ request, params, locals }) => {
 	guards.appartmentAccessible(user, appartment);
 
 	let newTravelTimes = { ...appartment.travelTimeToN7 };
-	console.log(newTravelTimes);
 	if (newTravelTimes.byFoot === null) {
 		newTravelTimes.byFoot = Math.ceil(
 			await openRouteService.travelTime('foot', appartment, ENSEEIHT)

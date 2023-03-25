@@ -45,7 +45,6 @@ class OpenRouteService {
 				end: `${end.latitude},${end.longitude}`
 			}
 		);
-		console.log(response);
 		return response.features[0].properties.summary.duration;
 	}
 }

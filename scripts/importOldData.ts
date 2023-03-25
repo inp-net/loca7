@@ -367,11 +367,6 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 		const photoOnDiskFilename = path.join(__dirname, 'old-data', photo?.photo);
 
 		if (photo === undefined || !photo || !existsSync(photoOnDiskFilename)) {
-			// console.log(
-			// 	`\t\t⚠️  Photo at ${photoOnDiskFilename} {${JSON.stringify(
-			// 		photoInDb
-			// 	)}} was not imported correctly`
-			// );
 		} else {
 			const targetFilename = path.join(
 				__dirname,
@@ -409,7 +404,6 @@ async function importData(ghost: User, appartments: AppartmentOld[], photos: Pho
 		};
 		const password = createPassword(3);
 		if (!appart.contact_mail) {
-			// console.log(`⚠️ ${attributes.name} has no email, creating a ghost user`);
 		}
 		await auth.createUser({
 			key: {
@@ -445,7 +439,7 @@ async function nukeDb() {
 	try {
 		await prisma.$executeRawUnsafe(`TRUNCATE TABLE ${tables} CASCADE;`);
 	} catch (error) {
-		console.log({ error });
+		console.error({ error });
 	}
 
 	rmSync(path.join(__dirname, '../public/photos/appartments'), { recursive: true });
@@ -487,8 +481,8 @@ async function main() {
 
 	// Create users
 	const passwords = await importData(ghost, appartments, photos);
-	console.log('Created users with passwords:');
-	console.log(passwords);
+	console.info('Created users with passwords:');
+	console.info(passwords);
 }
 
 main()

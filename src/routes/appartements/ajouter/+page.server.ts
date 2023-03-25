@@ -23,12 +23,10 @@ export const actions: Actions = {
 
 		const formDataRaw = await request.formData();
 		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;
-		console.log({ 'uploading appartment from form data': formData });
 
 		const isDummyFile = (file: File) =>
 			file.size === 0 && file.type === 'application/octet-stream';
 		const files = (formDataRaw.getAll('photos') as File[]).filter((f) => !isDummyFile(f));
-		console.log(files);
 
 		const photosOrder = JSON.parse(formData.photosOrder) as string[];
 
@@ -126,7 +124,6 @@ export const actions: Actions = {
 				data: appartInput,
 				include: { photos: true }
 			});
-			console.log(appartment);
 		} catch (err) {
 			console.error(err);
 			throw error(500, { message: "Impossible de poster l'annonce" });
