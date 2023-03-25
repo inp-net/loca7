@@ -1,12 +1,12 @@
 <script lang="ts">
 	import Icon from '$lib/Icon.svelte';
-	import iconNames from './all_icon_stems';
+	import { NAMES as iconNames } from './types';
 </script>
 
 <h1>Icons</h1>
 
 <main>
-	{#each iconNames.sort() as name}
+	{#each [...iconNames].sort() as name}
 		<div class="item">
 			<div class="icon">
 				<Icon {name} color="fg" />

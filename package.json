@@ -19,7 +19,9 @@
 		"start": "node -r dotenv/config build",
 		"start:beta": "STAGE=beta ORIGIN=https://loca7.ewen.works pnpm start",
 		"check-prisma-imports": "for file in **/*.server.ts; do if ! grep -q 'import { prisma } from' $file; then echo warn: no prisma import in $file; fi; done",
-		"update-mail-templates": "ts-node mail-templates/updateTypes.ts"
+		"update-mail-templates": "ts-node mail-templates/updateTypes.ts",
+		"update-icons": "python src/lib/icons/sveltify.py",
+		"generate": "concurrently npm:update-mail-templates npm:update-icons && pnpm format"
 	},
 	"prisma": {
 		"seed": "ts-node --transpile-only scripts/importOldData.ts"

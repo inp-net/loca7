@@ -3,6 +3,7 @@
 	import Icon from './Icon.svelte';
 	import { v4 as uuidv4 } from 'uuid';
 	import InputWithSuggestions from './InputWithSuggestions.svelte';
+	import type { Name as IconName } from '$lib/icons/types';
 	const emit = createEventDispatcher();
 
 	export let type: HTMLInputElement['type'];
@@ -13,7 +14,7 @@
 	export let initial: string | number | undefined = undefined;
 	export let unit: string = '';
 	export let placeholder: string = '';
-	export let actionIcon: string = '';
+	export let actionIcon: IconName | '' = '';
 	export let suggestions: string[] | undefined = undefined;
 	export let required: boolean = false;
 
