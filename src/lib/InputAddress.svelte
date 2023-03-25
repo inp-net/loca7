@@ -3,6 +3,7 @@
 	import { v4 as uuidv4 } from 'uuid';
 	import { distanceBetween, ENSEEIHT } from './utils';
 	import { throttle } from 'lodash';
+	import { z } from 'zod';
 
 	export let value: string;
 	export let latitude: number | null = null;
@@ -13,6 +14,7 @@
 	export let placeholder: string = '';
 	export let required: boolean = false;
 	export let showEmptyErrors: boolean = true;
+	export let schema: Zod.ZodString = z.string();
 
 	let messageIsWarning = false;
 	let errorMessage: string = '';
@@ -66,6 +68,7 @@
 	{id}
 	{name}
 	{initial}
+	{schema}
 	{errorMessage}
 	{messageIsWarning}
 	on:input={throttle(updateSuggestions, 200)}

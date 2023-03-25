@@ -17,8 +17,9 @@
 		SORT_OPTIONS,
 		searchResultsScrollPosition
 	} from '$lib/stores';
-	import { DISPLAY_APPARTMENT_KIND, type Appartment, type SearchCriteria } from '$lib/types';
+	import { DISPLAY_APPARTMENT_KIND } from '$lib/types';
 	import { distanceBetween, ENSEEIHT } from '$lib/utils';
+	import type { Appartment } from '@prisma/client';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 

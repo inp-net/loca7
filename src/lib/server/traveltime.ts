@@ -1,10 +1,6 @@
-import {
-	DISPLAY_PUBLIC_TRANSPORT_TYPE,
-	type GeographicPoint,
-	type PublicTransportStation
-} from '$lib/types';
+import { DISPLAY_PUBLIC_TRANSPORT_TYPE, type GeographicPoint } from '$lib/types';
 import { distanceBetween } from '$lib/utils';
-import type { PublicTransportType } from '@prisma/client';
+import type { PublicTransportType, PublicTransportStation } from '$lib/types';
 
 class OpenRouteService {
 	key: string;

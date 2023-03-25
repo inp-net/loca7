@@ -4,6 +4,7 @@
 	import Icon from './Icon.svelte';
 	import InputField from './InputField.svelte';
 	import { durationDisplay } from './utils';
+	import { z } from 'zod';
 
 	export let value: string;
 	export let placeholder: string = '';
@@ -13,7 +14,8 @@
 	export let label: string;
 	export let feedback: boolean = false;
 	export let required: boolean = false;
-	export let errorMessage: string = '';
+	export let schema: Zod.ZodString = z.string();
+	export let showEmptyErrors = true;
 
 	let analysis;
 	let strength: 'dangerous' | 'weak' | 'good';
@@ -42,7 +44,7 @@
 			{required}
 			{id}
 			{name}
-			{errorMessage}
+			{schema}
 			autocomplete={feedback ? 'new-password' : 'current-password'}
 			actionIcon={shown ? 'eye-cancel' : 'eye-open'}
 		/>

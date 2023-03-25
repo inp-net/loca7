@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { z, type ZodSchema } from 'zod';
 	import BaseInputText from './BaseInputText.svelte';
 
 	export let id: string | undefined = undefined;
@@ -8,7 +9,8 @@
 	export let value: string;
 	export let required: boolean = false;
 	export let autocomplete: string | undefined = undefined;
-	export let errorMessage: string = '';
+	export let schema: ZodSchema = z.string();
+	export let errorMessage: string | undefined = undefined;
 </script>
 
 <BaseInputText
@@ -20,6 +22,7 @@
 	{name}
 	{initial}
 	{errorMessage}
+	{schema}
 	{placeholder}
 	{required}
 />

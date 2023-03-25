@@ -7,7 +7,7 @@
 	export let placeholder: string | undefined = undefined;
 	export let value: string;
 	export let required: boolean = false;
-	export let errorMessage: string = '';
+	export let schema: Zod.ZodString = z.string();
 </script>
 
 <BaseInputText
@@ -16,7 +16,7 @@
 	bind:value
 	on:input
 	{id}
-	{errorMessage}
+	{schema}
 	{name}
 	{initial}
 	{placeholder}
