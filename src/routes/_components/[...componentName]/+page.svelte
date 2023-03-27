@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { randomAppartement } from '$lib/types';
 
 	let [componentName, slotContent] = $page.params['componentName'].split('/', 2);
 	let props = Object.fromEntries(
@@ -45,61 +44,62 @@
 <svelte:head>
 	<title>{title}</title>
 </svelte:head>
+<main>
+	<h1>{title}</h1>
 
-<h1>{title}</h1>
+	{#await import(`../../../lib/${componentName}.svelte`) then component}
+		<main class:wireframe bind:this={componentDomNode}>
+			{#if slotContent}
+				<svelte:component this={component.default} {...props}>
+					{slotContent}
+				</svelte:component>
+			{:else}
+				<svelte:component this={component.default} {...props} />
+			{/if}
+		</main>
+		<section class="props">
+			{#each Object.entries(props) as [key, value] (key)}
+				<label for={`prop-${key}`}
+					>{key}
+					<input id={`prop-${key}`} type="text" bind:value={props[key]} />
+					<button on:click={() => delete props[key]}>del</button>
+				</label>
+			{/each}
 
-{#await import(`../../../lib/${componentName}.svelte`) then component}
-	<main class:wireframe bind:this={componentDomNode}>
-		{#if slotContent}
-			<svelte:component this={component.default} {...props}>
-				{slotContent}
-			</svelte:component>
-		{:else}
-			<svelte:component this={component.default} {...props} />
-		{/if}
-	</main>
-	<section class="props">
-		{#each Object.entries(props) as [key, value] (key)}
-			<label for={`prop-${key}`}
-				>{key}
-				<input id={`prop-${key}`} type="text" bind:value={props[key]} />
-				<button on:click={() => delete props[key]}>del</button>
+			<div class="new-prop">
+				<p>New prop</p>
+				<input type="text" bind:value={newPropKey} />
+				<input type="text" bind:value={newPropValue} />
+				<button
+					on:click={() => {
+						props[newPropKey] = JSON.parse(newPropValue);
+						newPropKey = '';
+						newPropValue = '';
+					}}>Add</button
+				>
+			</div>
+
+			<label class="wireframe-toggle"
+				>Show wireframe
+				<input type="checkbox" bind:checked={wireframe} />
 			</label>
-		{/each}
-
-		<div class="new-prop">
-			<p>New prop</p>
-			<input type="text" bind:value={newPropKey} />
-			<input type="text" bind:value={newPropValue} />
-			<button
-				on:click={() => {
-					props[newPropKey] = JSON.parse(newPropValue);
-					newPropKey = '';
-					newPropValue = '';
-				}}>Add</button
-			>
-		</div>
-
-		<label class="wireframe-toggle"
-			>Show wireframe
-			<input type="checkbox" bind:checked={wireframe} />
-		</label>
-	</section>
-	{#if wireframe}
-		<section class="info">
-			<code
-				>{componentDomNode?.getBoundingClientRect().width - 2} × {componentDomNode?.getBoundingClientRect()
-					.height - 2}</code
-			>
 		</section>
-	{/if}
-{:catch error}
-	<section class="errored">
-		<h2>Woops!</h2>
-		<p>An error occured</p>
-		<pre><code>{error}</code></pre>
-	</section>
-{/await}
+		{#if wireframe}
+			<section class="info">
+				<code
+					>{componentDomNode?.getBoundingClientRect().width - 2} × {componentDomNode?.getBoundingClientRect()
+						.height - 2}</code
+				>
+			</section>
+		{/if}
+	{:catch error}
+		<section class="errored">
+			<h2>Woops!</h2>
+			<p>An error occured</p>
+			<pre><code>{error}</code></pre>
+		</section>
+	{/await}
+</main>
 
 <style>
 	section.errored {

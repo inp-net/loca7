@@ -1,9 +1,14 @@
 <script lang="ts">
 	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
+	import { appartmentTitle } from '$lib/types';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 </script>
+
+<svelte:head>
+	<title>Loca7 · Modification de l'appartement {appartmentTitle(data)}</title>
+</svelte:head>
 
 <main>
 	<h2>Modification de l'appartement</h2>

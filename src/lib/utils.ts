@@ -111,7 +111,6 @@ export const ENSEEIHT: GeographicPoint = {
 };
 
 export async function getDataURL(file: File): Promise<string> {
-	console.log(`getting data url of ${file.name}`);
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
 		reader.addEventListener('load', () => resolve(reader.result as string));
@@ -121,7 +120,6 @@ export async function getDataURL(file: File): Promise<string> {
 }
 
 export async function getContentHash(file: File): Promise<string> {
-	console.log(`getting hash of ${file.name}`);
 	return md5(new Uint8Array(await file.arrayBuffer()));
 }
 

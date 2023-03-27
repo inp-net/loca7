@@ -1,11 +1,16 @@
 <script lang="ts">
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import CardAppartment from '$lib/CardAppartment.svelte';
+	import { appartmentTitle } from '$lib/types';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 	$: ({ appartment } = data);
 </script>
+
+<svelte:head>
+	<title>Loca7 · Suppression de {appartmentTitle(appartment)}</title>
+</svelte:head>
 
 <main>
 	<h1>Suppression de l'annonce</h1>

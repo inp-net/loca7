@@ -1,12 +1,11 @@
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
-import { type AppartmentKind, tristateCheckboxToBoolean } from '$lib/types';
-import { ENSEEIHT } from '$lib/utils';
+import { tristateCheckboxToBoolean } from '$lib/types';
 import type { Actions, PageServerLoad } from './$types';
 import { copyPhotos, writePhotosToDisk } from '$lib/server/photos';
 import xss from 'xss';
 import { redirect } from '@sveltejs/kit';
-import md5 from 'md5';
+import type { AppartmentKind } from '@prisma/client';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { user, session } = await locals.validateUser();

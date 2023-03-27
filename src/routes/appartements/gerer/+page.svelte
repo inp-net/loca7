@@ -8,6 +8,10 @@
 	$: ({ appartments } = data);
 </script>
 
+<svelte:head>
+    <title>Loca7 · Mes annonces</title>
+</svelte:head>
+
 <main>
 	<h1>
 		Mes annonces {#if appartments.length}<ButtonSecondary

@@ -61,9 +61,14 @@
 		}
 
 		dispatch('change', selected);
+		dispatch('select', selected);
 	}
 
 	$: selected, onSelectedItemChanged();
+
+	$: if (text === '') {
+		selected = undefined;
+	}
 
 	$: showList = opened && items && items.length > 0;
 
@@ -107,6 +112,9 @@
 	function onDocumentClick(e: Event) {
 		if (e.composedPath().some((path) => path?.dataset?.suggestionsId === uniqueId)) {
 			highlight();
+			if (e.target.tagName === 'LI') {
+				selectHighlighted();
+			}
 		} else {
 			close();
 		}

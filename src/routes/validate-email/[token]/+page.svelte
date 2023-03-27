@@ -2,6 +2,10 @@
 	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
 </script>
 
+<svelte:head>
+	<title>Loca7 · Adresse e-mail vérifiée</title>
+</svelte:head>
+
 <main>
 	<h1>Votre adresse e-mail a bien été vérifiée.</h1>
 

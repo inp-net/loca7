@@ -1,7 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 import { convert as html2text } from 'html-to-text';
 import { distanceBetween, ENSEEIHT } from '../src/lib/utils';
-import { DISPLAY_PUBLIC_TRANSPORT_TYPE } from '../src/lib/types';
+import {
+	DISPLAY_PUBLIC_TRANSPORT_TYPE,
+	GeographicPoint,
+	Photo,
+	PublicTransportStation,
+	PublicTransportType
+} from '../src/lib/types';
 import Autolinker from 'autolinker';
 // import { openRouteService } from '../src/lib/server/traveltime';
 import xss from 'xss';
@@ -43,15 +49,15 @@ function bbcode2html(text: bbcodestr): string {
 	return Autolinker.link(
 		text
 			.replaceAll(/\r?\n/gi, '<br>')
-			.replaceAll(/\[b\](.+?)\[\/b\]/gi, '<strong>$1</strong>')
-			.replaceAll(/\[i\](.+?)\[\/i\]/gi, '<em>$1</em>')
-			.replaceAll(/\[u\](.+?)\[\/u\]/gi, '<u>$1</u>')
-			.replaceAll(/\[s\](.+?)\[\/s\]/gi, '<s>$1</s>')
-			.replaceAll(/\[url=(.+?)\](.+?)\[\/url\]/gi, '<a href="$1">$2</a>')
-			.replaceAll(/\[url\](.+?)\[\/url\]/gi, '<a href="$1">$1</a>')
-			.replaceAll(/\[img\](.+?)\[\/img\]/gi, '<img src="$1" />')
-			.replaceAll(/\[color=(.+?)\](.+?)\[\/color\]/gi, '<span style="color: $1">$2</span>')
-			.replaceAll(/\[quote\](.+?)\[\/quote\]/gi, '<blockquote>$1</blockquote>')
+			.replaceAll(/\[b\](.*?)\[\/b\]/gi, '<strong>$1</strong>')
+			.replaceAll(/\[i\](.*?)\[\/i\]/gi, '<em>$1</em>')
+			.replaceAll(/\[u\](.*?)\[\/u\]/gi, '<u>$1</u>')
+			.replaceAll(/\[s\](.*?)\[\/s\]/gi, '<s>$1</s>')
+			.replaceAll(/\[url=(.*?)\](.*?)\[\/url\]/gi, '<a href="$1">$2</a>')
+			.replaceAll(/\[url\](.*?)\[\/url\]/gi, '<a href="$1">$1</a>')
+			.replaceAll(/\[img\](.*?)\[\/img\]/gi, '<img src="$1" />')
+			.replaceAll(/\[color=(.*?)\](.*?)\[\/color\]/gi, '<span style="color: $1">$2</span>')
+			.replaceAll(/\[quote\](.*?)\[\/quote\]/gi, '<blockquote>$1</blockquote>')
 			.replaceAll(/\[list\]/gi, '<ul>')
 			.replaceAll(/\[\/list\]/gi, '</ul>')
 			.replaceAll(/\[\*\]/gi, '<li>')
@@ -240,24 +246,6 @@ function findRoomsCountInDescription(description: string): number {
 	return Number(result[1]);
 }
 
-async function travelTimes(appart: AppartmentOld): Promise<Omit<TravelTimeToN7, 'id'>> {
-	let traveltimes: Omit<TravelTimeToN7, 'id'> = {
-		byBike: null,
-		byFoot: null,
-		byPublicTransport: null
-	};
-
-	return traveltimes;
-
-	// TODO
-	// let latitude = optionalNumberStr(appart.latitude);
-	// let longitude = optionalNumberStr(appart.longitude);
-
-	// if (latitude && longitude) {
-	//     traveltimes.byBike = await openRouteService.travelTime("bike", )
-	// }
-}
-
 function detectKindFromDescription(appart: AppartmentOld): AppartmentKind | null {
 	if (appart.typel !== 'au') return null;
 
@@ -325,7 +313,11 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 				}
 			},
 			travelTimeToN7: {
-				create: travelTimes(appart)
+				create: {
+					byBike: null,
+					byPublicTransport: null,
+					byFoot: null
+				}
 			},
 			nearbyStations: {
 				createMany: {
@@ -371,15 +363,10 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 
 	for (const photoInDb of appartment.photos) {
 		const photo = photos.find((p) => path.basename(p.photo) === photoInDb.filename);
+		if (!photo) continue;
 		const photoOnDiskFilename = path.join(__dirname, 'old-data', photo?.photo);
 
-		if (photo === undefined || !photo || !existsSync(photoOnDiskFilename)) {
-			// console.log(
-			// 	`\t\t⚠️  Photo at ${photoOnDiskFilename} {${JSON.stringify(
-			// 		photoInDb
-			// 	)}} was not imported correctly`
-			// );
-		} else {
+		if (photo !== undefined && photo && existsSync(photoOnDiskFilename)) {
 			const targetFilename = path.join(
 				__dirname,
 				'../public/photos/appartments',
@@ -417,7 +404,6 @@ async function importData(ghost: User, appartments: AppartmentOld[], photos: Pho
 		};
 		const password = createPassword(3);
 		if (!appart.contact_mail) {
-			// console.log(`⚠️ ${attributes.name} has no email, creating a ghost user`);
 		}
 		await auth.createUser({
 			key: {
@@ -453,7 +439,7 @@ async function nukeDb() {
 	try {
 		await prisma.$executeRawUnsafe(`TRUNCATE TABLE ${tables} CASCADE;`);
 	} catch (error) {
-		console.log({ error });
+		console.error({ error });
 	}
 
 	rmSync(path.join(__dirname, '../public/photos/appartments'), { recursive: true });
@@ -495,8 +481,8 @@ async function main() {
 
 	// Create users
 	const passwords = await importData(ghost, appartments, photos);
-	console.log('Created users with passwords:');
-	console.log(passwords);
+	console.info('Created users with passwords:');
+	console.info(passwords);
 }
 
 main()

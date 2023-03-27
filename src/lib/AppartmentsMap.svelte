@@ -218,4 +218,9 @@
 		justify-content: center;
 		font-size: 15px;
 	}
+
+	:global(.leaflet-container .leaflet-control-attribution) {
+		background: var(--bg);
+		color: var(--fg);
+	}
 </style>

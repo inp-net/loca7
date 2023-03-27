@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { appartmentTitle, editBefore, EMPTY_APPARTMENT, type Report } from '$lib/types';
+	import {
+		appartmentTitle,
+		editBefore,
+		EMPTY_APPARTMENT,
+		type GeographicPoint,
+		type Report
+	} from '$lib/types';
 	import {
 		durationDisplay,
 		distanceDisplay,
@@ -13,11 +19,7 @@
 	import {
 		DISPLAY_APPARTMENT_KIND,
 		DISPLAY_PUBLIC_TRANSPORT_TYPE,
-		type Appartment,
-		type GeographicPoint,
-		type PublicTransportStation,
-		DISPLAY_REPORT_REASON,
-		type User
+		DISPLAY_REPORT_REASON
 	} from '$lib/types';
 	import { photoURL } from '$lib/photos';
 	import publicTransportColor from '$lib/publicTransportColors';
@@ -33,11 +35,12 @@
 	import { tooltip } from '$lib/tooltip';
 	import xss from 'xss';
 	import AppartmentEditItem from '$lib/AppartmentEditItem.svelte';
+	import type { PublicTransportStation, User } from '@prisma/client';
 
 	export let data: LayoutData;
-	let user: User | null = data.user;
-	let reports: Report[] = data.appartment.reports;
-	let appart: Appartment = data.appartment;
+	const { user, appartment: appart } = data;
+	let reports = appart.reports;
+
 	let calendarICSEvent: { url: string; filename: string } = { url: '', filename: '' };
 	let contactVCard: { url: string; filename: string } = vcard(appart.owner);
 	let secondsAvailableSince = (Date.now() - appart.availableAt.valueOf()) * 1e-3;
@@ -225,6 +228,20 @@
 								</span>
 							{/if}
 						</p>
+					</div>
+				{:else if appart.longitude && appart.latitude}
+					<div class="row">
+						<span class="icon">
+							<Icon name="travel" />
+						</span>
+						<div class="content">
+							<ButtonSecondary
+								on:click={async () => {
+									await fetch(`/appartements/${appart.id}/generate-travel-times`);
+									window.location.reload();
+								}}>Obtenir les temps de trajet</ButtonSecondary
+							>
+						</div>
 					</div>
 				{/if}
 			</section>
@@ -438,6 +455,15 @@
 			/>
 		</section>
 	{/if}
+
+	<section class="meta">
+		<p class="typo-details">
+			Annonce n°<a href="/appartements/{appart.number}">{appart.number}</a> &bull;
+			<a href="https://bde.enseeiht.fr/services/logement/{appart.number}"
+				>voir sur l'ancien site</a
+			>
+		</p>
+	</section>
 </main>
 
 <style>
@@ -706,5 +732,12 @@
 	section.notice .actions {
 		display: flex;
 		gap: 1rem;
+	}
+
+	section.meta {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 	}
 </style>

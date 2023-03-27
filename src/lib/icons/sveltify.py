@@ -25,6 +25,11 @@ for file in (root_folder / "public/icons").glob("*.svg"):
 
     all_file_stems.append(file.stem)
 
-(root_folder / "src/routes/_showcase/icons/all_icon_stems.ts").write_text(
-    f"export default {json.dumps(all_file_stems)}"
+all_file_stems.sort()
+
+(root_folder / "src/lib/icons/types.ts").write_text(
+    f"""
+export const NAMES = {json.dumps(all_file_stems)} as const;
+export type Name = typeof NAMES[number];
+"""
 )

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import AppartmentAdminItem from '$lib/AppartmentAdminItem.svelte';
 	import type { PageData } from './$types';
-	import type { Appartment } from '$lib/types';
 	import InputSelectMultiple from '$lib/InputSelectMultiple.svelte';
 	import InputField from '$lib/InputField.svelte';
+	import type { Report } from '@prisma/client';
 
 	export let data: PageData;
 	type Status = 'pending' | 'approved' | 'archived';
@@ -37,9 +37,13 @@
 		);
 	}
 
-	const byReportsThenUpdatedAt = (a: Appartment, b: Appartment) =>
+	const byReportsThenUpdatedAt = (
+		a: { reports: Report[]; updatedAt: Date },
+		b: { reports: Report[]; updatedAt: Date }
+	) =>
 		a.reports.length === b.reports.length
-			? a.updatedAt.valueOf() - b.updatedAt.valueOf()
+			? Math.max(a.updatedAt.valueOf(), ...a.reports.map((r) => r.createdAt.valueOf())) -
+			  Math.max(b.updatedAt.valueOf(), ...b.reports.map((r) => r.createdAt.valueOf()))
 			: a.reports.length - b.reports.length;
 
 	$: appartmentsPending = appartments

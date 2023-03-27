@@ -2,7 +2,7 @@ import { writeFileSync, rmSync, copyFileSync } from 'fs';
 import { error } from '@sveltejs/kit';
 import path from 'path';
 import { photoURL } from '$lib/photos';
-import type { Photo } from '$lib/types';
+import type { Photo } from '@prisma/client';
 
 export async function writePhotosToDisk(photos: Photo[], files: File[]) {
 	for (const photo of photos) {

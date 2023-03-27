@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { z } from 'zod';
 	import BaseInputText from './BaseInputText.svelte';
 
 	export let value: Date | null;
@@ -6,45 +7,9 @@
 	export let name: string | undefined = undefined;
 	export let initial: Date | undefined = undefined;
 	export let placeholder: string = '';
-	export let future: boolean = false;
-	export let past: boolean = false;
 	export let required: boolean = false;
-	export let showEmptyErrors: boolean = true;
 
-	let dateString: string;
-	$: dateString = value ? value.toISOString().split('T')[0] : '';
-
-	let initialString: string;
-	$: initialString = initial ? initial.toISOString().split('T')[0] : '';
-
-	export let errorMessage: string = '';
-	$: {
-		if (value === null && showEmptyErrors && required) {
-			errorMessage = 'Ce champ est requis';
-		} else if (value !== null) {
-			if (future && value.valueOf() < Date.now()) {
-				errorMessage = 'La date doit être dans le futur';
-			} else if (past && value.valueOf() > Date.now()) {
-				errorMessage = 'La date doit être dans le passé';
-			} else {
-				errorMessage = '';
-			}
-		} else {
-			errorMessage = '';
-		}
-	}
+	export let schema: Zod.ZodDate = z.date();
 </script>
 
-<BaseInputText
-	{placeholder}
-	type="date"
-	value={dateString}
-	on:input={(e) => {
-		value = new Date(e.target.value);
-	}}
-	{id}
-	{name}
-	initial={initialString}
-	{errorMessage}
-	{required}
-/>
+<BaseInputText {placeholder} type="date" bind:value {id} {name} {initial} {schema} {required} />

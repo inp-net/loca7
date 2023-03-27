@@ -67,11 +67,11 @@
 	--weight-big-button: 700;
 
 	/* Colors */
-	--diamond: rgba(37, 201, 255, 1);
+	--diamond: #25c9ff;
 	--fg: rgba(0, 0, 0, 1);
 	--bg: rgba(255, 255, 255, 1);
 	--muted: rgba(0, 0, 0, 0.75);
-	--cobalt: rgba(0, 99, 132, 1);
+	--cobalt: #006384;
 	--mushroom: rgba(214, 37, 37, 1);
 	--ice: rgba(194, 232, 252, 1);
 	--blood: rgba(154, 12, 12, 1);
@@ -82,21 +82,22 @@
 	--cactus: rgba(13, 140, 56, 1);
 	--plaster: rgba(252, 229, 169, 1);
 	--moss: rgba(174, 249, 190, 1);
-	--sky: rgba(0, 159, 227, 1);
+	--sky: #007baf;
 }
 
 @media (prefers-color-scheme: dark) {
 	:root {
 		--fg: rgba(255, 255, 255, 1);
 		--muted: rgba(255, 255, 255, 0.75);
-		--bg: rgb(18, 18, 18);
-		--card-bg: rgb(28, 28, 28);
+		--bg: rgb(26, 28, 30);
+		--card-bg: #33373b;
 		--ice: rgb(28, 60, 75);
-		--blood: rgb(238, 41, 41);
-		--rose: rgb(70, 14, 14);
+		--blood: rgb(240, 50, 50);
+		--rose: rgb(36, 4, 4);
 		--cobalt: rgb(35, 173, 233);
 		--cactus: rgb(95, 228, 124);
 		--moss: rgb(7, 54, 22);
+		--sky: #0096d6;
 	}
 }
 

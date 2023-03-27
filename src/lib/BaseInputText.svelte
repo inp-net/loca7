@@ -3,25 +3,74 @@
 	import Icon from './Icon.svelte';
 	import { v4 as uuidv4 } from 'uuid';
 	import InputWithSuggestions from './InputWithSuggestions.svelte';
+	import type { Name as IconName } from '$lib/icons/types';
+	import type { ZodSchema } from 'zod';
 	const emit = createEventDispatcher();
 
 	export let type: HTMLInputElement['type'];
-	export let value: string | number | undefined;
+	export let value: string | number | Date | null | undefined;
 	export let id: string = `input-${uuidv4()}`;
 	export let autocomplete: string | undefined = undefined;
 	export let name: string | undefined = undefined;
-	export let initial: string | number | undefined = undefined;
+	export let initial: string | number | Date | null | undefined = undefined;
 	export let unit: string = '';
 	export let placeholder: string = '';
-	export let actionIcon: string = '';
+	export let actionIcon: IconName | '' = '';
 	export let suggestions: string[] | undefined = undefined;
 	export let required: boolean = false;
+	export let schema: ZodSchema;
+
+	let showEmptyErrors: boolean = false;
+	let valueString: string =
+		type === 'date' ? value?.toISOString()?.split('T')[0] : value?.toString() ?? '';
+	$: {
+		switch (type) {
+			case 'number':
+				value = +valueString.replace(',', '.');
+				break;
+			case 'date':
+				value = new Date(valueString);
+				if (!value.valueOf()) {
+					value = null;
+					valueString = '';
+				}
+				break;
+			default:
+				value = valueString;
+		}
+	}
 
 	export let errorMessage: string = '';
+	let _errorMessage: string = '';
 	export let messageIsWarning: boolean = false;
+	$: {
+		if (valueString === '' && !showEmptyErrors) {
+			_errorMessage = '';
+		} else if (errorMessage !== '') {
+			_errorMessage = errorMessage;
+		} else {
+			if (valueString === '' && showEmptyErrors && required) {
+				_errorMessage = 'Ce champ est requis';
+			} else {
+				// Validate string conversion first
+				if (type === 'number' && valueString === '') {
+					_errorMessage = 'Ce champ doit être un nombre';
+				} else {
+					if (type === 'date' && value === null) {
+						_errorMessage = '';
+					} else {
+						let parseResult = schema.safeParse(value);
+						_errorMessage = parseResult.success
+							? ''
+							: parseResult.error.issues.map((e) => e.message).join(', ');
+					}
+				}
+			}
+		}
+	}
 
 	let errored = false;
-	$: errored = errorMessage !== '';
+	$: errored = _errorMessage !== '';
 
 	let resettable = false;
 	$: resettable = typeof initial !== 'undefined' && value !== initial;
@@ -50,22 +99,28 @@
 				{id}
 				{required}
 				{name}
-				bind:text={value}
+				bind:text={valueString}
 				{placeholder}
 				on:focus={() => (focused = true)}
 				on:blur={() => (focused = false)}
+				on:input={(e) => {
+					if (valueString !== '') showEmptyErrors = true;
+					emit('input', e);
+				}}
 			/>
 		{:else}
 			<input
 				{type}
 				{name}
 				{id}
-				{value}
+				value={valueString}
 				{required}
 				{autocomplete}
 				{placeholder}
 				on:input={(e) => {
-					value = type.match(/^(number|range)$/) ? +e.target.value : e.target.value;
+					valueString = e.target.value;
+					if (valueString === undefined) valueString = '';
+					if (valueString !== '') showEmptyErrors = true;
 					emit('input', e);
 				}}
 				on:focus={() => (focused = true)}
@@ -78,7 +133,17 @@
 			</button>
 		{/if}
 		{#if resettable}
-			<button type="button" class="reset" on:click={() => (value = initial)}>
+			<button
+				type="button"
+				class="reset"
+				on:click={() => {
+					value = initial;
+					valueString =
+						type === 'date'
+							? value?.toISOString()?.split('T')[0]
+							: value?.toString() ?? '';
+				}}
+			>
 				<Icon name="reset" color="fg" />
 			</button>
 		{:else}
@@ -87,7 +152,7 @@
 	</div>
 	{#if errored}
 		<div class="error-area">
-			<p class="typo-details error-message">{errorMessage}</p>
+			<p class="typo-details error-message">{_errorMessage}</p>
 		</div>
 	{/if}
 </div>

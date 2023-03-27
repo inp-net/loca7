@@ -43,7 +43,6 @@
 				);
 			return serialize(current.photos) !== serialize(edit.photos);
 		}
-		console.log('modified', field, modification(field));
 		return /<(ins|del)/g.test(modification(field));
 	}
 

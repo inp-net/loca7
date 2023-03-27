@@ -10,6 +10,10 @@
 	let sent: boolean = $page.url.hash === '#sent';
 </script>
 
+<svelte:head>
+    <title>Loca7 · Vérification d'adresse e-mail nécéssaire</title>
+</svelte:head>
+
 <main>
 	<h1>Votre adresse e-mail doit être vérifiée.</h1>
 
