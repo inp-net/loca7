@@ -70,13 +70,10 @@ export const PublicTransportStationSchema = z.object({
 
 export type Photo = z.infer<typeof PhotoSchema>;
 export const PhotoSchema = z.object({
-	id: z.string(),
 	filename: z.string(),
 	contentType: z.string(),
 	position: z.number(),
-	hash: z.string(),
-	appartmentId: z.string().nullable(),
-	appartmentEditId: z.string().nullable()
+	hash: z.string().nullable()
 });
 
 export type AppartmentEdit = z.infer<typeof AppartmentEditSchema>;

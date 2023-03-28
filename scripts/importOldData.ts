@@ -1,14 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 import { convert as html2text } from 'html-to-text';
 import { distanceBetween, ENSEEIHT } from '../src/lib/utils';
-import {
-	DISPLAY_PUBLIC_TRANSPORT_TYPE,
-	GeographicPoint,
+import { DISPLAY_PUBLIC_TRANSPORT_TYPE } from '../src/lib/types';
+import type {
 	Photo,
+	GeographicPoint,
 	PublicTransportStation,
 	PublicTransportType
 } from '../src/lib/types';
 import Autolinker from 'autolinker';
+import { checksumFile } from '../src/lib/server/utils';
 // import { openRouteService } from '../src/lib/server/traveltime';
 import xss from 'xss';
 import type { User, TravelTimeToN7, Report, AppartmentKind } from '@prisma/client';
@@ -326,17 +327,21 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 			},
 			photos: {
 				createMany: {
-					data: photos
-						.filter((photo) => photo.logement_id == appart.id)
-						.map(
-							(photo, i) =>
-								({
-									contentType: 'image/jpeg',
-									filename: path.basename(photo.photo),
-									position: i,
-									hash: null /* TODO */
-								} as Photo)
-						)
+					data: await Promise.all(
+						photos
+							.filter((photo) => photo.logement_id == appart.id)
+							.map(
+								async (photo, i) =>
+									({
+										contentType: 'image/jpeg',
+										filename: path.basename(photo.photo),
+										position: i,
+										hash: await checksumFile(
+											path.join(__dirname, 'old-data', photo?.photo)
+										)
+									} as Photo)
+							)
+					)
 				}
 			},
 			reports: {
@@ -382,11 +387,17 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 async function importData(ghost: User, appartments: AppartmentOld[], photos: PhotoOld[]) {
 	const userPasswords: Record<string, null> = {};
 	const appartmentsByOwner = appartments.reduce((acc, appart) => {
-		const key = appart.contact_mail?.trim().toLocaleLowerCase() || appart.uuid_proprietaire;
+		const key = fixEmailTypos(
+			appart.contact_mail?.trim().toLocaleLowerCase() ||
+				`ghost.${appart.uuid_proprietaire}@loca7.enseeiht.fr`
+		);
 		if (!acc[key]) acc[key] = [];
-		acc[key].push(appart);
+		acc[key].push({
+			...appart,
+			newEmail: key
+		});
 		return acc;
-	}, {} as Record<string, AppartmentOld[]>);
+	}, {} as Record<string, (AppartmentOld & { newEmail: string })[]>);
 
 	// create users
 	for (const apparts of nqdm(Object.values(appartmentsByOwner))) {
@@ -395,16 +406,11 @@ async function importData(ghost: User, appartments: AppartmentOld[], photos: Pho
 		// );
 		const appart = apparts[0];
 		const attributes = {
-			email: fixEmailTypos(
-				appart.contact_mail?.trim().toLocaleLowerCase() ||
-					`ghost.${appart.uuid_proprietaire}@loca7.enseeiht.fr`
-			),
+			email: appart.newEmail,
 			name: (appart.contact_prenom + ' ' + appart.contact_nom).trim(),
 			phone: (appart.contact_port || appart.contact_tel).trim()
 		};
 		const password = createPassword(3);
-		if (!appart.contact_mail) {
-		}
 		await auth.createUser({
 			key: {
 				providerId: 'email',
