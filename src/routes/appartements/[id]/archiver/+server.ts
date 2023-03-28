@@ -2,10 +2,10 @@ import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({ params, locals }) => {
+export const POST: RequestHandler = async ({ params, locals, url }) => {
 	const { user, session } = await locals.validateUser();
 
-	guards.emailValidated(user, session);
+	guards.emailValidated(user, session, url);
 
 	const appartment = await prisma.appartment.findUnique({
 		where: { id: params.id },

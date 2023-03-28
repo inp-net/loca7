@@ -8,9 +8,9 @@ import type { Actions, PageServerLoad } from './$types';
 import { writePhotosToDisk, deletePhotosFromDisk, copyPhotos } from '$lib/server/photos';
 import { prisma } from '$lib/server/prisma';
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export const load: PageServerLoad = async ({ params, locals, url }) => {
 	const { user, session } = await locals.validateUser();
-	guards.emailValidated(user, session);
+	guards.emailValidated(user, session, url);
 
 	const modification = await prisma.appartmentEdit.findUnique({
 		where: {
@@ -31,9 +31,9 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 };
 
 export const actions: Actions = {
-	async apply({ params, locals, fetch }) {
+	async apply({ params, locals, fetch, url }) {
 		const { user, session } = await locals.validateUser();
-		guards.isAdmin(user, session);
+		guards.isAdmin(user, session, url);
 
 		const edit = await prisma.appartmentEdit.findUnique({
 			where: {
@@ -139,9 +139,9 @@ export const actions: Actions = {
 		throw redirect(302, `/appartements/${newAppartment.id}`);
 	},
 
-	async delete({ params, locals }) {
+	async delete({ params, locals, url }) {
 		const { user, session } = await locals.validateUser();
-		guards.emailValidated(user, session);
+		guards.emailValidated(user, session, url);
 		const modification = await prisma.appartmentEdit.findUnique({
 			where: {
 				id: params.modification

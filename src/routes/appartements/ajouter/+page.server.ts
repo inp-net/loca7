@@ -11,15 +11,15 @@ import xss from 'xss';
 import type { Actions, PageServerLoad } from './$types';
 import { writePhotosToDisk } from '$lib/server/photos';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, url }) => {
 	const { session, user } = await locals.validateUser();
-	guards.emailValidated(user, session);
+	guards.emailValidated(user, session, url);
 };
 
 export const actions: Actions = {
-	postAppartment: async ({ request, locals, fetch }) => {
+	postAppartment: async ({ request, locals, fetch, url }) => {
 		const { user, session } = await locals.validateUser();
-		guards.emailValidated(user, session);
+		guards.emailValidated(user, session, url);
 
 		const formDataRaw = await request.formData();
 		const formData = Object.fromEntries(formDataRaw) as Record<string, string>;

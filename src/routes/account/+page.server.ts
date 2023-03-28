@@ -6,16 +6,16 @@ import type { Actions, PageServerLoad } from './$types';
 import { sendMail } from '$lib/server/mail';
 import { CONTACT_EMAIL } from '$lib/constants';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, url }) => {
 	const { user, session } = await locals.validateUser();
-	guards.emailValidated(user, session);
+	guards.emailValidated(user, session, url);
 	return { user };
 };
 
 export const actions: Actions = {
-	async updateProfile({ locals, request }) {
+	async updateProfile({ locals, request, url }) {
 		const { user, session } = await locals.validateUser();
-		guards.emailValidated(user, session);
+		guards.emailValidated(user, session, url);
 
 		const { name, email, phone } = Object.fromEntries(await request.formData()) as Record<
 			string,
@@ -55,9 +55,9 @@ export const actions: Actions = {
 		throw redirect(302, '/account');
 	},
 
-	async changePassword({ locals, request, fetch }) {
+	async changePassword({ locals, request, fetch, url }) {
 		const { user, session } = await locals.validateUser();
-		guards.emailValidated(user, session);
+		guards.emailValidated(user, session, url);
 
 		const { oldPassword, newPassword } = Object.fromEntries(await request.formData()) as Record<
 			string,

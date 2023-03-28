@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals }) => {
+	default: async ({ request, locals, url }) => {
 		const { email, password } = Object.fromEntries(await request.formData()) as Record<
 			string,
 			string
@@ -43,6 +43,6 @@ export const actions: Actions = {
 			}
 		}
 
-		throw redirect(302, '/');
+		throw redirect(302, url.searchParams.get('go') ?? '/');
 	}
 };

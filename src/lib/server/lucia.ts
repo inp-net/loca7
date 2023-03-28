@@ -25,18 +25,21 @@ export const auth = lucia({
 export type Auth = typeof auth;
 
 export const guards: {
-	loggedIn: (user: User | null, session: Session | null) => asserts user is User;
+	loggedIn: (user: User | null, session: Session | null, url: URL) => asserts user is User;
 	emailValidated: (
 		user: User | null,
-		session: Session | null
+		session: Session | null,
+		url: URL
 	) => asserts user is User & { emailIsValidated: true };
 	isAdmin: (
 		user: User | null,
-		session: Session | null
+		session: Session | null,
+		url: URL
 	) => asserts user is User & { emailIsValidated: true; admin: true };
 	isAdminElseRedirect: (
 		user: User | null,
-		session: Session | null
+		session: Session | null,
+		url: URL
 	) => asserts user is User & { emailIsValidated: true; admin: true };
 	appartmentAccessible: (
 		user: User | null,
@@ -49,15 +52,15 @@ export const guards: {
 	/**
 	 * Checks if the user is logged in, if not, redirects to /login
 	 */
-	loggedIn: (user, session) => {
-		if (!(user && session)) throw redirect(302, '/login');
+	loggedIn: (user, session, url) => {
+		if (!(user && session)) throw redirect(302, '/login?go=' + url.pathname);
 	},
 	/**
 	 * Checks if the user has validated their email, if not, redirects to /validate-email
 	 * Implies a check to see if the user is logged in (see guards.loggedIn)
 	 */
-	emailValidated: (user, session) => {
-		guards.loggedIn(user, session);
+	emailValidated: (user, session, url) => {
+		guards.loggedIn(user, session, url);
 		if (!user.emailIsValidated) throw redirect(302, '/validate-email');
 	},
 	/**
@@ -65,15 +68,15 @@ export const guards: {
 	 * Implies a check to see if the user has validated their email (see guards.emailValidated)
 	 * Implies a check to see if the user is logged in (see guards.loggedIn)
 	 */
-	isAdmin: (user, session) => {
-		guards.emailValidated(user, session);
+	isAdmin: (user, session, url) => {
+		guards.emailValidated(user, session, url);
 		if (!user.admin) throw error(401, { message: "Vous n'êtes pas administrateur" });
 	},
 	/**
 	 * Acts like guards.isAdmin, but redirects to / instead of throwing an error
 	 */
-	isAdminElseRedirect: (user, session) => {
-		guards.emailValidated(user, session);
+	isAdminElseRedirect: (user, session, url) => {
+		guards.emailValidated(user, session, url);
 		if (!user.admin) throw redirect(302, '/');
 	},
 	/**

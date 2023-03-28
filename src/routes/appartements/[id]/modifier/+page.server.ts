@@ -7,9 +7,9 @@ import xss from 'xss';
 import { redirect } from '@sveltejs/kit';
 import type { AppartmentKind } from '@prisma/client';
 
-export const load: PageServerLoad = async ({ locals, params }) => {
+export const load: PageServerLoad = async ({ locals, params, url }) => {
 	const { user, session } = await locals.validateUser();
-	guards.emailValidated(user, session);
+	guards.emailValidated(user, session, url);
 
 	const appartment = await prisma.appartment.findFirst({
 		where: {
@@ -37,9 +37,9 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 };
 
 export const actions: Actions = {
-	edit: async ({ request, locals, params, fetch }) => {
+	edit: async ({ request, locals, params, url }) => {
 		const { user, session } = await locals.validateUser();
-		guards.emailValidated(user, session);
+		guards.emailValidated(user, session, url);
 		const appartment = await prisma.appartment.findUnique({
 			where: { id: params.id },
 			include: {

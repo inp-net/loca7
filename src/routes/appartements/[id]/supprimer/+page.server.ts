@@ -6,10 +6,10 @@ import { rmSync } from 'fs';
 import path from 'path';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals, params }) => {
+export const load: PageServerLoad = async ({ locals, params, url }) => {
 	const { session, user } = await locals.validateUser();
 
-	guards.emailValidated(user, session);
+	guards.emailValidated(user, session, url);
 
 	const appartment = await prisma.appartment.findFirst({
 		where: {
@@ -27,10 +27,10 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 };
 
 export const actions: Actions = {
-	confirm: async ({ locals, params }) => {
+	confirm: async ({ locals, params, url }) => {
 		const { session, user } = await locals.validateUser();
 
-		guards.emailValidated(user, session);
+		guards.emailValidated(user, session, url);
 
 		const appartment = await prisma.appartment.findFirst({
 			where: {

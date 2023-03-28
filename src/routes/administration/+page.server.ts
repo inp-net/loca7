@@ -2,9 +2,9 @@ import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, url }) => {
 	const { user, session } = await locals.validateUser();
-	guards.isAdminElseRedirect(user, session);
+	guards.isAdminElseRedirect(user, session, url);
 
 	const appartments = await prisma.appartment.findMany({
 		where: {},

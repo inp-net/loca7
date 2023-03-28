@@ -2,9 +2,9 @@ import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({ locals, params }) => {
+export const POST: RequestHandler = async ({ locals, params, url }) => {
 	const { user, session } = await locals.validateUser();
-	guards.isAdmin(user, session);
+	guards.isAdmin(user, session, url);
 
 	await prisma.report.delete({
 		where: { id: params.id }

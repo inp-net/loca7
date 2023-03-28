@@ -6,9 +6,9 @@ import xss from 'xss';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-	default: async ({ locals, request }) => {
+	default: async ({ locals, request, url }) => {
 		const { user, session } = await locals.validateUser();
-		guards.emailValidated(user, session);
+		guards.emailValidated(user, session, url);
 
 		const { reason, message, appartmentId } = Object.fromEntries(
 			await request.formData()

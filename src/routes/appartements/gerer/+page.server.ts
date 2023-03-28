@@ -2,9 +2,9 @@ import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, url }) => {
 	const { session, user } = await locals.validateUser();
-	guards.emailValidated(user, session);
+	guards.emailValidated(user, session, url);
 
 	return {
 		appartments: (
