@@ -266,7 +266,7 @@
 							<p class="typo-paragraph">Parking</p>
 						</li>
 					{/if}
-					{#if appart.kind === 'colocation'}
+					{#if appart.kind === 'colocation' && appart.roomsCount > 0}
 						<li class="aspect">
 							<span class="iconlike">
 								{appart.roomsCount}
