@@ -46,8 +46,8 @@
 	}
 
 	label {
-		background: var(--fg);
-		color: var(--bg);
+		background: var(--bg);
+		color: var(--fg);
 		padding: 0.5rem 1rem;
 		cursor: pointer;
 	}
@@ -59,11 +59,12 @@
 
 	fieldset {
 		border: var(--border-width) solid var(--fg);
-		display: flex;
-		gap: 0.5rem;
-		padding: 1rem;
+		display: inline-flex;
+		gap: var(--border-width);
+		padding: 0;
 		flex-wrap: wrap;
 		margin: 0;
+        background: var(--fg);
 	}
 
 	.error-area {
