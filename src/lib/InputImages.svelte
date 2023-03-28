@@ -110,8 +110,8 @@
 		</p>
 	{:else}
 		<SortableList bind:list={value} key="filename" let:item={photo} let:index>
-			<li class="item">
-				<button class="drag" use:tooltip={'Glissez pour réordonner les images'}>
+			<li class="image-item">
+				<button type="button" class="drag" use:tooltip={'Glissez pour réordonner les images'}>
 					<Icon name="drag-handle" />
 				</button>
 				<span class="position">{index + 1}</span>
@@ -188,29 +188,31 @@
 		width: 100%;
 	}
 
-	.item {
+	.image-item {
 		display: grid;
 		grid-template-columns: 2rem 2rem 5rem auto 3rem;
 		align-items: center;
 		gap: 0.5rem;
 		position: relative;
 		z-index: 10;
-		margin-bottom: 1rem;
+        width: 100%;
+        padding: 0.5rem;
+		/* margin-bottom: 1rem; */
 	}
 
-	.item .position {
+	.image-item .position {
 		font-size: 1.5rem;
 		font-weight: bold;
 		text-align: center;
 	}
 
-	.item span {
+	.image-item span {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
 
-	.item img {
+	.image-item img {
 		height: 4rem;
 		width: 5rem;
 		object-fit: cover;
@@ -218,7 +220,7 @@
 		border: var(--border-width) solid var(--fg);
 	}
 
-	.item button.drag {
+	.image-item button.drag {
 		border: none;
 		background-color: transparent;
 		height: 2rem;
