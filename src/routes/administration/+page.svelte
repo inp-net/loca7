@@ -1,12 +1,23 @@
 <script lang="ts">
+	import VirtualList from 'svelte-tiny-virtual-list';
 	import AppartmentAdminItem from '$lib/AppartmentAdminItem.svelte';
+	import { debounce } from 'lodash';
 	import type { PageData } from './$types';
 	import InputSelectMultiple from '$lib/InputSelectMultiple.svelte';
 	import InputField from '$lib/InputField.svelte';
-	import type { Report } from '@prisma/client';
+	import type { Appartment, Report } from '@prisma/client';
+	import InputText from '$lib/InputText.svelte';
+	import Fuse from 'fuse.js';
+	import type { record } from 'zod';
+	import InputSelectOne from '$lib/InputSelectOne.svelte';
 
 	export let data: PageData;
-	type Status = 'pending' | 'approved' | 'archived';
+	const categories = {
+		pending: 'en attente',
+		online: 'en ligne',
+		archived: 'archivé'
+	};
+	type Status = keyof typeof categories;
 	let eagerStatus: Record<string, Status> = {};
 	$: appartments = data.appartments.sort(
 		(a, b) => a.availableAt.valueOf() - b.availableAt.valueOf()
@@ -15,6 +26,71 @@
 	$: yearsAvailable = [
 		...new Set(appartments.map((a) => a.updatedAt.getFullYear().toString()))
 	].sort();
+
+	const isOnline = (a: Appartment) =>
+		status(eagerStatus, a) === 'online' && a.history.every((h) => h.applied);
+	const isPending = (a: Appartment) =>
+		status(eagerStatus, a) === 'pending' ||
+		(status(eagerStatus, a) !== 'archived' && a.history.some((h) => !h.applied));
+	const isArchived = (a: Appartment) => status(eagerStatus, a) === 'archived';
+	const isYearSelected = (years) => (a: Appartment) =>
+		years.length === 0 || years.includes(a.updatedAt.getFullYear().toString());
+
+	let currentCategory: Status = 'pending';
+
+	$: searcher = new Fuse(appartments.filter(isYearSelected(years)), {
+		keys: [
+			'rent',
+			'charges',
+			'deposit',
+			'surface',
+			'kind',
+			'address',
+			'description',
+			'number',
+			'owner.name',
+			'owner.email',
+			'owner.phone'
+		],
+		threshold: 0.2,
+		includeMatches: true,
+		shouldSort: false,
+		distance: 3500, // by analysis of imported data, description character length is at most 3148, wth most below 2000. (20 apparts have more than 2k chars in description)
+		useExtendedSearch: true
+	});
+
+	let byCategory: Record<Status, (Appartment & { matches: readonly Fuse.FuseResultMatch[] })[]> =
+		{
+			pending: [],
+			archived: [],
+			online: []
+		};
+
+	const appartment = (category: keyof typeof byCategory, index: number) =>
+		byCategory[category][index];
+
+	const updateSearchResults = debounce((search: string, years: number[]) => {
+		let searchResults: (typeof byCategory)['archived'] = [];
+		if (search) {
+			searchResults = searcher
+				.search(search)
+				.map((r) => ({ ...r.item, matches: r.matches ?? [] }));
+		} else {
+			searchResults = appartments
+				.filter(isYearSelected(years))
+				.map((a) => ({ ...a, matches: [] }));
+		}
+		byCategory = {
+			pending: searchResults.filter(isPending).sort(byReportsThenUpdatedAt).reverse(),
+			archived: searchResults.filter(isArchived).sort(byReportsThenUpdatedAt).reverse(),
+			online: searchResults.filter(isOnline).sort(byReportsThenUpdatedAt).reverse()
+		};
+		console.log(byCategory);
+	}, 300);
+
+	$: updateSearchResults(search, years);
+
+	let search: string = '';
 
 	let years: string[] =
 		new Date().getMonth() >= 9
@@ -33,7 +109,7 @@
 	): Status {
 		return (
 			eagerStatus?.[appartment.id] ??
-			(!appartment.approved ? 'pending' : appartment.archived ? 'archived' : 'approved')
+			(!appartment.approved ? 'pending' : appartment.archived ? 'archived' : 'online')
 		);
 	}
 
@@ -45,26 +121,6 @@
 			? Math.max(a.updatedAt.valueOf(), ...a.reports.map((r) => r.createdAt.valueOf())) -
 			  Math.max(b.updatedAt.valueOf(), ...b.reports.map((r) => r.createdAt.valueOf()))
 			: a.reports.length - b.reports.length;
-
-	$: appartmentsPending = appartments
-		.filter(
-			(a) =>
-				status(eagerStatus, a) === 'pending' ||
-				(status(eagerStatus, a) !== 'archived' && a.history.some((h) => !h.applied))
-		)
-		.filter((a) => years.length === 0 || years.includes(a.updatedAt.getFullYear().toString()))
-		.sort(byReportsThenUpdatedAt)
-		.reverse();
-	$: appartmentsArchived = appartments
-		.filter((a) => status(eagerStatus, a) === 'archived')
-		.filter((a) => years.length === 0 || years.includes(a.updatedAt.getFullYear().toString()))
-		.sort(byReportsThenUpdatedAt)
-		.reverse();
-	$: appartmentsOnline = appartments
-		.filter((a) => status(eagerStatus, a) === 'approved' && a.history.every((h) => h.applied))
-		.filter((a) => years.length === 0 || years.includes(a.updatedAt.getFullYear().toString()))
-		.sort(byReportsThenUpdatedAt)
-		.reverse();
 </script>
 
 <svelte:head>
@@ -72,71 +128,58 @@
 </svelte:head>
 
 <main>
-	<h1>Administration</h1>
-
 	<section class="filters">
-		<InputField label="Dernière modification">
-			<InputSelectMultiple options={yearsAvailable} bind:selection={years} />
-		</InputField>
+		<InputSelectOne options={categories} bind:value={currentCategory} />
+		<div class="side-by-side">
+			<InputField label="Dernière modification">
+				<InputSelectMultiple options={yearsAvailable} bind:selection={years} />
+			</InputField>
+			<InputField label="Rechercher">
+				<InputText bind:value={search} />
+			</InputField>
+		</div>
 	</section>
 
-	<h2>{appartmentsPending.length || ''} en attente</h2>
+	{#if currentCategory === 'pending'}
+		<h2>{byCategory.pending.length || ''} en attente</h2>
+	{:else if currentCategory === 'online'}
+		<h2>{byCategory.online.length || ''} en ligne</h2>
+	{:else}
+		<h2>
+			{byCategory.archived.length || ''} archivé{byCategory.archived.length > 1 ? 's' : ''}
+		</h2>
+	{/if}
 
 	<ul>
-		{#each appartmentsPending as appartment (appartment.id)}
-			<AppartmentAdminItem
-				{...appartment}
-				approved={false}
-				on:approuver={() => {
-					eagerStatus[appartment.id] = 'approved';
-				}}
-				open={openAppartmentId === appartment.id}
-				on:close={() => (openAppartmentId = '')}
-				on:open={() => (openAppartmentId = appartment.id)}
-			/>
-		{:else}
-			<li class="empty">Aucune annonce.</li>
-		{/each}
-	</ul>
+		<VirtualList
+			width="100%"
+			height={Math.min(510, 110 * byCategory[currentCategory].length)}
+			itemCount={byCategory[currentCategory].length}
+			itemSize={110}
+		>
+			<div slot="item" let:index let:style {style}>
+				<AppartmentAdminItem
+					{...appartment(currentCategory, index)}
+					highlight={appartment(currentCategory, index).matches}
+					approved={false}
+					on:approuver={() => {
+						let appart = appartment(currentCategory, index);
+						if (currentCategory === 'online') {
+							eagerStatus[appart.id] = 'archived';
+						} else {
+							eagerStatus[appart.id] = 'online';
+						}
+					}}
+					open={openAppartmentId === appartment(currentCategory, index).id}
+					on:close={() => (openAppartmentId = '')}
+					on:open={() => (openAppartmentId = appartment(currentCategory, index).id)}
+				/>
+			</div>
+		</VirtualList>
 
-	<h2>{appartmentsOnline.length || ''} en ligne</h2>
-
-	<ul>
-		{#each appartmentsOnline as appartment (appartment.id)}
-			<AppartmentAdminItem
-				{...appartment}
-				approved={true}
-				archived={false}
-				on:archiver={() => {
-					eagerStatus[appartment.id] = 'archived';
-				}}
-				open={openAppartmentId === appartment.id}
-				on:close={() => (openAppartmentId = '')}
-				on:open={() => (openAppartmentId = appartment.id)}
-			/>
-		{:else}
-			<li class="empty">Aucune annonce.</li>
-		{/each}
-	</ul>
-
-	<h2>{appartmentsArchived.length || ''} archivé{appartmentsArchived.length > 1 ? 's' : ''}</h2>
-
-	<ul>
-		{#each appartmentsArchived as appartment (appartment.id)}
-			<AppartmentAdminItem
-				{...appartment}
-				approved={true}
-				archived={true}
-				on:publier={() => {
-					eagerStatus[appartment.id] = 'approved';
-				}}
-				open={openAppartmentId === appartment.id}
-				on:close={() => (openAppartmentId = '')}
-				on:open={() => (openAppartmentId = appartment.id)}
-			/>
-		{:else}
-			<li class="empty">Aucune annonce.</li>
-		{/each}
+		{#if byCategory[currentCategory].length <= 0}
+			<li class="empty">Aucun appartment {categories[currentCategory]}.</li>
+		{/if}
 	</ul>
 </main>
 
@@ -144,12 +187,20 @@
 	main {
 		margin: 0 auto;
 		max-width: 1200px;
+		width: 100%;
 	}
 
 	section.filters {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		margin: 0 auto;
+		gap: 1rem;
+	}
+
+	section.filters .side-by-side {
+		display: flex;
+		gap: 2rem;
 	}
 
 	h1 {

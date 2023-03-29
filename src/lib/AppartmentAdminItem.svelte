@@ -1,11 +1,13 @@
 <script lang="ts">
-	import type { Photo } from '@prisma/client';
+	import type { Appartment, Photo } from '@prisma/client';
 	import { createEventDispatcher } from 'svelte';
 	import ButtonSecondary from './ButtonSecondary.svelte';
+	import type Fuse from 'fuse.js';
 	import Icon from './Icon.svelte';
 	import { addToast } from './toasts';
 	import { photoURL } from './photos';
 	import type { AppartmentEdit } from './types';
+	import HighlightedText from './HighlightedText.svelte';
 	const emit = createEventDispatcher();
 
 	export let id: string;
@@ -20,6 +22,7 @@
 	export let archived: boolean;
 	export let history: AppartmentEdit[];
 	export let photos: Photo[];
+	export let highlight: readonly Fuse.FuseResultMatch[] = [];
 	export let open: boolean = false;
 	let error: string = '';
 
@@ -33,9 +36,12 @@
 		open = false;
 		emit('close');
 	};
+
+	const indices = (key, highlight) =>
+		highlight.filter((h) => h.key === key).flatMap((h) => h.indices);
 </script>
 
-<li class:reported={reports.length > 0} class:approved>
+<li class:reported={reports.length > 0} class:approved class:open>
 	<img src={photos.length > 0 ? photoURL(photos[0]) : '/missing-photo.png'} class="photo" />
 	<div
 		class="row-1"
@@ -50,8 +56,14 @@
 			}
 		}}
 	>
-		<span class="data">#{number}</span>
-		<span class="data">{address}</span>
+		<span class="data"
+			>#<HighlightedText indices={indices('number', highlight)}>{number}</HighlightedText
+			></span
+		>
+		<span class="data"
+			><HighlightedText indices={indices('address', highlight)}>{address}</HighlightedText
+			></span
+		>
 		<span class="data reports">{reports.length}</span>
 	</div>
 	<div
@@ -67,8 +79,16 @@
 			}
 		}}
 	>
-		<span class="data">{rent}€+{charges}€</span>
-		<span class="data">{owner.name}</span>
+		<span class="data"
+			><HighlightedText indices={indices('rent', highlight)}>{rent}</HighlightedText>€ + <HighlightedText
+				indices={indices('charges', highlight)}>{charges}</HighlightedText
+			>€</span
+		>
+		<span class="data"
+			><HighlightedText indices={indices('owner.name', highlight)}
+				>{owner.name}</HighlightedText
+			></span
+		>
 		<span class="data"
 			>{Intl.DateTimeFormat('fr-FR', { dateStyle: 'short' }).format(updatedAt)}</span
 		>
@@ -106,8 +126,17 @@
 
 <style>
 	li {
-		padding: 0.75rem 0.5rem;
+		--bg: var(--bg);
 		border-bottom: 2px solid var(--muted);
+		background: var(--bg);
+		padding: 0.75rem 0.5rem;
+	}
+	li.reported {
+		--bg: var(--rose);
+	}
+	li.open {
+		position: relative;
+		z-index: 10;
 	}
 	li > div {
 		display: grid;
@@ -152,12 +181,11 @@
 		display: flex;
 		justify-content: center;
 		flex-wrap: wrap;
-	}
-	.actions {
+		background: var(--bg);
 		color: var(--fg);
 	}
 	.collapse {
-		background: none;
+		background: var(--bg);
 		border: none;
 		padding: 0;
 		margin: 0;
