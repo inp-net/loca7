@@ -438,7 +438,7 @@ async function nukeDb() {
 
 	const tables = tablenames
 		.map(({ tablename }) => tablename)
-		.filter((name) => name !== '_prisma_migrations')
+		.filter((name) => !['_prisma_migrations', 'user', 'key', 'session'].includes(name))
 		.map((name) => `"public"."${name}"`)
 		.join(', ');
 
@@ -447,6 +447,24 @@ async function nukeDb() {
 	} catch (error) {
 		console.error({ error });
 	}
+
+	await prisma.user.deleteMany({
+		where: {
+			name: {
+				not: 'Gauthier Lubin'
+			}
+		}
+	});
+
+	await prisma.key.deleteMany({
+		where: {
+			user: {
+				name: {
+					not: 'Gauthier Lubin'
+				}
+			}
+		}
+	});
 
 	rmSync(path.join(__dirname, '../public/photos/appartments'), { recursive: true });
 	mkdirSync(path.join(__dirname, '../public/photos/appartments'));
