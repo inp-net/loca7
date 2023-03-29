@@ -12,13 +12,15 @@ datasource db {
 }
 
 model User {
-    id               String  @id @unique @default(cuid())
+    id               String   @id @unique @default(cuid())
     name             String
     phone            String
-    email            String  @unique
-    admin            Boolean @default(false)
-    god              Boolean @default(false)
-    emailIsValidated Boolean @default(false)
+    email            String   @unique
+    admin            Boolean  @default(false)
+    god              Boolean  @default(false)
+    emailIsValidated Boolean  @default(false)
+    createdAt        DateTime @default(now())
+    updatedAt        DateTime @updatedAt
 
     appartments      Appartment[]
     sessions         Session[]
