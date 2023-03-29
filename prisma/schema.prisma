@@ -157,8 +157,8 @@ model Report {
     createdAt    DateTime     @default(now())
     appartment   Appartment   @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
     appartmentId String
-    author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
-    authorId     String
+    author       User?        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    authorId     String?
 }
 
 enum ReportReason {
