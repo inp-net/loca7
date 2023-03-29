@@ -169,3 +169,14 @@ export function hexToHsl(hex: `#${string}`): {
 export function lowerFirstChar(str: string): string {
 	return str.charAt(0).toLowerCase() + str.slice(1);
 }
+
+/**
+ * Remove indentation from a string
+ */
+export function dedent(value: string): string {
+	const match = value.match(/^[ \t]*(?=\S)/gm);
+	if (match === null) return value;
+	const indent = Math.min(...match.map((el) => el.length));
+	const regexp = new RegExp(`^[ \\t]{${indent}}`, 'gm');
+	return value.replace(regexp, '');
+}

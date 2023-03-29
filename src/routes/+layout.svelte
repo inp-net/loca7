@@ -7,6 +7,7 @@
 	import LogoNet7 from '$lib/LogoNet7.svelte';
 	import NavigationBar from '$lib/NavigationBar.svelte';
 	import { closeToast, toasts } from '$lib/toasts';
+	import { dedent } from '$lib/utils';
 	import { fly } from 'svelte/transition';
 	import xss from 'xss';
 	import type { PageData } from './$types';
@@ -45,22 +46,26 @@
 				Ceci est une bêta. Vous pouvez <a
 					class="in-body"
 					href="https://git.inpt.fr/inp-net/loca7/-/issues/new?issue[description]={encodeURIComponent(
-						`
+						dedent(
+							`
                 Décrivez votre problème ici.
                 
                 /label ~bug ~from:beta
                 Submitted-From: ${$page.url}`
+						)
 					)}">signaler un bug</a
 				>
 				ou
 				<a
 					class="in-body"
 					href="https://git.inpt.fr/inp-net/loca7/-/issues/new?issue[description]={encodeURIComponent(
-						`
+						dedent(
+							`
                 Décrivez votre idée ici.
                 
                 /label ~feature ~from:beta
                 Submitted-From: ${$page.url}`
+						)
 					)}">proposer une fonctionnalité</a
 				>
 			</p>
