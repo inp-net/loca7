@@ -116,7 +116,13 @@
 	}
 	:global(main) {
 		flex-grow: 1;
-		padding-top: 170px;
+		padding-top: 150px;
+	}
+
+	@media (max-width: 1100px) {
+		:global(main) {
+			padding-top: 130px;
+		}
 	}
 
 	.notice {
