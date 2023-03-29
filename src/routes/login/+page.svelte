@@ -28,11 +28,6 @@
 	{/if}
 
 	<h1>Connexion</h1>
-	<p>
-		Pas de compte?
-
-		<ButtonSecondary insideProse href="/register">Créez-en un</ButtonSecondary>
-	</p>
 
 	<form method="post">
 		<InputField label="Email">
@@ -54,6 +49,12 @@
 		<section class="submit">
 			<ButtonPrimary submits>Se connecter</ButtonPrimary>
 		</section>
+
+		<p>
+			Pas de compte?
+
+			<ButtonSecondary insideProse href="/register">Créez-en un</ButtonSecondary>
+		</p>
 	</form>
 </main>
 
