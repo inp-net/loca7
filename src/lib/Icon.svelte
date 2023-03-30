@@ -4,7 +4,7 @@
 
 	export let name: IconName;
 	export let strokeWidth: string = '5';
-	export let color = 'fg';
+	export let color = 'icon-color';
 	export let flip = false;
 </script>
 
@@ -13,7 +13,7 @@
 {:then iconSVG}
 	<svelte:component
 		this={iconSVG.default}
-		color={color.startsWith('#') ? color : `var(--${color})`}
+		color={color.startsWith('#') ? color : `var(--${color}, var(--fg))`}
 		{strokeWidth}
 		{flip}
 	/>

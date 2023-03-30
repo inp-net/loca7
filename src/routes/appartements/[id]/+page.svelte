@@ -81,6 +81,8 @@
 			url: $page.url.toString()
 		});
 	});
+
+	let reportSubmitted = $page.url.hash === '#reportSubmitted';
 </script>
 
 <svelte:head>
@@ -88,6 +90,14 @@
 </svelte:head>
 
 <main>
+	{#if reportSubmitted}
+		<section class="notice notice-report-submitted">
+			<span class="icon">
+				<Icon name="checkmark" />
+			</span>
+			<p class="typo-paragraph">Votre signalement a bien été envoyé</p>
+		</section>
+	{/if}
 	{#if appart.archived || !appart.approved}
 		<section class="notice notice-archived">
 			<p class="typo-paragraph">
@@ -732,6 +742,20 @@
 	section.notice .actions {
 		display: flex;
 		gap: 1rem;
+	}
+
+	section.notice.notice-report-submitted {
+		background: var(--moss);
+        justify-content: start;
+	}
+
+	section.notice.notice-report-submitted p {
+		color: var(--cactus);
+	}
+
+	section.notice.notice-report-submitted .icon {
+        --icon-color: var(--cactus);
+		height: 1.5em;
 	}
 
 	section.meta {

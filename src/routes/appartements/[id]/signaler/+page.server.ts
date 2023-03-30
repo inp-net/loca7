@@ -29,10 +29,10 @@ export const actions: Actions = {
 								id: user.id
 							}
 					  }
-					: null
+					: undefined
 			}
 		});
 
-		throw redirect(301, '/');
+		throw redirect(301, `/appartements/${appartmentId}#reportSubmitted`);
 	}
 };
