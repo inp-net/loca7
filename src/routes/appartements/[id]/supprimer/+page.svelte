@@ -29,7 +29,9 @@
 			}}>Annuler</ButtonSecondary
 		>
 		<form action="?/confirm" method="post">
-			<ButtonSecondary icon="delete" dangerous>Confirmer la suppression</ButtonSecondary>
+			<ButtonSecondary submits icon="delete" dangerous
+				>Confirmer la suppression</ButtonSecondary
+			>
 		</form>
 	</section>
 </main>
