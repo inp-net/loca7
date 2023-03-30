@@ -54,7 +54,7 @@
 
 	label[aria-current='true'] {
 		background: var(--diamond);
-		color: var(--fg);
+		color: black;
 	}
 
 	fieldset {
