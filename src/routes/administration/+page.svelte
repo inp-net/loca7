@@ -34,7 +34,7 @@
 		(status(eagerStatus, a) !== 'archived' && a.history.some((h) => !h.applied));
 	const isArchived = (a: Appartment) => status(eagerStatus, a) === 'archived';
 	const isYearSelected = (years) => (a: Appartment) =>
-		years.length === 0 || years.includes(a.updatedAt.getFullYear().toString());
+		years.length === 0 || years.includes(effectiveUpdatedAt(a).getFullYear().toString());
 
 	let currentCategory: Status = 'pending';
 
@@ -69,7 +69,20 @@
 	const appartment = (category: keyof typeof byCategory, index: number) =>
 		byCategory[category][index];
 
-	const updateSearchResults = debounce((search: string, years: number[]) => {
+	/**
+	 * Last update date that also takes into account pending edits and reports
+	 * @param appartment
+	 */
+	const effectiveUpdatedAt = (appartment: Appartment) =>
+		new Date(
+			Math.max(
+				appartment.updatedAt.valueOf(),
+				...appartment.reports.map((r) => r.createdAt.valueOf()),
+				...appartment.history.map((h) => h.createdAt.valueOf())
+			)
+		);
+
+	const updateSearchResults = debounce((search: string, years: string[]) => {
 		let searchResults: (typeof byCategory)['archived'] = [];
 		if (search) {
 			searchResults = searcher
@@ -119,8 +132,7 @@
 		b: { reports: Report[]; updatedAt: Date }
 	) =>
 		a.reports.length === b.reports.length
-			? Math.max(a.updatedAt.valueOf(), ...a.reports.map((r) => r.createdAt.valueOf())) -
-			  Math.max(b.updatedAt.valueOf(), ...b.reports.map((r) => r.createdAt.valueOf()))
+			? effectiveUpdatedAt(a).valueOf() - effectiveUpdatedAt(b).valueOf()
 			: a.reports.length - b.reports.length;
 
 	const setEagerStatus = (index: number, status: Status) => () => {
@@ -166,6 +178,7 @@
 			<div slot="item" let:index let:style {style}>
 				<AppartmentAdminItem
 					{...appartment(currentCategory, index)}
+					updatedAt={effectiveUpdatedAt(appartment(currentCategory, index))}
 					highlight={appartment(currentCategory, index).matches}
 					approved={currentCategory !== 'pending'}
 					archived={currentCategory === 'archived'}
