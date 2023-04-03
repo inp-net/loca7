@@ -138,7 +138,7 @@
 	<section class="carousel">
 		<CarouselImages
 			contain
-			images={appart.photos.length > 1 ? appart.photos.map(photoURL) : ['/missing-photo.png']}
+			images={appart.photos.length > 0 ? appart.photos.map(photoURL) : ['/missing-photo.png']}
 		/>
 	</section>
 
