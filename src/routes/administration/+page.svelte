@@ -89,6 +89,7 @@
 	}, 300);
 
 	$: updateSearchResults(search, years);
+	$: eagerStatus, updateSearchResults(search, years);
 
 	let search: string = '';
 
@@ -121,6 +122,11 @@
 			? Math.max(a.updatedAt.valueOf(), ...a.reports.map((r) => r.createdAt.valueOf())) -
 			  Math.max(b.updatedAt.valueOf(), ...b.reports.map((r) => r.createdAt.valueOf()))
 			: a.reports.length - b.reports.length;
+
+	const setEagerStatus = (index: number, status: Status) => () => {
+		let appart = appartment(currentCategory, index);
+		eagerStatus[appart.id] = status;
+	};
 </script>
 
 <svelte:head>
@@ -161,15 +167,11 @@
 				<AppartmentAdminItem
 					{...appartment(currentCategory, index)}
 					highlight={appartment(currentCategory, index).matches}
-					approved={false}
-					on:approuver={() => {
-						let appart = appartment(currentCategory, index);
-						if (currentCategory === 'online') {
-							eagerStatus[appart.id] = 'archived';
-						} else {
-							eagerStatus[appart.id] = 'online';
-						}
-					}}
+					approved={currentCategory !== 'pending'}
+					archived={currentCategory === 'archived'}
+					on:approuver={setEagerStatus(index, 'online')}
+					on:archiver={setEagerStatus(index, 'archived')}
+					on:publier={setEagerStatus(index, 'online')}
 					open={openAppartmentId === appartment(currentCategory, index).id}
 					on:close={() => (openAppartmentId = '')}
 					on:open={() => (openAppartmentId = appartment(currentCategory, index).id)}
