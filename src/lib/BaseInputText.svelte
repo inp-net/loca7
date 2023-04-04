@@ -19,6 +19,7 @@
 	export let suggestions: string[] | undefined = undefined;
 	export let required: boolean = false;
 	export let schema: ZodSchema;
+	export let leftIcon: IconName | '' = '';
 
 	let showEmptyErrors: boolean = false;
 	let valueString: string =
@@ -88,6 +89,11 @@
 	style:--pale="var(--{messageIsWarning ? 'plaster' : 'rose'})"
 >
 	<div class="input-area" bind:this={inputContainer}>
+		{#if leftIcon}
+			<div class="left-icon">
+				<Icon name={leftIcon} color="fg" />
+			</div>
+		{/if}
 		{#if suggestions}
 			<InputWithSuggestions
 				on:close-suggestions
@@ -136,7 +142,7 @@
 			<button
 				type="button"
 				class="reset"
-				on:click={() => {
+				on:click|stopPropagation={() => {
 					value = initial;
 					valueString =
 						type === 'date'
@@ -198,6 +204,12 @@
 		width: 1.5rem;
 		height: 1.25rem;
 		cursor: pointer;
+	}
+
+	.left-icon {
+		height: 1.5rem;
+		width: 1.5rem;
+		margin-right: 0.5rem;
 	}
 
 	.unit {

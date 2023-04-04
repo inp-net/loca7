@@ -15,6 +15,7 @@
 	import InputText from '$lib/InputText.svelte';
 	import Fuse from 'fuse.js';
 	import InputSelectOne from '$lib/InputSelectOne.svelte';
+	import InputSearch from '$lib/InputSearch.svelte';
 
 	type AppartmentEdit = AppartmentEditBase & { photos: Photo[] };
 	type Appartment = AppartmentBase & {
@@ -166,7 +167,7 @@
 				<InputSelectMultiple options={yearsAvailable} bind:selection={years} />
 			</InputField>
 			<InputField label="Rechercher">
-				<InputText bind:value={search} />
+				<InputSearch bind:search />
 			</InputField>
 		</div>
 	</section>
