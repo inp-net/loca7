@@ -66,19 +66,20 @@
 					>recherche</ButtonNavigation
 				>
 			</li>
-			<li>
-				{#if user?.admin}
+			{#if user?.admin}
+				<li>
 					<ButtonNavigation
 						current={currentPage === 'administration'}
 						href="/administration">administration</ButtonNavigation
 					>
-				{:else}
-					<ButtonNavigation
-						current={currentPage === 'mes annonces'}
-						href="/appartements/gerer"
-						>mes annonces
-					</ButtonNavigation>
-				{/if}
+				</li>
+			{/if}
+			<li>
+				<ButtonNavigation
+					current={currentPage === 'mes annonces'}
+					href="/appartements/gerer"
+					>mes annonces
+				</ButtonNavigation>
 			</li>
 			<li>
 				<ButtonNavigation current={currentPage === 'mon compte'} href="/account"
@@ -125,17 +126,17 @@
 				>recherche</ButtonNavigation
 			>
 		</li>
-		<li>
-			{#if user?.admin}
+		{#if user?.admin}
+			<li>
 				<ButtonNavigation current={currentPage === 'administration'} href="/administration"
 					>administration</ButtonNavigation
 				>
-			{:else}
-				<ButtonNavigation
-					current={currentPage === 'mes annonces'}
-					href="/appartements/gerer">mes annonces</ButtonNavigation
-				>
-			{/if}
+			</li>
+		{/if}
+		<li>
+			<ButtonNavigation current={currentPage === 'mes annonces'} href="/appartements/gerer"
+				>mes annonces</ButtonNavigation
+			>
 		</li>
 
 		<li>
@@ -218,7 +219,7 @@
 		display: none;
 	}
 
-	@media (max-width: 1100px) {
+	@media (max-width: 1350px) {
 		.logo {
 			/* height: 5rem; */
 			max-height: 3rem;
