@@ -286,7 +286,7 @@
 	}
 
 	:global(label:not([aria-current='true']) .pill[data-done='true']) {
-		/* --fg: black; */
+		--fg: black;
 		background: var(--acid);
 		color: black;
 	}
