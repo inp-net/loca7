@@ -24,10 +24,7 @@
 	import { photoURL } from '$lib/photos';
 	import publicTransportColor from '$lib/publicTransportColors';
 	import AppartmentsMap from '$lib/AppartmentsMap.svelte';
-	import { ics } from '$lib/ics';
 	import { page } from '$app/stores';
-	import { vcard } from '$lib/vcard';
-	import { onMount } from 'svelte';
 	import type { LayoutData } from './$types';
 	import CarouselImages from '$lib/CarouselImages.svelte';
 	import InputField from '$lib/InputField.svelte';
@@ -71,6 +68,10 @@
 </svelte:head>
 
 <main>
+	<section class="go-back">
+		<ButtonPrimary href="/">Accueil</ButtonPrimary>
+	</section>
+
 	{#if reportSubmitted}
 		<section class="notice notice-report-submitted">
 			<span class="icon">
@@ -135,10 +136,6 @@
 			{/if}
 		</section>
 	{/if}
-
-	<section class="go-back">
-		<ButtonPrimary href="/">Accueil</ButtonPrimary>
-	</section>
 
 	<section class="carousel">
 		<CarouselImages
@@ -340,7 +337,7 @@
 		</div>
 	</div>
 
-    <hr>
+	<hr />
 
 	<section class="actions">
 		{#if user?.admin || appart.owner.id === user?.id}
@@ -616,7 +613,8 @@
 	}
 
 	section.actions {
-        margin-top: 2rem;
+		margin-top: 2rem;
+		margin-bottom: 4rem;
 		display: flex;
 		align-items: center;
 		gap: 1rem;
