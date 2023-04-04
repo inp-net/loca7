@@ -109,7 +109,13 @@
 				>Archiver</ButtonSecondary
 			>
 		{/if}
-		<ButtonSecondary href="/appartements/{id}" icon="add">Voir</ButtonSecondary>
+		{#if approved && !archived}
+			<ButtonSecondary href="/appartements/{id}/modifier" icon="edit"
+				>Modifier</ButtonSecondary
+			>
+		{:else}
+			<ButtonSecondary href="/appartements/{id}" icon="add">Voir</ButtonSecondary>
+		{/if}
 		<ButtonSecondary href="/appartements/{id}/supprimer" icon="delete">Suppr.</ButtonSecondary>
 	</div>
 	<button
