@@ -31,6 +31,9 @@
 
 	<form method="post" action="?/updateProfile">
 		<h2>Profil</h2>
+		<p class="explain typo-paragraph">
+			Ces informations apparaîtront publiquement sur vos annonces.
+		</p>
 		<InputField label="Nom complet">
 			<InputText name="name" bind:value={user.name} />
 		</InputField>
