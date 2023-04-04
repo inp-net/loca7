@@ -1,6 +1,33 @@
 {
 	"gitlab.customQueries": [
 		{
+			"name": "Important bugs",
+			"type": "issues",
+			"scope": "all",
+			"labels": ["bug", "important"]
+		},
+		{
+			"name": "Important",
+			"type": "issues",
+			"scope": "all",
+			"labels": ["important"]
+		},
+		{
+			"name": "Lubin's bugs",
+			"type": "issues",
+			"labels": ["bug", "by:lubin"]
+		},
+		{
+			"name": "Bugs",
+			"type": "issues",
+			"labels": ["bug"]
+		},
+		{
+			"name": "Lubin",
+			"type": "issues",
+			"labels": ["by:lubin"]
+		},
+		{
 			"name": "Open beta",
 			"type": "issues",
 			"scope": "assigned_to_me",
