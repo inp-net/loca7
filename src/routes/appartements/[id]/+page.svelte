@@ -740,7 +740,7 @@
 	}
 
 	section.notice-pending {
-		--bg: var(--blood);
+		--bg: var(--mushroom);
 		--fg: white;
 		background-color: var(--bg);
 		color: var(--fg);

@@ -223,4 +223,7 @@
 		background: var(--bg);
 		color: var(--fg);
 	}
+	:global(.leaflet-container .leaflet-control-attribution a) {
+		color: var(--sky);
+	}
 </style>
