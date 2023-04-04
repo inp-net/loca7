@@ -29,7 +29,7 @@
 	const categories = {
 		pending: 'en attente',
 		online: 'en ligne',
-		archived: 'archivé'
+		archived: 'archivée'
 	};
 	type Status = keyof typeof categories;
 	let eagerStatus: Record<string, Status> = {};
