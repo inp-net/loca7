@@ -126,12 +126,14 @@
 
 <style>
 	li {
-		--bg: var(--bg);
+		--background: var(--bg);
 		border-bottom: 2px solid var(--muted);
-		background: var(--bg);
+		background: var(--background);
 		padding: 0.75rem 0.5rem;
 	}
 	li.reported {
+		/* using only --bg does not work on .collapse for some reason, but using only --background does not allowing overriding the background color of the action buttons, since they use var(--bg) */
+		--background: var(--rose);
 		--bg: var(--rose);
 	}
 	li.open {
@@ -181,11 +183,11 @@
 		display: flex;
 		justify-content: center;
 		flex-wrap: wrap;
-		background: var(--bg);
+		background: var(--background);
 		color: var(--fg);
 	}
 	.collapse {
-		background: var(--bg);
+		background: var(--background);
 		border: none;
 		padding: 0;
 		margin: 0;
