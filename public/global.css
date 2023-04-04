@@ -106,6 +106,7 @@
 	:root {
 		--fg: rgba(255, 255, 255, 1);
 		--muted: rgba(255, 255, 255, 0.75);
+		--bg-muted: rgba(255, 255, 255, 0.25);
 		--bg: rgb(26, 28, 30);
 		--card-bg: #33373b;
 		--ice: rgb(28, 60, 75);
@@ -230,7 +231,8 @@ del {
 }
 
 hr {
-	max-width: 30rem;
+	width: 80%;
+	max-width: 1000px;
 	border: var(--border-width) solid var(--bg-muted);
 	border-radius: 1000px;
 }
