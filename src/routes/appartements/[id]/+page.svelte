@@ -41,8 +41,6 @@
 	const { user, appartment: appart } = data;
 	let reports = appart.reports;
 
-	let calendarICSEvent: { url: string; filename: string } = { url: '', filename: '' };
-	let contactVCard: { url: string; filename: string } = vcard(appart.owner);
 	let secondsAvailableSince = (Date.now() - appart.availableAt.valueOf()) * 1e-3;
 
 	function publicTransportStationSentence(station: PublicTransportStation) {
@@ -62,25 +60,6 @@
 			longitude: points.reduce((acc, p) => acc + p.longitude, 0) / points.length
 		};
 	}
-	onMount(async () => {
-		calendarICSEvent = await ics({
-			start: appart.availableAt,
-			duration: { days: 1 },
-			attendees: user ? [user, appart.owner] : [appart.owner],
-			organizer: {
-				name: 'Loca7',
-				email: 'contact@loca7.enseeiht.fr'
-			},
-			busy: 'TENTATIVE',
-			status: 'TENTATIVE',
-			location: appart.latitude && appart.longitude ? appart : null,
-			description: `${appartmentTitle(
-				appart
-			)}\n\nPlus d'informations: ${$page.url.toString()}`,
-			title: `Visite d'un appartement Loca7`,
-			url: $page.url.toString()
-		});
-	});
 
 	let reportSubmitted = $page.url.hash === '#reportSubmitted';
 	let hasPendingModifications = (appart?.history ?? []).filter((h) => !h.applied).length > 0;
@@ -190,23 +169,6 @@
 			</section>
 			<section class="situation">
 				<div class="row">
-					<span class="icon"><Icon name="calendar" /></span>
-					<p class="when">
-						{availableAtSentence(secondsAvailableSince, appart.availableAt)}<wbr />
-						{#if secondsAvailableSince !== 0}
-							<span class="muted"
-								>{#if secondsAvailableSince > 0}il y a{:else}dans{/if}
-								{durationDisplay(Math.abs(secondsAvailableSince))}</span
-							>
-						{/if}
-					</p>
-					<ButtonSecondary
-						icon="open-outside"
-						href={calendarICSEvent?.url}
-						download={calendarICSEvent?.filename}>Calendrier</ButtonSecondary
-					>
-				</div>
-				<div class="row">
 					<span class="icon"><Icon name="location" /></span>
 					<p class="where">
 						{appart.address}<wbr />
@@ -275,6 +237,18 @@
 						</div>
 					</div>
 				{/if}
+				<div class="row">
+					<span class="icon"><Icon name="calendar" /></span>
+					<p class="when">
+						{availableAtSentence(secondsAvailableSince, appart.availableAt)}<wbr />
+						{#if secondsAvailableSince !== 0}
+							<span class="muted"
+								>{#if secondsAvailableSince > 0}il y a{:else}dans{/if}
+								{durationDisplay(Math.abs(secondsAvailableSince))}</span
+							>
+						{/if}
+					</p>
+				</div>
 			</section>
 			<section class="aspects">
 				<!-- <h2>Caractéristiques</h2> -->
@@ -331,11 +305,6 @@
 				<h2 class="typo-field-label">Propriétaire</h2>
 				<p class="name typo-title">
 					{appart.owner.name}
-					<ButtonSecondary
-						icon="open-outside"
-						download={contactVCard.filename}
-						href={contactVCard.url}>Contacts</ButtonSecondary
-					>
 				</p>
 				{#if appart.owner.email && !appart.owner.email.match(/^ghost\.\w+@loca7.enseeiht.fr$/)}
 					<div class="row">
