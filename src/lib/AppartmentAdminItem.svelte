@@ -43,7 +43,9 @@
 
 <li class:reported={reports.length > 0} class:approved class:open>
 	<img src={photos.length > 0 ? photoURL(photos[0]) : '/missing-photo.png'} class="photo" />
-	<div
+	<svelte:element
+		this={window.innerWidth > 1000 ? 'a' : 'div'}
+		href="/appartements/{id}"
 		class="row-1"
 		on:click={() => {
 			open = !open;
@@ -65,8 +67,10 @@
 			></span
 		>
 		<span class="data reports">{reports.length}</span>
-	</div>
-	<div
+	</svelte:element>
+	<svelte:element
+		this={window.innerWidth > 1000 ? 'a' : 'div'}
+		href="/appartements/{id}"
 		class="row-2"
 		on:click={() => {
 			open = !open;
@@ -92,7 +96,7 @@
 		<span class="data"
 			>{Intl.DateTimeFormat('fr-FR', { dateStyle: 'short' }).format(updatedAt)}</span
 		>
-	</div>
+	</svelte:element>
 	<div class="actions" class:open>
 		{#if history.some((h) => !h.applied)}
 			<ButtonSecondary href="/appartements/{id}#modifications" icon="editor-list"
@@ -146,7 +150,7 @@
 		position: relative;
 		z-index: 10;
 	}
-	li > div {
+	li [class^='row'] {
 		display: grid;
 		gap: 0.5rem 1rem;
 	}
