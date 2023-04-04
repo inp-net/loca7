@@ -28,7 +28,7 @@
 		{#each Object.entries(optionsWithDisplay) as [option, display]}
 			<label aria-current={option === value}>
 				<input type="radio" {name} bind:group={value} value={option} />
-				{display}
+				<slot {value} {display} {option}>{display}</slot>
 			</label>
 		{/each}
 	</fieldset>
@@ -50,6 +50,8 @@
 		color: var(--fg);
 		padding: 0.5rem 1rem;
 		cursor: pointer;
+		display: flex;
+		align-items: center;
 	}
 
 	label[aria-current='true'] {

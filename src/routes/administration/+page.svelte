@@ -16,6 +16,7 @@
 	import Fuse from 'fuse.js';
 	import InputSelectOne from '$lib/InputSelectOne.svelte';
 	import InputSearch from '$lib/InputSearch.svelte';
+	import Icon from '$lib/Icon.svelte';
 
 	type AppartmentEdit = AppartmentEditBase & { photos: Photo[] };
 	type Appartment = AppartmentBase & {
@@ -161,7 +162,16 @@
 
 <main>
 	<section class="filters">
-		<InputSelectOne options={categories} bind:value={currentCategory} />
+		<InputSelectOne options={categories} bind:value={currentCategory} let:display let:option>
+			{display}
+			{#if option === 'pending'}
+				<span class="pill" data-done={byCategory.pending.length === 0}
+					>{#if byCategory.pending.length > 0}{byCategory.pending.length}{:else}
+						<Icon name="checkmark" />
+					{/if}</span
+				>
+			{/if}
+		</InputSelectOne>
 		<div class="side-by-side">
 			<InputField label="Dernière modification">
 				<InputSelectMultiple options={yearsAvailable} bind:selection={years} />
@@ -250,5 +260,34 @@
 	ul {
 		list-style: none;
 		padding-left: 0;
+	}
+
+	:global(.pill) {
+		margin-left: 0.5rem;
+		font-family: var(--font-mono);
+		background: var(--gold);
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		color: black;
+		padding: 0 0.5rem;
+		border-radius: 100000px;
+	}
+
+	:global(.pill svg) {
+		padding: 0.15rem 0;
+		height: 1.2rem;
+	}
+
+	:global([aria-current='true'] .pill) {
+		--fg: var(--diamond);
+		background: black;
+		color: var(--diamond);
+	}
+
+	:global(label:not([aria-current='true']) .pill[data-done='true']) {
+		/* --fg: black; */
+		background: var(--acid);
+		color: black;
 	}
 </style>
