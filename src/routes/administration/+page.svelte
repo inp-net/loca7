@@ -44,13 +44,13 @@
 		...new Set(appartments.map((a) => a.updatedAt.getFullYear().toString()))
 	].sort();
 
-	const isReported = (a: Appartment) => a.reports.length > 0;
 	const isOnline = (a: Appartment) =>
 		status(eagerStatus, a) === 'online' && a.history.every((h) => h.applied);
 	const isPending = (a: Appartment) =>
 		status(eagerStatus, a) === 'pending' ||
 		(status(eagerStatus, a) !== 'archived' && a.history.some((h) => !h.applied));
 	const isArchived = (a: Appartment) => status(eagerStatus, a) === 'archived';
+	const isReported = (a: Appartment) => a.reports.length > 0 && !isArchived(a);
 	const isYearSelected = (years: string[]) => (a: Appartment) =>
 		years.length === 0 || years.includes(effectiveUpdatedAt(a).getFullYear().toString());
 
