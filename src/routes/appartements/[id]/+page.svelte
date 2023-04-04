@@ -83,6 +83,7 @@
 	});
 
 	let reportSubmitted = $page.url.hash === '#reportSubmitted';
+	let hasPendingModifications = (appart?.history ?? []).filter((h) => !h.applied).length > 0;
 </script>
 
 <svelte:head>
@@ -98,40 +99,60 @@
 			<p class="typo-paragraph">Votre signalement a bien été envoyé</p>
 		</section>
 	{/if}
-	{#if appart.archived || !appart.approved}
+	{#if appart.archived}
 		<section class="notice notice-archived">
-			<p class="typo-paragraph">
-				{#if appart.archived}
-					Cette annonce est archivée
-				{:else}
-					Cette annonce n'a pas encore été approuvée
-				{/if}
-			</p>
-			{#if appart.archived || (!appart.approved && user?.admin)}
-				<div class="actions">
-					<ButtonSecondary icon="delete" href="/appartements/{appart.id}/supprimer"
-						>Supprimer</ButtonSecondary
-					>
-					<ButtonSecondary
-						icon={appart.archived ? 'eye-open' : 'checkmark'}
-						on:click={async () => {
-							await fetch(`/appartements/${appart.id}/publier`, { method: 'POST' });
-							appart.archived = false;
-							appart.approved = true;
-						}}
-						>{#if appart.archived}Publier{:else}Approuver{/if}</ButtonSecondary
-					>
-				</div>
-			{/if}
+			<p class="typo-paragraph">Cette annonce est archivée</p>
+			<div class="actions">
+				<ButtonSecondary icon="delete" href="/appartements/{appart.id}/supprimer"
+					>Supprimer</ButtonSecondary
+				>
+				<ButtonSecondary
+					icon="eye-open"
+					on:click={async () => {
+						await fetch(`/appartements/${appart.id}/publier`, { method: 'POST' });
+						appart.archived = false;
+						appart.approved = true;
+					}}>Publier</ButtonSecondary
+				>
+			</div>
 		</section>
 	{/if}
 
-	{#if (appart?.history ?? []).filter((h) => !h.applied).length > 0}
-		<section class="notice notice-pending-modifications">
-			<p class="typo-paragraph">Cette annonce a des modifications en attente</p>
-			<div class="actions">
-				<ButtonSecondary icon="add" href="#modifications">Voir</ButtonSecondary>
-			</div>
+	{#if hasPendingModifications || !appart.approved}
+		<section class="notice notice-pending">
+			<p class="typo-title">
+				Cette annonce {#if !appart.approved}n'a pas encore été approuvée{/if}
+				{#if hasPendingModifications && !appart.approved}et{/if}
+				{#if hasPendingModifications} a des modifications en attente{/if}
+			</p>
+			{#if !user?.admin}
+				<p class="explainer typo-paragraph">
+					En attente de validation par un·e administrateur·ice
+				</p>
+			{/if}
+			{#if hasPendingModifications || (user?.admin && !appart.approved)}
+				<div class="actions">
+					{#if hasPendingModifications}
+						<ButtonSecondary icon="add" href="#modifications"
+							>Voir les modifications</ButtonSecondary
+						>
+					{/if}
+					{#if !appart.approved && user?.admin}
+						<ButtonSecondary icon="delete" href="/appartements/{appart.id}/supprimer"
+							>Supprimer</ButtonSecondary
+						>
+						<ButtonSecondary
+							icon="checkmark"
+							on:click={async () => {
+								await fetch(`/appartements/${appart.id}/publier`, {
+									method: 'POST'
+								});
+								window.location.reload();
+							}}>Approuver</ButtonSecondary
+						>
+					{/if}
+				</div>
+			{/if}
 		</section>
 	{/if}
 
@@ -685,11 +706,6 @@
 		margin-bottom: 1rem;
 	}
 
-	section.history h3 {
-		text-align: center;
-		margin-bottom: 2rem;
-	}
-
 	section.history ul {
 		list-style: none;
 		padding-left: 0;
@@ -741,6 +757,20 @@
 	section.notice.notice-report-submitted .icon {
 		--icon-color: var(--cactus);
 		height: 1.5em;
+	}
+
+	section.notice-pending {
+		--bg: var(--blood);
+		--fg: white;
+		background-color: var(--bg);
+		color: var(--fg);
+		text-align: center;
+		flex-direction: column;
+		padding: 2rem;
+	}
+
+	section.notice-pending {
+		font-size: 5rem;
 	}
 
 	section.meta {
