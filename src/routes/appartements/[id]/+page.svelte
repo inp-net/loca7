@@ -340,6 +340,8 @@
 		</div>
 	</div>
 
+    <hr>
+
 	<section class="actions">
 		{#if user?.admin || appart.owner.id === user?.id}
 			<ButtonSecondary icon="edit" href="/appartements/{appart.id}/modifier"
@@ -614,6 +616,7 @@
 	}
 
 	section.actions {
+        margin-top: 2rem;
 		display: flex;
 		align-items: center;
 		gap: 1rem;

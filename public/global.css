@@ -71,6 +71,7 @@
 	--fg: rgba(0, 0, 0, 1);
 	--bg: rgba(255, 255, 255, 1);
 	--muted: rgba(0, 0, 0, 0.75);
+	--bg-muted: rgba(0, 0, 0, 0.25);
 	--cobalt: #006384;
 	--mushroom: rgba(214, 37, 37, 1);
 	--ice: rgba(194, 232, 252, 1);
@@ -210,4 +211,10 @@ ins {
 del {
 	background-color: var(--rose);
 	color: var(--blood);
+}
+
+hr {
+	max-width: 30rem;
+	border: var(--border-width) solid var(--bg-muted);
+    border-radius: 1000px;
 }
