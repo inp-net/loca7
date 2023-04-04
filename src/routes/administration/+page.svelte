@@ -29,8 +29,10 @@
 	export let data: PageData;
 	const categories = {
 		pending: 'en attente',
+		reported: 'signalée',
 		online: 'en ligne',
-		archived: 'archivée'
+		archived: 'archivée',
+		all: 'toutes'
 	};
 	type Status = keyof typeof categories;
 	let eagerStatus: Record<string, Status> = {};
@@ -42,6 +44,7 @@
 		...new Set(appartments.map((a) => a.updatedAt.getFullYear().toString()))
 	].sort();
 
+	const isReported = (a: Appartment) => a.reports.length > 0;
 	const isOnline = (a: Appartment) =>
 		status(eagerStatus, a) === 'online' && a.history.every((h) => h.applied);
 	const isPending = (a: Appartment) =>
@@ -78,7 +81,9 @@
 		{
 			pending: [],
 			archived: [],
-			online: []
+			online: [],
+			reported: [],
+			all: []
 		};
 
 	const appartment = (category: keyof typeof byCategory, index: number) =>
@@ -108,10 +113,13 @@
 				.filter(isYearSelected(years))
 				.map((a) => ({ ...a, matches: [] }));
 		}
+		let all = searchResults.sort(byReportsThenUpdatedAt).reverse();
 		byCategory = {
-			pending: searchResults.filter(isPending).sort(byReportsThenUpdatedAt).reverse(),
-			archived: searchResults.filter(isArchived).sort(byReportsThenUpdatedAt).reverse(),
-			online: searchResults.filter(isOnline).sort(byReportsThenUpdatedAt).reverse()
+			pending: all.filter(isPending),
+			archived: all.filter(isArchived),
+			online: all.filter(isOnline),
+			reported: all.filter(isReported),
+			all
 		};
 		console.log(byCategory);
 	}, 300);
@@ -162,7 +170,17 @@
 
 <main>
 	<section class="filters">
-		<InputSelectOne options={categories} bind:value={currentCategory} let:display let:option>
+		<InputSelectOne
+			options={Object.fromEntries(
+				Object.entries(categories).map(([k, v]) => [
+					k,
+					{ reported: 'signalées', archived: 'archivées' }?.[k] ?? v
+				])
+			)}
+			bind:value={currentCategory}
+			let:display
+			let:option
+		>
 			{display}
 			{#if option === 'pending'}
 				<span class="pill" data-done={byCategory.pending.length === 0}
@@ -186,10 +204,16 @@
 		<h2>{byCategory.pending.length || ''} en attente</h2>
 	{:else if currentCategory === 'online'}
 		<h2>{byCategory.online.length || ''} en ligne</h2>
-	{:else}
+	{:else if currentCategory === 'reported'}
+		<h2>
+			{byCategory.reported.length || ''} signalée{byCategory.reported.length > 1 ? 's' : ''}
+		</h2>
+	{:else if currentCategory === 'archived'}
 		<h2>
 			{byCategory.archived.length || ''} archivé{byCategory.archived.length > 1 ? 's' : ''}
 		</h2>
+	{:else}
+		<h2>toutes ({byCategory.all.length})</h2>
 	{/if}
 
 	<ul>
