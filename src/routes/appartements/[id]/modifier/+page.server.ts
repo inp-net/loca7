@@ -123,6 +123,9 @@ export const actions: Actions = {
 		await copyPhotos(edit.photos, appartment.photos);
 		await writePhotosToDisk(edit.photos, files);
 
-		throw redirect(302, user?.admin ? `/administration` : `/appartements/gerer`);
+		throw redirect(
+			302,
+			user?.admin ? `/administration` : `/appartements/${appartment.id}/modifier/fait`
+		);
 	}
 };
