@@ -13,7 +13,6 @@ class OpenRouteService {
 		const paramsString = Object.entries({ ...params, api_key: this.key })
 			.map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
 			.join('&');
-		console.info(paramsString);
 		const response = await fetch(
 			`https://api.openrouteservice.org/v2/${path}?${paramsString}`,
 			{}

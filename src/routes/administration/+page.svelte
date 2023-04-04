@@ -121,7 +121,6 @@
 			reported: all.filter(isReported),
 			all
 		};
-		console.log(byCategory);
 	}, 300);
 
 	$: updateSearchResults(search, years);
