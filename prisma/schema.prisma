@@ -2,198 +2,198 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider      = "prisma-client-js"
-    binaryTargets = ["native", "debian-openssl-1.1.x"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id               String   @id @unique @default(cuid())
-    name             String
-    phone            String
-    email            String   @unique
-    admin            Boolean  @default(false)
-    god              Boolean  @default(false)
-    emailIsValidated Boolean  @default(false)
-    createdAt        DateTime @default(now())
-    updatedAt        DateTime @updatedAt
+  id               String   @id @unique @default(cuid())
+  name             String
+  phone            String
+  email            String   @unique
+  admin            Boolean  @default(false)
+  god              Boolean  @default(false)
+  emailIsValidated Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-    appartments      Appartment[]
-    sessions         Session[]
-    keys             Key[]
-    emailValidations EmailValidation[]
-    Report           Report[]
-    PasswordReset    PasswordReset[]
+  appartments      Appartment[]
+  sessions         Session[]
+  keys             Key[]
+  emailValidations EmailValidation[]
+  Report           Report[]
+  PasswordReset    PasswordReset[]
 
-    @@map("user")
+  @@map("user")
 }
 
 model Session {
-    id             String @id @unique
-    user_id        String
-    active_expires BigInt
-    idle_expires   BigInt
-    user           User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id             String @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  user           User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-    @@index([user_id])
-    @@map("session")
+  @@index([user_id])
+  @@map("session")
 }
 
 model EmailValidation {
-    id      String @id @unique @default(cuid())
-    user_id String
-    expires BigInt
-    user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id      String @id @unique @default(cuid())
+  user_id String
+  expires BigInt
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-    @@index([user_id])
+  @@index([user_id])
 }
 
 model PasswordReset {
-    id      String @id @unique @default(cuid())
-    expires BigInt
-    user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-    user_id String
+  id      String @id @unique @default(cuid())
+  expires BigInt
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
 
-    @@index([user_id])
+  @@index([user_id])
 }
 
 model Key {
-    id              String  @id @unique
-    hashed_password String?
-    user_id         String
-    primary         Boolean
-    expires         BigInt?
-    user            User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id              String  @id @unique
+  hashed_password String?
+  user_id         String
+  primary         Boolean
+  expires         BigInt?
+  user            User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-    @@index([user_id])
-    @@map("key")
+  @@index([user_id])
+  @@map("key")
 }
 
 model Appartment {
-    id                String                   @id @unique @default(cuid())
-    number            Int                      @unique @default(autoincrement())
-    photos            Photo[]
-    rent              Int
-    charges           Int
-    deposit           Int
-    surface           Int
-    kind              AppartmentKind
-    roomsCount        Int
-    availableAt       DateTime
-    createdAt         DateTime                 @default(now())
-    updatedAt         DateTime                 @updatedAt
-    address           String
-    latitude          Float?
-    longitude         Float?
-    hasFurniture      Boolean?
-    hasParking        Boolean?
-    hasBicycleParking Boolean?
-    description       String
-    travelTimeToN7    TravelTimeToN7           @relation(fields: [travelTimeId], references: [id])
-    travelTimeId      String
-    nearbyStations    PublicTransportStation[]
-    owner             User                     @relation(fields: [ownerId], references: [id])
-    ownerId           String
-    reports           Report[]
-    approved          Boolean                  @default(false)
-    archived          Boolean                  @default(false)
-    history           AppartmentEdit[]
+  id                String                   @id @unique @default(cuid())
+  number            Int                      @unique @default(autoincrement())
+  photos            Photo[]
+  rent              Int
+  charges           Int
+  deposit           Int
+  surface           Int
+  kind              AppartmentKind
+  roomsCount        Int
+  availableAt       DateTime
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
+  address           String
+  latitude          Float?
+  longitude         Float?
+  hasFurniture      Boolean?
+  hasParking        Boolean?
+  hasBicycleParking Boolean?
+  description       String
+  travelTimeToN7    TravelTimeToN7           @relation(fields: [travelTimeId], references: [id])
+  travelTimeId      String
+  nearbyStations    PublicTransportStation[]
+  owner             User                     @relation(fields: [ownerId], references: [id])
+  ownerId           String
+  reports           Report[]
+  approved          Boolean                  @default(false)
+  archived          Boolean                  @default(false)
+  history           AppartmentEdit[]
 }
 
 model Photo {
-    id          String  @id @unique @default(cuid())
-    filename    String
-    contentType String
-    position    Int // Order of this photo in the list, 0-based.
-    hash        String?
+  id          String  @id @unique @default(cuid())
+  filename    String
+  contentType String
+  position    Int // Order of this photo in the list, 0-based.
+  hash        String?
 
-    Appartment       Appartment?     @relation(fields: [appartmentId], references: [id])
-    appartmentId     String?
-    AppartmentEdit   AppartmentEdit? @relation(fields: [appartmentEditId], references: [id])
-    appartmentEditId String?
+  Appartment       Appartment?     @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
+  appartmentId     String?
+  AppartmentEdit   AppartmentEdit? @relation(fields: [appartmentEditId], references: [id], onDelete: Cascade)
+  appartmentEditId String?
 }
 
 enum AppartmentKind {
-    chambre
-    studio
-    t1
-    t1bis
-    t2
-    t3etplus
-    colocation
-    autre
+  chambre
+  studio
+  t1
+  t1bis
+  t2
+  t3etplus
+  colocation
+  autre
 }
 
 model AppartmentEdit {
-    id                String         @id @unique @default(cuid())
-    photos            Photo[]
-    rent              Int
-    charges           Int
-    deposit           Int
-    surface           Int
-    kind              AppartmentKind
-    roomsCount        Int
-    availableAt       DateTime
-    address           String
-    latitude          Float?
-    longitude         Float?
-    hasFurniture      Boolean?
-    hasParking        Boolean?
-    hasBicycleParking Boolean?
-    description       String
-    applied           Boolean        @default(false)
-    createdAt         DateTime       @default(now())
-    appliedAt         DateTime?
-    appartment        Appartment     @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
-    appartmentId      String
+  id                String         @id @unique @default(cuid())
+  photos            Photo[]
+  rent              Int
+  charges           Int
+  deposit           Int
+  surface           Int
+  kind              AppartmentKind
+  roomsCount        Int
+  availableAt       DateTime
+  address           String
+  latitude          Float?
+  longitude         Float?
+  hasFurniture      Boolean?
+  hasParking        Boolean?
+  hasBicycleParking Boolean?
+  description       String
+  applied           Boolean        @default(false)
+  createdAt         DateTime       @default(now())
+  appliedAt         DateTime?
+  appartment        Appartment     @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
+  appartmentId      String
 }
 
 model Report {
-    id           String       @id @unique @default(cuid())
-    reason       ReportReason
-    message      String
-    createdAt    DateTime     @default(now())
-    appartment   Appartment   @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
-    appartmentId String
-    author       User?        @relation(fields: [authorId], references: [id], onDelete: Cascade)
-    authorId     String?
+  id           String       @id @unique @default(cuid())
+  reason       ReportReason
+  message      String
+  createdAt    DateTime     @default(now())
+  appartment   Appartment   @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
+  appartmentId String
+  author       User?        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId     String?
 }
 
 enum ReportReason {
-    dangerous
-    obsolete
-    other
+  dangerous
+  obsolete
+  other
 }
 
 model TravelTimeToN7 {
-    id                String       @id @unique @default(cuid())
-    byFoot            Int?
-    byBike            Int?
-    byPublicTransport Int?
-    appartments       Appartment[]
+  id                String       @id @unique @default(cuid())
+  byFoot            Int?
+  byBike            Int?
+  byPublicTransport Int?
+  appartments       Appartment[]
 }
 
 model PublicTransportStation {
-    id           String              @id @unique @default(cuid())
-    name         String
-    line         String
-    type         PublicTransportType
-    color        String?
-    Appartment   Appartment?         @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
-    appartmentId String?
-    latitude     Float
-    longitude    Float
+  id           String              @id @unique @default(cuid())
+  name         String
+  line         String
+  type         PublicTransportType
+  color        String?
+  Appartment   Appartment?         @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
+  appartmentId String?
+  latitude     Float
+  longitude    Float
 }
 
 enum PublicTransportType {
-    bus
-    bhnf
-    metro
-    tram
-    telepherique
-    tad
+  bus
+  bhnf
+  metro
+  tram
+  telepherique
+  tad
 }

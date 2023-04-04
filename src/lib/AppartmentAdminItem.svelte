@@ -37,7 +37,7 @@
 		emit('close');
 	};
 
-	const indices = (key, highlight) =>
+	const indices = (key: string, highlight: readonly Fuse.FuseResultMatch[]) =>
 		highlight.filter((h) => h.key === key).flatMap((h) => h.indices);
 </script>
 

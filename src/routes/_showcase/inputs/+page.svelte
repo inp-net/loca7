@@ -11,7 +11,7 @@
 	let counter: number = -4294967295;
 	let teo: number = 1_000_000_000;
 
-	let tristate: boolean | null = null;
+	let ternaryState: boolean | null = null;
 </script>
 
 <h1>Inputs</h1>
@@ -41,7 +41,7 @@
 
 <section class="checkbox">
 	<InputField label="Thing">
-		<InputCheckbox label="Thing1" bind:value={tristate} />
+		<InputCheckbox label="Thing1" bind:value={ternaryState} />
 	</InputField>
 </section>
 

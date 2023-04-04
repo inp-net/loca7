@@ -746,7 +746,7 @@
 
 	section.notice.notice-report-submitted {
 		background: var(--moss);
-        justify-content: start;
+		justify-content: start;
 	}
 
 	section.notice.notice-report-submitted p {
@@ -754,7 +754,7 @@
 	}
 
 	section.notice.notice-report-submitted .icon {
-        --icon-color: var(--cactus);
+		--icon-color: var(--cactus);
 		height: 1.5em;
 	}
 

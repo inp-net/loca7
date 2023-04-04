@@ -111,7 +111,11 @@
 	{:else}
 		<SortableList bind:list={value} key="filename" let:item={photo} let:index>
 			<li class="image-item">
-				<button type="button" class="drag" use:tooltip={'Glissez pour réordonner les images'}>
+				<button
+					type="button"
+					class="drag"
+					use:tooltip={'Glissez pour réordonner les images'}
+				>
 					<Icon name="drag-handle" />
 				</button>
 				<span class="position">{index + 1}</span>
@@ -195,8 +199,8 @@
 		gap: 0.5rem;
 		position: relative;
 		z-index: 10;
-        width: 100%;
-        padding: 0.5rem;
+		width: 100%;
+		padding: 0.5rem;
 		/* margin-bottom: 1rem; */
 	}
 

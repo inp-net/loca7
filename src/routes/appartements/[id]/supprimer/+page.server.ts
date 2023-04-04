@@ -68,6 +68,6 @@ export const actions: Actions = {
 			}
 		});
 
-		throw redirect(302, '/appartements/gerer');
+		throw redirect(302, user?.admin ? '/administration' : '/appartements/gerer');
 	}
 };

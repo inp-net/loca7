@@ -64,7 +64,7 @@
 		padding: 0;
 		flex-wrap: wrap;
 		margin: 0;
-        background: var(--fg);
+		background: var(--fg);
 	}
 
 	.error-area {

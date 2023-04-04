@@ -43,7 +43,7 @@
 	<section class="photos">
 		<CarouselImages
 			cover
-			images={photos.length > 0 ? photos?.map(photoURL) : ['/missing-photo.png']}
+			images={photos?.length > 0 ? photos?.map(photoURL) : ['/missing-photo.png']}
 		/>
 	</section>
 	<svelte:element

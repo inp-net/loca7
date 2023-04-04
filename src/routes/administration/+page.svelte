@@ -5,11 +5,24 @@
 	import type { PageData } from './$types';
 	import InputSelectMultiple from '$lib/InputSelectMultiple.svelte';
 	import InputField from '$lib/InputField.svelte';
-	import type { Appartment, Report } from '@prisma/client';
+	import type {
+		Appartment as AppartmentBase,
+		AppartmentEdit as AppartmentEditBase,
+		Photo,
+		Report,
+		User
+	} from '@prisma/client';
 	import InputText from '$lib/InputText.svelte';
 	import Fuse from 'fuse.js';
-	import type { record } from 'zod';
 	import InputSelectOne from '$lib/InputSelectOne.svelte';
+
+	type AppartmentEdit = AppartmentEditBase & { photos: Photo[] };
+	type Appartment = AppartmentBase & {
+		reports: Report[];
+		history: AppartmentEdit[];
+		owner: User;
+		photos: Photo[];
+	};
 
 	export let data: PageData;
 	const categories = {
@@ -33,7 +46,7 @@
 		status(eagerStatus, a) === 'pending' ||
 		(status(eagerStatus, a) !== 'archived' && a.history.some((h) => !h.applied));
 	const isArchived = (a: Appartment) => status(eagerStatus, a) === 'archived';
-	const isYearSelected = (years) => (a: Appartment) =>
+	const isYearSelected = (years: string[]) => (a: Appartment) =>
 		years.length === 0 || years.includes(effectiveUpdatedAt(a).getFullYear().toString());
 
 	let currentCategory: Status = 'pending';

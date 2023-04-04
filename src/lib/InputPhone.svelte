@@ -1,6 +1,6 @@
 <script lang="ts">
 	import BaseInputText from './BaseInputText.svelte';
-    import { z } from 'zod';
+	import { z } from 'zod';
 
 	export let id: string | undefined = undefined;
 	export let name: string | undefined = undefined;

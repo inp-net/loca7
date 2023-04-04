@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-    <title>Loca7 · Choisir un nouveau mot de passe</title>
+	<title>Loca7 · Choisir un nouveau mot de passe</title>
 </svelte:head>
 
 <main>

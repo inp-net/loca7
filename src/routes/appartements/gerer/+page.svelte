@@ -9,7 +9,7 @@
 </script>
 
 <svelte:head>
-    <title>Loca7 · Mes annonces</title>
+	<title>Loca7 · Mes annonces</title>
 </svelte:head>
 
 <main>

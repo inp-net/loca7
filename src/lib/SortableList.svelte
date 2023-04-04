@@ -10,7 +10,7 @@
 	export let removesItems = false;
 
 	let ghost: HTMLDivElement;
-	let grabbed: HTMLElement|null;
+	let grabbed: HTMLElement | null;
 
 	let lastTarget: HTMLElement;
 
@@ -245,9 +245,9 @@
 		top: 0;
 		left: 0;
 		opacity: 0;
-        border-radius: 1rem;
-        transition: box-shadow 0.5s ease;
-        box-shadow: transparent;
+		border-radius: 1rem;
+		transition: box-shadow 0.5s ease;
+		box-shadow: transparent;
 	}
 
 	#ghost * {

@@ -17,7 +17,7 @@
 </script>
 
 <svelte:head>
-    <title>Loca7 · Réinitialisez votre mot de passe</title>
+	<title>Loca7 · Réinitialisez votre mot de passe</title>
 </svelte:head>
 
 <main>

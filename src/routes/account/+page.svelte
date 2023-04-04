@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-    <title>Loca7 · Mon compte</title>
+	<title>Loca7 · Mon compte</title>
 </svelte:head>
 
 <main>

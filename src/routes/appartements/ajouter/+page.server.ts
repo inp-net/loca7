@@ -1,7 +1,7 @@
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import { openRouteService, tisseo } from '$lib/server/traveltime';
-import { tristateCheckboxToBoolean } from '$lib/types';
+import { ternaryStateCheckboxToBoolean } from '$lib/types';
 import { ENSEEIHT } from '$lib/utils';
 import type { AppartmentKind, Prisma } from '@prisma/client';
 import { error, redirect } from '@sveltejs/kit';
@@ -84,13 +84,13 @@ export const actions: Actions = {
 					}
 				},
 				hasFurniture: Object.keys(formData).includes('hasFurniture')
-					? tristateCheckboxToBoolean(formData.hasFurniture)
+					? ternaryStateCheckboxToBoolean(formData.hasFurniture)
 					: null,
 				hasParking: Object.keys(formData).includes('hasParking')
-					? tristateCheckboxToBoolean(formData.hasParking)
+					? ternaryStateCheckboxToBoolean(formData.hasParking)
 					: null,
 				hasBicycleParking: Object.keys(formData).includes('hasBicycleParking')
-					? tristateCheckboxToBoolean(formData.hasParking)
+					? ternaryStateCheckboxToBoolean(formData.hasParking)
 					: null
 			};
 			if (latitude && longitude) {

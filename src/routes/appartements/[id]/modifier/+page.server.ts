@@ -1,6 +1,6 @@
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
-import { tristateCheckboxToBoolean } from '$lib/types';
+import { ternaryStateCheckboxToBoolean } from '$lib/types';
 import type { Actions, PageServerLoad } from './$types';
 import { copyPhotos, writePhotosToDisk } from '$lib/server/photos';
 import xss from 'xss';
@@ -110,9 +110,9 @@ export const actions: Actions = {
 						}))
 					}
 				},
-				hasFurniture: tristateCheckboxToBoolean(hasFurniture),
-				hasParking: tristateCheckboxToBoolean(hasParking),
-				hasBicycleParking: tristateCheckboxToBoolean(hasBicycleParking)
+				hasFurniture: ternaryStateCheckboxToBoolean(hasFurniture),
+				hasParking: ternaryStateCheckboxToBoolean(hasParking),
+				hasBicycleParking: ternaryStateCheckboxToBoolean(hasBicycleParking)
 			},
 			include: {
 				photos: true
@@ -123,6 +123,6 @@ export const actions: Actions = {
 		await copyPhotos(edit.photos, appartment.photos);
 		await writePhotosToDisk(edit.photos, files);
 
-		throw redirect(302, `/appartements/gerer`);
+		throw redirect(302, user?.admin ? `/administration` : `/appartements/gerer`);
 	}
 };

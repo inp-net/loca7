@@ -221,7 +221,7 @@ export function appartmentTitle(appartment: Appartment, insideSentence = false):
 	} de ${appartment.surface}m² à ${appartment.rent + appartment.charges}€/mois`;
 }
 
-export const tristateCheckboxToBoolean = (value: string) => {
+export const ternaryStateCheckboxToBoolean = (value: string) => {
 	return (
 		{
 			indeterminate: null,

@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-    <title>Loca7 · Vérification d'adresse e-mail nécéssaire</title>
+	<title>Loca7 · Vérification d'adresse e-mail nécéssaire</title>
 </svelte:head>
 
 <main>

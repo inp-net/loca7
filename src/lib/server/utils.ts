@@ -10,4 +10,3 @@ export function checksumFile(filepath: string): Promise<string> {
 		stream.on('end', () => resolve(hash.digest('hex')));
 	});
 }
-
