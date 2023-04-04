@@ -23,6 +23,51 @@
 			"labels": ["bug"]
 		},
 		{
+			"name": "Administration",
+			"type": "issues",
+			"labels": ["area:admin"]
+		},
+		{
+			"name": "View page",
+			"type": "issues",
+			"labels": ["area:view"]
+		},
+		{
+			"name": "Add/edit page",
+			"type": "issues",
+			"labels": ["area:add", "area:edit"]
+		},
+		{
+			"name": "Search page",
+			"type": "issues",
+			"labels": ["area:search"]
+		},
+		{
+			"name": "Settings page",
+			"type": "issues",
+			"labels": ["area:settings"]
+		},
+		{
+			"name": "Account page",
+			"type": "issues",
+			"labels": ["area:account", "area:accounts"]
+		},
+		{
+			"name": "Authentication",
+			"type": "issues",
+			"labels": ["area:auth"]
+		},
+		{
+			"name": "Management page",
+			"type": "issues",
+			"labels": ["area:manage"]
+		},
+		{
+			"name": "Report page",
+			"type": "issues",
+			"labels": ["area:report"]
+		},
+		{
 			"name": "Lubin",
 			"type": "issues",
 			"labels": ["by:lubin"]
