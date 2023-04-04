@@ -429,27 +429,12 @@
 
 	{#if user?.admin || appart.owner.id === user?.id}
 		<section class="history" id="modifications">
-			<h2>Modifications</h2>
-			<h3>En attente de validation</h3>
+			<h2>Modifications en attente</h2>
 			<ul>
 				{#each appart.history
 					.filter((a) => !a.applied)
 					.sort((a, b) => -(a.createdAt.valueOf() - b.createdAt.valueOf())) as edit (edit.id)}
 					<AppartmentEditItem {user} {edit} current={appart} />
-				{:else}
-					<li class="empty">Aucune modification.</li>
-				{/each}
-			</ul>
-			<h3>Appliquées</h3>
-			<ul>
-				{#each appart.history
-					.filter((a) => a.applied)
-					.sort((a, b) => -(a.createdAt.valueOf() - b.createdAt.valueOf())) as edit (edit.id)}
-					<AppartmentEditItem
-						{user}
-						{edit}
-						current={editBefore(appart.history, edit) ?? EMPTY_APPARTMENT}
-					/>
 				{:else}
 					<li class="empty">Aucune modification.</li>
 				{/each}
