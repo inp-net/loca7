@@ -36,6 +36,7 @@
 	import xss from 'xss';
 	import AppartmentEditItem from '$lib/AppartmentEditItem.svelte';
 	import type { PublicTransportStation, User } from '@prisma/client';
+	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
 
 	export let data: LayoutData;
 	const { user, appartment: appart } = data;
@@ -134,6 +135,10 @@
 			{/if}
 		</section>
 	{/if}
+
+	<section class="go-back">
+		<ButtonPrimary href="/">Accueil</ButtonPrimary>
+	</section>
 
 	<section class="carousel">
 		<CarouselImages
@@ -452,6 +457,22 @@
 </main>
 
 <style>
+	section:not(.carousel) {
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		justify-content: start;
+	}
+
+	section:not(:last-of-type) {
+		margin-bottom: 3rem;
+	}
+
+	section.go-back {
+		justify-content: center;
+		flex-direction: row;
+	}
+
 	.carousel {
 		width: 100%;
 		max-width: 1000px;
@@ -477,17 +498,6 @@
 		.side-by-side {
 			grid-template-columns: 1fr 1.6fr;
 		}
-	}
-
-	section:not(.carousel) {
-		margin: 0 auto;
-		display: flex;
-		flex-direction: column;
-		justify-content: start;
-	}
-
-	section:not(:last-of-type) {
-		margin-bottom: 3rem;
 	}
 
 	section.situation {
