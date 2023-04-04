@@ -500,13 +500,13 @@
 	.side-by-side {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: 3rem;
+		gap: 8rem;
 		padding: 0 1rem 2rem;
 	}
 
 	@media (min-width: 800px) {
 		.side-by-side {
-			grid-template-columns: 1fr 1.5fr;
+			grid-template-columns: 1fr 1.6fr;
 		}
 	}
 
