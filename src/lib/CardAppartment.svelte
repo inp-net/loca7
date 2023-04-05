@@ -40,12 +40,18 @@
 	let secondsAvailableSince = (Date.now() - availableAt.valueOf()) * 1e-3;
 </script>
 
-<article class:editable class:small>
+<article class:editable class:small class:photo-is-clickable={photos?.length < 2}>
 	<section class="photos">
-		<CarouselImages
-			cover
-			images={photos?.length > 0 ? photos?.map(photoURL) : ['/missing-photo.png']}
-		/>
+		<svelte:element
+			this={photos?.length < 2 ? 'a' : 'div'}
+			href={photos?.length < 2 ? `/appartements/${id}` : undefined}
+			class="photo-maybe-link"
+		>
+			<CarouselImages
+				cover
+				images={photos?.length > 0 ? photos?.map(photoURL) : ['/missing-photo.png']}
+			/>
+		</svelte:element>
 	</section>
 	<svelte:element
 		this={editable ? 'div' : 'a'}
@@ -168,6 +174,11 @@
 		flex-shrink: 0;
 	}
 
+	section.photos .photo-maybe-link {
+		display: block;
+		height: 100%;
+	}
+
 	article.small section.photos {
 		height: 150px;
 	}
@@ -222,7 +233,9 @@
 	}
 
 	article:not(.editable) .content:hover,
-	article:not(.editable) .content:focus {
+	article:not(.editable) .content:focus,
+	article:not(.editable).photo-is-clickable:hover .content,
+	article:not(.editable).photo-is-clickable:focus .content {
 		background: var(--ice);
 	}
 
