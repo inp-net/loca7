@@ -55,6 +55,8 @@
 		outline: var(--border-width) solid var(--fg);
 		margin-right: var(--border-width);
 		margin-top: var(--border-width);
+		flex-grow: 1;
+		justify-content: center;
 	}
 
 	label[aria-current='true'] {
@@ -68,6 +70,7 @@
 		padding: 0;
 		flex-wrap: wrap;
 		margin: 0;
+		justify-content: center;
 	}
 
 	.error-area {
