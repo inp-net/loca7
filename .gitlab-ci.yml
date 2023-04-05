@@ -1,8 +1,9 @@
+image: node:18
+
 stages:
   - test
 
 check_prisma_imports:
-  image: node:14
   stage: test
   script:
     - npm run check-prisma-imports
