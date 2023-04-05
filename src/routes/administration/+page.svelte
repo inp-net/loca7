@@ -1,7 +1,7 @@
 <script lang="ts">
 	import VirtualList from 'svelte-tiny-virtual-list';
 	import AppartmentAdminItem from '$lib/AppartmentAdminItem.svelte';
-	import { debounce } from 'lodash';
+	import { debounce } from 'lodash-es';
 	import type { PageData } from './$types';
 	import InputSelectMultiple from '$lib/InputSelectMultiple.svelte';
 	import InputField from '$lib/InputField.svelte';

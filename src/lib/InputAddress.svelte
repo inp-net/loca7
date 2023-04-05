@@ -2,7 +2,7 @@
 	import BaseInputText from './BaseInputText.svelte';
 	import { v4 as uuidv4 } from 'uuid';
 	import { distanceBetween, ENSEEIHT } from './utils';
-	import { throttle } from 'lodash';
+	import { throttle } from 'lodash-es';
 	import { z } from 'zod';
 
 	export let value: string;

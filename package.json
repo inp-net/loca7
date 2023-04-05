@@ -92,7 +92,7 @@
 		"handlebars": "^4.7.7",
 		"ics": "^3.1.0",
 		"lexical": "^0.8.1",
-		"lodash": "^4.17.21",
+		"lodash-es": "^4.17.21",
 		"lucia-auth": "^0.7.3",
 		"md5": "^2.3.0",
 		"mime-types": "^2.1.35",
