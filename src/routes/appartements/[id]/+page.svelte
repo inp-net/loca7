@@ -306,7 +306,7 @@
 			<section class="owner">
 				<h2 class="typo-field-label">Propriétaire</h2>
 				<p class="name typo-title">
-					{appart.owner.name}
+					{appart.owner.firstName}&nbsp;{appart.owner.lastName.toUpperCase()}
 				</p>
 				{#if appart.owner.email && !appart.owner.email.match(/^ghost\.\w+@loca7.enseeiht.fr$/)}
 					<div class="row">

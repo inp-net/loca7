@@ -34,9 +34,14 @@
 			/>
 		</InputField>
 
-		<InputField label="Nom complet">
-			<InputText autocomplete="name" required name="name" value="" />
-		</InputField>
+		<div class="side-by-side">
+			<InputField label="Prénom">
+				<InputText autocomplete="given-name" required name="firstName" value="" />
+			</InputField>
+			<InputField label="Nom de famille">
+				<InputText autocomplete="family-name" required name="lastName" value="" />
+			</InputField>
+		</div>
 
 		<InputField label="Téléphone (optionel)">
 			<InputPhone name="phone" value="" />

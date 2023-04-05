@@ -59,7 +59,7 @@ export const actions: Actions = {
 			to: passwordReset.user.email,
 			subject: 'Loca7: Votre mot de passe a été changé',
 			data: {
-				fullname: passwordReset.user.name,
+				fullname: passwordReset.user.firstName,
 				contactEmail: CONTACT_EMAIL
 			},
 			template: 'password-changed'

@@ -407,7 +407,8 @@ async function importData(ghost: User, appartments: AppartmentOld[], photos: Pho
 		const appart = apparts[0];
 		const attributes = {
 			email: appart.newEmail,
-			name: (appart.contact_prenom + ' ' + appart.contact_nom).trim(),
+			firstName: appart.contact_prenom.trim(),
+			lastName: appart.contact_nom.trim(),
 			phone: (appart.contact_port || appart.contact_tel).trim()
 		};
 		const password = createPassword(3);
@@ -450,21 +451,28 @@ async function nukeDb() {
 
 	await prisma.user.deleteMany({
 		where: {
-			name: {
-				not: 'Gauthier Lubin'
-			}
+			admin: false
 		}
 	});
 
 	await prisma.key.deleteMany({
 		where: {
 			user: {
-				name: {
-					not: 'Gauthier Lubin'
-				}
+				admin: false
 			}
 		}
 	});
+
+	for (const user of await prisma.user.findMany({ where: { admin: true } })) {
+		await prisma.user.update({
+			where: { id: user.id },
+			data: {
+				firstName: user.name?.split(' ')[0],
+				lastName: user.name?.split(' ').slice(1).join(' '),
+				name: null
+			}
+		});
+	}
 
 	rmSync(path.join(__dirname, '../public/photos/appartments'), { recursive: true });
 	mkdirSync(path.join(__dirname, '../public/photos/appartments'));
@@ -477,24 +485,8 @@ async function main() {
 	// Create ghost user
 	const ghost = await prisma.user.create({
 		data: {
-			name: 'Ghost',
+			firstName: 'Ghost',
 			email: 'ghost@loca7.enseeiht.fr',
-			phone: ''
-		}
-	});
-
-	// Create admin user
-	const admin = await auth.createUser({
-		key: {
-			providerId: 'email',
-			password: 'refrain-candied-exert-phony-storewide',
-			providerUserId: 'hey2@ewen.works'
-		},
-		attributes: {
-			email: 'hey2@ewen.works',
-			admin: true,
-			emailIsValidated: true,
-			name: 'Admin',
 			phone: ''
 		}
 	});

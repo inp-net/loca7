@@ -17,14 +17,13 @@ export const actions: Actions = {
 		const { user, session } = await locals.validateUser();
 		guards.emailValidated(user, session, url);
 
-		const { name, email, phone } = Object.fromEntries(await request.formData()) as Record<
-			string,
-			string
-		>;
+		const { firstName, lastName, email, phone } = Object.fromEntries(
+			await request.formData()
+		) as Record<string, string>;
 
 		await prisma.user.update({
 			where: { id: user.id },
-			data: { name, email, phone, emailIsValidated: email === user.email }
+			data: { firstName, lastName, email, phone, emailIsValidated: email === user.email }
 		});
 
 		if (email !== user.email) {
@@ -44,7 +43,7 @@ export const actions: Actions = {
 				to: user.email,
 				subject: 'Loca7: Votre adresse email a été changée',
 				data: {
-					fullname: user.name,
+					fullname: user.firstName + ' ' + user.lastName,
 					contactEmail: CONTACT_EMAIL,
 					newEmail: email
 				},
@@ -71,7 +70,7 @@ export const actions: Actions = {
 				to: user.email,
 				subject: 'Loca7: Votre mot de passe a été changé',
 				data: {
-					fullname: user.name,
+					fullname: user.firstName,
 					contactEmail: CONTACT_EMAIL
 				},
 				template: 'password-changed'

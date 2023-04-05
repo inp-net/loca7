@@ -12,7 +12,6 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	if (user.emailIsValidated) {
 		throw redirect(302, '/');
 	}
-
 	return { user };
 };
 
@@ -48,10 +47,11 @@ export const actions: Actions = {
 			}
 		});
 
-		await sendMail({
+		await sendMail({ilValidation.deleteMany({
+			where: {
 			to: user.email,
 			data: {
-				fullname: user.name,
+				fullname: user.firstName,
 				validateEmailUrl: `${
 					process.env.ORIGIN || 'http://localhost:5173'
 				}/validate-email/${validation.id}`

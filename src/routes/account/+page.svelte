@@ -34,9 +34,14 @@
 		<p class="explain typo-paragraph">
 			Ces informations apparaîtront publiquement sur vos annonces.
 		</p>
-		<InputField label="Nom complet">
-			<InputText name="name" bind:value={user.name} />
-		</InputField>
+		<div class="side-by-side">
+            <InputField label="Prénom">
+                <InputText name="firstName" bind:value={user.firstName} />
+            </InputField>
+            <InputField label="Nom de famille">
+                <InputText name="lastName" bind:value={user.lastName} />
+            </InputField>
+        </div>
 
 		<InputField label="Adresse e-mail">
 			<InputEmail name="email" bind:value={user.email} />
@@ -107,4 +112,9 @@
 		display: flex;
 		justify-content: center;
 	}
+
+    .side-by-side {
+        display: flex;
+        gap: 1rem;
+    }
 </style>

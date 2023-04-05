@@ -12,7 +12,7 @@
 
 	export let id: string;
 	export let number: number;
-	export let owner: { name: string };
+	export let owner: { firstName: string; lastName: string };
 	export let updatedAt: Date;
 	export let reports: any[];
 	export let approved: boolean;
@@ -90,7 +90,7 @@
 		>
 		<span class="data"
 			><HighlightedText indices={indices('owner.name', highlight)}
-				>{owner.name}</HighlightedText
+				>{owner.firstName} {owner.lastName.toUpperCase()}</HighlightedText
 			></span
 		>
 		<span class="data"
