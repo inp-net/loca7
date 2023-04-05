@@ -1,5 +1,5 @@
 {
-	"name": "front",
+	"name": "loca7",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
@@ -18,10 +18,11 @@
 		"format": "prettier --plugin-search-dir . --write .",
 		"start": "node -r dotenv/config build",
 		"start:beta": "STAGE=beta ORIGIN=https://loca7.ewen.works pnpm start",
-		"check-prisma-imports": "for file in **/*.server.ts; do if ! grep -q 'import { prisma } from' $file; then echo warn: no prisma import in $file; fi; done",
+		"check-prisma-imports": "shopt -s globstar; found_warning=0; for file in src/**/*server.ts; do if grep -q 'prisma' \"$file\" && ! grep -q 'import { prisma } from' \"$file\"; then echo \"warn: no prisma import in $file\";  found_warning=1; fi; done; if [ $found_warning -eq 0 ]; then echo \"All files have a prisma import\"; fi",
 		"update-mail-templates": "ts-node mail-templates/updateTypes.ts",
 		"update-icons": "python src/lib/icons/sveltify.py",
-		"generate": "concurrently npm:update-mail-templates npm:update-icons && pnpm format"
+		"generate": "concurrently npm:update-mail-templates npm:update-icons && pnpm format",
+		"staging:deploy": "ssh ewen@ewen.works 'bash --login -c ~/www/loca7.ewen.works/update-staging'"
 	},
 	"prisma": {
 		"seed": "ts-node --transpile-only scripts/importOldData.ts"
