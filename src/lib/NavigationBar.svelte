@@ -6,6 +6,7 @@
 	import { afterUpdate, onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import LogoLoca7 from './LogoLoca7.svelte';
+	import ButtonPrimary from './ButtonPrimary.svelte';
 
 	export let user: User | null = null;
 	export let noticeBarAbove: boolean = false;
@@ -100,13 +101,13 @@
 				</form>
 			</li>
 		{:else}
-			<li class="post">
-				<ButtonSecondary icon="add" href="/appartements/ajouter"
-					>Déposer une annonce</ButtonSecondary
-				>
-			</li>
 			<li>
-				<ButtonSecondary href="/login">Connexion</ButtonSecondary>
+				<ButtonSecondary icon="user" href="/login">Connexion</ButtonSecondary>
+			</li>
+			<li class="post">
+				<ButtonPrimary smaller icon="add" href="/appartements/ajouter"
+					>Déposer une annonce</ButtonPrimary
+				>
 			</li>
 		{/if}
 	</ul>
@@ -181,6 +182,7 @@
 		display: flex;
 		padding: 2rem 4rem;
 		justify-content: space-between;
+		align-items: center;
 		flex-wrap: wrap;
 		position: fixed;
 		z-index: 10000;
@@ -213,6 +215,7 @@
 		gap: 1rem;
 		flex-wrap: wrap;
 		justify-content: center;
+		align-items: center;
 	}
 
 	:global(#open-menu) {
@@ -243,6 +246,12 @@
 		}
 		:global(#open-menu) {
 			display: flex;
+		}
+	}
+
+	@media (min-width: 1350px) {
+		:global(#post-appartment-cta) {
+			display: none;
 		}
 	}
 

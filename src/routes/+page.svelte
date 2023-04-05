@@ -89,6 +89,12 @@
 </svelte:head>
 
 <main>
+	<div id="post-appartment-cta">
+		<ButtonPrimary smaller icon="add" href="/appartements/ajouter"
+			>Déposer une annonce</ButtonPrimary
+		>
+	</div>
+
 	<div class="search">
 		<h1>Recherche de logement</h1>
 		<form action="?/search">
@@ -129,24 +135,24 @@
 
 		<section class="switch-tabs">
 			{#if resultsTab === 'list'}
-				<ButtonPrimary
+				<ButtonSecondary
 					icon="map"
 					on:click={() => {
 						resultsTab = 'map';
 						window.scrollTo({
 							top: document.getElementById('map')?.scrollTop
 						});
-					}}>Voir sur la carte</ButtonPrimary
+					}}>Voir sur la carte</ButtonSecondary
 				>
 			{:else}
-				<ButtonPrimary
+				<ButtonSecondary
 					icon="back"
 					on:click={() => {
 						resultsTab = 'list';
 						window.scrollTo({
 							top: $searchResultsScrollPosition
 						});
-					}}>Retour à la liste</ButtonPrimary
+					}}>Retour à la liste</ButtonSecondary
 				>
 			{/if}
 		</section>
