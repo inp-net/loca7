@@ -6,13 +6,7 @@
 
 	export let search: string;
 
-    // TODO add clear button
+	// TODO add clear button
 </script>
 
-<BaseInputText
-	type="text"
-	leftIcon="search"
-	schema={z.string()}
-	bind:value={search}
-	on:input
-/>
+<BaseInputText type="text" leftIcon="search" schema={z.string()} bind:value={search} on:input />

@@ -35,13 +35,13 @@
 			Ces informations apparaîtront publiquement sur vos annonces.
 		</p>
 		<div class="side-by-side">
-            <InputField label="Prénom">
-                <InputText name="firstName" bind:value={user.firstName} />
-            </InputField>
-            <InputField label="Nom de famille">
-                <InputText name="lastName" bind:value={user.lastName} />
-            </InputField>
-        </div>
+			<InputField label="Prénom">
+				<InputText name="firstName" bind:value={user.firstName} />
+			</InputField>
+			<InputField label="Nom de famille">
+				<InputText name="lastName" bind:value={user.lastName} />
+			</InputField>
+		</div>
 
 		<InputField label="Adresse e-mail">
 			<InputEmail name="email" bind:value={user.email} />
@@ -113,8 +113,8 @@
 		justify-content: center;
 	}
 
-    .side-by-side {
-        display: flex;
-        gap: 1rem;
-    }
+	.side-by-side {
+		display: flex;
+		gap: 1rem;
+	}
 </style>

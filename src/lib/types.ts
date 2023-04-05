@@ -118,7 +118,7 @@ export const ReportSchema = z.object({
 export type User = z.infer<typeof UserSchema>;
 export const UserSchema = z.object({
 	firstName: z.string(),
-    lastName: z.string(),
+	lastName: z.string(),
 	phone: z.string(),
 	email: z.string(),
 	emailIsValidated: z.boolean(),
