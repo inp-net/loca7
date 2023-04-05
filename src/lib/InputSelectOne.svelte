@@ -52,6 +52,9 @@
 		cursor: pointer;
 		display: flex;
 		align-items: center;
+		outline: var(--border-width) solid var(--fg);
+		margin-right: var(--border-width);
+		margin-top: var(--border-width);
 	}
 
 	label[aria-current='true'] {
@@ -60,13 +63,11 @@
 	}
 
 	fieldset {
-		border: var(--border-width) solid var(--fg);
+		border: none;
 		display: inline-flex;
-		gap: var(--border-width);
 		padding: 0;
 		flex-wrap: wrap;
 		margin: 0;
-		background: var(--fg);
 	}
 
 	.error-area {
