@@ -47,8 +47,7 @@ export const actions: Actions = {
 			}
 		});
 
-		await sendMail({ilValidation.deleteMany({
-			where: {
+		await sendMail({
 			to: user.email,
 			data: {
 				fullname: user.firstName,
