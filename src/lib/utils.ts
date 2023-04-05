@@ -49,13 +49,17 @@ export function distanceDisplay(distanceMeters: number): string {
 	}).format(useMeters ? distanceMeters : distanceMeters * 1e-3);
 }
 
+export function isToday(date: Date): boolean {
+	return (
+		date.getFullYear() === new Date().getFullYear() &&
+		date.getMonth() === new Date().getMonth() &&
+		date.getDate() === new Date().getDate()
+	);
+}
+
 export function availableAtSentence(availableSince: number, availableAt: Date): string {
 	let out = '';
-	if (
-		availableAt.getFullYear() === new Date().getFullYear() &&
-		availableAt.getMonth() === new Date().getMonth() &&
-		availableAt.getDate() === new Date().getDate()
-	) {
+	if (isToday(availableAt)) {
 		out += "Se libère aujourd'hui";
 	} else if (availableSince > 0) {
 		out += 'Libéré depuis le ';

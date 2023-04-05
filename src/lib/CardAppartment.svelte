@@ -15,7 +15,8 @@
 		distanceBetween,
 		distanceDisplay,
 		durationDisplay,
-		ENSEEIHT
+		ENSEEIHT,
+		isToday
 	} from './utils';
 	const emit = createEventDispatcher();
 
@@ -78,7 +79,7 @@
 				<span class="icon"><Icon name="calendar" /></span>
 				<p class="when">
 					{availableAtSentence(secondsAvailableSince, availableAt)}
-					{#if secondsAvailableSince !== 0}
+					{#if !isToday(availableAt)}
 						<span class="muted"
 							>{#if secondsAvailableSince > 0}il y a{:else}dans{/if}
 							{durationDisplay(Math.abs(secondsAvailableSince))}</span
