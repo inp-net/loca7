@@ -261,8 +261,10 @@
 	}
 
 	section.filters .side-by-side {
+		margin-top: 1rem;
 		display: flex;
 		gap: 2rem;
+		flex-wrap: wrap;
 	}
 
 	h1 {
