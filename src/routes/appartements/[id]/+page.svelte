@@ -476,8 +476,14 @@
 		width: 100%;
 		max-width: 1000px;
 		margin: 0 auto;
-		height: 60vh;
-		max-height: 400px;
+		height: 40vh;
+		max-height: 600px;
+	}
+
+	@media (min-width: 1000px) {
+		.carousel {
+			height: 60vh;
+		}
 	}
 
 	.side-by-side,
