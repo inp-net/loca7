@@ -1,6 +1,7 @@
 import { guards } from '$lib/server/lucia';
 import { jsonAPIOutputsInclude } from '$lib/types';
 import type { RequestHandler } from './$types';
+import { prisma } from '$lib/server/prisma';
 
 export const GET: RequestHandler = async ({ params, locals }) => {
 	const { user } = await locals.validateUser();
