@@ -13,8 +13,8 @@ export const searchCriteria: Writable<SearchCriteria> = persisted('searchCriteri
 });
 
 export const SORT_OPTIONS = [
-	'prix/m²',
 	'prix',
+	'prix/m²',
 	'surface',
 	"distance à l'n7",
 	'délai avant libération'

@@ -66,9 +66,9 @@
 					case 'prix':
 						return charges + rent;
 					case 'prix/m²':
-						return surface ? (charges + rent) / surface : 0;
+						return surface ? (charges + rent) / surface : Number.MAX_SAFE_INTEGER;
 					case 'surface':
-						return surface;
+						return -surface;
 					case "distance à l'n7":
 						return latitude && longitude
 							? Number.MAX_SAFE_INTEGER
