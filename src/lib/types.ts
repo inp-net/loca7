@@ -231,3 +231,29 @@ export const ternaryStateCheckboxToBoolean = (value: string) => {
 		}[value] ?? null
 	);
 };
+
+/**
+ * Prevent some (potentially) sensitive fields from being exposed in the JSON "API".
+ */
+export const jsonAPIOutputsInclude = {
+	owner: {
+		select: {
+			id: true,
+			firstName: true,
+			lastName: true,
+			email: true,
+			phone: true
+		}
+	},
+	nearbyStations: true,
+	travelTimeToN7: true,
+	photos: {
+		select: {
+			id: true,
+			contentType: true,
+			position: true,
+			filename: true,
+			hash: true
+		}
+	}
+};
