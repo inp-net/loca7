@@ -106,7 +106,8 @@
 
 	{#if empty}
 		<p>
-			Glissez-déposer vos fichiers ici<br />Ou cliquez dans cette zone
+			Cliquez dans cette zone ou <br />
+			Glissez-déposer vos fichiers ici
 		</p>
 	{:else}
 		<SortableList bind:list={value} key="filename" let:item={photo} let:index>
