@@ -66,7 +66,7 @@ export function availableAtSentence(availableSince: number, availableAt: Date): 
 	} else {
 		out += 'Se libère le ';
 	}
-	if (availableSince !== 0) {
+	if (!isToday(availableAt)) {
 		out += new Intl.DateTimeFormat('fr-FR', {
 			year: 'numeric',
 			month: 'long',
