@@ -21,6 +21,7 @@
 	const emit = createEventDispatcher();
 
 	export let photos: Photo[] | null;
+	export let archived: boolean;
 	export let id: string;
 	export let rent: number;
 	export let charges: number;
@@ -53,11 +54,7 @@
 			/>
 		</svelte:element>
 	</section>
-	<svelte:element
-		this={editable ? 'div' : 'a'}
-		class="content"
-		href={editable ? '' : `/appartements/${id}`}
-	>
+	<a class="content" href="/appartements/{id}">
 		<section class="figures">
 			<section class="price">
 				<p class="typo-big-figure rent">{rent + charges}€</p>
@@ -131,20 +128,28 @@
 				{/if}
 			</section>
 		{/if}
-		{#if editable}
-			<section class="editable">
-				<ButtonColored dangerous href="/appartements/{id}/supprimer"
-					>Supprimer</ButtonColored
+	</a>
+	{#if editable}
+		<section class="editable">
+			<ButtonColored href="/appartements/{id}/modifier">Modifier</ButtonColored>
+			{#if !archived}
+				<ButtonColored
+					on:click={async () => {
+						await fetch(`/appartements/${id}/archiver`, { method: 'POST' });
+						window.location.reload();
+					}}>Archiver</ButtonColored
 				>
-				<ButtonColored href="/appartements/{id}" on:click={() => emit('delete')}
-					>Annonce</ButtonColored
+			{:else}
+				<ButtonColored
+					on:click={async () => {
+						await fetch(`/appartements/${id}/publier`, { method: 'POST' });
+						window.location.reload();
+					}}>Publier</ButtonColored
 				>
-				<ButtonColored href="/appartements/{id}/modifier" on:click={() => emit('edit')}
-					>Modifier</ButtonColored
-				>
-			</section>
-		{/if}
-	</svelte:element>
+			{/if}
+			<ButtonColored dangerous href="/appartements/{id}/supprimer">Supprimer</ButtonColored>
+		</section>
+	{/if}
 </article>
 
 <style>
@@ -232,17 +237,23 @@
 		height: 1.2em;
 	}
 
-	article:not(.editable) .content:hover,
-	article:not(.editable) .content:focus,
-	article:not(.editable).photo-is-clickable:hover .content,
-	article:not(.editable).photo-is-clickable:focus .content {
+	article .content:hover,
+	article .content:focus,
+	article.photo-is-clickable section.photos:hover + .content,
+	article.photo-is-clickable section.photos:focus + .content {
 		background: var(--ice);
+	}
+
+	article.editable .content {
+		padding-bottom: 0;
 	}
 
 	section.editable {
 		display: flex;
 		justify-content: space-between;
 		gap: 0.5rem;
-		margin-top: 2rem;
+		/* margin-top: 2rem; */
+		padding: 1.5em;
+		/* padding-top: em; */
 	}
 </style>
