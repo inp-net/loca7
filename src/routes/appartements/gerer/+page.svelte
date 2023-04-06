@@ -43,9 +43,10 @@
 
 <main class:empty={appartments.length === 0}>
 	<h1>
-		Mes annonces {#if appartments.length}<ButtonSecondary
+		Mes annonces {#if appartments.length}<ButtonPrimary
+				smaller
 				icon="add"
-				href="/appartements/ajouter">Nouvelle annonce</ButtonSecondary
+				href="/appartements/ajouter">Nouvelle annonce</ButtonPrimary
 			>{/if}
 	</h1>
 
