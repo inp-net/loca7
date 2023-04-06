@@ -4,7 +4,7 @@
 	import type { Snapshot } from './$types';
 
 	let appartment: Appartment = {
-		availableAt: null,
+		availableAt: new Date(),
 		address: '',
 		charges: undefined,
 		deposit: undefined,
