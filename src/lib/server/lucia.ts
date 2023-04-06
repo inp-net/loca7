@@ -49,6 +49,10 @@ export const guards: {
 	appartmentExists: (
 		appartment: { approved: boolean; archived: boolean; owner: { id: string } } | null
 	) => asserts appartment;
+	appartmentOwnedByUser: (
+		user: User,
+		appartment: { approved: boolean; archived: boolean; owner: { id: string } }
+	) => asserts appartment;
 } = {
 	/**
 	 * Checks if the user is logged in, if not, redirects to /login
@@ -96,5 +100,19 @@ export const guards: {
 	 */
 	appartmentExists: (appartment) => {
 		if (appartment === null) throw error(404, { message: "Cette annonce n'existe pas" });
+	},
+
+	/**
+	 * Checks if the appartement is owned by the current user
+	 * WARNING: Does not imply a check to see if the user is logged in
+	 */
+	appartmentOwnedByUser(user, appartment) {
+		if (appartment === null || appartment.owner.id !== user?.id)
+			throw error(404, { message: "Cette annonce n'existe pas" });
+	},
+
+	isGod(user, session, url) {
+		guards.emailValidated(user, session, url);
+		if (!user.god) throw error(401, { message: "Vous n'êtes pas un dieu" });
 	}
 };

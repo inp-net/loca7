@@ -86,5 +86,17 @@ export const actions: Actions = {
 			}
 		}
 		await fetch('/logout', { method: 'POST' });
+	},
+
+	async toggleAdmin({ locals, url }) {
+		const { user, session } = await locals.validateUser();
+		guards.isGod(user, session, url);
+
+		await prisma.user.update({
+			where: { id: user.id },
+			data: {
+				admin: !user.admin
+			}
+		});
 	}
 };
