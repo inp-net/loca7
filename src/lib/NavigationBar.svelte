@@ -10,6 +10,7 @@
 
 	export let user: User | null = null;
 	export let noticeBarAbove: boolean = false;
+	export let numberOfManagedAppartments: number = 0;
 
 	let topbarElement: HTMLElement;
 	let sidebarOpen: boolean = false;
@@ -81,6 +82,9 @@
 					href="/appartements/gerer"
 					>mes annonces
 				</ButtonNavigation>
+				{#if numberOfManagedAppartments > 0}
+					<span class="pill">{numberOfManagedAppartments}</span>
+				{/if}
 			</li>
 			<li>
 				<ButtonNavigation current={currentPage === 'mon compte'} href="/account"
@@ -138,6 +142,9 @@
 			<ButtonNavigation current={currentPage === 'mes annonces'} href="/appartements/gerer"
 				>mes annonces</ButtonNavigation
 			>
+			{#if numberOfManagedAppartments > 0}
+				<span class="pill">{numberOfManagedAppartments}</span>
+			{/if}
 		</li>
 
 		<li>
@@ -289,5 +296,14 @@
 	nav.sidebar li.logo :global(svg) {
 		max-height: 1.5rem;
 		max-width: 100%;
+	}
+
+	span.pill {
+		border-radius: 1000px;
+		padding: 0.125rem 0.5rem;
+		background: var(--ice);
+		color: var(--cobalt);
+		font-family: var(--font-mono);
+        font-weight: bold;
 	}
 </style>
