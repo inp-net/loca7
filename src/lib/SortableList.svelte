@@ -200,10 +200,6 @@
 		z-index: 10;
 	}
 
-	.item > * {
-		/* margin: auto; */
-	}
-
 	.content {
 		width: 100%;
 	}

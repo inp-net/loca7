@@ -31,7 +31,7 @@
 
 	{#if user.god}
 		<section class="godmode">
-            <p>currently: {user.admin}</p>
+			<p>currently: {user.admin}</p>
 			<form method="post" action="?/toggleAdmin">
 				<ButtonSecondary submits>Toggle admin</ButtonSecondary>
 			</form>
@@ -101,10 +101,10 @@
 		gap: 3rem;
 	}
 
-    .godmode {
-        display: flex;
-        justify-content: space-between;
-    }
+	.godmode {
+		display: flex;
+		justify-content: space-between;
+	}
 
 	h1 {
 		text-align: center;

@@ -304,6 +304,6 @@
 		background: var(--ice);
 		color: var(--cobalt);
 		font-family: var(--font-mono);
-        font-weight: bold;
+		font-weight: bold;
 	}
 </style>

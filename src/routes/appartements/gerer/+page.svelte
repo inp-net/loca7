@@ -78,7 +78,7 @@
 		justify-content: space-between;
 		align-items: center;
 		gap: 3rem;
-        margin-bottom: 2rem;
+		margin-bottom: 2rem;
 	}
 
 	section.filter {

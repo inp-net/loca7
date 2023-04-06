@@ -14,7 +14,10 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 
 	return new Response(
 		JSON.stringify(
-			appartments.map((a) => ({ link: `${env.ORIGIN || "http://localhost:5173"}/appartements/${a.number}.json`, ...a }))
+			appartments.map((a) => ({
+				link: `${env.ORIGIN || 'http://localhost:5173'}/appartements/${a.number}.json`,
+				...a
+			}))
 		),
 		{
 			headers: {
