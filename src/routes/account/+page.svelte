@@ -29,6 +29,15 @@
 		{/if}
 	</section>
 
+	{#if user.god}
+		<section class="godmode">
+            <p>currently: {user.admin}</p>
+			<form method="post" action="?/toggleAdmin">
+				<ButtonSecondary submits>Toggle admin</ButtonSecondary>
+			</form>
+		</section>
+	{/if}
+
 	<form method="post" action="?/updateProfile">
 		<h2>Profil</h2>
 		<p class="explain typo-paragraph">

@@ -37,6 +37,11 @@ export const guards: {
 		session: Session | null,
 		url: URL
 	) => asserts user is User & { emailIsValidated: true; admin: true };
+	isGod: (
+		user: User | null,
+		session: Session | null,
+		url: URL
+	) => asserts user is User & { emailIsValidated: true; god: true };
 	isAdminElseRedirect: (
 		user: User | null,
 		session: Session | null,
@@ -57,14 +62,14 @@ export const guards: {
 	/**
 	 * Checks if the user is logged in, if not, redirects to /login
 	 */
-	loggedIn: (user, session, url) => {
+	loggedIn(user, session, url) {
 		if (!(user && session)) throw redirect(302, '/login?go=' + url.pathname);
 	},
 	/**
 	 * Checks if the user has validated their email, if not, redirects to /validate-email
 	 * Implies a check to see if the user is logged in (see guards.loggedIn)
 	 */
-	emailValidated: (user, session, url) => {
+	emailValidated(user, session, url) {
 		guards.loggedIn(user, session, url);
 		if (!user.emailIsValidated) throw redirect(302, '/validate-email');
 	},
@@ -73,14 +78,14 @@ export const guards: {
 	 * Implies a check to see if the user has validated their email (see guards.emailValidated)
 	 * Implies a check to see if the user is logged in (see guards.loggedIn)
 	 */
-	isAdmin: (user, session, url) => {
+	isAdmin(user, session, url) {
 		guards.emailValidated(user, session, url);
 		if (!user.admin) throw error(401, { message: "Vous n'êtes pas administrateur" });
 	},
 	/**
 	 * Acts like guards.isAdmin, but redirects to / instead of throwing an error
 	 */
-	isAdminElseRedirect: (user, session, url) => {
+	isAdminElseRedirect(user, session, url) {
 		guards.emailValidated(user, session, url);
 		if (!user.admin) throw redirect(302, '/');
 	},
@@ -88,7 +93,7 @@ export const guards: {
 	 * Checks if the appartement is accessible to the user, if not, throws an error
 	 * WARNING: Does not imply a check to see if the user is logged in
 	 */
-	appartmentAccessible: (user, appartment) => {
+	appartmentAccessible(user, appartment) {
 		if (appartment === null || !appartmentAccessible(user, appartment))
 			throw error(404, {
 				message: "Cette annonce n'existe pas, ou n'est pas (encore) publique"
@@ -98,7 +103,7 @@ export const guards: {
 	 * Checks if the appartement exists, if not, throws an error
 	 * WARNING: Does not imply a check to see if the user is logged in
 	 */
-	appartmentExists: (appartment) => {
+	appartmentExists(appartment) {
 		if (appartment === null) throw error(404, { message: "Cette annonce n'existe pas" });
 	},
 
