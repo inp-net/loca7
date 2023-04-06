@@ -101,6 +101,11 @@
 		gap: 3rem;
 	}
 
+    .godmode {
+        display: flex;
+        justify-content: space-between;
+    }
+
 	h1 {
 		text-align: center;
 		margin-bottom: 0.5rem;
