@@ -160,7 +160,7 @@
 	#map {
 		height: 100%;
 		width: 100%;
-		border-radius: 1rem;
+		border-radius: var(--border-radius, 1rem);
 	}
 
 	aside {

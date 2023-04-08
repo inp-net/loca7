@@ -14,6 +14,7 @@
 		searchResults,
 		searchCriteria,
 		searchSortBy,
+		resultsTab,
 		SORT_OPTIONS,
 		searchResultsScrollPosition
 	} from '$lib/stores';
@@ -24,11 +25,13 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	let resultsTab = 'list';
 
 	onMount(() => {
+		if (window.scrollY === 0) {
+			window.scrollTo(0, $searchResultsScrollPosition);
+		}
 		window.addEventListener('scroll', () => {
-			if (resultsTab === 'list') $searchResultsScrollPosition = window.scrollY;
+			$searchResultsScrollPosition = window.scrollY;
 		});
 	});
 
@@ -82,85 +85,76 @@
 
 			return quantity(a) - quantity(b);
 		});
+
+	function toggleTab() {
+		$resultsTab = $resultsTab === 'list' ? 'map' : 'list';
+	}
 </script>
 
 <svelte:head>
 	<title>Loca7 · Recherche</title>
 </svelte:head>
 
-<main>
+<main data-view={$resultsTab}>
 	<div id="post-appartment-cta">
 		<ButtonPrimary smaller icon="add" href="/appartements/ajouter"
 			>Déposer une annonce</ButtonPrimary
 		>
 	</div>
 
-	<div class="search">
-		<h1>Recherche de logement</h1>
-		<form action="?/search">
-			<div class="surface-and-price">
-				<InputField label="Surface minimale">
-					<InputNumber unit="m²" positive bind:value={$searchCriteria.minimumSurface} />
-				</InputField>
-				<InputField label="Loyer maximum">
-					<InputNumber unit="€" positive bind:value={$searchCriteria.maximumRent} />
-				</InputField>
-			</div>
-			<InputField label="Type de logement">
-				<InputSelectMultiple
-					options={DISPLAY_APPARTMENT_KIND}
-					bind:selection={$searchCriteria.type}
-				/>
-			</InputField>
-			<InputField label="Aspects">
-				<div class="aspects">
-					<InputCheckbox
-						labelNull="Peu importe"
-						label="Meublé"
-						bind:value={$searchCriteria.furniture}
-					/>
-					<InputCheckbox
-						labelNull="Peu importe"
-						label="Parking"
-						bind:value={$searchCriteria.parking}
-					/>
-					<InputCheckbox
-						labelNull="Peu importe"
-						label="Parking vélo"
-						bind:value={$searchCriteria.bicycleParking}
-					/>
+	<section class="search">
+		<div class="filters">
+			{#if $resultsTab === 'list'}{/if}
+			<h1>Recherche de logement</h1>
+			<form action="?/search">
+				<div class="surface-and-price">
+					<InputField label="Surface minimale">
+						<InputNumber
+							unit="m²"
+							positive
+							bind:value={$searchCriteria.minimumSurface}
+						/>
+					</InputField>
+					<InputField label="Loyer maximum">
+						<InputNumber unit="€" positive bind:value={$searchCriteria.maximumRent} />
+					</InputField>
 				</div>
-			</InputField>
-		</form>
-
-		<section class="switch-tabs">
-			{#if resultsTab === 'list'}
-				<ButtonSecondary
-					icon="map"
-					on:click={() => {
-						resultsTab = 'map';
-						window.scrollTo({
-							top: document.getElementById('map')?.scrollTop
-						});
-					}}>Voir sur la carte</ButtonSecondary
-				>
-			{:else}
-				<ButtonSecondary
-					icon="back"
-					on:click={() => {
-						resultsTab = 'list';
-						window.scrollTo({
-							top: $searchResultsScrollPosition
-						});
-					}}>Retour à la liste</ButtonSecondary
-				>
+				<InputField label="Type de logement">
+					<InputSelectMultiple
+						options={DISPLAY_APPARTMENT_KIND}
+						bind:selection={$searchCriteria.type}
+					/>
+				</InputField>
+				<InputField label="Aspects">
+					<div class="aspects">
+						<InputCheckbox
+							labelNull="Peu importe"
+							label="Meublé"
+							bind:value={$searchCriteria.furniture}
+						/>
+						<InputCheckbox
+							labelNull="Peu importe"
+							label="Parking"
+							bind:value={$searchCriteria.parking}
+						/>
+						<InputCheckbox
+							labelNull="Peu importe"
+							label="Parking vélo"
+							bind:value={$searchCriteria.bicycleParking}
+						/>
+					</div>
+				</InputField>
+			</form>
+			{#if $resultsTab === 'list'}
+				<section class="switch-tabs">
+					<ButtonSecondary icon="map" on:click={toggleTab}
+						>Voir sur la carte</ButtonSecondary
+					>
+				</section>
 			{/if}
-		</section>
-	</div>
-
-	<div class="results">
-		<h2>{$searchResults.length} Résultat{$searchResults.length === 1 ? '' : 's'}</h2>
-		{#if resultsTab === 'list'}
+		</div>
+		<div class="results">
+			<h2>{$searchResults.length} Résultat{$searchResults.length === 1 ? '' : 's'}</h2>
 			<div class="sort">
 				<InputField label="Trier par">
 					<InputSelectOne options={SORT_OPTIONS} bind:value={$searchSortBy} />
@@ -173,35 +167,22 @@
 					</li>
 				{/each}
 			</ul>
-		{:else}
-			<div class="map">
-				<AppartmentsMap appartments={$searchResults} scrollIsZoom />
-			</div>
-		{/if}
-		<div class="goto-map">
-			{#if resultsTab === 'list'}
-				<ButtonFloating
-					icon="map"
-					on:click={() => {
-						resultsTab = 'map';
-						window.scrollTo({
-							top: document.getElementById('map')?.scrollTop
-						});
-					}}>Voir sur la carte</ButtonFloating
-				>
-			{:else}
-				<ButtonFloating
-					icon="back"
-					on:click={() => {
-						resultsTab = 'list';
-						window.scrollTo({
-							top: $searchResultsScrollPosition
-						});
-					}}>Retour à la liste</ButtonFloating
-				>
+			{#if $resultsTab === 'map'}
+				<div class="map">
+					<AppartmentsMap appartments={$searchResults} scrollIsZoom />
+				</div>
 			{/if}
+			<div class="goto-map">
+				<ButtonFloating icon={$resultsTab === 'list' ? 'map' : 'back'} on:click={toggleTab}>
+					{#if $resultsTab === 'list'}
+						Voir sur la carte
+					{:else}
+						Retour à la liste
+					{/if}
+				</ButtonFloating>
+			</div>
 		</div>
-	</div>
+	</section>
 </main>
 
 <style>
@@ -238,29 +219,44 @@
 		max-width: 1400px;
 		width: 100%;
 		margin: 0 auto;
+	}
+
+	#post-appartment-cta {
+		display: flex;
+		justify-content: center;
+		margin-bottom: 3rem;
+	}
+
+	section.search {
 		display: flex;
 		gap: 5rem;
 		position: relative;
 		justify-content: center;
 	}
 
-	.search {
+	.filters {
 		position: sticky;
 		top: 180px;
 		align-self: flex-start;
 	}
 
+	@media (min-width: 1350px) {
+		#post-appartment-cta {
+			display: none;
+		}
+	}
+
 	@media (min-width: 500px) {
-		.search {
+		.filters {
 			min-width: 400px;
 		}
 	}
 
 	@media (max-width: 1100px) {
-		.search {
+		.filters {
 			position: static;
 		}
-		main {
+		section.search {
 			flex-wrap: wrap;
 		}
 	}
@@ -300,17 +296,43 @@
 	}
 
 	.results .map {
-		width: 100%;
-		height: calc(100vh - 200px);
+		--border-radius: 0;
+		position: fixed;
+		top: 0;
+		right: 0;
+		left: 0;
+		bottom: 0;
+		z-index: 10000;
 	}
 
 	.results .goto-map {
 		margin-top: 2rem;
 		position: sticky;
 		bottom: 2rem;
-		z-index: 1000;
+		z-index: 100000;
 		width: 100%;
 		display: flex;
 		justify-content: center;
+	}
+
+	@media (min-width: 1200px) {
+		main[data-view='map'] .goto-map {
+			position: fixed;
+			z-index: 100000;
+			bottom: 4rem;
+			left: 4rem;
+			justify-content: start;
+		}
+
+		main[data-view='map'] .filters {
+			position: fixed;
+			z-index: 100000;
+			left: 4rem;
+			top: 4rem;
+			bottom: unset;
+			background: var(--bg);
+			padding: 2rem;
+			border-radius: 1rem;
+		}
 	}
 </style>

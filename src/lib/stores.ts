@@ -28,3 +28,5 @@ export const searchResultsScrollPosition: Writable<number> = persisted(
 	'searchResultsScrollPosition',
 	0
 );
+
+export const resultsTab: Writable<'list' | 'map'> = persisted('resultsTab', 'list');
