@@ -294,7 +294,14 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 			availableAt: new Date(appart.free_date),
 			charges: optionalNumberStr(appart.montant_charges) || 0,
 			deposit: optionalNumberStr(appart.montant_caution) || 0,
-			description: xss(bbcode2html(appart.description)),
+			description: xss(
+				'<p>' +
+					bbcode2html(appart.description)
+						.split('<br>')
+						.map((line) => `<span>${line}</span>`)
+						.join('<br>') +
+					'</p>'
+			),
 			kind: detectKindFromDescription(appart) ?? KIND_MAP[appart.typel] ?? 'autre',
 			// FIXME tkt
 			latitude: longitude,
