@@ -5,6 +5,7 @@
 	import htmldiff from 'node-htmldiff';
 	import InputField from './InputField.svelte';
 	import ButtonSecondary from './ButtonSecondary.svelte';
+	import { escapeHtml } from 'xss';
 
 	export let current: Appartment;
 	export let edit: AppartmentEdit;
@@ -50,6 +51,15 @@
 		value: string | number | Date | boolean | null,
 		field: keyof Appartment & keyof AppartmentEdit
 	) {
+		if (field === 'description') {
+			return escapeHtml(
+				value
+					.toString()
+					.replaceAll(/<\/?span>/g, '')
+					.replaceAll(/<\/?br>/g, '\n')
+					.replace(/<\/?p>/g, '')
+			);
+		}
 		switch (typeof value) {
 			case 'number':
 				return (
