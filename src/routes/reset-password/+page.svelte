@@ -32,7 +32,7 @@
 			On a envoyé un e-mail à <strong>{email}</strong> avec un lien de réinitialisation.
 		</p>
 		<p>
-			Il sera valide pendant {new Intl.RelativeTimeFormat('fr-FR', {
+			Il expire {new Intl.RelativeTimeFormat('fr-FR', {
 				numeric: 'auto'
 			}).format((PASSWORD_RESET_VALID_FOR_MILLISECONDS * 1e-3) / 60, 'minutes')}
 		</p>
