@@ -183,10 +183,8 @@
 			{display}
 			{#if option === 'pending'}
 				<span class="pill" data-done={byCategory.pending.length === 0}
-					>{#if byCategory.pending.length > 0}{byCategory.pending.length}{:else}
-						<Icon name="checkmark" />
-					{/if}</span
-				>
+					>{byCategory.pending.length}
+				</span>
 			{/if}
 		</InputSelectOne>
 		<div class="side-by-side">
@@ -290,6 +288,7 @@
 	:global(.pill) {
 		margin-left: 0.5rem;
 		font-family: var(--font-mono);
+		font-weight: bold;
 		background: var(--gold);
 		display: inline-flex;
 		justify-content: center;
