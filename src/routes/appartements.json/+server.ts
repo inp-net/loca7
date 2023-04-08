@@ -2,6 +2,7 @@ import type { RequestHandler } from './$types';
 import { prisma } from '$lib/server/prisma';
 import { jsonAPIOutputsInclude } from '$lib/types';
 import { env } from 'process';
+import { photoURL } from '$lib/photos';
 
 export const GET: RequestHandler = async ({ params, locals }) => {
 	const appartments = await prisma.appartment.findMany({
@@ -16,7 +17,11 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 		JSON.stringify(
 			appartments.map((a) => ({
 				link: `${env.ORIGIN || 'http://localhost:5173'}/appartements/${a.number}.json`,
-				...a
+				...a,
+				photos: a.photos.map((p) => ({
+					link: (env.ORIGIN || 'http://localhost:5173') + photoURL(p),
+					...p
+				}))
 			}))
 		),
 		{

@@ -2,6 +2,8 @@ import { guards } from '$lib/server/lucia';
 import { jsonAPIOutputsInclude } from '$lib/types';
 import type { RequestHandler } from './$types';
 import { prisma } from '$lib/server/prisma';
+import { photoURL } from '$lib/photos';
+import { env } from 'process';
 
 export const GET: RequestHandler = async ({ params, locals }) => {
 	const { user } = await locals.validateUser();
@@ -21,9 +23,18 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 
 	guards.appartmentAccessible(user, appartment);
 
-	return new Response(JSON.stringify(appartment), {
-		headers: {
-			'Content-Type': 'application/json'
+	return new Response(
+		JSON.stringify({
+			...appartment,
+			photos: appartment.photos.map((p) => ({
+				link: (env.ORIGIN || 'http://localhost:5173') + photoURL(p),
+				...p
+			}))
+		}),
+		{
+			headers: {
+				'Content-Type': 'application/json'
+			}
 		}
-	});
+	);
 };
