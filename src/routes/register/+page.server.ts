@@ -3,16 +3,16 @@ import { error, redirect, type Actions } from '@sveltejs/kit';
 import { LuciaError } from 'lucia-auth';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, url }) => {
 	const session = await locals.validate();
 
 	if (session) {
-		throw redirect(302, '/');
+		throw redirect(302, '/' + url.search);
 	}
 };
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	default: async ({ request, url }) => {
 		const { firstName, lastName, email, password, phone } = Object.fromEntries(
 			await request.formData()
 		) as Record<string, string>;
@@ -46,12 +46,15 @@ export const actions: Actions = {
 
 			switch (err.message) {
 				case 'AUTH_DUPLICATE_KEY_ID':
-					throw redirect(302, '/register#duplicateEmail');
+					throw redirect(
+						302,
+						'/register' + url.search + '#duplicateEmail=' + encodeURIComponent(email)
+					);
 				default:
 					throw error(400, { message: 'Inscription impossible.' });
 			}
 		}
 
-		throw redirect(302, '/login');
+		throw redirect(302, '/login' + url.search);
 	}
 };

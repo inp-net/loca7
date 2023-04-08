@@ -71,7 +71,7 @@ export const guards: {
 	 */
 	emailValidated(user, session, url) {
 		guards.loggedIn(user, session, url);
-		if (!user.emailIsValidated) throw redirect(302, '/validate-email');
+		if (!user.emailIsValidated) throw redirect(302, '/validate-email?go=' + url.pathname);
 	},
 	/**
 	 * Checks if the user is an admin, if not, throws an error

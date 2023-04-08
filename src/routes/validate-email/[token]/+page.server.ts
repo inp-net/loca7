@@ -2,7 +2,7 @@ import { prisma } from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals, params }) => {
+export const load: PageServerLoad = async ({ locals, params, url }) => {
 	const { user, session } = await locals.validateUser();
 	if (!(user && session)) {
 		throw redirect(302, '/login');
@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		}
 	});
 	if (!emailValidations) {
-		throw redirect(302, '/validate-email#invalidToken');
+		throw redirect(302, '/validate-email' + url.search + '#invalidToken');
 	}
 
 	// Delete this validation as well as expired validations
@@ -50,4 +50,9 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			emailIsValidated: true
 		}
 	});
+
+	const redirectTo = url.searchParams.get('go');
+	if (redirectTo) {
+		throw redirect(302, redirectTo);
+	}
 };

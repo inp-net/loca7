@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	guards.loggedIn(user, session, url);
 
 	if (user.emailIsValidated) {
-		throw redirect(302, '/');
+		throw redirect(302, url.searchParams.get('go') ?? '/');
 	}
 	return { user };
 };
@@ -21,7 +21,7 @@ export const actions: Actions = {
 		guards.loggedIn(user, session, url);
 
 		if (user.emailIsValidated && !url.hash) {
-			throw redirect(302, '/');
+			throw redirect(302, url.searchParams.get('go') ?? '/');
 		}
 
 		const validation = await prisma.emailValidation.create({
@@ -51,14 +51,15 @@ export const actions: Actions = {
 			to: user.email,
 			data: {
 				fullname: user.firstName,
-				validateEmailUrl: `${
-					process.env.ORIGIN || 'http://localhost:5173'
-				}/validate-email/${validation.id}`
+				validateEmailUrl:
+					`${process.env.ORIGIN || 'http://localhost:5173'}/validate-email/${
+						validation.id
+					}` + url.search
 			},
 			subject: 'Loca7: Vérifiez votre adresse email',
 			template: 'validate-email'
 		});
 
-		throw redirect(302, '/validate-email#sent');
+		throw redirect(302, '/validate-email' + url.search + '#sent');
 	}
 };

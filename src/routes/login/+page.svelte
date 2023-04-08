@@ -53,7 +53,9 @@
 		<p>
 			Pas de compte?
 
-			<ButtonSecondary insideProse href="/register">Créez-en un</ButtonSecondary>
+			<ButtonSecondary insideProse href="/register{$page.url.search}"
+				>Créez-en un</ButtonSecondary
+			>
 		</p>
 	</form>
 </main>
