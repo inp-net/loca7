@@ -236,3 +236,9 @@ hr {
 	border: var(--border-width) solid var(--bg-muted);
 	border-radius: 1000px;
 }
+
+code {
+	color: currentColor;
+	font-family: var(--font-mono);
+	font-weight: bold;
+}

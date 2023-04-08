@@ -1,4 +1,5 @@
 import tippy from 'sveltejs-tippy';
+import xss from 'xss';
 
 export const tooltip = (node: HTMLElement, parameters: string | [string, number] | object) => {
 	let content: string;
@@ -15,5 +16,5 @@ export const tooltip = (node: HTMLElement, parameters: string | [string, number]
 		return tippy(node, parameters);
 	}
 	// node.title = content
-	return tippy(node, { content, delay: [delay, 0] });
+	return tippy(node, { content: xss(content), allowHTML: true, delay: [delay, 0] });
 };

@@ -11,6 +11,7 @@
 	import { fly } from 'svelte/transition';
 	import xss from 'xss';
 	import type { PageData } from './$types';
+	import { tooltip } from '$lib/tooltip';
 	export let data: PageData;
 </script>
 
@@ -98,6 +99,11 @@
 			<dt>code source</dt>
 			<dd><a href="https://git.inpt.fr/INP-net/loca7">git.inpt.fr/inp-net/loca7</a></dd>
 
+			<dt use:tooltip={'Pour les amatteurs de <code>jq</code> et <code>wget</code> ❤️'}>
+				API
+			</dt>
+			<dd><a href="/appartements.json">/appartements.json</a></dd>
+
 			<dt>design, code</dt>
 			<dd><a href="https://ewen.works">Ewen Le Bihan</a></dd>
 
@@ -159,15 +165,16 @@
 		margin: 10rem 0 0;
 		padding: 0 2rem 2rem;
 		display: flex;
+		align-items: center;
 		justify-content: center;
-		gap: 4rem;
+		gap: 6rem;
 		flex-wrap: wrap;
 		text-align: center;
 	}
 
 	footer dl {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: repeat(2, max-content);
 		gap: 0.25rem 1rem;
 	}
 
@@ -178,6 +185,11 @@
 	footer dl dd {
 		text-align: left;
 		margin: 0;
+	}
+
+	footer dl dt,
+	footer dl dd {
+		max-width: 45vw;
 	}
 
 	footer .net7 p {
