@@ -309,16 +309,19 @@
 		margin-top: 2rem;
 		position: sticky;
 		bottom: 2rem;
-		z-index: 100000;
+		z-index: 1000;
 		width: 100%;
 		display: flex;
 		justify-content: center;
 	}
 
+	main[data-view='map'] .goto-map {
+		z-index: 100000;
+	}
+
 	@media (min-width: 1200px) {
 		main[data-view='map'] .goto-map {
 			position: fixed;
-			z-index: 100000;
 			bottom: 4rem;
 			left: 4rem;
 			justify-content: start;
