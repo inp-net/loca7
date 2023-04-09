@@ -9,4 +9,15 @@
 	// TODO add clear button
 </script>
 
-<BaseInputText type="text" leftIcon="search" schema={z.string()} bind:value={search} on:input />
+<BaseInputText
+	on:keyup={(e) => {
+		if (e.key === 'Enter') {
+			e.target.blur();
+		}
+	}}
+	type="search"
+	leftIcon="search"
+	schema={z.string()}
+	bind:value={search}
+	on:input
+/>

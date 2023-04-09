@@ -116,6 +116,7 @@
 			/>
 		{:else}
 			<input
+                on:keyup
 				{type}
 				{name}
 				{id}
