@@ -5,7 +5,6 @@
 	import htmldiff from 'node-htmldiff';
 	import InputField from './InputField.svelte';
 	import ButtonSecondary from './ButtonSecondary.svelte';
-	import { escapeHtml } from 'xss';
 
 	export let current: Appartment;
 	export let edit: AppartmentEdit;
@@ -52,13 +51,13 @@
 		field: keyof Appartment & keyof AppartmentEdit
 	) {
 		if (field === 'description') {
-			return escapeHtml(
-				value
-					.toString()
-					.replaceAll(/<\/?span>/g, '')
-					.replaceAll(/<\/?br>/g, '\n')
-					.replace(/<\/?p>/g, '')
-			);
+			return value
+				?.toString()
+				.replaceAll(/<\/?span>/g, '')
+				.replaceAll(/<\/?br>/g, '\n')
+				.replace(/<\/?p>/g, '')
+				.replaceAll(/</g, '&lt;')
+				.replaceAll(/>/g, '&gt;');
 		}
 		switch (typeof value) {
 			case 'number':
@@ -84,7 +83,10 @@
 	}
 
 	function modification(field: keyof Appartment & keyof AppartmentEdit): string {
-		return htmldiff(display(current[field], field), display(edit[field], field));
+		return htmldiff(display(current[field], field), display(edit[field], field)).replaceAll(
+			/\n/g,
+			'<br />'
+		);
 	}
 </script>
 
