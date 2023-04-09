@@ -243,10 +243,6 @@
 			grid-template-columns: 5rem 9fr max-content;
 			column-gap: 2rem;
 		}
-		li .row-1,
-		li .row-2 {
-			cursor: default;
-		}
 		.photo {
 			grid-area: photo;
 			display: block;
