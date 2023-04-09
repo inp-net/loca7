@@ -5,6 +5,8 @@
 	import InputField from './InputField.svelte';
 	import { durationDisplay } from './utils';
 	import { z } from 'zod';
+	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 
 	export let value: string;
 	export let placeholder: string = '';
@@ -21,6 +23,14 @@
 	let analysis;
 	let strength: 'dangerous' | 'weak' | 'good';
 	let crackTimeDisplay: string;
+
+	let currentPage: string = '';
+
+	onMount(() => {
+		if (browser) {
+			currentPage = window.location.pathname;
+		}
+	});
 
 	$: analysis = zxcvbn(value); // TODO use second argument (user inputs)
 	$: strength = analysis.score <= 1 ? 'dangerous' : analysis.score <= 2 ? 'weak' : 'good';
@@ -70,7 +80,10 @@
 						data-strength={strength}>{crackTimeDisplay}</span
 					>
 				</p>
-				<a href="/password-strength">
+				<a
+					class="about"
+					href="/à-propos/mots-de-passe?from={encodeURIComponent(currentPage)}"
+				>
 					<span class="icon">
 						<Icon name="question" />
 					</span>
@@ -124,5 +137,13 @@
 
 	.feedback a {
 		display: flex;
+	}
+
+	.cracktime .about {
+		transition: opacity 250ms ease;
+	}
+
+	.cracktime .about:not(:hover):not(:focus) {
+		opacity: 0.75;
 	}
 </style>
