@@ -22,7 +22,7 @@
 	</p>
 
 	<form method="post">
-		<InputField label="Email">
+		<InputField label="Email" required>
 			<InputEmail
 				errorMessage={duplicateEmail ? 'Cet e-mail a déjà été utilisé' : ''}
 				required
@@ -35,11 +35,19 @@
 		</InputField>
 
 		<div class="side-by-side">
-			<InputField label="Prénom">
-				<InputText autocomplete="given-name" required name="firstName" value="" />
+			<InputField label="Prénom" required>
+				<InputText
+					autocomplete="given-name"
+					required
+					name="firstName"
+				/>
 			</InputField>
-			<InputField label="Nom de famille">
-				<InputText autocomplete="family-name" required name="lastName" value="" />
+			<InputField label="Nom de famille" required>
+				<InputText
+					autocomplete="family-name"
+					required
+					name="lastName"
+				/>
 			</InputField>
 		</div>
 
@@ -47,7 +55,12 @@
 			<InputPhone name="phone" value="" />
 		</InputField>
 
-		<InputPassword feedback required label="Mot de passe" name="password" value="" />
+		<InputPassword
+			feedback
+			required
+			label="Mot de passe"
+			name="password"
+		/>
 
 		<section class="submit">
 			<ButtonPrimary submits>Créer un compte</ButtonPrimary>

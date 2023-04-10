@@ -45,7 +45,7 @@
 </script>
 
 <div class="password-with-feedback">
-	<InputField {label}>
+	<InputField {required} {label}>
 		<BaseInputText
 			on:input
 			on:action={() => (shown = !shown)}

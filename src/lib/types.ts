@@ -172,8 +172,8 @@ export type Appartment = z.infer<typeof AppartmentSchema>;
 export const EMPTY_APPARTMENT: WithUndefinableProperties<Appartment> = {
 	address: '',
 	availableAt: undefined,
-	charges: undefined,
-	deposit: undefined,
+	charges: 0,
+	deposit: 0,
 	description: '',
 	hasFurniture: null,
 	hasParking: null,

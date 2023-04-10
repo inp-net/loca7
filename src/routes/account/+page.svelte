@@ -44,16 +44,16 @@
 			Ces informations apparaîtront publiquement sur vos annonces.
 		</p>
 		<div class="side-by-side">
-			<InputField label="Prénom">
-				<InputText name="firstName" bind:value={user.firstName} />
+			<InputField label="Prénom" required>
+				<InputText required name="firstName" bind:value={user.firstName} />
 			</InputField>
-			<InputField label="Nom de famille">
-				<InputText name="lastName" bind:value={user.lastName} />
+			<InputField label="Nom de famille" required>
+				<InputText required name="lastName" bind:value={user.lastName} />
 			</InputField>
 		</div>
 
-		<InputField label="Adresse e-mail">
-			<InputEmail name="email" bind:value={user.email} />
+		<InputField label="Adresse e-mail" required>
+			<InputEmail required name="email" bind:value={user.email} />
 		</InputField>
 		<InputField label="Téléphone">
 			<InputPhone name="phone" bind:value={user.phone} />

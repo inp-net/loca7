@@ -29,7 +29,7 @@
 </script>
 
 <form class="fields" {action} method="post" enctype="multipart/form-data">
-	<InputField label="Type de logement">
+	<InputField label="Type de logement" required>
 		<InputSelectOne
 			required
 			name="kind"
@@ -39,7 +39,7 @@
 	</InputField>
 
 	<div class="side-by-side">
-		<InputField label="Surface">
+		<InputField label="Surface" required>
 			<InputNumber
 				required
 				name="surface"
@@ -51,7 +51,7 @@
 		</InputField>
 
 		{#if appartment.kind === 'colocation'}
-			<InputField label="Nb chambres">
+			<InputField label="Nb chambres" required>
 				<InputNumber
 					required
 					name="roomsCount"
@@ -64,7 +64,7 @@
 	</div>
 
 	<div class="side-by-side">
-		<InputField label="Loyer">
+		<InputField label="Loyer" required>
 			<InputNumber
 				name="rent"
 				unit="€"
@@ -82,7 +82,6 @@
 				initial={initial.charges}
 				bind:value={appartment.charges}
 				schema={AppartmentSchema.shape.charges}
-				required
 			/>
 		</InputField>
 
@@ -93,7 +92,6 @@
 				initial={initial.deposit}
 				bind:value={appartment.deposit}
 				schema={AppartmentSchema.shape.deposit}
-				required
 			/>
 		</InputField>
 	</div>
@@ -102,7 +100,7 @@
 		<p class="typo-details">Veuillez rentrer le loyer total, pas un prix par chambre.</p>
 	{/if}
 
-	<InputField label="Date de libération">
+	<InputField label="Date de libération" required>
 		<InputDate
 			name="availableAt"
 			bind:value={appartment.availableAt}
@@ -111,7 +109,7 @@
 		/>
 	</InputField>
 
-	<InputField label="Adresse" id="address">
+	<InputField label="Adresse" id="address" required>
 		<InputAddress
 			name="address"
 			id="address"
