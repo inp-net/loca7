@@ -21,6 +21,7 @@
 	.label {
 		display: inline-flex;
 		justify-content: center;
+        margin-bottom: 0.25rem;
 	}
 
 	.required-indicator {
