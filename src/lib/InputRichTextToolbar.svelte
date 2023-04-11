@@ -41,12 +41,12 @@
 		<li>
 			<ButtonSecondary on:click={format('italic')}>I</ButtonSecondary>
 		</li>
-		<li>
+		<!-- <li>
 			<ButtonSecondary on:click={bulletList} icon="editor-list">liste</ButtonSecondary>
 		</li>
 		<li>
 			<ButtonSecondary on:click={openLinkEditor} icon="editor-link">lien</ButtonSecondary>
-		</li>
+		</li> -->
 	</ul>
 
 	{#if addingLink}
