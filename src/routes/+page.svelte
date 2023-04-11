@@ -86,7 +86,8 @@
 			return quantity(a) - quantity(b);
 		});
 
-	function toggleTab() {
+	function toggleTab(e) {
+		e.target.blur();
 		$resultsTab = $resultsTab === 'list' ? 'map' : 'list';
 	}
 </script>
