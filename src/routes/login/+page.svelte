@@ -21,9 +21,17 @@
 
 <main>
 	{#if passwordResetSuccessful}
-		<p class="password-reset-successful">
+		<p class="notice success password-reset-successful">
 			Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous
 			connecter.
+		</p>
+	{/if}
+
+	{#if $page.url.searchParams.get('go') === '/appartements/ajouter'}
+		<p class="notice info">
+			Vous devez vous connecter ou créer un compte pour déposer une annonce.
+
+			<ButtonSecondary insideProse href="/register">Créer un compte</ButtonSecondary>
 		</p>
 	{/if}
 
@@ -61,11 +69,18 @@
 </main>
 
 <style>
-	.password-reset-successful {
-		background-color: var(--moss);
-		color: var(--cactus);
+	.notice {
 		padding: 1rem 2rem;
 		margin-bottom: 3rem;
+		background-color: var(--bg);
+	}
+	.notice.info {
+		--bg: var(--ice);
+		--fg: var(--cobalt);
+	}
+	.notice.success {
+		--bg: var(--moss);
+		--fg: var(--cactus);
 	}
 
 	form {
