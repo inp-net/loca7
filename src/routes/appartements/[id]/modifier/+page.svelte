@@ -16,6 +16,7 @@
 
 <main>
 	<h1>Modification d'une annonce</h1>
+	<p>La modification sera validée par un·e administrateur·ice avant d’être publiée</p>
 	<FormEditAppartment
 		action="?/edit"
 		bind:appartment
@@ -28,9 +29,17 @@
 	main {
 		max-width: 1200px;
 		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 	}
 
-	h1 {
+	h1,
+	p {
+		text-align: center;
+	}
+
+	h1 + p {
 		margin-bottom: 2rem;
 	}
 </style>
