@@ -7,8 +7,28 @@
 	import InputPassword from '$lib/InputPassword.svelte';
 	import InputPhone from '$lib/InputPhone.svelte';
 	import InputText from '$lib/InputText.svelte';
+	import { z } from 'zod';
+	import type { PageData, Snapshot } from './$types';
 
-	let duplicateEmail: boolean = $page.url.hash === '#duplicateEmail';
+	export let data: PageData;
+	let duplicateEmail: string = $page.url.hash.startsWith('#duplicateEmail')
+		? decodeURIComponent($page.url.hash.replace('#duplicateEmail=', ''))
+		: '';
+
+	let user: {
+		email: string;
+		firstName: string;
+		lastName: string;
+		phone: string;
+		password: string;
+	} = {
+		email: duplicateEmail,
+		firstName: '',
+		lastName: '',
+		phone: '',
+		password: ''
+	};
+
 </script>
 
 <svelte:head>
@@ -24,13 +44,14 @@
 	<form method="post">
 		<InputField label="Email" required>
 			<InputEmail
-				errorMessage={duplicateEmail ? 'Cet e-mail a déjà été utilisé' : ''}
+				schema={z
+					.string()
+					.email({ message: "Cet e-mail n'est pas valide" })
+					.regex(new RegExp('^(?!' + data.allEmails.join('|') + '$).*'), {
+						message: 'Cet e-mail a déjà été utilisé'
+					})}
 				required
-				on:input={() => {
-					duplicateEmail = false;
-				}}
 				name="email"
-				value=""
 			/>
 		</InputField>
 
