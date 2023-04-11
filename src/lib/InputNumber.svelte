@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { z, ZodNumber } from 'zod';
+	import { z } from 'zod';
 	import BaseInputText from './BaseInputText.svelte';
 
 	export let unit: string = '';
@@ -9,7 +9,7 @@
 	export let initial: number | undefined = undefined;
 	export let placeholder: string = '';
 
-	export let schema: ZodNumber = z.number();
+	export let schema: Zod.ZodSchema = z.number();
 
 	export let required: boolean = false;
 </script>

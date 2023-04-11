@@ -20,7 +20,7 @@ export type EmailTemplates =
 // end generate
 
 export const mailer = nodemailer.createTransport({
-	host: process.env.MAIL_HOST,
+    host: process.env.MAIL_HOST,
 	port: process.env.MAIL_PORT,
 	secure: !dev,
 	auth: {

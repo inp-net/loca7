@@ -23,7 +23,7 @@
 
 	let showEmptyErrors: boolean = false;
 	let valueString: string =
-		type === 'date' ? value?.toISOString()?.split('T')[0] : value?.toString() ?? '';
+		(type === 'date' && value instanceof Date) ? value?.toISOString()?.split('T')[0] : value?.toString() ?? '';
 	$: {
 		switch (type) {
 			case 'number':
@@ -125,7 +125,7 @@
 				{autocomplete}
 				{placeholder}
 				on:input={(e) => {
-					valueString = e.target.value;
+					valueString = e.target?.value;
 					if (valueString === undefined) valueString = '';
 					if (valueString !== '') showEmptyErrors = true;
 					emit('input', e);
@@ -146,7 +146,7 @@
 				on:click|stopPropagation={() => {
 					value = initial;
 					valueString =
-						type === 'date'
+						(type === 'date' && value instanceof Date)
 							? value?.toISOString()?.split('T')[0]
 							: value?.toString() ?? '';
 				}}

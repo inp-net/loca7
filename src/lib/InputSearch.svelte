@@ -12,7 +12,7 @@
 <BaseInputText
 	on:keyup={(e) => {
 		if (e.key === 'Enter') {
-			e.target.blur();
+			e?.target?.blur();
 		}
 	}}
 	type="search"

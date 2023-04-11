@@ -3,6 +3,12 @@ import { z, type ZodErrorMap, type ZodInvalidTypeIssue } from 'zod';
 import { lowerFirstChar } from './utils';
 import slugify from 'slugify';
 import { v4 as uuid } from 'uuid';
+import {
+	metroColorsByLine,
+	TADColorsByLine,
+	TADLines,
+	tramColorsByLine
+} from './publicTransportColors';
 
 export type WithUndefinableProperties<T> = {
 	[P in keyof T]: T[P] | undefined;
@@ -60,15 +66,61 @@ export const DISPLAY_PUBLIC_TRANSPORT_TYPE: Record<PublicTransportType, string> 
 	tad: 'TAD'
 };
 
+export const TADLineSchema = z.union([
+	z.literal('105'),
+	z.literal('106'),
+	z.literal('118'),
+	z.literal('119'),
+	z.literal('120'),
+	z.literal('201'),
+	z.literal('202'),
+	z.literal('204'),
+	z.literal('205')
+]);
+export type TADLine = z.infer<typeof TADLineSchema>;
+
+export const TramLineSchema = z.union([z.literal('T1'), z.literal('T2')]);
+export type TramLine = z.infer<typeof TramLineSchema>;
+
+export const MetroLineSchema = z.union([z.literal('A'), z.literal('B'), z.literal('C')]);
+export type MetroLine = z.infer<typeof MetroLineSchema>;
+
 export type PublicTransportStation = z.infer<typeof PublicTransportStationSchema>;
-export const PublicTransportStationSchema = z.object({
-	name: z.string(),
-	line: z.string(),
-	type: PublicTransportTypeSchema,
-	color: z.string().nullable(),
-	latitude: z.number(),
-	longitude: z.number()
-});
+export const PublicTransportStationSchema = z.intersection(
+	z.object({
+		name: z.string(),
+		color: z.string().startsWith('#').nullable(),
+		latitude: z.number(),
+		longitude: z.number(),
+		type: PublicTransportTypeSchema
+	}),
+	z.discriminatedUnion('type', [
+		z.object({
+			type: z.literal('bus'),
+			line: z.string()
+		}),
+		z.object({
+			type: z.literal('telepherique'),
+			line: z.string()
+		}),
+		z.object({
+			type: z.literal('bhnf'),
+			line: z.string()
+		}),
+		z.object({
+			type: z.literal('tad'),
+			line: TADLineSchema
+		}),
+		z.object({
+			type: z.literal('tram'),
+			line: TramLineSchema
+		}),
+		z.object({
+			type: z.literal('metro'),
+			line: MetroLineSchema
+		})
+	])
+);
 
 export type Photo = z.infer<typeof PhotoSchema>;
 export const PhotoSchema = z.object({
@@ -105,7 +157,7 @@ export const AppartmentEditSchema = z.object({
  * Returns the edit that was made just before the given edit, based on the appliedAt date. Only works for edits that have been applied.
  */
 export function editBefore(history: AppartmentEdit[], edit: AppartmentEdit & { appliedAt: Date }) {
-	return history.filter((e) => e.appliedAt !== null).find((e) => e.appliedAt < edit.appliedAt);
+	return history.filter((e) => e.appliedAt !== null).find((e) => e.appliedAt! < edit.appliedAt);
 }
 
 export type Report = z.infer<typeof ReportSchema>;
@@ -141,10 +193,12 @@ export const SearchCriteriaSchema = z.object({
 });
 
 export type GeographicPoint = z.infer<typeof GeographicPointSchema>;
-export const GeographicPointSchema = z.object({
-	latitude: z.number(),
-	longitude: z.number()
-});
+export const GeographicPointSchema = z
+	.object({
+		latitude: z.number(),
+		longitude: z.number()
+	})
+	.passthrough();
 
 export const AppartmentSchema = z.object({
 	photos: z.array(PhotoSchema),
@@ -177,7 +231,9 @@ export const AppartmentSchema = z.object({
 	hasBicycleParking: z.boolean().nullable(),
 	hasFiberInternet: z.boolean().nullable(),
 	hasElevator: z.boolean().nullable(),
-	description: z.string()
+	description: z.string(),
+	latitude: z.number().nullable(),
+	longitude: z.number().nullable()
 });
 export type Appartment = z.infer<typeof AppartmentSchema>;
 
@@ -196,7 +252,9 @@ export const EMPTY_APPARTMENT: WithUndefinableProperties<Appartment> = {
 	photos: [],
 	rent: undefined,
 	roomsCount: 0,
-	surface: undefined
+	surface: undefined,
+	latitude: null,
+	longitude: null
 };
 
 export function appartmentAccessible(

@@ -70,9 +70,12 @@ class Tisseo {
 	}
 
 	async nearbyStations(
-		location: GeographicPoint,
+		location: Partial<GeographicPoint>,
 		fetch: typeof window.fetch
 	): Promise<PublicTransportStation[]> {
+        if (!location.latitude || !location.longitude) {
+            return [];
+        }
 		const allStops = (await (await fetch('/tisseo-stops.json')).json()) as {
 			stop_id: `stop_point:SP_${number}`;
 			stop_code: `${number}`;

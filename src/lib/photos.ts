@@ -1,4 +1,4 @@
-import type { Photo } from './types';
+import type { Photo } from '@prisma/client';
 import mime from 'mime-types';
 
 export function photoFilenameOnDisk(photo: Photo): string {

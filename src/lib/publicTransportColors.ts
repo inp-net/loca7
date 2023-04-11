@@ -1,4 +1,10 @@
-import type { PublicTransportType } from './types';
+import { z } from 'zod';
+import type {
+	MetroLine,
+	PublicTransportStation,
+	TADLine,
+	TramLine
+} from './types';
 
 // source of colors: wikipedia.org, wikimedia.org
 
@@ -6,11 +12,7 @@ export default function publicTransportColor({
 	line,
 	type,
 	color
-}: {
-	line: string;
-	type: PublicTransportType;
-	color: string | null;
-}): string | undefined {
+}: Pick<PublicTransportStation, 'line' | 'type' | 'color'>): string | undefined {
 	if (color) return color;
 	switch (type) {
 		case 'bus':
@@ -30,7 +32,9 @@ export default function publicTransportColor({
 	}
 }
 
-export const TADColorsByLine = {
+type ColorMap<K extends string | number | symbol> = Record<K, `#${string}`>;
+
+export const TADColorsByLine: ColorMap<TADLine> = {
 	'105': '#F295BF',
 	'106': '#A7CD39',
 	'118': '#ED1C25',
@@ -41,11 +45,13 @@ export const TADColorsByLine = {
 	'204': '#ED1C25',
 	'205': '#41C8F4'
 };
-export const tramColorsByLine = {
+
+export const tramColorsByLine: ColorMap<TramLine> = {
 	T1: '#224c8f',
 	T2: '#4299da'
 };
-export const metroColorsByLine = {
+
+export const metroColorsByLine: ColorMap<MetroLine> = {
 	A: '#e51b24',
 	B: '#fddd04',
 	C: '#52b149'

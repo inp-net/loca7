@@ -4,10 +4,10 @@ import { persisted } from 'svelte-local-storage-store';
 
 export const searchResults: Writable<Appartment[]> = writable([]);
 export const searchCriteria: Writable<SearchCriteria> = persisted('searchCriteria', {
-	minimumSurface: undefined,
+	minimumSurface: null,
 	bicycleParking: null,
 	furniture: null,
-	maximumRent: undefined,
+	maximumRent: null,
 	parking: null,
 	fiberInternet: null,
 	elevator: null,

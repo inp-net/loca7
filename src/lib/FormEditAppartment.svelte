@@ -242,8 +242,7 @@
 	</p>
 
 	<section class="submit">
-		<ButtonPrimary on:click={() => (showEmptyErrors = true)} submits>{submitText}</ButtonPrimary
-		>
+		<ButtonPrimary submits>{submitText}</ButtonPrimary>
 	</section>
 </form>
 
