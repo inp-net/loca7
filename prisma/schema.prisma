@@ -80,8 +80,8 @@ model Appartment {
   number            Int                      @unique @default(autoincrement())
   photos            Photo[]
   rent              Int
-  charges           Int
-  deposit           Int
+  charges           Int                      @default(0)
+  deposit           Int                      @default(0)
   surface           Int
   kind              AppartmentKind
   roomsCount        Int

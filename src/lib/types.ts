@@ -147,12 +147,18 @@ export const AppartmentSchema = z.object({
 	rent: z.number().nonnegative({
 		message: 'Le loyer doit être positif'
 	}),
-	charges: z.number().nonnegative({
-		message: 'Les charges doivent être positif'
-	}),
-	deposit: z.number().nonnegative({
-		message: 'Le dépôt de garantie doit être positif'
-	}),
+	charges: z
+		.number()
+		.nonnegative({
+			message: 'Les charges doivent être positif'
+		})
+		.default(0),
+	deposit: z
+		.number()
+		.nonnegative({
+			message: 'Le dépôt de garantie doit être positif'
+		})
+		.default(0),
 	surface: z.number().positive({
 		message: 'La surface doit être positive et non nulle'
 	}),
