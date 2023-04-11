@@ -25,7 +25,7 @@
 
 	.required-indicator {
 		color: var(--sky);
-		font-size: 1.2em;
 		margin-left: 0.125rem;
+		transform: scale(1.2) translateY(0.1em);
 	}
 </style>
