@@ -51,7 +51,7 @@
 			</InputField>
 		</div>
 
-		<InputField label="Téléphone (optionel)">
+		<InputField label="Téléphone (conseillé)">
 			<InputPhone name="phone" value="" />
 		</InputField>
 
