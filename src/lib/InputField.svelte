@@ -24,7 +24,7 @@
 	}
 
 	.required-indicator {
-		color: var(--diamond);
+		color: var(--sky);
 		font-size: 1.2em;
 		margin-left: 0.125rem;
 	}
