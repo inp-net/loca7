@@ -112,7 +112,7 @@
 	}
 
 	form {
-		max-width: 400px;
+		max-width: 600px;
 		margin: 2rem auto;
 		display: flex;
 		flex-direction: column;
@@ -123,5 +123,11 @@
 		margin-top: 2rem;
 		display: flex;
 		justify-content: center;
+	}
+
+	.side-by-side {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
 	}
 </style>
