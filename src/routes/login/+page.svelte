@@ -49,7 +49,7 @@
 		{/if}
 
 		<p class="reset">
-			Mot de passe perdu ? <ButtonSecondary href="/reset-password"
+			Mot de passe perdu ? <ButtonSecondary insideProse href="/reset-password"
 				>Réinitialisez-le</ButtonSecondary
 			>
 		</p>
