@@ -23,7 +23,9 @@
 
 	let showEmptyErrors: boolean = false;
 	let valueString: string =
-		(type === 'date' && value instanceof Date) ? value?.toISOString()?.split('T')[0] : value?.toString() ?? '';
+		type === 'date' && value instanceof Date
+			? value?.toISOString()?.split('T')[0]
+			: value?.toString() ?? '';
 	$: {
 		switch (type) {
 			case 'number':
@@ -146,7 +148,7 @@
 				on:click|stopPropagation={() => {
 					value = initial;
 					valueString =
-						(type === 'date' && value instanceof Date)
+						type === 'date' && value instanceof Date
 							? value?.toISOString()?.split('T')[0]
 							: value?.toString() ?? '';
 				}}

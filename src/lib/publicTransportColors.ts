@@ -1,10 +1,4 @@
-import { z } from 'zod';
-import type {
-	MetroLine,
-	PublicTransportStation,
-	TADLine,
-	TramLine
-} from './types';
+import type { MetroLine, PublicTransportStation, TADLine, TramLine } from './types';
 
 // source of colors: wikipedia.org, wikimedia.org
 
