@@ -40,5 +40,15 @@
 	main {
 		max-width: 600px;
 		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+	h1,
+	h1 + p {
+		text-align: center;
+	}
+	h1 + p {
+		margin-bottom: 2rem;
 	}
 </style>
