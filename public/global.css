@@ -96,9 +96,9 @@
 	--acid: rgba(89, 237, 121, 1);
 	--gold: rgba(230, 176, 36, 1);
 	--safran: rgba(179, 109, 4, 1);
-	--cactus: rgba(13, 140, 56, 1);
+	--cactus: rgb(1, 100, 34);
 	--plaster: rgba(252, 229, 169, 1);
-	--moss: rgba(174, 249, 190, 1);
+	--moss: rgb(201, 248, 211);
 	--sky: #007baf;
 }
 
