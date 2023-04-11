@@ -321,6 +321,7 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 			hasBicycleParking: detectBicycleParkingFromDescription(appart),
 			hasFiberInternet: detectFiberInternetFromDescription(appart),
 			hasElevator: detectElevatorFromDescription(appart),
+			importedFromOldSite: true,
 			owner: {
 				connect: {
 					id: user.id

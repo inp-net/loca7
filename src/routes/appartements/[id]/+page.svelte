@@ -463,10 +463,12 @@
 
 	<section class="meta">
 		<p class="typo-details">
-			Annonce n°<a href="/appartements/{appart.number}">{appart.number}</a> &bull;
-			<a href="https://bde.enseeiht.fr/services/logement/{appart.number}"
-				>voir sur l'ancien site</a
-			>
+			Annonce n°<a href="/appartements/{appart.number}">{appart.number}</a>
+			{#if appart.importedFromOldSite}
+				&bull;
+				<a href="https://bde.enseeiht.fr/services/logement/{appart.number}"
+					>voir sur l'ancien site</a
+				>{/if}
 		</p>
 	</section>
 </main>

@@ -76,37 +76,38 @@ model Key {
 }
 
 model Appartment {
-  id                String                   @id @unique @default(cuid())
-  number            Int                      @unique @default(autoincrement())
-  photos            Photo[]
-  rent              Int
-  charges           Int                      @default(0)
-  deposit           Int                      @default(0)
-  surface           Int
-  kind              AppartmentKind
-  roomsCount        Int
-  availableAt       DateTime
-  createdAt         DateTime                 @default(now())
-  updatedAt         DateTime                 @updatedAt
-  address           String
-  latitude          Float?
-  longitude         Float?
-  hasFurniture      Boolean?
-  hasParking        Boolean?
-  hasBicycleParking Boolean?
-  hasFiberInternet  Boolean?
-  hasElevator       Boolean?
-  description       String
-  travelTimeToN7    TravelTimeToN7           @relation(fields: [travelTimeId], references: [id])
-  travelTimeId      String
-  nearbyStations    PublicTransportStation[]
-  owner             User                     @relation(fields: [ownerId], references: [id])
-  ownerId           String
-  createdByAdmin    Boolean                  @default(false)
-  reports           Report[]
-  approved          Boolean                  @default(false)
-  archived          Boolean                  @default(false)
-  history           AppartmentEdit[]
+  id                  String                   @id @unique @default(cuid())
+  number              Int                      @unique @default(autoincrement())
+  photos              Photo[]
+  rent                Int
+  charges             Int                      @default(0)
+  deposit             Int                      @default(0)
+  surface             Int
+  kind                AppartmentKind
+  roomsCount          Int
+  availableAt         DateTime
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+  address             String
+  latitude            Float?
+  longitude           Float?
+  hasFurniture        Boolean?
+  hasParking          Boolean?
+  hasBicycleParking   Boolean?
+  hasFiberInternet    Boolean?
+  hasElevator         Boolean?
+  description         String
+  travelTimeToN7      TravelTimeToN7           @relation(fields: [travelTimeId], references: [id])
+  travelTimeId        String
+  nearbyStations      PublicTransportStation[]
+  owner               User                     @relation(fields: [ownerId], references: [id])
+  ownerId             String
+  createdByAdmin      Boolean                  @default(false)
+  reports             Report[]
+  approved            Boolean                  @default(false)
+  archived            Boolean                  @default(false)
+  history             AppartmentEdit[]
+  importedFromOldSite Boolean                  @default(false)
 }
 
 model Photo {
