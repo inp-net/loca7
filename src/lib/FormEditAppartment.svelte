@@ -14,21 +14,88 @@
 		DISPLAY_APPARTMENT_KIND,
 		EMPTY_APPARTMENT,
 		type Appartment,
-		type WithUndefinableProperties
+		type WithUndefinableProperties,
+		createGhostEmail
 	} from './types';
+	import InputText from './InputText.svelte';
+	import { tooltip } from './tooltip';
+	import InputEmail from './InputEmail.svelte';
+	import Fuse from 'fuse.js';
+	import Icon from './Icon.svelte';
 
 	export let appartment: Appartment;
 	export let action: string | undefined = undefined;
 	export let submitText: string = 'Confirmer';
 	export let user: User;
+	export let allEmails: string[] = [];
+	export let owner: User = user;
 	/*@ts-ignore*/
 	export let initial: WithUndefinableProperties<Appartment> = {
-		...EMPTY_APPARTMENT,
-		owner: user
+		...EMPTY_APPARTMENT
 	};
+
+	const emailSearcher = new Fuse(allEmails, {
+		shouldSort: true,
+		distance: Math.max(...allEmails.map((e) => e.length)),
+		useExtendedSearch: true
+	});
+
+	let ownerCreationMode: 'vide' | 'nouveau' | 'existant' = 'vide';
+	$: ownerCreationMode =
+		owner.email === '' ? 'vide' : allEmails.includes(owner.email) ? 'existant' : 'nouveau';
 </script>
 
 <form class="fields" {action} method="post" enctype="multipart/form-data">
+	{#if user?.admin}
+		<section class="owner">
+			<h2>Propriétaire</h2>
+			<InputField label="Email">
+				<InputEmail
+					suggestions={emailSearcher.search(owner.email || '').map((r) => r.item)}
+					name="ownerEmail"
+					bind:value={owner.email}
+					unit={ownerCreationMode}
+				/>
+			</InputField>
+			<div class="explanation">
+				{#if ownerCreationMode === 'vide'}
+					Le compte du propriétaire sera créé avec les informations fournies, mais sans
+					addresse e-mail utilisable <span
+						class="help"
+						use:tooltip={`de la forme ` +
+							createGhostEmail(owner.firstName, owner.lastName, 'XXX')}
+						><Icon name="question" />
+					</span>
+				{:else if ownerCreationMode === 'existant'}
+					Cette annonce sera reliée au propriétaire {owner.email}
+				{:else}
+					Le compte du propriétaire sera créé avec les informations fournies
+				{/if}
+			</div>
+			{#if ownerCreationMode !== 'existant'}
+				<div class="side-by-side owner-creation">
+					<InputField label="Prénom">
+						<InputText
+							autocomplete="given-name"
+							name="ownerFirstName"
+							bind:value={owner.firstName}
+						/>
+					</InputField>
+					<InputField label="Nom de famille">
+						<InputText
+							autocomplete="family-name"
+							name="ownerLastName"
+							bind:value={owner.lastName}
+						/>
+					</InputField>
+					<InputField label="Téléphone">
+						<InputText name="ownerPhone" bind:value={owner.phone} />
+					</InputField>
+				</div>
+			{/if}
+		</section>
+		<h2>Annonce</h2>
+	{/if}
 	<InputField label="Type de logement" required>
 		<InputSelectOne
 			required
@@ -177,12 +244,29 @@
 	.side-by-side {
 		display: flex;
 		gap: 1rem;
+		/* flex-wrap: wrap; */
+	}
+
+	@media (max-width: 600px) {
+		.side-by-side {
+			flex-wrap: wrap;
+		}
 	}
 
 	.wrap {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 2rem;
+	}
+
+	.owner {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.owner .explanation {
+		max-width: 600px;
 	}
 
 	.fields {
@@ -201,5 +285,10 @@
 		justify-content: center;
 		text-align: center;
 		gap: 1rem;
+	}
+
+	.help {
+		display: inline-block;
+		height: 1em;
 	}
 </style>

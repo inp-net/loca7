@@ -82,7 +82,7 @@
 </script>
 
 <div
-	class="wrapper typo-paragraph"
+	class="wrapper base-input typo-paragraph"
 	class:errored
 	class:focused
 	style:--intense="var(--{messageIsWarning ? 'safran' : 'blood'})"
@@ -116,7 +116,7 @@
 			/>
 		{:else}
 			<input
-                on:keyup
+				on:keyup
 				{type}
 				{name}
 				{id}

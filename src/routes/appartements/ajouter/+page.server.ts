@@ -1,7 +1,7 @@
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import { openRouteService, tisseo } from '$lib/server/traveltime';
-import { ternaryStateCheckboxToBoolean } from '$lib/types';
+import { createGhostEmail, ternaryStateCheckboxToBoolean } from '$lib/types';
 import { ENSEEIHT } from '$lib/utils';
 import type { AppartmentKind, Prisma } from '@prisma/client';
 import { error, redirect } from '@sveltejs/kit';
@@ -10,6 +10,7 @@ import path from 'path';
 import xss from 'xss';
 import type { Actions, PageServerLoad } from './$types';
 import { writePhotosToDisk } from '$lib/server/photos';
+import { randomUUID } from 'crypto';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	const { session, user } = await locals.validateUser();
@@ -40,7 +41,11 @@ export const actions: Actions = {
 			address,
 			addressLatitude,
 			addressLongitude,
-			description
+			description,
+			ownerEmail,
+			ownerPhone,
+			ownerFirstName,
+			ownerLastName
 		} = formData;
 
 		const latitude = addressLatitude && addressLongitude ? Number(addressLatitude) : null;
@@ -71,9 +76,19 @@ export const actions: Actions = {
 				latitude,
 				longitude,
 				description: xss(description),
+				createdByAdmin: user.admin,
+				approved: user.admin,
 				owner: {
-					connect: {
-						id: user.id
+					connectOrCreate: {
+						create: {
+							email: ownerEmail || createGhostEmail(ownerFirstName, ownerLastName),
+							firstName: ownerFirstName,
+							lastName: ownerLastName,
+							phone: ownerPhone
+						},
+						where: {
+							email: ownerEmail || user.email
+						}
 					}
 				},
 				travelTimeToN7: {

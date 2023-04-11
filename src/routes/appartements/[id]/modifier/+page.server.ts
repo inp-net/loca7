@@ -1,4 +1,5 @@
 import { guards } from '$lib/server/lucia';
+import { createGhostEmail } from '$lib/types';
 import { prisma } from '$lib/server/prisma';
 import { ternaryStateCheckboxToBoolean } from '$lib/types';
 import type { Actions, PageServerLoad } from './$types';
@@ -75,11 +76,51 @@ export const actions: Actions = {
 			hasParking,
 			hasBicycleParking,
 			addressLongitude,
-			description
+			description,
+			ownerFirstName,
+			ownerLastName,
+			ownerEmail,
+			ownerPhone
 		} = formData;
 
 		const latitude = addressLatitude && addressLongitude ? Number(addressLatitude) : null;
 		const longitude = addressLatitude && addressLongitude ? Number(addressLongitude) : null;
+
+		const changingOwner =
+			ownerEmail !== appartment.owner.email &&
+			![ownerEmail, ownerLastName, ownerFirstName, ownerPhone].every((x) => x === '');
+
+		if (changingOwner) {
+			let newOwner = await prisma.user.findUnique({
+				where: {
+					email: ownerEmail
+				}
+			});
+
+			if (!newOwner) {
+				newOwner = await prisma.user.create({
+					data: {
+						email: ownerEmail || createGhostEmail(ownerFirstName, ownerLastName),
+						firstName: ownerFirstName,
+						lastName: ownerLastName,
+						phone: ownerPhone
+					}
+				});
+			}
+
+			await prisma.appartment.update({
+				where: {
+					id: appartment.id
+				},
+				data: {
+					owner: {
+						connect: {
+							id: newOwner.id
+						}
+					}
+				}
+			});
+		}
 
 		const edit = await prisma.appartmentEdit.create({
 			data: {

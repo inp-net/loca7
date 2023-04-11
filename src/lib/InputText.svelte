@@ -12,6 +12,7 @@
 	export let autocomplete: string | undefined = undefined;
 	export let schema: ZodSchema = z.string();
 	export let errorMessage: string | undefined = undefined;
+	export let messageIsWarning: boolean = false;
 	export let actionIcon: IconName | undefined = undefined;
 	export let leftIcon: IconName | undefined = undefined;
 </script>
@@ -26,6 +27,7 @@
 	{name}
 	{initial}
 	{errorMessage}
+	{messageIsWarning}
 	{schema}
 	{placeholder}
 	{required}

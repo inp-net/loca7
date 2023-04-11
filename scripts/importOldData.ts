@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { convert as html2text } from 'html-to-text';
 import { distanceBetween, ENSEEIHT } from '../src/lib/utils';
-import { DISPLAY_PUBLIC_TRANSPORT_TYPE } from '../src/lib/types';
+import { createGhostEmail, DISPLAY_PUBLIC_TRANSPORT_TYPE } from '../src/lib/types';
 import type {
 	Photo,
 	GeographicPoint,
@@ -14,15 +14,12 @@ import { checksumFile } from '../src/lib/server/utils';
 import xss from 'xss';
 import type { User, TravelTimeToN7, Report, AppartmentKind } from '@prisma/client';
 import tisseoStops from '../public/tisseo-stops.json' assert { type: 'json' };
-import md5 from 'md5';
 import lucia from 'lucia-auth';
 import luciaPrismaAdapter from '@lucia-auth/adapter-prisma';
 import createPassword from 'password';
 import oldLogements from './old-data/logements.json' assert { type: 'json' };
 import oldPhotos from './old-data/photos.json' assert { type: 'json' };
-import bbcode from 'bbcode.js';
-import { copyFileSync, existsSync, mkdirSync, rmSync } from 'fs';
-import mime2ext from 'mime2ext';
+import { copyFileSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -392,11 +389,15 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 }
 
 async function importData(ghost: User, appartments: AppartmentOld[], photos: PhotoOld[]) {
-	const userPasswords: Record<string, null> = {};
+	const users: Record<string, User> = {};
 	const appartmentsByOwner = appartments.reduce((acc, appart) => {
 		const key = fixEmailTypos(
 			appart.contact_mail?.trim().toLocaleLowerCase() ||
-				`ghost.${appart.uuid_proprietaire}@loca7.enseeiht.fr`
+				createGhostEmail(
+					appart.contact_prenom,
+					appart.contact_nom,
+					appart.uuid_proprietaire
+				)
 		);
 		if (!acc[key]) acc[key] = [];
 		acc[key].push({
@@ -412,31 +413,28 @@ async function importData(ghost: User, appartments: AppartmentOld[], photos: Pho
 		// 	`Creating user ${apparts[0].contact_prenom} ${apparts[0].contact_nom} (#${apparts[0].uuid_proprietaire})`
 		// );
 		const appart = apparts[0];
-		const attributes = {
-			email: appart.newEmail,
-			firstName: appart.contact_prenom.trim(),
-			lastName: appart.contact_nom.trim(),
-			phone: (appart.contact_port || appart.contact_tel).trim()
+		const preventAllUppercase = (s: string) => {
+			if (s.toUpperCase() === s) {
+				return s
+					.split(/[ -]/)
+					.map((w) => (w?.[0] || '').toUpperCase() + w.slice(1).toLowerCase())
+					.join(' ');
+			}
+			return s;
 		};
-		const password = createPassword(3);
-		await auth.createUser({
-			key: {
-				providerId: 'email',
-				password,
-				providerUserId: attributes.email
-			},
-			attributes
-		});
-		const user = await prisma.user.findUnique({
-			where: {
-				email: attributes.email
+		const user = await prisma.user.create({
+			data: {
+				email: appart.newEmail,
+				firstName: preventAllUppercase(appart.contact_prenom.trim()),
+				lastName: preventAllUppercase(appart.contact_nom.trim()),
+				phone: (appart.contact_port || appart.contact_tel).trim()
 			}
 		});
 		if (user === null) throw new Error('User not found');
-		userPasswords[user.id] = password;
+		users[user.id] = user;
 		await appartment(ghost, appart, photos, user);
 	}
-	return userPasswords;
+	return users;
 }
 
 async function nukeDb() {
@@ -503,9 +501,13 @@ async function main() {
 	const photos = oldPhotos.find((e) => e.type === 'table')?.data;
 
 	// Create users
-	const passwords = await importData(ghost, appartments, photos);
-	console.info('Created users with passwords:');
-	console.info(passwords);
+	const users = await importData(ghost, appartments, photos);
+	console.info(
+		`Created ${Object.keys(users).length} users, ${appartments.length} appartments, and ${
+			photos.length
+		} photos`
+	);
+	writeFileSync('created-users.json', JSON.stringify(users, null, 2));
 }
 
 main()

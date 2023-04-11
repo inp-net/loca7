@@ -6,10 +6,14 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	const { session, user } = await locals.validateUser();
 	guards.emailValidated(user, session, url);
 
+	let conditions = [{ owner: { id: user.id } }];
+	if (user?.admin) {
+		conditions.push({ createdByAdmin: true });
+	}
 	return {
 		appartments: (
 			await prisma.appartment.findMany({
-				where: { ownerId: user.id },
+				where: { OR: conditions },
 				include: {
 					owner: true,
 					nearbyStations: true,

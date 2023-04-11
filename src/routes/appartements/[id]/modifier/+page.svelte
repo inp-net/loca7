@@ -2,12 +2,14 @@
 	import { applyAction } from '$app/forms';
 	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
 	import FormEditAppartment from '$lib/FormEditAppartment.svelte';
-	import type { Appartment } from '$lib/types';
+	import type { User } from '@prisma/client';
 	import type { LayoutData } from '../$types';
 
 	export let data: LayoutData;
-	const initialAppartment: Appartment = data.appartment;
-	let appartment: Appartment = { ...initialAppartment };
+	let user: User = data.user!;
+	const initialAppartment = data.appartment;
+	let appartment = { ...initialAppartment };
+	let allEmails = data.allEmails;
 </script>
 
 <svelte:head>
@@ -18,6 +20,9 @@
 	<h1>Modification d'une annonce</h1>
 	<p>La modification sera validée par un·e administrateur·ice avant d’être publiée</p>
 	<FormEditAppartment
+		{user}
+		owner={initialAppartment.owner}
+		{allEmails}
 		action="?/edit"
 		bind:appartment
 		initial={initialAppartment}

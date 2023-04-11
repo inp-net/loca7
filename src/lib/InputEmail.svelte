@@ -7,8 +7,10 @@
 	export let initial: string | undefined = undefined;
 	export let placeholder: string | undefined = undefined;
 	export let value: string;
+	export let unit: string = '';
+	export let suggestions: string[] | undefined = undefined;
 	export let required: boolean = false;
-	export let schema: Zod.ZodString = z.string();
+	export let schema: Zod.ZodString = z.string().email({ message: 'Adresse e-mail invalide' });
 </script>
 
 <BaseInputText
@@ -19,7 +21,9 @@
 	{id}
 	{schema}
 	{name}
+	{unit}
 	{initial}
 	{placeholder}
+	{suggestions}
 	{required}
 />

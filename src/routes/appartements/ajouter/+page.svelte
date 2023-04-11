@@ -1,7 +1,11 @@
 <script lang="ts">
 	import FormEditAppartment from '$lib/FormEditAppartment.svelte';
 	import type { Appartment } from '$lib/types';
-	import type { Snapshot } from './$types';
+	import type { User } from '@prisma/client';
+	import type { PageData, Snapshot } from './$types';
+
+	export let data: PageData;
+	let user: User = data.user!;
 
 	let appartment: Appartment = {
 		availableAt: new Date(),
@@ -33,7 +37,7 @@
 <main>
 	<h1>Nouvelle annonce</h1>
 	<p>Votre annonce sera validée par un·e administrateur·ice avant d’être publiée</p>
-	<FormEditAppartment bind:appartment submitText="Poster" action="?/postAppartment" />
+	<FormEditAppartment {user} bind:appartment submitText="Poster" action="?/postAppartment" />
 </main>
 
 <style>
