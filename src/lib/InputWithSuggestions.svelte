@@ -284,7 +284,7 @@
 		position: absolute;
 		width: 100%;
 		overflow-y: auto;
-		z-index: 99;
+		z-index: 10000;
 		top: 0;
 		left: calc(-1 * var(--border-width));
 		border: var(--border-width) solid var(--fg);
