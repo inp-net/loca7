@@ -11,6 +11,8 @@ while not (root_folder / ".git").exists() and root_folder.parent != root_folder:
     root_folder = root_folder.parent
 
 for file in (root_folder / "public/icons").glob("*.svg"):
+    if file.name.startswith("icone_ "):
+        file = file.rename(file.with_name(file.name.replace("icone_ ", "")))
     (root_folder / "src/lib/icons" / file.with_suffix(".svelte").name).write_text(
         """<script lang="ts">
     export let color: string = 'currentColor';
@@ -26,6 +28,8 @@ for file in (root_folder / "public/icons").glob("*.svg"):
     all_file_stems.append(file.stem)
 
 all_file_stems.sort()
+
+print(f"Sveltified {', '.join(all_file_stems)}")
 
 (root_folder / "src/lib/icons/types.ts").write_text(
     f"""
