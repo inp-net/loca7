@@ -29,6 +29,10 @@
 		password: ''
 	};
 
+	export const snapshot: Snapshot = {
+		capture: () => user,
+		restore: (data) => (user = data)
+	};
 </script>
 
 <svelte:head>
@@ -52,6 +56,7 @@
 					})}
 				required
 				name="email"
+				bind:value={user.email}
 			/>
 		</InputField>
 
@@ -61,6 +66,7 @@
 					autocomplete="given-name"
 					required
 					name="firstName"
+					bind:value={user.firstName}
 				/>
 			</InputField>
 			<InputField label="Nom de famille" required>
@@ -68,12 +74,13 @@
 					autocomplete="family-name"
 					required
 					name="lastName"
+					bind:value={user.lastName}
 				/>
 			</InputField>
 		</div>
 
 		<InputField label="Téléphone (conseillé)">
-			<InputPhone name="phone" value="" />
+			<InputPhone name="phone" bind:value={user.phone} />
 		</InputField>
 
 		<InputPassword
@@ -81,6 +88,7 @@
 			required
 			label="Mot de passe"
 			name="password"
+			bind:value={user.password}
 		/>
 
 		<section class="submit">
