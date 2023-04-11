@@ -54,7 +54,32 @@ export const actions: Actions = {
 			throw error(400, { message: "Aucun mot de passe n'a été fourni." });
 		}
 
-		await auth.updateKeyPassword('email', passwordReset.user.email, newPassword);
+		const currentEmailKey = await prisma.key.findFirst({
+			where: {
+				user: {
+					id: passwordReset.user.id
+				}
+			}
+		});
+		const creatingPassword = !currentEmailKey;
+
+		if (creatingPassword) {
+			await auth.createKey(passwordReset.user.id, {
+				password: newPassword,
+				providerId: 'email',
+				providerUserId: passwordReset.user.email
+			});
+			await prisma.user.update({
+				where: {
+					id: passwordReset.user.id
+				},
+				data: {
+					emailIsValidated: true
+				}
+			});
+		} else {
+			await auth.updateKeyPassword('email', passwordReset.user.email, newPassword);
+		}
 		await sendMail({
 			to: passwordReset.user.email,
 			subject: 'Loca7: Votre mot de passe a été changé',
