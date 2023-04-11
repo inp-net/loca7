@@ -182,9 +182,11 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
+
 	.data.reports {
 		text-align: right;
 	}
+
 	.actions {
 		margin-top: 0.75rem;
 		/* display: grid;
