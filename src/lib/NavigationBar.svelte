@@ -18,7 +18,9 @@
 
 	$: currentPage = $page.url.pathname.startsWith('/administration')
 		? 'administration'
-		: $page.url.pathname.startsWith('/appartements/gerer')
+		: $page.url.pathname.startsWith('/appartements/gerer') ||
+		  $page.url.pathname.startsWith('/appartements/ajouter') ||
+		  /^\/appartements\/[^\/]+\/modifier/.test($page.url.pathname)
 		? 'mes annonces'
 		: $page.url.pathname.startsWith('/account')
 		? 'mon compte'
