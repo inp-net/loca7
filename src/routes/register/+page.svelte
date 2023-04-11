@@ -9,6 +9,7 @@
 	import InputText from '$lib/InputText.svelte';
 	import { z } from 'zod';
 	import type { PageData, Snapshot } from './$types';
+	import escapeRegex from 'escape-string-regexp';
 
 	export let data: PageData;
 	let duplicateEmail: string = $page.url.hash.startsWith('#duplicateEmail')
@@ -51,9 +52,12 @@
 				schema={z
 					.string()
 					.email({ message: "Cet e-mail n'est pas valide" })
-					.regex(new RegExp('^(?!' + data.allEmails.join('|') + '$).*'), {
-						message: 'Cet e-mail a déjà été utilisé'
-					})}
+					.regex(
+						new RegExp('^(?!' + data.allEmails.map(escapeRegex).join('|') + '$).*'),
+						{
+							message: 'Cet e-mail a déjà été utilisé'
+						}
+					)}
 				required
 				name="email"
 				bind:value={user.email}
