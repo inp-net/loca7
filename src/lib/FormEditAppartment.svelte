@@ -159,6 +159,11 @@
 		<InputImages name="photos" appartmentId={appartment.id} bind:value={appartment.photos} />
 	</InputField>
 
+	<p class="explain-validation">
+		{#if action === '?/edit'}La modification{:else}L'annonce{/if} sera validée par un·e administrateur·ice
+		avant d’être publiée
+	</p>
+
 	<section class="submit">
 		<ButtonPrimary on:click={() => (showEmptyErrors = true)} submits>{submitText}</ButtonPrimary
 		>
@@ -186,9 +191,15 @@
 		gap: 1rem;
 	}
 
+	.explain-validation {
+		margin-top: 2rem;
+		text-align: center;
+	}
+
 	.submit {
-		margin-top: 3rem;
-		display: flex;
+		flex-direction: column;
 		justify-content: center;
+		text-align: center;
+		gap: 1rem;
 	}
 </style>
