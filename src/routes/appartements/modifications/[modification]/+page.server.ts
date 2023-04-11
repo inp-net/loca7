@@ -72,6 +72,8 @@ export const actions: Actions = {
 				hasFurniture: edit.hasFurniture,
 				hasParking: edit.hasParking,
 				hasBicycleParking: edit.hasBicycleParking,
+				hasFiberInternet: edit.hasFiberInternet,
+				hasElevator: edit.hasElevator,
 				history: undefined,
 				id: undefined,
 				kind: edit.kind,

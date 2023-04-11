@@ -35,6 +35,8 @@
 	export let hasFurniture: boolean | null;
 	export let hasParking: boolean | null;
 	export let hasBicycleParking: boolean | null;
+	export let hasFiberInternet: boolean | null;
+	export let hasElevator: boolean | null;
 	export let editable: boolean = false;
 	export let small: boolean = false;
 
@@ -124,6 +126,24 @@
 							><Icon name="bike{!hasBicycleParking ? '-cancel' : ''}" /></span
 						>
 						{hasBicycleParking ? 'Place pour vélo' : 'Pas de place pour vélo'}
+					</p>
+				{/if}
+				{#if hasFiberInternet !== null}
+					<p class="fiber-internet">
+						<span class="icon"
+							><Icon
+								name="fiber-internet{!hasFiberInternet ? '-cancel' : ''}"
+							/></span
+						>
+						{hasFiberInternet ? 'Fibre optique' : 'Pas de fibre optique'}
+					</p>
+				{/if}
+				{#if hasElevator !== null}
+					<p class="elevator">
+						<span class="icon"
+							><Icon name="elevator{!hasElevator ? '-cancel' : ''}" /></span
+						>
+						{hasElevator ? 'Ascenseur' : "Pas d'ascenseur"}
 					</p>
 				{/if}
 			</section>

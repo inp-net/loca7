@@ -94,6 +94,8 @@ model Appartment {
   hasFurniture      Boolean?
   hasParking        Boolean?
   hasBicycleParking Boolean?
+  hasFiberInternet  Boolean?
+  hasElevator       Boolean?
   description       String
   travelTimeToN7    TravelTimeToN7           @relation(fields: [travelTimeId], references: [id])
   travelTimeId      String
@@ -147,6 +149,8 @@ model AppartmentEdit {
   hasFurniture      Boolean?
   hasParking        Boolean?
   hasBicycleParking Boolean?
+  hasFiberInternet  Boolean?
+  hasElevator       Boolean?
   description       String
   applied           Boolean        @default(false)
   createdAt         DateTime       @default(now())

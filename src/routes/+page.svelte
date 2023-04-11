@@ -19,10 +19,11 @@
 		searchResultsScrollPosition
 	} from '$lib/stores';
 	import { DISPLAY_APPARTMENT_KIND } from '$lib/types';
-	import { distanceBetween, ENSEEIHT } from '$lib/utils';
+	import { distanceBetween, ENSEEIHT, titleCase } from '$lib/utils';
 	import type { Appartment } from '@prisma/client';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
+	import AppartmentAdminItem from '$lib/AppartmentAdminItem.svelte';
 
 	export let data: PageData;
 
@@ -38,19 +39,33 @@
 	let appartments: Appartment[] = [];
 	$: ({ appartments } = data);
 
+	const aspectCriteria = (aspectName: keyof typeof $searchCriteria, appartment: Appartment) =>
+		$searchCriteria[aspectName] === null
+			? true
+			: appartment['has' + titleCase(aspectName)] === $searchCriteria[aspectName];
+
+	const aspectCriterias = (
+		appartment: Appartment,
+		...aspectNames: (keyof typeof $searchCriteria)[]
+	) => {
+		return aspectNames.reduce(
+			(acc, aspectName) => acc && aspectCriteria(aspectName, appartment),
+			true
+		);
+	};
+
 	$searchResults = [...appartments];
 	$: $searchResults = appartments
 		.filter(
 			(appartment) =>
-				($searchCriteria.furniture === null
-					? true
-					: appartment.hasFurniture === $searchCriteria.furniture) &&
-				($searchCriteria.parking === null
-					? true
-					: appartment.hasParking === $searchCriteria.parking) &&
-				($searchCriteria.bicycleParking === null
-					? true
-					: appartment.hasBicycleParking === $searchCriteria.bicycleParking) &&
+				aspectCriterias(
+					appartment,
+					'furniture',
+					'parking',
+					'bicycleParking',
+					'fiberInternet',
+					'elevator'
+				) &&
 				(!$searchCriteria.maximumRent || appartment.rent <= $searchCriteria.maximumRent) &&
 				(!$searchCriteria.minimumSurface ||
 					appartment.surface >= $searchCriteria.minimumSurface) &&
@@ -142,6 +157,16 @@
 							labelNull="Peu importe"
 							label="Parking vélo"
 							bind:value={$searchCriteria.bicycleParking}
+						/>
+						<InputCheckbox
+							labelNull="Peu importe"
+							label="Fibre optique"
+							bind:value={$searchCriteria.fiberInternet}
+						/>
+						<InputCheckbox
+							labelNull="Peu importe"
+							label="Ascenseur"
+							bind:value={$searchCriteria.elevator}
 						/>
 					</div>
 				</InputField>

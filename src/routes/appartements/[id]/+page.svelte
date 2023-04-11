@@ -292,6 +292,22 @@
 							<p class="typo-paragraph">Place pour vélo</p>
 						</li>
 					{/if}
+					{#if appart.hasFiberInternet}
+						<li class="aspect">
+							<span class="icon">
+								<Icon name="fiber-internet" />
+							</span>
+							<p class="typo-paragraph">Fibre optique</p>
+						</li>
+					{/if}
+					{#if appart.hasElevator !== null}
+						<li class="aspect">
+							<span class="icon">
+								<Icon name="elevator{!appart.hasElevator ? '-cancel' : ''}" />
+							</span>
+							<p class="typo-paragraph">Ascenseur</p>
+						</li>
+					{/if}
 				</ul>
 			</section>
 		</div>

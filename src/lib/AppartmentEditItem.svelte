@@ -20,6 +20,8 @@
 		deposit: 'Caution',
 		hasFurniture: 'Meublé',
 		hasParking: 'Parking',
+		hasFiberInternet: 'Fibre optique',
+		hasElevator: 'Ascenseur',
 		hasBicycleParking: 'Place pour vélo',
 		kind: 'Type',
 		roomsCount: 'Nombre de chambres',

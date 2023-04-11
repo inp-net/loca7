@@ -201,6 +201,16 @@
 				bind:value={appartment.hasBicycleParking}
 				label="Place pour vélo"
 			/>
+			<InputCheckbox
+				name="hasFiberInternet"
+				bind:value={appartment.hasFiberInternet}
+				label="Fibre optique"
+			/>
+			<InputCheckbox
+				name="hasElevator"
+				bind:value={appartment.hasElevator}
+				label="Ascenseur"
+			/>
 		</div>
 	</InputField>
 

@@ -106,6 +106,12 @@ export const actions: Actions = {
 					: null,
 				hasBicycleParking: Object.keys(formData).includes('hasBicycleParking')
 					? ternaryStateCheckboxToBoolean(formData.hasParking)
+					: null,
+				hasFiberInternet: Object.keys(formData).includes('hasFiberInternet')
+					? ternaryStateCheckboxToBoolean(formData.hasFiberInternet)
+					: null,
+				hasElevator: Object.keys(formData).includes('hasElevator')
+					? ternaryStateCheckboxToBoolean(formData.hasElevator)
 					: null
 			};
 			if (latitude && longitude) {

@@ -135,7 +135,9 @@ export const SearchCriteriaSchema = z.object({
 	type: z.array(AppartmentKindSchema),
 	furniture: z.boolean().nullable(),
 	parking: z.boolean().nullable(),
-	bicycleParking: z.boolean().nullable()
+	bicycleParking: z.boolean().nullable(),
+	fiberInternet: z.boolean().nullable(),
+	elevator: z.boolean().nullable()
 });
 
 export type GeographicPoint = z.infer<typeof GeographicPointSchema>;
@@ -173,6 +175,8 @@ export const AppartmentSchema = z.object({
 	hasFurniture: z.boolean().nullable(),
 	hasParking: z.boolean().nullable(),
 	hasBicycleParking: z.boolean().nullable(),
+	hasFiberInternet: z.boolean().nullable(),
+	hasElevator: z.boolean().nullable(),
 	description: z.string()
 });
 export type Appartment = z.infer<typeof AppartmentSchema>;
@@ -186,6 +190,8 @@ export const EMPTY_APPARTMENT: WithUndefinableProperties<Appartment> = {
 	hasFurniture: null,
 	hasParking: null,
 	hasBicycleParking: null,
+	hasFiberInternet: null,
+	hasElevator: null,
 	kind: undefined,
 	photos: [],
 	rent: undefined,

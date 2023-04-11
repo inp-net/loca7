@@ -272,6 +272,13 @@ function detectBicycleParkingFromDescription(appart: AppartmentOld): boolean | n
 	);
 }
 
+function detectFiberInternetFromDescription(appart: AppartmentOld): boolean | null {
+	return /(\b(fibre)\n)/gi.test(appart.description.toLowerCase()) || null;
+}
+function detectElevatorFromDescription(appart: AppartmentOld): boolean | null {
+	return /(\b(ascenseur)\n)/gi.test(appart.description.toLowerCase()) || null;
+}
+
 async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[], user: User) {
 	let latitude = optionalNumberStr(appart.latitude);
 	let longitude = optionalNumberStr(appart.longitude);
@@ -312,6 +319,8 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 			hasFurniture: optionalBooleanStr(appart.meuble),
 			hasParking: optionalBooleanStr(appart.place_parking),
 			hasBicycleParking: detectBicycleParkingFromDescription(appart),
+			hasFiberInternet: detectFiberInternetFromDescription(appart),
+			hasElevator: detectElevatorFromDescription(appart),
 			owner: {
 				connect: {
 					id: user.id

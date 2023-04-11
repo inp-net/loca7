@@ -9,6 +9,8 @@ export const searchCriteria: Writable<SearchCriteria> = persisted('searchCriteri
 	furniture: null,
 	maximumRent: undefined,
 	parking: null,
+	fiberInternet: null,
+	elevator: null,
 	type: []
 });
 

@@ -75,6 +75,8 @@ export const actions: Actions = {
 			hasFurniture,
 			hasParking,
 			hasBicycleParking,
+			hasFiberInternet,
+			hasElevator,
 			addressLongitude,
 			description,
 			ownerFirstName,
@@ -153,7 +155,9 @@ export const actions: Actions = {
 				},
 				hasFurniture: ternaryStateCheckboxToBoolean(hasFurniture),
 				hasParking: ternaryStateCheckboxToBoolean(hasParking),
-				hasBicycleParking: ternaryStateCheckboxToBoolean(hasBicycleParking)
+				hasBicycleParking: ternaryStateCheckboxToBoolean(hasBicycleParking),
+				hasFiberInternet: ternaryStateCheckboxToBoolean(hasFiberInternet),
+				hasElevator: ternaryStateCheckboxToBoolean(hasElevator)
 			},
 			include: {
 				photos: true
