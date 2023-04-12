@@ -71,6 +71,21 @@ function bbcode2html(text: bbcodestr): string {
 	);
 }
 
+function agencyFromEmail(email: string): { agencyName: string; agencyWebsite: string } {
+	const domain = email.split('@')[1];
+	const [agencyName, agencyWebsite] = {
+		'athome-ah.com': ['At Home', 'athome-ah.com'],
+		'aubuisson.com': ['Aubuisson', 'aubuisson.com'],
+		'cegetel.net': ['Cegetel', 'cegetel.net'],
+		'cia-toulouse.com': ['Cabinet Immobilier Araud', 'cia-toulouse.com'],
+		'dols-invest.fr': ['Dols Invest', ''],
+		'eraimmo.fr': ['ERA', 'era-immobilier-midi-pyrenees.fr'],
+		'orpi.com': ['Orpi', 'orpi.com'],
+		'privilegeservices.fr': ['LP Services', 'www.groupelp-services.com']
+	}?.[domain] ?? ['', ''];
+	return { agencyName, agencyWebsite };
+}
+
 function fixEmailTypos(email: string): string {
 	return email
 		.replace(/@g[ml]ail.com/gi, '@gmail.com')
@@ -437,7 +452,8 @@ async function importData(ghost: User, appartments: AppartmentOld[], photos: Pho
 				email: appart.newEmail,
 				firstName: preventAllUppercase(appart.contact_prenom.trim()),
 				lastName: preventAllUppercase(appart.contact_nom.trim()),
-				phone: (appart.contact_port || appart.contact_tel).trim()
+				phone: (appart.contact_port || appart.contact_tel).trim(),
+				...agencyFromEmail(appart.newEmail)
 			}
 		});
 		if (user === null) throw new Error('User not found');
