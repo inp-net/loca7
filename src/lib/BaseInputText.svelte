@@ -20,6 +20,7 @@
 	export let required: boolean = false;
 	export let schema: ZodSchema;
 	export let leftIcon: IconName | '' = '';
+	export let closeKeyboardOnEnter: boolean = false;
 
 	let showEmptyErrors: boolean = false;
 	let valueString: string =
@@ -109,6 +110,11 @@
 				{name}
 				bind:text={valueString}
 				{placeholder}
+				on:keypress={(e) => {
+					if (e.key === 'Enter' && closeKeyboardOnEnter) {
+						e.target.blur();
+					}
+				}}
 				on:focus={() => (focused = true)}
 				on:blur={() => (focused = false)}
 				on:input={(e) => {
@@ -119,6 +125,11 @@
 		{:else}
 			<input
 				on:keyup
+				on:keypress={(e) => {
+					if (e.key === 'Enter' && closeKeyboardOnEnter) {
+						e.target.blur();
+					}
+				}}
 				{type}
 				{name}
 				{id}

@@ -132,7 +132,7 @@
 						/>
 					</InputField>
 					<InputField label="Loyer maximum">
-						<InputNumber unit="€" positive bind:value={$searchCriteria.maximumRent} />
+						<InputNumber unit="€" positive bind:value={$searchCriteria.maximumRent} closeKeyboardOnEnter />
 					</InputField>
 				</div>
 				<InputField label="Type de logement">

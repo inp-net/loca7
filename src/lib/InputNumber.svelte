@@ -8,6 +8,7 @@
 	export let name: string | undefined = undefined;
 	export let initial: number | undefined = undefined;
 	export let placeholder: string = '';
+    export let closeKeyboardOnEnter: boolean = false;
 
 	export let schema: Zod.ZodSchema = z.number();
 
@@ -24,4 +25,5 @@
 	{initial}
 	{schema}
 	{required}
+    {closeKeyboardOnEnter}
 />
