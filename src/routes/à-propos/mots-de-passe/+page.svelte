@@ -32,12 +32,12 @@
 	</section>
 
 	<section class="learn-more">
+		<ButtonSecondary href={returnTo || '/'} icon="back">Retour</ButtonSecondary>
 		<ButtonSecondary
 			href="https://dropbox.tech/security/zxcvbn-realistic-password-strength-estimation"
 			icon="open-outside">En savoir plus (en anglais)</ButtonSecondary
 		>
 
-		<ButtonSecondary href={returnTo || '/'} icon="back">Retour</ButtonSecondary>
 	</section>
 </main>
 
