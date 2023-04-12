@@ -7,6 +7,7 @@
 	import { z } from 'zod';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import { tooltip } from './tooltip';
 
 	export let value: string;
 	export let placeholder: string = '';
@@ -81,6 +82,7 @@
 					>
 				</p>
 				<a
+					use:tooltip={'En savoir plus sur la complexité des mots de passe'}
 					class="about"
 					href="/à-propos/mots-de-passe?from={encodeURIComponent(currentPage)}"
 				>
