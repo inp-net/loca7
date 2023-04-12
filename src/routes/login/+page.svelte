@@ -31,7 +31,9 @@
 		<p class="notice info">
 			Vous devez vous connecter ou créer un compte pour déposer une annonce.
 
-			<ButtonSecondary insideProse href="/register">Créer un compte</ButtonSecondary>
+			<ButtonSecondary insideProse href="/register{$page.url.search}"
+				>Créer un compte</ButtonSecondary
+			>
 		</p>
 	{/if}
 

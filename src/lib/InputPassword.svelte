@@ -28,7 +28,7 @@
 
 	onMount(() => {
 		if (browser) {
-			currentPage = window.location.pathname;
+			currentPage = window.location.pathname + window.location.search + window.location.hash;
 		}
 	});
 
