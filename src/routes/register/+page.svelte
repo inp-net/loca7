@@ -95,6 +95,19 @@
 			bind:value={user.password}
 		/>
 
+		<div class="title-and-explain">
+            <h2>Vous représentez une agence ?</h2>
+            <p>Votre nom ne sera pas affiché sur vos annonces</p>
+        </div>
+		<InputField label="Nom de l'agence">
+			<InputText autocomplete="organization" name="agencyName" bind:value={user.agencyName} />
+		</InputField>
+
+		<InputField label="Site internet">
+			<InputText autocomplete="url" name="agencyWebsite" bind:value={user.agencyWebsite} />
+		</InputField>
+
+
 		<section class="submit">
 			<ButtonPrimary submits>Créer un compte</ButtonPrimary>
 		</section>

@@ -3,6 +3,7 @@
 		appartmentTitle,
 		editBefore,
 		EMPTY_APPARTMENT,
+		ownerIsAgency,
 		type GeographicPoint,
 		type Report
 	} from '$lib/types';
@@ -13,7 +14,8 @@
 		readableOn,
 		distanceBetween,
 		ENSEEIHT,
-		hexToHsl
+		hexToHsl,
+		addProtocolIfNeeded
 	} from '$lib/utils';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import {
@@ -320,10 +322,31 @@
 				</section>
 			{/if}
 			<section class="owner">
-				<h2 class="typo-field-label">Propriétaire</h2>
+				<h2 class="typo-field-label">
+					{#if ownerIsAgency(appart.owner)}Agence{:else}Propriétaire{/if}
+				</h2>
 				<p class="name typo-title">
-					{appart.owner.firstName}&nbsp;{appart.owner.lastName.toUpperCase()}
+					{#if ownerIsAgency(appart.owner)}
+						{appart.owner.agencyName}
+					{:else}
+						{appart.owner.firstName}&nbsp;{appart.owner.lastName.toUpperCase()}
+					{/if}
 				</p>
+				{#if appart.owner.agencyWebsite}
+					<div class="row">
+						<div class="icon">
+							<Icon name="editor-link" />
+						</div>
+						<a href={addProtocolIfNeeded(appart.owner.agencyWebsite)}
+							>{appart.owner.agencyWebsite}</a
+						>
+						<ButtonSecondary
+							icon="open-outside"
+							href={addProtocolIfNeeded(appart.owner.agencyWebsite)}
+							>Visiter le site</ButtonSecondary
+						>
+					</div>
+				{/if}
 				{#if appart.owner.email && !appart.owner.email.match(/^ghost\.\w+@loca7.enseeiht.fr$/)}
 					<div class="row">
 						<div class="icon">
@@ -632,8 +655,13 @@
 		line-height: 0.95;
 	}
 
-	section.owner .row :global(:last-child) {
+    section.owner .row.user {
+        margin-top: 2rem;
+    }
+
+	section.owner .row :global(.button-secondary) {
 		margin-left: auto;
+        line-height: 0.95;
 	}
 
 	section.actions {

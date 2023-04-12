@@ -17,13 +17,21 @@ export const actions: Actions = {
 		const { user, session } = await locals.validateUser();
 		guards.emailValidated(user, session, url);
 
-		const { firstName, lastName, email, phone } = Object.fromEntries(
+		const { firstName, lastName, email, phone, agencyName, agencyWebsite } = Object.fromEntries(
 			await request.formData()
 		) as Record<string, string>;
 
 		await prisma.user.update({
 			where: { id: user.id },
-			data: { firstName, lastName, email, phone, emailIsValidated: email === user.email }
+			data: {
+				firstName,
+				lastName,
+				email,
+				phone,
+				emailIsValidated: email === user.email,
+				agencyName,
+				agencyWebsite
+			}
 		});
 
 		if (email !== user.email) {

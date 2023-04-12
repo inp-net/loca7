@@ -335,3 +335,7 @@ export function createGhostEmail(
 		''
 	)}@loca7.enseeiht.fr`;
 }
+
+export function ownerIsAgency(owner: User) {
+	return Boolean(owner.agencyName || owner.agencyWebsite);
+}

@@ -92,6 +92,22 @@
 						<InputText name="ownerPhone" bind:value={owner.phone} />
 					</InputField>
 				</div>
+				<div class="side-by-side owner-creation">
+					<InputField label="Nom de l'agence">
+						<InputText
+							autocomplete="organization"
+							name="ownerAgencyName"
+							bind:value={owner.agencyName}
+						/>
+					</InputField>
+					<InputField label="Site internet">
+						<InputText
+							autocomplete="url"
+							name="ownerAgencyWebsite"
+							bind:value={owner.agencyWebsite}
+						/>
+					</InputField>
+				</div>
 			{/if}
 		</section>
 		<h2>Annonce</h2>

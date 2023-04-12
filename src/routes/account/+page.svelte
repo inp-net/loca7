@@ -59,6 +59,27 @@
 			<InputPhone name="phone" bind:value={user.phone} />
 		</InputField>
 
+		<div class="title-and-explain">
+            <h3>Vous représentez une agence ?</h3>
+            <p>Votre nom ne sera pas affiché sur vos annonces.</p>
+        </div>
+		<div class="side-by-side">
+			<InputField label="Nom de l'agence">
+				<InputText
+					autocomplete="organization"
+					name="agencyName"
+					bind:value={user.agencyName}
+				/>
+			</InputField>
+			<InputField label="Site internet">
+				<InputText
+					autocomplete="url"
+					name="agencyWebsite"
+					bind:value={user.agencyWebsite}
+				/>
+			</InputField>
+		</div>
+
 		<section class="submit">
 			<ButtonSecondary submits icon="checkmark">Enregistrer</ButtonSecondary>
 		</section>
@@ -105,6 +126,7 @@
 		display: flex;
 		justify-content: space-between;
 	}
+
 
 	h1 {
 		text-align: center;

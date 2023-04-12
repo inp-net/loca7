@@ -45,7 +45,9 @@ export const actions: Actions = {
 			ownerEmail,
 			ownerPhone,
 			ownerFirstName,
-			ownerLastName
+			ownerLastName,
+			ownerAgencyName,
+			ownerAgencyWebsite
 		} = formData;
 
 		const latitude = addressLatitude && addressLongitude ? Number(addressLatitude) : null;
@@ -84,7 +86,9 @@ export const actions: Actions = {
 							email: ownerEmail || createGhostEmail(ownerFirstName, ownerLastName),
 							firstName: ownerFirstName,
 							lastName: ownerLastName,
-							phone: ownerPhone
+							phone: ownerPhone,
+							agencyName: ownerAgencyName,
+							agencyWebsite: ownerAgencyWebsite
 						},
 						where: {
 							email: ownerEmail || user.email

@@ -18,7 +18,9 @@ export const auth = lucia({
 			phone: userData.phone,
 			emailIsValidated: userData.emailIsValidated,
 			admin: userData.admin,
-			god: userData.god
+			god: userData.god,
+			agencyName: userData.agencyName,
+			agencyWebsite: userData.agencyWebsite
 		} as User;
 	}
 });

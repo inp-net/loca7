@@ -191,3 +191,12 @@ export function titleCase(str: string): string {
 		.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
 		.join(' ');
 }
+
+export function addProtocolIfNeeded(website: string): string {
+	try {
+		new URL(website);
+		return website;
+	} catch (error) {
+		return `https://${website}`;
+	}
+}

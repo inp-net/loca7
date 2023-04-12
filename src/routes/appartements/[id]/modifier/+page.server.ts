@@ -105,7 +105,9 @@ export const actions: Actions = {
 						email: ownerEmail || createGhostEmail(ownerFirstName, ownerLastName),
 						firstName: ownerFirstName,
 						lastName: ownerLastName,
-						phone: ownerPhone
+						phone: ownerPhone,
+						agencyName: ownerLastName,
+						agencyWebsite: ownerLastName
 					}
 				});
 			}

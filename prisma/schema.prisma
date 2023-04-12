@@ -23,6 +23,8 @@ model User {
   emailIsValidated Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+  agencyName       String   @default("")
+  agencyWebsite    String   @default("")
 
   appartments      Appartment[]
   sessions         Session[]
