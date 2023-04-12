@@ -264,10 +264,6 @@
 		background: var(--ice);
 	}
 
-	article.editable .content {
-		padding-bottom: 0;
-	}
-
 	section.editable {
 		display: flex;
 		justify-content: space-between;
