@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { tooltip } from './tooltip';
+
 	export let label: string;
 	export let id: string | null = null;
 	export let required: boolean = false;
@@ -7,7 +9,9 @@
 <div class="field">
 	<svelte:element this={id === null ? 'p' : 'label'} for={id}
 		><span class="label typo-field-label"
-			>{label}{#if required} <span class="required-indicator">*</span> {/if}</span
+			>{label}{#if required}
+				<span use:tooltip={'Ce champ est requis'} class="required-indicator">*</span>
+			{/if}</span
 		>
 	</svelte:element>
 	<slot />
