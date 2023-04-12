@@ -67,14 +67,14 @@
 		<ul class="links">
 			<li>
 				<ButtonNavigation current={currentPage === 'recherche'} href="/"
-					>recherche</ButtonNavigation
+					>Recherche</ButtonNavigation
 				>
 			</li>
 			{#if user?.admin}
 				<li>
 					<ButtonNavigation
 						current={currentPage === 'administration'}
-						href="/administration">administration</ButtonNavigation
+						href="/administration">Administration</ButtonNavigation
 					>
 				</li>
 			{/if}
@@ -82,7 +82,7 @@
 				<ButtonNavigation
 					current={currentPage === 'mes annonces'}
 					href="/appartements/gerer"
-					>mes annonces
+					>Mes annonces
 				</ButtonNavigation>
 				{#if numberOfManagedAppartments > 0}
 					<span class="pill">{numberOfManagedAppartments}</span>
@@ -90,7 +90,7 @@
 			</li>
 			<li>
 				<ButtonNavigation current={currentPage === 'mon compte'} href="/account"
-					>mon compte</ButtonNavigation
+					>Mon compte</ButtonNavigation
 				>
 			</li>
 		</ul>
@@ -130,19 +130,19 @@
 		</li>
 		<li>
 			<ButtonNavigation current={currentPage === 'recherche'} href="/"
-				>recherche</ButtonNavigation
+				>Recherche</ButtonNavigation
 			>
 		</li>
 		{#if user?.admin}
 			<li>
 				<ButtonNavigation current={currentPage === 'administration'} href="/administration"
-					>administration</ButtonNavigation
+					>Administration</ButtonNavigation
 				>
 			</li>
 		{/if}
 		<li>
 			<ButtonNavigation current={currentPage === 'mes annonces'} href="/appartements/gerer"
-				>mes annonces</ButtonNavigation
+				>Mes annonces</ButtonNavigation
 			>
 			{#if numberOfManagedAppartments > 0}
 				<span class="pill">{numberOfManagedAppartments}</span>
@@ -151,7 +151,7 @@
 
 		<li>
 			<ButtonNavigation current={currentPage === 'mon compte'} href="/account"
-				>mon compte</ButtonNavigation
+				>Mon compte</ButtonNavigation
 			>
 		</li>
 		<li>

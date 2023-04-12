@@ -4,7 +4,7 @@
 	export let current: boolean = false;
 </script>
 
-<a class="typo-title" aria-current={current} {href} {id}><slot /></a>
+<a aria-current={current} {href} {id}><slot /></a>
 
 <style>
 	a {
@@ -12,6 +12,7 @@
 		text-decoration: none;
 		display: inline-block;
 		color: var(--fg);
+		font-size: 1.5rem;
 	}
 
 	a:hover,
