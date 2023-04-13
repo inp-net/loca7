@@ -3,9 +3,11 @@
 	import CardAppartment from './CardAppartment.svelte';
 	import CarouselImages from './CarouselImages.svelte';
 	import publicTransportColor from './publicTransportColors';
-	import type { Appartment, GeographicPoint } from './types';
+	import type { GeographicPoint } from './types';
 	import { ENSEEIHT, readableOn } from './utils';
-	export let appartments: Appartment[];
+	import ButtonCircle from './ButtonCircle.svelte';
+	import type { Appartment, Photo } from '@prisma/client';
+	export let appartments: (Appartment & { photos: Photo })[];
 
 	export let center: GeographicPoint = ENSEEIHT;
 	export let scrollIsZoom: boolean = false;
@@ -19,6 +21,15 @@
 
 	function locationTuple(point: GeographicPoint) {
 		return [point.longitude, point.latitude];
+	}
+
+	function updatePopupCloseButtonColor() {
+		document.querySelectorAll('.leaflet-popup').forEach((popup) => {
+			console.log(popup.querySelector('.missing-photo'));
+			if (popup.querySelector('.missing-photo')) {
+				popup.querySelector('.leaflet-popup-close-button span').style.color = 'black';
+			}
+		});
 	}
 
 	function updateMarkers(appartments: Appartment[]) {
@@ -225,5 +236,27 @@
 	}
 	:global(.leaflet-container .leaflet-control-attribution a) {
 		color: var(--sky);
+	}
+
+	:global(.leaflet-container .leaflet-popup-close-button) {
+		z-index: 100000;
+		top: 0.5rem !important;
+		right: 0.5rem !important;
+		padding: 0.25rem;
+		background-color: white !important;
+		border-radius: 100000px;
+	}
+	:global(.leaflet-container .leaflet-popup-close-button span) {
+		color: black;
+		font-size: 2rem;
+	}
+
+	:global(.leaflet-container .leaflet-popup-close-button:hover span),
+	:global(.leaflet-container .leaflet-popup-close-button:focus span) {
+		color: white;
+	}
+	:global(.leaflet-container .leaflet-popup-close-button:hover),
+	:global(.leaflet-container .leaflet-popup-close-button:focus) {
+		background-color: black !important;
 	}
 </style>
