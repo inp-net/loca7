@@ -659,13 +659,13 @@
 		line-height: 0.95;
 	}
 
-    section.owner .row.user {
-        margin-top: 2rem;
-    }
+	section.owner .row.user {
+		margin-top: 2rem;
+	}
 
 	section.owner .row :global(.button-secondary) {
 		margin-left: auto;
-        line-height: 0.95;
+		line-height: 0.95;
 	}
 
 	section.actions {

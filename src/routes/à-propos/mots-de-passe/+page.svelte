@@ -37,7 +37,6 @@
 			href="https://dropbox.tech/security/zxcvbn-realistic-password-strength-estimation"
 			icon="open-outside">En savoir plus (en anglais)</ButtonSecondary
 		>
-
 	</section>
 </main>
 
