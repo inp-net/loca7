@@ -283,6 +283,14 @@
 							<p class="typo-paragraph">Chambres</p>
 						</li>
 					{/if}
+					{#if appart.hasElevator !== null}
+						<li class="aspect">
+							<span class="icon">
+								<Icon name="elevator{!appart.hasElevator ? '-cancel' : ''}" />
+							</span>
+							<p class="typo-paragraph">Ascenseur</p>
+						</li>
+					{/if}
 					{#if appart.hasBicycleParking}
 						<li
 							class="aspect"
@@ -300,14 +308,6 @@
 								<Icon name="fiber-internet" />
 							</span>
 							<p class="typo-paragraph">Fibre optique</p>
-						</li>
-					{/if}
-					{#if appart.hasElevator !== null}
-						<li class="aspect">
-							<span class="icon">
-								<Icon name="elevator{!appart.hasElevator ? '-cancel' : ''}" />
-							</span>
-							<p class="typo-paragraph">Ascenseur</p>
 						</li>
 					{/if}
 				</ul>
@@ -611,11 +611,17 @@
 	section.aspects .aspect {
 		display: flex;
 		flex-direction: column;
-		justify-content: space-between;
+		text-align: center;
 		align-items: center;
+		width: 5rem;
+	}
+
+	section.aspects .aspect p {
+		margin-top: 0.5rem;
 	}
 
 	section.aspects .iconlike {
+		height: 50px;
 		--size: 50px;
 		font-size: var(--size);
 		font-weight: bold;
@@ -657,10 +663,6 @@
 		align-items: center;
 		margin-top: 0.5rem;
 		line-height: 0.95;
-	}
-
-	section.owner .row.user {
-		margin-top: 2rem;
 	}
 
 	section.owner .row :global(.button-secondary) {
