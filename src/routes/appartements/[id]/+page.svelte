@@ -626,6 +626,10 @@
 		grid-area: right;
 	}
 
+	section.description h2 {
+		margin-bottom: 1rem;
+	}
+
 	section.description :global(p) {
 		font-size: 1.05em;
 	}
