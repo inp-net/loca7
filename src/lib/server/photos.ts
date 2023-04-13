@@ -3,6 +3,7 @@ import { error } from '@sveltejs/kit';
 import path from 'path';
 import { photoURL } from '$lib/photos';
 import type { Photo } from '@prisma/client';
+import sharp from 'sharp';
 
 export async function writePhotosToDisk(photos: Photo[], files: File[]) {
 	for (const photo of photos) {
@@ -17,7 +18,7 @@ export async function writePhotosToDisk(photos: Photo[], files: File[]) {
 			throw error(400, { message: 'Les photos doivent faire moins de 10 Mo' });
 		}
 
-		writeFileSync(path.join('public', photoURL(photo)), Buffer.from(await file.arrayBuffer()));
+		compressPhoto(Buffer.from(await file.arrayBuffer()), path.join('public', photoURL(photo)));
 	}
 }
 
@@ -27,6 +28,18 @@ export async function copyPhotos(to: Photo[], from: Photo[]) {
 		if (!source) continue;
 		copyFileSync(path.join('public', photoURL(source)), path.join('public', photoURL(photo)));
 	}
+}
+
+export async function compressPhoto(buf: Buffer, filename: string) {
+	await sharp(buf)
+		.resize({
+			width: 1000,
+			withoutEnlargement: true
+		})
+		.jpeg({
+			quality: 80
+		})
+		.toFile(filename);
 }
 
 export async function deletePhotosFromDisk(photos: Photo[]) {

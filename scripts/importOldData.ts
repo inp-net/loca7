@@ -8,6 +8,7 @@ import type {
 	PublicTransportStation,
 	PublicTransportType
 } from '../src/lib/types';
+import sharp from 'sharp';
 import Autolinker from 'autolinker';
 import { checksumFile } from '../src/lib/server/utils';
 // import { openRouteService } from '../src/lib/server/traveltime';
@@ -408,7 +409,15 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 			);
 
 			mkdirSync(path.dirname(targetFilename), { recursive: true });
-			copyFileSync(photoOnDiskFilename, targetFilename);
+			await sharp(photoOnDiskFilename)
+				.resize({
+					width: 1000,
+					withoutEnlargement: true
+				})
+				.jpeg({
+					quality: 80
+				})
+				.toFile(targetFilename);
 		}
 	}
 }

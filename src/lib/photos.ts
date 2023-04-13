@@ -1,8 +1,7 @@
 import type { Photo } from '@prisma/client';
-import mime from 'mime-types';
 
 export function photoFilenameOnDisk(photo: Photo): string {
-	return `${photo.id}.${mime.extension(photo.contentType) || 'bin'}`;
+	return `${photo.id}.jpeg`;
 }
 
 export function photoURL(photo: Photo): string {
