@@ -5,7 +5,8 @@
 		EMPTY_APPARTMENT,
 		ownerIsAgency,
 		type GeographicPoint,
-		type Report
+		type Report,
+		isGhostEmail
 	} from '$lib/types';
 	import {
 		durationDisplay,
@@ -347,7 +348,7 @@
 						>
 					</div>
 				{/if}
-				{#if appart.owner.email && !appart.owner.email.match(/^ghost\.\w+@loca7.enseeiht.fr$/)}
+				{#if appart.owner.email && !isGhostEmail(appart.owner.email)}
 					<div class="row">
 						<div class="icon">
 							<Icon name="email" />

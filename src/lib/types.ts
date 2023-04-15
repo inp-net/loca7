@@ -336,6 +336,10 @@ export function createGhostEmail(
 	)}@loca7.enseeiht.fr`;
 }
 
+export function isGhostEmail(email: string): boolean {
+    return new RegExp(createGhostEmail('(.+)', '(.+)', '(.+)')).test(email);
+}
+
 export function ownerIsAgency(owner: User) {
 	return Boolean(owner.agencyName || owner.agencyWebsite);
 }
