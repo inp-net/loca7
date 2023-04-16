@@ -43,7 +43,7 @@ export function sendMail({
 	const computedSubject = Handlebars.compile(subject)(data);
 	const layout = readFileSync('mail-templates/_layout.mjml').toString('utf-8');
 	return mailer.sendMail({
-		from: 'no-reply@loca7.enseeiht.fr',
+		from: 'loca7@bde.enseeiht.fr',
 		to,
 		subject: computedSubject + ' @ ' + new Date().toISOString(),
 		html: mjml2html(

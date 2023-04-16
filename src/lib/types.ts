@@ -328,12 +328,12 @@ export function createGhostEmail(
 	firstName: string,
 	lastName: string,
 	id: string | undefined = undefined
-): `ghost.${string}.${string}.${string}@loca7.enseeiht.fr` {
+): `ghost.${string}.${string}.${string}@loca7.fr` {
 	const slug = (s: string) => slugify(s, { lower: true, strict: true });
 	return `ghost.${slug(firstName)}.${slug(lastName)}.${(id ?? uuid()).replace(
 		/-/g,
 		''
-	)}@loca7.enseeiht.fr`;
+	)}@loca7.fr`;
 }
 
 export function isGhostEmail(email: string): boolean {

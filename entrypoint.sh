@@ -1,5 +1,4 @@
 #!/bin/sh
-pnpm prisma migrate deploy
-pnpm prisma generate
-pnpm build
-pnpm start
+cd /app
+npx prisma migrate deploy
+node build/index.js

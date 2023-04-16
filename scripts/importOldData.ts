@@ -526,7 +526,7 @@ async function main() {
 	const ghost = await prisma.user.create({
 		data: {
 			firstName: 'Ghost',
-			email: 'ghost@loca7.enseeiht.fr',
+			email: 'ghost@loca7.fr',
 			phone: ''
 		}
 	});

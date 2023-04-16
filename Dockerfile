@@ -1,12 +1,15 @@
-from gplane/pnpm
+FROM node:18-alpine
 
 workdir /app
 
-copy package.json .npmrc pnpm-lock.yaml ./
-run pnpm install
+copy package.json ./
+copy .npmrc ./
+run npm install
 
 copy . .
-copy .env.docker .env
 run chmod +x entrypoint.sh
+run npx prisma generate
+run npm run build
 
-entrypoint ["./entrypoint.sh"]
+expose 3000
+entrypoint ["/app/entrypoint.sh"]
