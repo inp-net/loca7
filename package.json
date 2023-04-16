@@ -28,6 +28,7 @@
 		"seed": "ts-node --transpile-only scripts/importOldData.ts"
 	},
 	"devDependencies": {
+		"@clack/prompts": "^0.6.3",
 		"@sveltejs/adapter-node": "^1.2.3",
 		"@sveltejs/kit": "^1.15.0",
 		"@types/cli-progress": "^3.11.0",
