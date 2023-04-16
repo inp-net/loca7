@@ -98,7 +98,7 @@ model Appartment {
   hasBicycleParking   Boolean?
   hasFiberInternet    Boolean?
   hasElevator         Boolean?
-  description         String
+  description         String                   @db.Text
   travelTimeToN7      TravelTimeToN7           @relation(fields: [travelTimeId], references: [id])
   travelTimeId        String
   nearbyStations      PublicTransportStation[]
@@ -114,7 +114,7 @@ model Appartment {
 
 model Photo {
   id          String  @id @unique @default(cuid())
-  filename    String
+  filename    String  @db.TinyText
   contentType String
   position    Int // Order of this photo in the list, 0-based.
   hash        String?
@@ -154,7 +154,7 @@ model AppartmentEdit {
   hasBicycleParking Boolean?
   hasFiberInternet  Boolean?
   hasElevator       Boolean?
-  description       String
+  description       String         @db.Text
   applied           Boolean        @default(false)
   createdAt         DateTime       @default(now())
   appliedAt         DateTime?
@@ -165,7 +165,7 @@ model AppartmentEdit {
 model Report {
   id           String       @id @unique @default(cuid())
   reason       ReportReason
-  message      String
+  message      String       @db.Text
   createdAt    DateTime     @default(now())
   appartment   Appartment   @relation(fields: [appartmentId], references: [id], onDelete: Cascade)
   appartmentId String
