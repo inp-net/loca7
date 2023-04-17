@@ -22,7 +22,7 @@ export type EmailTemplates =
 export const mailer = nodemailer.createTransport({
 	host: process.env.MAIL_HOST,
 	port: process.env.MAIL_PORT,
-	secure: false,
+	secure: process.env.MAIL_NODEMAILER_SECURE,
 	auth: {
 		user: process.env.MAIL_USER,
 		pass: process.env.MAIL_PASS
