@@ -316,7 +316,7 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 			deposit: optionalNumberStr(appart.montant_caution) || 0,
 			description: xss(
 				'<p>' +
-					bbcode2html(appart.description)
+					bbcode2html(appart.description.replace(/\u0001/g, ''))
 						.split('<br>')
 						.map((line) => `<span>${line}</span>`)
 						.join('<br>') +
@@ -480,7 +480,7 @@ async function nukeDb() {
 		.filter((name) => !['_prisma_migrations', 'user', 'key', 'session'].includes(name))
 		.map((name) => `\`${name}\``);
 
-	await prisma.$executeRawUnsafe('set FOREIGN_KEY_CHECKS = 0;')
+	await prisma.$executeRawUnsafe('set FOREIGN_KEY_CHECKS = 0;');
 	for (const table of tables) {
 		try {
 			await prisma.$executeRawUnsafe(`truncate table ${table};`);
@@ -488,7 +488,7 @@ async function nukeDb() {
 			console.error({ error });
 		}
 	}
-	await prisma.$executeRawUnsafe('set FOREIGN_KEY_CHECKS = 1;')
+	await prisma.$executeRawUnsafe('set FOREIGN_KEY_CHECKS = 1;');
 
 	await prisma.user.deleteMany({
 		where: {
