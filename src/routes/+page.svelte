@@ -353,6 +353,8 @@
 
 	main[data-view='map'] .goto-map {
 		z-index: 100000;
+		position: fixed;
+		bottom: 2rem;
 	}
 
 	@media (min-width: 1200px) {
