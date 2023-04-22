@@ -12,9 +12,11 @@ import type { Actions, PageServerLoad } from './$types';
 import { writePhotosToDisk } from '$lib/server/photos';
 import { randomUUID } from 'crypto';
 
-export const load: PageServerLoad = async ({ locals, url }) => {
+export const load: PageServerLoad = async ({ locals, url, parent }) => {
 	const { session, user } = await locals.validateUser();
 	guards.emailValidated(user, session, url);
+
+	return { ...(await parent()), user };
 };
 
 export const actions: Actions = {

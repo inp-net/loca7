@@ -2,7 +2,7 @@ import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals, url }) => {
+export const load: PageServerLoad = async ({ locals, url, parent }) => {
 	const { user, session } = await locals.validateUser();
 	guards.isAdminElseRedirect(user, session, url);
 
@@ -19,5 +19,5 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		}
 	});
 
-	return { appartments, user };
+	return { ...(await parent()), appartments, user };
 };

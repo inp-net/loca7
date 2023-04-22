@@ -5,7 +5,7 @@
 	import type { PageData, Snapshot } from './$types';
 
 	export let data: PageData;
-	let user: User = data.user!;
+	let user: User = data.user;
 	let allEmails: string[] = data.allEmails;
 
 	let appartment: Appartment = {
