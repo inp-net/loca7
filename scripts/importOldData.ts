@@ -473,21 +473,22 @@ async function importData(ghost: User, appartments: AppartmentOld[], photos: Pho
 }
 
 async function nukeDb() {
-	const tablenames = await prisma.$queryRaw<
-		Array<{ tablename: string }>
-	>`SELECT tablename FROM pg_tables WHERE schemaname='public'`;
+	const tablenames = await prisma.$queryRaw<Array<{ Tables_in_loca7: string }>>`show tables`;
 
 	const tables = tablenames
-		.map(({ tablename }) => tablename)
+		.map(({ Tables_in_loca7 }) => Tables_in_loca7)
 		.filter((name) => !['_prisma_migrations', 'user', 'key', 'session'].includes(name))
-		.map((name) => `"public"."${name}"`)
-		.join(', ');
+		.map((name) => `\`${name}\``);
 
-	try {
-		await prisma.$executeRawUnsafe(`TRUNCATE TABLE ${tables} CASCADE;`);
-	} catch (error) {
-		console.error({ error });
+	await prisma.$executeRawUnsafe('set FOREIGN_KEY_CHECKS = 0;')
+	for (const table of tables) {
+		try {
+			await prisma.$executeRawUnsafe(`truncate table ${table};`);
+		} catch (error) {
+			console.error({ error });
+		}
 	}
+	await prisma.$executeRawUnsafe('set FOREIGN_KEY_CHECKS = 1;')
 
 	await prisma.user.deleteMany({
 		where: {
