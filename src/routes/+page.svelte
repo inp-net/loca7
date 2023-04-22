@@ -24,6 +24,7 @@
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import AppartmentAdminItem from '$lib/AppartmentAdminItem.svelte';
+	import { page } from '$app/stores';
 
 	export let data: PageData;
 
@@ -34,6 +35,10 @@
 		window.addEventListener('scroll', () => {
 			$searchResultsScrollPosition = window.scrollY;
 		});
+
+		if ($page.url.searchParams.has('reload')) {
+			window.location.search = '';
+		}
 	});
 
 	let appartments: Appartment[] = [];

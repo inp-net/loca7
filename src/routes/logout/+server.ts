@@ -9,5 +9,5 @@ export const POST: RequestHandler = async ({ locals, url }) => {
 	await auth.invalidateSession(session.sessionId);
 	locals.setSession(null);
 
-	throw redirect(302, '/');
+	throw redirect(302, '/?reload');
 };
