@@ -6,6 +6,7 @@
 
 	export let data: PageData;
 	let user: User = data.user!;
+	let allEmails: string[] = data.allEmails;
 
 	let appartment: Appartment = {
 		availableAt: new Date(),
@@ -40,7 +41,13 @@
 <main>
 	<h1>Nouvelle annonce</h1>
 	<p>Votre annonce sera validée par un·e administrateur·ice avant d’être publiée</p>
-	<FormEditAppartment {user} bind:appartment submitText="Poster" action="?/postAppartment" />
+	<FormEditAppartment
+		{allEmails}
+		{user}
+		bind:appartment
+		submitText="Poster"
+		action="?/postAppartment"
+	/>
 </main>
 
 <style>
