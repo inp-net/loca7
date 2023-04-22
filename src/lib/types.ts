@@ -330,14 +330,13 @@ export function createGhostEmail(
 	id: string | undefined = undefined
 ): `ghost.${string}.${string}.${string}@loca7.fr` {
 	const slug = (s: string) => slugify(s, { lower: true, strict: true });
-	return `ghost.${slug(firstName)}.${slug(lastName)}.${(id ?? uuid()).replace(
-		/-/g,
-		''
-	)}@loca7.fr`;
+	return `ghost.${slug(firstName) || 'unknown'}.${slug(lastName) || 'unknown'}.${(
+		id ?? uuid()
+	).replace(/-/g, '')}@loca7.fr`;
 }
 
 export function isGhostEmail(email: string): boolean {
-    return new RegExp(createGhostEmail('(.+)', '(.+)', '(.+)')).test(email);
+	return new RegExp(createGhostEmail('(.+)', '(.+)', '(.+)')).test(email);
 }
 
 export function ownerIsAgency(owner: User) {
