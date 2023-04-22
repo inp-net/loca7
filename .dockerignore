@@ -1,0 +1,9 @@
+scripts/old-data/
+build/
+node_modules/
+.svelte-kit/
+package/
+public/photos/appartments/
+.git/
+.env
+.env.*
