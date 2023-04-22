@@ -22,3 +22,7 @@ export function publicPath(relativePath: string): string {
 	}
 	return path.join('build', 'client', relativePath);
 }
+
+export function valueOfBooleanString(str: string | undefined): boolean {
+	return str === 'true';
+}
