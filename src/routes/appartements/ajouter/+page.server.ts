@@ -86,11 +86,11 @@ export const actions: Actions = {
 					connectOrCreate: {
 						create: {
 							email: ownerEmail || createGhostEmail(ownerFirstName, ownerLastName),
-							firstName: ownerFirstName,
-							lastName: ownerLastName,
-							phone: ownerPhone,
-							agencyName: ownerAgencyName,
-							agencyWebsite: ownerAgencyWebsite
+							firstName: ownerFirstName ?? '',
+							lastName: ownerLastName ?? '',
+							phone: ownerPhone ?? '',
+							agencyName: ownerAgencyName ?? '',
+							agencyWebsite: ownerAgencyWebsite ?? ''
 						},
 						where: {
 							email: ownerEmail || user.email
