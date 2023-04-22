@@ -1,6 +1,7 @@
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import { photoURL } from '$lib/photos';
+import { publicPath } from '$lib/server/utils';
 import { error, redirect } from '@sveltejs/kit';
 import { rmSync } from 'fs';
 import path from 'path';
@@ -54,7 +55,7 @@ export const actions: Actions = {
 			...appartment.history.flatMap((h) => h.photos)
 		]) {
 			try {
-				rmSync(path.join('public', photoURL(photo)));
+				rmSync(publicPath(photoURL(photo)));
 			} catch (error) {
 				if (error?.code !== 'ENOENT') {
 					throw error;

@@ -4,6 +4,7 @@ import path from 'path';
 import { photoURL } from '$lib/photos';
 import type { Photo } from '@prisma/client';
 import sharp from 'sharp';
+import { publicPath } from './utils';
 
 export async function writePhotosToDisk(photos: Photo[], files: File[]) {
 	for (const photo of photos) {
@@ -18,7 +19,7 @@ export async function writePhotosToDisk(photos: Photo[], files: File[]) {
 			throw error(400, { message: 'Les photos doivent faire moins de 10 Mo' });
 		}
 
-		compressPhoto(Buffer.from(await file.arrayBuffer()), path.join('public', photoURL(photo)));
+		compressPhoto(Buffer.from(await file.arrayBuffer()), publicPath(photoURL(photo)));
 	}
 }
 
@@ -26,7 +27,7 @@ export async function copyPhotos(to: Photo[], from: Photo[]) {
 	for (const photo of to) {
 		const source = from.find((p) => p.filename === photo.filename);
 		if (!source) continue;
-		copyFileSync(path.join('public', photoURL(source)), path.join('public', photoURL(photo)));
+		copyFileSync(publicPath(photoURL(source)), publicPath(photoURL(photo)));
 	}
 }
 
@@ -45,7 +46,7 @@ export async function compressPhoto(buf: Buffer, filename: string) {
 export async function deletePhotosFromDisk(photos: Photo[]) {
 	for (const photo of photos) {
 		try {
-			rmSync(path.join('public', photoURL(photo)));
+			rmSync(publicPath(photoURL(photo)));
 		} catch (error) {
 			if (error?.code !== 'ENOENT') {
 				throw error;
