@@ -225,8 +225,9 @@
 					{...appartment(currentCategory, index)}
 					updatedAt={effectiveUpdatedAt(appartment(currentCategory, index))}
 					highlight={appartment(currentCategory, index).matches}
-					approved={currentCategory !== 'pending'}
-					archived={currentCategory === 'archived'}
+					approved={status(eagerStatus, appartment(currentCategory, index)) !== 'pending'}
+					archived={status(eagerStatus, appartment(currentCategory, index)) ===
+						'archived'}
 					on:approuver={setEagerStatus(index, 'online')}
 					on:archiver={setEagerStatus(index, 'archived')}
 					on:publier={setEagerStatus(index, 'online')}
