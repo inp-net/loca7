@@ -65,13 +65,8 @@
 		</InputField>
 
 		<div class="side-by-side">
-			<InputField label="Prénom" required>
-				<InputText
-					autocomplete="given-name"
-					required
-					name="firstName"
-					bind:value={user.firstName}
-				/>
+			<InputField label="Prénom">
+				<InputText autocomplete="given-name" name="firstName" bind:value={user.firstName} />
 			</InputField>
 			<InputField label="Nom de famille" required>
 				<InputText

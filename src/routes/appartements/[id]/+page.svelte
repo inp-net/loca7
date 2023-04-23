@@ -329,8 +329,10 @@
 				<p class="name typo-title">
 					{#if ownerIsAgency(appart.owner)}
 						{appart.owner.agencyName}
-					{:else}
+					{:else if appart.owner.firstName}
 						{appart.owner.firstName}&nbsp;{appart.owner.lastName.toUpperCase()}
+					{:else}
+						{appart.owner.lastName}
 					{/if}
 				</p>
 				{#if appart.owner.agencyWebsite}
