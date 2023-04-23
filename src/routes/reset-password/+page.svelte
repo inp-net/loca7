@@ -25,6 +25,8 @@
 
 	{#if $page.url.hash === '#invalidToken'}
 		<p class="error">Le lien de réinitialisation a expiré ou est invalide.</p>
+	{:else if $page.url.hash === '#noEmail'}
+		<p class="error">Cette addresse e-mail n'existe pas</p>
 	{/if}
 
 	{#if sent}
@@ -71,5 +73,9 @@
 
 	section.submit {
 		margin-top: 2rem;
+	}
+
+	p.error {
+		color: var(--mushroom);
 	}
 </style>

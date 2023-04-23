@@ -25,7 +25,7 @@ export const actions: Actions = {
 		});
 
 		if (!user) {
-			throw redirect(302, `/reset-password?email=${encodeURIComponent(email)}#sent`);
+			throw redirect(302, `/reset-password?email=${encodeURIComponent(email)}#noEmail`);
 		}
 
 		const passwordReset = await prisma.passwordReset.create({
