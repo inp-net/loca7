@@ -115,6 +115,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		width: 100%;
 	}
 
 	h1,
@@ -123,7 +124,8 @@
 	}
 
 	form {
-		max-width: 600px;
+		max-width: 500px;
+		width: 100%;
 		margin: 2rem auto;
 		display: flex;
 		flex-direction: column;
