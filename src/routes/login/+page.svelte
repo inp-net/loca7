@@ -40,7 +40,7 @@
 	<h1>Connexion</h1>
 
 	<form method="post">
-		<InputField label="Email">
+		<InputField required label="Email">
 			<InputEmail required bind:value={email} name="email" />
 		</InputField>
 
