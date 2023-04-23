@@ -539,7 +539,8 @@
 	.side-by-side {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: 8rem;
+		column-gap: 8rem;
+		row-gap: 3rem;
 		padding: 0 1rem 2rem;
 	}
 
