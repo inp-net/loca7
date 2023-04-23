@@ -7,12 +7,23 @@
 	import type { PageData } from './$types';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import { page } from '$app/stores';
+	import { addToast, toasts } from '$lib/toasts';
+	import { onMount } from 'svelte';
 	export let data: PageData;
 	$: ({ user } = data);
 
 	let oldPassword: string = '';
 	let oldPasswordIsInvalid: boolean = $page.url.hash === '#invalidCredentials';
+	let wrongCredentialsWhenConfirmingAccountDeletion =
+		$page.url.hash === '#invalidCredentialsDeleteAccount';
 	let newPassword: string = '';
+	let confirmingDeletion = false;
+
+	onMount(() => {
+		if (wrongCredentialsWhenConfirmingAccountDeletion) {
+			addToast('error', 'E-mail ou mot de passe incorrect');
+		}
+	});
 </script>
 
 <svelte:head>
@@ -109,6 +120,41 @@
 			<ButtonSecondary submits icon="checkmark">Enregistrer</ButtonSecondary>
 		</section>
 	</form>
+
+	<form
+		action="?/deleteAccount"
+		method="post"
+		class="delete-account"
+		id="invalidCredentialsDeleteAccount"
+	>
+		<h2>Supprimer mon compte</h2>
+		<p class="explain typo-paragraph">
+			{#if confirmingDeletion}
+				Pour confirmer, saisissez de nouveau votre mot de passe et email
+			{:else}
+				Cette action est irréversible. Vos annonces seront supprimées.
+			{/if}
+		</p>
+		<section class="submit">
+			{#if confirmingDeletion}
+				<InputField required label="email" id="email">
+					<InputEmail value="" required name="email" />
+				</InputField>
+				<InputPassword label="Mot de passe" value="" required name="password" />
+				<div class="submit-button">
+					<ButtonSecondary submits dangerous
+						>Je confirme la suppression de mon compte</ButtonSecondary
+					>
+				</div>
+			{:else}
+				<div class="submit-button">
+					<ButtonSecondary on:click={() => (confirmingDeletion = true)} dangerous
+						>Supprimer mon compte</ButtonSecondary
+					>
+				</div>
+			{/if}
+		</section>
+	</form>
 </main>
 
 <style>
@@ -151,5 +197,20 @@
 	.side-by-side {
 		display: flex;
 		gap: 1rem;
+	}
+
+	form.delete-account {
+		padding: 2rem;
+		border-radius: 1rem;
+		--bg: var(--rose);
+		--fg: var(--blood);
+		background-color: var(--bg);
+	}
+
+	form.delete-account section.submit {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 2rem;
 	}
 </style>

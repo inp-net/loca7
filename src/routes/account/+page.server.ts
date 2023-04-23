@@ -6,6 +6,10 @@ import type { Actions, PageServerLoad } from './$types';
 import { sendMail } from '$lib/server/mail';
 import { CONTACT_EMAIL } from '$lib/constants';
 import { log } from '$lib/server/logging';
+import { deletePhotosFromDisk } from '$lib/server/photos';
+import { publicPath } from '$lib/server/utils';
+import { photoURL } from '$lib/photos';
+import { rmSync } from 'fs';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	const { user, session } = await locals.validateUser();
@@ -96,12 +100,17 @@ export const actions: Actions = {
 				template: 'password-changed'
 			});
 		} catch (error) {
-			if (!(error instanceof LuciaError)) throw error;
+			if (!(error instanceof LuciaError)) {
+				await log.fatal('change_password', user, 'unknown NON-LUCIA error', error);
+				throw error;
+			}
 
 			switch (error.message) {
 				case 'AUTH_INVALID_PASSWORD':
+					await log.error('change_password', user, 'invalid credentials');
 					throw redirect(302, '/account' + url.search + '#invalidCredentials');
 				default:
+					await log.fatal('change_password', user, 'unknown error', error);
 					throw error;
 			}
 		}
@@ -119,5 +128,78 @@ export const actions: Actions = {
 				admin: !user.admin
 			}
 		});
+	},
+
+	async deleteAccount({ locals, url, request }) {
+		const { user, session } = await locals.validateUser();
+		guards.loggedIn(user, session, url);
+
+		const { email, password } = Object.fromEntries(await request.formData()) as Record<
+			string,
+			string
+		>;
+		try {
+			await auth.validateKeyPassword('email', email, password);
+		} catch (error) {
+			if (!(error instanceof LuciaError)) {
+				await log.fatal('delete_account', user, 'unknown NON-LUCIA error', error);
+				throw error;
+			}
+
+			switch (error.message) {
+				case 'AUTH_INVALID_PASSWORD':
+				case 'AUTH_INVALID_KEY_ID':
+					await log.error('delete_account', user, 'invalid credentials');
+					throw redirect(
+						302,
+						'/account' + url.search + '#invalidCredentialsDeleteAccount'
+					);
+				default:
+					await log.fatal('delete_account', user, 'unknown error', error);
+					throw error;
+			}
+		}
+
+		const appartments = await prisma.appartment.findMany({
+			where: {
+				ownerId: user.id
+			},
+			include: {
+				photos: true,
+				history: {
+					include: {
+						photos: true
+					}
+				}
+			}
+		});
+		for (const photo of appartments.flatMap((appartment) => [
+			...appartment.photos,
+			...appartment.history.flatMap((h) => h.photos)
+		])) {
+			try {
+				rmSync(publicPath(photoURL(photo)));
+			} catch (error) {
+				if (error?.code !== 'ENOENT') {
+					await log.fatal(
+						'delete_appartment',
+						user,
+						'while deleting a photo while deleting user',
+						error,
+						'with data',
+						{
+							appartmentId: photo.appartmentId,
+							photo
+						}
+					);
+					throw error;
+				}
+			}
+		}
+		await prisma.user.delete({
+			where: { id: user.id }
+		});
+
+		await log.warn('delete_account', null, `deleted ${user.email}`);
 	}
 };
