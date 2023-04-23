@@ -16,15 +16,23 @@
 	let sidebarOpen: boolean = false;
 	let currentPage: 'recherche' | 'administration' | 'mes annonces' | 'mon compte' = 'recherche';
 
-	$: currentPage = $page.url.pathname.startsWith('/administration')
-		? 'administration'
-		: $page.url.pathname.startsWith('/appartements/gerer') ||
-		  $page.url.pathname.startsWith('/appartements/ajouter') ||
-		  /^\/appartements\/[^\/]+\/modifier/.test($page.url.pathname)
-		? 'mes annonces'
-		: $page.url.pathname.startsWith('/account')
-		? 'mon compte'
-		: 'recherche';
+	function getCurrentPage(url: URL): typeof currentPage {
+		if (url.pathname.startsWith('/validate-email') && url.searchParams.has('go')) {
+			const goto = new URL(url.protocol + '//' + url.host + url.searchParams.get('go')!);
+			return getCurrentPage(goto);
+		}
+		if (url.pathname.startsWith('/administration')) return 'administration';
+		if (
+			url.pathname.startsWith('/appartements/gerer') ||
+			url.pathname.startsWith('/appartements/ajouter') ||
+			/^\/appartements\/[^\/]+\/modifier/.test(url.pathname)
+		)
+			return 'mes annonces';
+		if (url.pathname.startsWith('/account')) return 'mon compte';
+		return 'recherche';
+	}
+
+	$: currentPage = getCurrentPage($page.url);
 
 	onMount(() => {
 		if (browser) {
