@@ -2,6 +2,7 @@ import { auth } from '$lib/server/lucia';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { LuciaError } from 'lucia-auth';
 import type { PageServerLoad } from './$types';
+import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	const session = await locals.validate();
@@ -38,23 +39,35 @@ export const actions: Actions = {
 					god: false
 				}
 			});
+			throw Error("Shouldn't be here");
 		} catch (err) {
-			console.error(err);
 			if (!(err instanceof LuciaError)) {
+				await log.fatal('create_account', email, `NON-LUCIA unknown error`, err);
 				throw error(500);
 			}
 
 			switch (err.message) {
 				case 'AUTH_DUPLICATE_KEY_ID':
+					await log.error(
+						'create_account',
+						null,
+						`duplicate email (lucia says ${err.message})`
+					);
 					throw redirect(
 						302,
 						'/register' + url.search + '#duplicateEmail=' + encodeURIComponent(email)
 					);
 				default:
+					await log.fatal(
+						'create_account',
+						null,
+						`unknown error (lucia says ${err.message})`
+					);
 					throw error(400, { message: 'Inscription impossible.' });
 			}
 		}
 
+		await log.info('create_account', email, { firstName, lastName, phone, email });
 		throw redirect(302, '/login' + url.search);
 	}
 };

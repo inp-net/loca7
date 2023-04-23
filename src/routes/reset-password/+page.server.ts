@@ -7,6 +7,7 @@ import { sendMail } from '$lib/server/mail';
 import { prisma } from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { user, session } = await locals.validateUser();
@@ -17,6 +18,7 @@ export const actions: Actions = {
 	default: async ({ request, locals, url }) => {
 		const email = (await request.formData()).get('email')?.toString();
 		if (!email) {
+			await log.error('request_password_reset', null, 'no email given');
 			throw redirect(302, `/reset-password#noEmail`);
 		}
 
@@ -25,6 +27,7 @@ export const actions: Actions = {
 		});
 
 		if (!user) {
+			await log.error('request_password_reset', null, `email ${email} not found`);
 			throw redirect(302, `/reset-password?email=${encodeURIComponent(email)}#noEmail`);
 		}
 
@@ -62,6 +65,8 @@ export const actions: Actions = {
 			subject: 'Loca7: Réinitialisation de votre mot de passe',
 			template: 'reset-password'
 		});
+
+		await log.info('request_password_reset', user, 'success');
 
 		throw redirect(302, `/reset-password?email=${encodeURIComponent(email)}#sent`);
 	}

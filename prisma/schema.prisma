@@ -32,6 +32,7 @@ model User {
   emailValidations EmailValidation[]
   Report           Report[]
   PasswordReset    PasswordReset[]
+  Log              Log[]
 
   @@map("user")
 }
@@ -206,4 +207,15 @@ enum PublicTransportType {
   tram
   telepherique
   tad
+}
+
+model Log {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String   @default("misc")
+  level     Int
+  message   String   @db.LongText
+  ip        String
+  userId    String?
 }

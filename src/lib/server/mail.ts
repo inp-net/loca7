@@ -5,6 +5,7 @@ import mjml2html from 'mjml';
 import nodemailer from 'nodemailer';
 import path from 'path';
 import { valueOfBooleanString } from './utils';
+import { log } from './logging';
 
 // generate:EmailTemplates
 /**
@@ -15,6 +16,7 @@ export type EmailTemplates =
 	| 'announcement'
 	| 'email-changed'
 	| 'password-changed'
+	| 'plain'
 	| 'reset-password'
 	| 'validate-email';
 
@@ -34,7 +36,7 @@ export const mailer = nodemailer.createTransport({
 		: {})
 });
 
-export function sendMail({
+export async function sendMail({
 	template,
 	to,
 	subject,
@@ -45,12 +47,13 @@ export function sendMail({
 	subject: string;
 	data: Record<string, string>;
 }) {
+	await log.info('send_mail', null, { to, template, subject, data });
 	const computedSubject = Handlebars.compile(subject)(data);
 	const layout = readFileSync('mail-templates/_layout.mjml').toString('utf-8');
 	return mailer.sendMail({
 		from: 'loca7@bde.enseeiht.fr',
 		to,
-		subject: computedSubject + ' @ ' + new Date().toISOString(),
+		subject: computedSubject,
 		html: mjml2html(
 			Handlebars.compile(
 				layout.replace(

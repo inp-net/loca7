@@ -2,6 +2,7 @@ import { auth } from '$lib/server/lucia';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { LuciaError } from 'lucia-auth';
 import type { PageServerLoad } from './$types';
+import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { user, session } = await locals.validateUser();
@@ -36,13 +37,20 @@ export const actions: Actions = {
 				case 'AUTH_OUTDATED_PASSWORD':
 				case 'AUTH_INVALID_USER_ID':
 				case 'AUTH_INVALID_KEY_ID':
+					await log.error(
+						'login',
+						email,
+						`invalid credentials (lucia says ${err.message}) `
+					);
 					throw redirect(302, '/login' + url.search + '#invalidCredentials');
 
 				default:
+					await log.fatal('login', email, `unknown error (lucia says ${err.message}) `);
 					throw error(400, { message: 'Connexion impossible.' });
 			}
 		}
 
+		await log.info('login', email, 'success');
 		throw redirect(302, url.searchParams.get('go') ?? '/');
 	}
 };

@@ -96,10 +96,18 @@
 				<p>Votre nom ne sera pas affiché sur vos annonces</p>
 			</div>
 			<InputField label="Nom de l'agence">
-				<InputText autocomplete="organization" name="agencyName" bind:value={user.agencyName} />
+				<InputText
+					autocomplete="organization"
+					name="agencyName"
+					bind:value={user.agencyName}
+				/>
 			</InputField>
 			<InputField label="Site internet">
-				<InputText autocomplete="url" name="agencyWebsite" bind:value={user.agencyWebsite} />
+				<InputText
+					autocomplete="url"
+					name="agencyWebsite"
+					bind:value={user.agencyWebsite}
+				/>
 			</InputField>
 		</section>
 

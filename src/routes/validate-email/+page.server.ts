@@ -4,6 +4,7 @@ import { sendMail } from '$lib/server/mail';
 import { prisma } from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	const { user, session } = await locals.validateUser();
@@ -46,6 +47,8 @@ export const actions: Actions = {
 				}
 			}
 		});
+
+		await log.info('request_email_validation', user);
 
 		await sendMail({
 			to: user.email,

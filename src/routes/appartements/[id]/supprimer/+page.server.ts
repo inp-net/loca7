@@ -6,6 +6,7 @@ import { error, redirect } from '@sveltejs/kit';
 import { rmSync } from 'fs';
 import path from 'path';
 import type { Actions, PageServerLoad } from './$types';
+import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ locals, params, url }) => {
 	const { session, user } = await locals.validateUser();
@@ -58,6 +59,17 @@ export const actions: Actions = {
 				rmSync(publicPath(photoURL(photo)));
 			} catch (error) {
 				if (error?.code !== 'ENOENT') {
+					await log.fatal(
+						'delete_appartment',
+						user,
+						'while deleting a photo',
+						error,
+						'with data',
+						{
+							appartment,
+							photo
+						}
+					);
 					throw error;
 				}
 			}
@@ -68,6 +80,8 @@ export const actions: Actions = {
 				id: params.id
 			}
 		});
+
+		await log.info('delete_appartment', user, { appartment });
 
 		throw redirect(302, user?.admin ? '/administration' : '/appartements/gerer');
 	}

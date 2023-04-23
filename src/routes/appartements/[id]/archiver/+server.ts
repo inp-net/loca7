@@ -1,3 +1,4 @@
+import { log } from '$lib/server/logging';
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import type { RequestHandler } from './$types';
@@ -22,6 +23,8 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 			archived: true
 		}
 	});
+
+	await log.info('archive_appartment', user, 'success', { appartment: params.id });
 
 	return new Response('Archivage effectué avec succès', {
 		status: 200

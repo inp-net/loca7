@@ -1,3 +1,4 @@
+import { log } from '$lib/server/logging';
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import type { RequestHandler } from './$types';
@@ -21,7 +22,7 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 		guards.isAdmin(user, session, url);
 	}
 
-	await prisma.appartment.update({
+	const newAppartment = await prisma.appartment.update({
 		where: { id: params.id },
 		data: {
 			// Only approve if the user is an admin, else leave it as it was before
@@ -29,6 +30,11 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 			approved: user.admin ? true : false,
 			archived: false
 		}
+	});
+
+	await log.info('unarchive_appartment', user, 'success', {
+		before: appartment,
+		after: newAppartment
 	});
 
 	return new Response('Archivage effectué avec succès', {

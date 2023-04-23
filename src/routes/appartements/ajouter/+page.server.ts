@@ -11,6 +11,7 @@ import xss from 'xss';
 import type { Actions, PageServerLoad } from './$types';
 import { writePhotosToDisk } from '$lib/server/photos';
 import { randomUUID } from 'crypto';
+import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ locals, url, parent }) => {
 	const { session, user } = await locals.validateUser();
@@ -85,7 +86,7 @@ export const actions: Actions = {
 				owner: {
 					connectOrCreate: {
 						create: {
-							email: ownerEmail || createGhostEmail(ownerFirstName, ownerLastName),
+							email: ownerEmail || createGhostEmail(ownerFirstName ?? '', ownerLastName ?? ''),
 							firstName: ownerFirstName ?? '',
 							lastName: ownerLastName ?? '',
 							phone: ownerPhone ?? '',
@@ -151,12 +152,26 @@ export const actions: Actions = {
 				data: appartInput,
 				include: { photos: true }
 			});
+			await writePhotosToDisk(appartment.photos, files);
+
+			await log.info('submit_appartment', user, { input: appartInput, created: appartment });
 		} catch (err) {
-			console.error(err);
+			await log.fatal(
+				'submit_appartment',
+				user,
+				err,
+				'\n\nwith data',
+				{
+					formData,
+					latitude,
+					longitude,
+					photosOrder
+				},
+				'files',
+				files
+			);
 			throw error(500, { message: "Impossible de poster l'annonce" });
 		}
-
-		await writePhotosToDisk(appartment.photos, files);
 
 		throw redirect(302, '/appartements/gerer');
 	}

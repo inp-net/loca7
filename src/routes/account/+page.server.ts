@@ -5,6 +5,7 @@ import { LuciaError } from 'lucia-auth';
 import type { Actions, PageServerLoad } from './$types';
 import { sendMail } from '$lib/server/mail';
 import { CONTACT_EMAIL } from '$lib/constants';
+import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	const { user, session } = await locals.validateUser();
@@ -33,8 +34,17 @@ export const actions: Actions = {
 				agencyWebsite
 			}
 		});
+		await log.info('edit_account', user, 'success', {
+			firstName,
+			lastName,
+			email,
+			phone,
+			agencyName,
+			agencyWebsite
+		});
 
 		if (email !== user.email) {
+			await log.info('change_email', user, 'attempt', { from: user.email, to: email });
 			// XXX this should be done through lucia-auth
 			await prisma.key.updateMany({
 				where: {
@@ -59,6 +69,7 @@ export const actions: Actions = {
 			});
 		}
 
+		await log.info('change_email', user, 'success', { from: user.email, to: email });
 		throw redirect(302, '/account');
 	},
 
@@ -74,6 +85,7 @@ export const actions: Actions = {
 		try {
 			await auth.validateKeyPassword('email', user.email, oldPassword);
 			await auth.updateKeyPassword('email', user.email, newPassword);
+			await log.info('change_password', user, 'attempt');
 			await sendMail({
 				to: user.email,
 				subject: 'Loca7: Votre mot de passe a été changé',
@@ -93,6 +105,7 @@ export const actions: Actions = {
 					throw error;
 			}
 		}
+		await log.info('change_password', user, 'success');
 		await fetch('/logout', { method: 'POST' });
 	},
 

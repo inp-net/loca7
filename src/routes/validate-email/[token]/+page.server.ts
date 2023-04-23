@@ -1,6 +1,7 @@
 import { prisma } from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ locals, params, url }) => {
 	const { user, session } = await locals.validateUser();
@@ -20,6 +21,11 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 		}
 	});
 	if (!emailValidations) {
+		await log.error(
+			'use_email_validation',
+			user,
+			`token ${params.token} is invalid (expired or not found)`
+		);
 		throw redirect(302, '/validate-email' + url.search + '#invalidToken');
 	}
 
@@ -50,6 +56,8 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 			emailIsValidated: true
 		}
 	});
+
+	await log.info('use_email_validation', user, `success with token ${params.token}`);
 
 	const redirectTo = url.searchParams.get('go');
 	if (redirectTo) {

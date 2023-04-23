@@ -4,6 +4,7 @@ import type { ReportReason } from '@prisma/client';
 import { redirect } from '@sveltejs/kit';
 import xss from 'xss';
 import type { Actions } from './$types';
+import { log } from '$lib/server/logging';
 
 export const actions: Actions = {
 	default: async ({ locals, request, url }) => {
@@ -32,6 +33,8 @@ export const actions: Actions = {
 					: undefined
 			}
 		});
+
+		await log.info('report_appartment', user, { reason, message, appartmentId });
 
 		throw redirect(301, `/appartements/${appartmentId}#reportSubmitted`);
 	}

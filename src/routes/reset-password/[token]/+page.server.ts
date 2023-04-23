@@ -4,8 +4,10 @@ import type { Actions, PageServerLoad } from './$types';
 import { auth, guards } from '$lib/server/lucia';
 import { sendMail } from '$lib/server/mail';
 import { CONTACT_EMAIL } from '$lib/constants';
+import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
+	const { user } = await locals.validateUser();
 	const passwordResets = await prisma.passwordReset.findFirst({
 		where: {
 			id: params.token,
@@ -15,6 +17,11 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		}
 	});
 	if (!passwordResets) {
+		await log.error(
+			'use_password_reset',
+			user,
+			`token ${params.token} is invalid (expired or not found)`
+		);
 		throw redirect(302, '/reset-password#invalidToken');
 	}
 };
@@ -36,6 +43,11 @@ export const actions: Actions = {
 		});
 
 		if (!passwordReset) {
+			await log.error(
+				'use_password_reset',
+				user,
+				`token ${params.token} is invalid (expired or not found)`
+			);
 			throw redirect(302, '/reset-password#invalidToken');
 		}
 
@@ -51,6 +63,7 @@ export const actions: Actions = {
 		const newPassword = (await request.formData()).get('password')?.toString();
 
 		if (!newPassword) {
+			await log.error('use_password_reset', user, `no password given`);
 			throw error(400, { message: "Aucun mot de passe n'a été fourni." });
 		}
 
@@ -89,6 +102,12 @@ export const actions: Actions = {
 			},
 			template: 'password-changed'
 		});
+
+		await log.info(
+			'use_password_reset',
+			user,
+			'password ' + creatingPassword ? 'created' : 'changed'
+		);
 
 		throw redirect(302, '/login#passwordResetSuccessful');
 	}

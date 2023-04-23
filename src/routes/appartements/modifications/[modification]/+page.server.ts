@@ -7,6 +7,7 @@ import path from 'path';
 import type { Actions, PageServerLoad } from './$types';
 import { writePhotosToDisk, deletePhotosFromDisk, copyPhotos } from '$lib/server/photos';
 import { prisma } from '$lib/server/prisma';
+import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ params, locals, url }) => {
 	const { user, session } = await locals.validateUser();
@@ -137,6 +138,8 @@ export const actions: Actions = {
 				appliedAt: new Date()
 			}
 		});
+
+		await log.info('approve_appartment_edit', user, { newAppartment, edit });
 
 		throw redirect(302, `/appartements/${newAppartment.id}`);
 	},

@@ -7,6 +7,7 @@ import { copyPhotos, writePhotosToDisk } from '$lib/server/photos';
 import xss from 'xss';
 import { redirect } from '@sveltejs/kit';
 import type { AppartmentKind } from '@prisma/client';
+import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ locals, params, url }) => {
 	const { user, session } = await locals.validateUser();
@@ -99,6 +100,8 @@ export const actions: Actions = {
 				}
 			});
 
+			const creatingOwner = !newOwner;
+
 			if (!newOwner) {
 				newOwner = await prisma.user.create({
 					data: {
@@ -124,6 +127,15 @@ export const actions: Actions = {
 					}
 				}
 			});
+			await log.info(
+				'submit_appartment_edit',
+				user,
+				'appartment owner changed from',
+				ownerEmail,
+				'to',
+				newOwner?.email + (creatingOwner ? ' (new account)' : ''),
+				'(effective immediately)'
+			);
 		}
 
 		const edit = await prisma.appartmentEdit.create({
