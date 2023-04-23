@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	export let value: string | null = null;
 	export let options: string[] | Record<string, string> = {};
 	export let name: string | undefined = undefined;
@@ -12,6 +14,17 @@
 		errorMessage = '';
 	}
 
+	onMount(() => {
+		if (required) {
+			fieldsetElement
+				.closest('form')
+				?.querySelector('button[type=submit]')
+				?.addEventListener('click', () => {
+					showEmptyErrors = true;
+				});
+		}
+	});
+
 	let edited: boolean = false;
 
 	let errored: boolean = false;
@@ -21,10 +34,12 @@
 	$: optionsWithDisplay = Array.isArray(options)
 		? Object.fromEntries(options.map((option) => [option, option]))
 		: options;
+
+	let fieldsetElement: HTMLFieldSetElement;
 </script>
 
 <div class="wrapper" class:errored>
-	<fieldset>
+	<fieldset bind:this={fieldsetElement}>
 		{#each Object.entries(optionsWithDisplay) as [option, display]}
 			<label aria-current={option === value}>
 				<input type="radio" {required} {name} bind:group={value} value={option} />
@@ -75,11 +90,13 @@
 
 	.error-area {
 		padding: 0.5rem 0.75rem;
+		margin-top: calc(var(--border-width) * 2);
+		outline: var(--border-width) solid var(--blood);
 	}
 
-	.wrapper.errored fieldset {
-		border-color: var(--blood);
-	}
+	/* .wrapper.errored label {
+		outline-color: var(--blood);
+	} */
 	.wrapper.errored label[aria-current='true'] {
 		background: var(--blood);
 		color: #fff;

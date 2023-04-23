@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import Icon from './Icon.svelte';
 	import { v4 as uuidv4 } from 'uuid';
 	import InputWithSuggestions from './InputWithSuggestions.svelte';
@@ -57,7 +57,7 @@
 				_errorMessage = 'Ce champ est requis';
 			} else {
 				// Validate string conversion first
-				if (type === 'number' && valueString === '') {
+				if (type === 'number' && valueString === '' && required) {
 					_errorMessage = 'Ce champ doit être un nombre';
 				} else {
 					if (type === 'date' && value === null) {
@@ -82,6 +82,15 @@
 	let focused = false;
 
 	let inputContainer: HTMLDivElement;
+
+	onMount(() => {
+		inputContainer
+			.closest('form')
+			?.querySelector('button[type=submit]')
+			?.addEventListener('click', () => {
+				showEmptyErrors = true;
+			});
+	});
 </script>
 
 <div
