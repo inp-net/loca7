@@ -181,15 +181,22 @@
 					</div>
 				</InputField>
 			</form>
-			{#if $resultsTab === 'list'}
-				<section class="switch-tabs">
+			<section class="search-actions">
+				<ButtonSecondary
+					icon="search"
+					id="scroll-to-results"
+					on:click={() => {
+						document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' });
+					}}>Résultats</ButtonSecondary
+				>
+				{#if $resultsTab === 'list'}
 					<ButtonSecondary icon="map" on:click={toggleTab}
 						>Voir sur la carte</ButtonSecondary
 					>
-				</section>
-			{/if}
+				{/if}
+			</section>
 		</div>
-		<div class="results">
+		<div class="results" id="results">
 			<h2>{$searchResults.length} Résultat{$searchResults.length === 1 ? '' : 's'}</h2>
 			<div class="sort">
 				<InputField label="Trier par">
@@ -297,10 +304,11 @@
 		}
 	}
 
-	.switch-tabs {
+	.search-actions {
 		display: flex;
 		justify-content: center;
 		margin-top: 2rem;
+		gap: 1rem;
 	}
 
 	.sort {
@@ -358,6 +366,10 @@
 	}
 
 	@media (min-width: 1200px) {
+		:global(#scroll-to-results) {
+			display: none;
+		}
+
 		main[data-view='map'] .goto-map {
 			position: fixed;
 			bottom: 4rem;
