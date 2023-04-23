@@ -87,7 +87,7 @@ CREATE TABLE `Appartment` (
     `hasBicycleParking` BOOLEAN NULL,
     `hasFiberInternet` BOOLEAN NULL,
     `hasElevator` BOOLEAN NULL,
-    `description` TEXT NOT NULL,
+    `description` VARCHAR(191) NOT NULL,
     `travelTimeId` VARCHAR(191) NOT NULL,
     `ownerId` VARCHAR(191) NOT NULL,
     `createdByAdmin` BOOLEAN NOT NULL DEFAULT false,
@@ -103,7 +103,7 @@ CREATE TABLE `Appartment` (
 -- CreateTable
 CREATE TABLE `Photo` (
     `id` VARCHAR(191) NOT NULL,
-    `filename` TINYTEXT NOT NULL,
+    `filename` VARCHAR(191) NOT NULL,
     `contentType` VARCHAR(191) NOT NULL,
     `position` INTEGER NOT NULL,
     `hash` VARCHAR(191) NULL,
@@ -132,7 +132,7 @@ CREATE TABLE `AppartmentEdit` (
     `hasBicycleParking` BOOLEAN NULL,
     `hasFiberInternet` BOOLEAN NULL,
     `hasElevator` BOOLEAN NULL,
-    `description` TEXT NOT NULL,
+    `description` VARCHAR(191) NOT NULL,
     `applied` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `appliedAt` DATETIME(3) NULL,
@@ -146,7 +146,7 @@ CREATE TABLE `AppartmentEdit` (
 CREATE TABLE `Report` (
     `id` VARCHAR(191) NOT NULL,
     `reason` ENUM('dangerous', 'obsolete', 'other') NOT NULL,
-    `message` TEXT NOT NULL,
+    `message` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `appartmentId` VARCHAR(191) NOT NULL,
     `authorId` VARCHAR(191) NULL,
