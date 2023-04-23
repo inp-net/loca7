@@ -36,7 +36,7 @@ export const actions: Actions = {
 				case 'AUTH_OUTDATED_PASSWORD':
 				case 'AUTH_INVALID_USER_ID':
 				case 'AUTH_INVALID_KEY_ID':
-					throw redirect(302, '/login#invalidCredentials');
+					throw redirect(302, '/login' + url.search + '#invalidCredentials');
 
 				default:
 					throw error(400, { message: 'Connexion impossible.' });

@@ -88,7 +88,7 @@ export const actions: Actions = {
 
 			switch (error.message) {
 				case 'AUTH_INVALID_PASSWORD':
-					throw redirect(302, '/account#invalidCredentials');
+					throw redirect(302, '/account' + url.search + '#invalidCredentials');
 				default:
 					throw error;
 			}
