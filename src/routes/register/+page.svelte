@@ -90,17 +90,18 @@
 			bind:value={user.password}
 		/>
 
-		<div class="title-and-explain">
-			<h2>Vous représentez une agence ?</h2>
-			<p>Votre nom ne sera pas affiché sur vos annonces</p>
-		</div>
-		<InputField label="Nom de l'agence">
-			<InputText autocomplete="organization" name="agencyName" bind:value={user.agencyName} />
-		</InputField>
-
-		<InputField label="Site internet">
-			<InputText autocomplete="url" name="agencyWebsite" bind:value={user.agencyWebsite} />
-		</InputField>
+		<section class="agency">
+			<div class="title-and-explain">
+				<h2>Vous représentez une agence ?</h2>
+				<p>Votre nom ne sera pas affiché sur vos annonces</p>
+			</div>
+			<InputField label="Nom de l'agence">
+				<InputText autocomplete="organization" name="agencyName" bind:value={user.agencyName} />
+			</InputField>
+			<InputField label="Site internet">
+				<InputText autocomplete="url" name="agencyWebsite" bind:value={user.agencyWebsite} />
+			</InputField>
+		</section>
 
 		<section class="submit">
 			<ButtonPrimary submits>Créer un compte</ButtonPrimary>
@@ -142,5 +143,11 @@
 		display: flex;
 		gap: 1rem;
 		flex-wrap: wrap;
+	}
+	section.agency {
+		margin-top: 2rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 	}
 </style>
