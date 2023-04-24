@@ -626,6 +626,7 @@
 	}
 
 	section.aspects .iconlike {
+		margin-top: 5px; /* XXX don't ask me why, real icons are actually 55px tall. putting it as a margin top keeps it somewhat vertically aligned to other icons */
 		height: 50px;
 		--size: 50px;
 		font-size: var(--size);
