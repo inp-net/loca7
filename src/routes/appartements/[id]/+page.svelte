@@ -6,7 +6,8 @@
 		ownerIsAgency,
 		type GeographicPoint,
 		type Report,
-		isGhostEmail
+		isGhostEmail,
+		createGhostEmail
 	} from '$lib/types';
 	import {
 		durationDisplay,

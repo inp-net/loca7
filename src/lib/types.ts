@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { lowerFirstChar } from './utils';
 import slugify from 'slugify';
 import { v4 as uuid } from 'uuid';
+import Handlebars from 'handlebars';
 
 export type WithUndefinableProperties<T> = {
 	[P in keyof T]: T[P] | undefined;
@@ -167,6 +168,8 @@ export type User = z.infer<typeof UserSchema>;
 export const UserSchema = z.object({
 	firstName: z.string(),
 	lastName: z.string(),
+	agencyName: z.string().nullable(),
+	agencyWebsite: z.string().nullable(),
 	phone: z.string(),
 	email: z.string(),
 	emailIsValidated: z.boolean(),
@@ -326,19 +329,29 @@ export const jsonAPIOutputsInclude = {
 
 export const EMAIL_REGEX = /^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
 
+export const GHOST_EMAIL_TEMPLATE = Handlebars.compile(
+	'ghost.{{ firstName }}.{{ lastName }}.{{ id }}@loca7.fr'
+);
+
+export const GHOST_EMAIL_REGEX = new RegExp(
+	GHOST_EMAIL_TEMPLATE({ firstName: '(.*)', lastName: '(.*)', id: '(.*)' })
+);
+
 export function createGhostEmail(
 	firstName: string,
 	lastName: string,
 	id: string | undefined = undefined
-): `ghost.${string}.${string}.${string}@loca7.fr` {
+): string {
 	const slug = (s: string) => slugify(s, { lower: true, strict: true });
-	return `ghost.${slug(firstName) || 'unknown'}.${slug(lastName) || 'unknown'}.${(
-		id ?? uuid()
-	).replace(/-/g, '')}@loca7.fr`;
+	return GHOST_EMAIL_TEMPLATE({
+		firstName: slug(firstName),
+		lastName: slug(lastName),
+		id: (id ?? uuid()).replace(/-/g, '')
+	});
 }
 
 export function isGhostEmail(email: string): boolean {
-	return new RegExp(createGhostEmail('(.+)', '(.+)', '(.+)')).test(email);
+	return GHOST_EMAIL_REGEX.test(email);
 }
 
 export function ownerIsAgency(owner: User) {

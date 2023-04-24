@@ -3,11 +3,13 @@ import { error, redirect, type Actions } from '@sveltejs/kit';
 import { LuciaError } from 'lucia-auth';
 import type { PageServerLoad } from './$types';
 import { log } from '$lib/server/logging';
+import { isGhostEmail } from '$lib/types';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
-	const session = await locals.validate();
+	const { session, user } = await locals.validateUser();
 
 	if (session) {
+		await log.info('create_account', user, 'already logged in, redirecting', { session });
 		throw redirect(302, '/' + url.search);
 	}
 };
@@ -19,7 +21,17 @@ export const actions: Actions = {
 			inputData;
 
 		if ((firstName + lastName).trim() === '') {
+			await log.error('create_account', null, `fail because blank name`, {
+				inputData
+			});
 			throw error(400, { message: 'Veuillez renseigner votre nom.' });
+		}
+
+		if (isGhostEmail(email)) {
+			await log.error('create_account', null, `fail because ghost email used`, {
+				inputData
+			});
+			throw error(400, { message: 'Veuillez renseigner une adresse email valide.' });
 		}
 
 		try {
@@ -43,7 +55,9 @@ export const actions: Actions = {
 			});
 		} catch (err) {
 			if (!(err instanceof LuciaError)) {
-				await log.fatal('create_account', email, `NON-LUCIA unknown error`, err);
+				await log.fatal('create_account', email, `NON-LUCIA unknown error`, err, {
+					inputData
+				});
 				throw error(500);
 			}
 
@@ -52,7 +66,8 @@ export const actions: Actions = {
 					await log.error(
 						'create_account',
 						null,
-						`duplicate email (lucia says ${err.message})`
+						`duplicate email (lucia says ${err.message})`,
+						{ inputData }
 					);
 					throw redirect(
 						302,
@@ -62,13 +77,14 @@ export const actions: Actions = {
 					await log.fatal(
 						'create_account',
 						null,
-						`unknown error (lucia says ${err.message})`
+						`unknown error (lucia says ${err.message})`,
+						{ inputData }
 					);
 					throw error(400, { message: 'Inscription impossible.' });
 			}
 		}
 
-		await log.info('create_account', email, { firstName, lastName, phone, email });
+		await log.info('create_account', email, 'success', { inputData });
 		throw redirect(302, '/login' + url.search);
 	}
 };
