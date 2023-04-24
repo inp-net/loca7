@@ -41,7 +41,6 @@ export const actions: Actions = {
 					god: false
 				}
 			});
-			throw Error("Shouldn't be here");
 		} catch (err) {
 			if (!(err instanceof LuciaError)) {
 				await log.fatal('create_account', email, `NON-LUCIA unknown error`, err);
