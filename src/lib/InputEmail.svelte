@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { z } from 'zod';
 	import BaseInputText from './BaseInputText.svelte';
+	import { EMAIL_REGEX } from './types';
 
 	export let id: string | undefined = undefined;
 	export let name: string | undefined = undefined;
@@ -10,7 +11,10 @@
 	export let unit: string = '';
 	export let suggestions: string[] | undefined = undefined;
 	export let required: boolean = false;
-	export let schema: Zod.ZodString = z.string().email({ message: 'Adresse e-mail invalide' });
+
+	export let schema: Zod.ZodString = z.string().regex(EMAIL_REGEX, {
+		message: 'Adresse email invalide'
+	}); /* don't use .email() until https://github.com/colinhacks/zod/pull/2224 gets merged, someone@laplace.univ-tlse.fr does not pass!!!! */
 </script>
 
 <BaseInputText
