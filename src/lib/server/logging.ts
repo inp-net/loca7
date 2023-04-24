@@ -97,7 +97,9 @@ async function _log(
 						}</strong> triggered a fatal error when <strong>${action}</strong>:<br><br>${messageString.replaceAll(
 							'\n',
 							'<br>'
-						)}<br><br><br><br>For some context: <a href="${process.env.ORIGIN || 'http://localhost:5173'}/logs#${createdLog.createdAt.toISOString()}" target="_blank">see logs</a>.`
+						)}<br><br><br><br>For some context: <a href="${
+							process.env.ORIGIN || 'http://localhost:5173'
+						}/logs#${createdLog.createdAt.toISOString()}" target="_blank">see logs</a>.`
 					}
 				})
 			)
