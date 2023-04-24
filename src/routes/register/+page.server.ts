@@ -14,9 +14,9 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 export const actions: Actions = {
 	default: async ({ request, url }) => {
-		const { firstName, lastName, email, password, phone } = Object.fromEntries(
-			await request.formData()
-		) as Record<string, string>;
+		const inputData = Object.fromEntries(await request.formData()) as Record<string, string>;
+		const { firstName, lastName, email, password, phone, agencyName, agencyWebsite } =
+			inputData;
 
 		if ((firstName + lastName).trim() === '') {
 			throw error(400, { message: 'Veuillez renseigner votre nom.' });
@@ -34,6 +34,8 @@ export const actions: Actions = {
 					firstName,
 					lastName,
 					email,
+					agencyName: agencyName ?? '',
+					agencyWebsite: agencyWebsite ?? '',
 					admin: false,
 					emailIsValidated: false,
 					god: false

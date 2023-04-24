@@ -83,7 +83,9 @@ export const actions: Actions = {
 			ownerFirstName,
 			ownerLastName,
 			ownerEmail,
-			ownerPhone
+			ownerPhone,
+			ownerAgencyName,
+			ownerAgencyWebsite
 		} = formData;
 
 		const latitude = addressLatitude && addressLongitude ? Number(addressLatitude) : null;
@@ -109,8 +111,8 @@ export const actions: Actions = {
 						firstName: ownerFirstName,
 						lastName: ownerLastName,
 						phone: ownerPhone,
-						agencyName: ownerLastName,
-						agencyWebsite: ownerLastName
+						agencyName: ownerAgencyName,
+						agencyWebsite: ownerAgencyWebsite
 					}
 				});
 			}
