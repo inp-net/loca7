@@ -138,25 +138,31 @@ export const actions: Actions = {
 			string,
 			string
 		>;
-		try {
-			await auth.validateKeyPassword('email', email, password);
-		} catch (error) {
-			if (!(error instanceof LuciaError)) {
-				await log.fatal('delete_account', user, 'unknown NON-LUCIA error', error);
-				throw error;
-			}
+		const thruCAS = (await auth.getAllUserKeys(user.id)).some(
+			(key) => key?.providerId === 'cas'
+		);
 
-			switch (error.message) {
-				case 'AUTH_INVALID_PASSWORD':
-				case 'AUTH_INVALID_KEY_ID':
-					await log.error('delete_account', user, 'invalid credentials');
-					throw redirect(
-						302,
-						'/account' + url.search + '#invalidCredentialsDeleteAccount'
-					);
-				default:
-					await log.fatal('delete_account', user, 'unknown error', error);
+		if (!thruCAS) {
+			try {
+				await auth.validateKeyPassword('email', email, password);
+			} catch (error) {
+				if (!(error instanceof LuciaError)) {
+					await log.fatal('delete_account', user, 'unknown NON-LUCIA error', error);
 					throw error;
+				}
+
+				switch (error.message) {
+					case 'AUTH_INVALID_PASSWORD':
+					case 'AUTH_INVALID_KEY_ID':
+						await log.error('delete_account', user, 'invalid credentials');
+						throw redirect(
+							302,
+							'/account' + url.search + '#invalidCredentialsDeleteAccount'
+						);
+					default:
+						await log.fatal('delete_account', user, 'unknown error', error);
+						throw error;
+				}
 			}
 		}
 
@@ -196,10 +202,9 @@ export const actions: Actions = {
 				}
 			}
 		}
-		await prisma.user.delete({
-			where: { id: user.id }
-		});
+		await auth.deleteUser(user.id);
 
 		await log.warn('delete_account', null, `deleted ${user.email}`);
+		throw redirect(302, '/');
 	}
 };

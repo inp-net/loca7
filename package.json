@@ -39,6 +39,7 @@
 		"@types/mjml": "^4.7.1",
 		"@types/nodemailer": "^6.4.7",
 		"@types/uuid": "^9.0.1",
+		"@types/xml2js": "^0.4.11",
 		"@types/zxcvbn": "^4.4.1",
 		"@typescript-eslint/eslint-plugin": "^5.57.1",
 		"@typescript-eslint/parser": "^5.57.1",
@@ -94,6 +95,7 @@
 		"sveltejs-tippy": "^3.0.0",
 		"uuid": "^9.0.0",
 		"vcard4": "^3.1.5",
+		"xml2js": "^0.5.0",
 		"xss": "^1.0.14",
 		"zxcvbn": "^4.4.2"
 	}

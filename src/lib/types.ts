@@ -327,7 +327,8 @@ export const jsonAPIOutputsInclude = {
 	}
 };
 
-export const EMAIL_REGEX = /^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+export const EMAIL_REGEX =
+	/^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
 
 export const GHOST_EMAIL_TEMPLATE = Handlebars.compile(
 	'ghost.{{ firstName }}.{{ lastName }}.{{ id }}@loca7.fr'

@@ -39,10 +39,17 @@
 
 	<h1>Connexion</h1>
 
+	<section class="through-cas">
+		<p>Vous êtes étudiant à l'n7? Connectez-vous via votre compte du BDE</p>
+		<ButtonSecondary href="/login/cas" icon="location-enseeiht-alt"
+			>Se connecter</ButtonSecondary
+		>
+	</section>
+
 	<form method="post">
 		<InputField required label="Email">
 			<InputEmail required bind:value={email} name="email" />
-		</InputField>
+		</InputField> 
 
 		<InputPassword required label="Mot de passe" bind:value={password} name="password" />
 

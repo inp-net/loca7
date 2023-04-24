@@ -86,7 +86,9 @@ export const actions: Actions = {
 				owner: {
 					connectOrCreate: {
 						create: {
-							email: ownerEmail || createGhostEmail(ownerFirstName ?? '', ownerLastName ?? ''),
+							email:
+								ownerEmail ||
+								createGhostEmail(ownerFirstName ?? '', ownerLastName ?? ''),
 							firstName: ownerFirstName ?? '',
 							lastName: ownerLastName ?? '',
 							phone: ownerPhone ?? '',

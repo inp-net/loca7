@@ -98,6 +98,7 @@
 
 	<form method="post" action="?/changePassword" class="password">
 		<h2>Changer de mot de passe</h2>
+		<!-- FIXME can't "change" (i.e. create one) when created account thru CAS -->
 
 		<InputPassword
 			bind:value={oldPassword}
