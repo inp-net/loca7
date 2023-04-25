@@ -84,38 +84,41 @@
 <slot />
 
 <footer>
-	<section class="about">
-		<LogoLoca7 />
-		<p class="tagline">Le site de recherche de logement pour les n7iens</p>
-	</section>
+	<div class="side-by-side">
+		<section class="about">
+			<LogoLoca7 />
+			<p class="tagline">Le site de recherche de logement pour les n7iens</p>
+		</section>
+		<section class="net7">
+			<p>Site réalisé par</p>
+			<a href="https://bde.enseeiht.fr/clubs/net7"><LogoNet7 /></a>
+		</section>
+		<section class="credits">
+			<dl>
+				<dt>code source</dt>
+				<dd><a href="https://git.inpt.fr/INP-net/loca7">git.inpt.fr/inp-net/loca7</a></dd>
+				<dt use:tooltip={'Pour les amatteurs de <code>jq</code> et <code>wget</code> ❤️'}>
+					API
+				</dt>
+				<dd><a href="/appartements.json">/appartements.json</a></dd>
+				<dt>design, code</dt>
+				<dd><a href="https://ewen.works">Ewen Le Bihan</a></dd>
+				<dt>logo, administration</dt>
+				<dd>Lubin Gauthier</dd>
+				<dt>données tierces de</dt>
+				<dd>
+					<a href="https://openrouteservice.org">openroute service</a>,
+					<a href="https://data.toulouse-metropole.fr">Toulouse Métropole</a>
+				</dd>
+			</dl>
+		</section>
+	</div>
 
-	<section class="net7">
-		<p>Site réalisé par</p>
-		<a href="https://bde.enseeiht.fr/clubs/net7"><LogoNet7 /></a>
-	</section>
-
-	<section class="credits">
-		<dl>
-			<dt>code source</dt>
-			<dd><a href="https://git.inpt.fr/INP-net/loca7">git.inpt.fr/inp-net/loca7</a></dd>
-
-			<dt use:tooltip={'Pour les amatteurs de <code>jq</code> et <code>wget</code> ❤️'}>
-				API
-			</dt>
-			<dd><a href="/appartements.json">/appartements.json</a></dd>
-
-			<dt>design, code</dt>
-			<dd><a href="https://ewen.works">Ewen Le Bihan</a></dd>
-
-			<dt>logo, administration</dt>
-			<dd>Lubin Gauthier</dd>
-
-			<dt>données tierces de</dt>
-			<dd>
-				<a href="https://openrouteservice.org">openroute service</a>,
-				<a href="https://data.toulouse-metropole.fr">Toulouse Métropole</a>
-			</dd>
-		</dl>
+	<section class="technical">
+		loca7 v{data.currentVersion} &bull;
+		<a href="https://git.inpt.fr/inp-net/loca7/-/commits/{data.currentCommit}"
+			>{data.currentCommit?.slice(0, 16)}</a
+		>
 	</section>
 </footer>
 
@@ -165,11 +168,27 @@
 		margin: 10rem 0 0;
 		padding: 0 2rem 2rem;
 		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+		text-align: center;
+	}
+
+	footer .side-by-side {
+		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: 6rem;
 		flex-wrap: wrap;
 		text-align: center;
+		width: 100%;
+	}
+
+	footer section.technical {
+		font-family: var(--font-mono);
+		font-size: 0.75em;
 	}
 
 	footer dl {
