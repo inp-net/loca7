@@ -40,16 +40,14 @@
 	<h1>Connexion</h1>
 
 	<section class="through-cas">
-		<p>Vous êtes étudiant à l'n7? Connectez-vous via votre compte du BDE</p>
-		<ButtonSecondary href="/login/cas" icon="location-enseeiht-alt"
-			>Se connecter</ButtonSecondary
-		>
+		<p>Vous êtes étudiant à l'n7 ?</p>
+		<ButtonSecondary insideProse href="/login/cas" icon="lock">Se connecter avec le BDE</ButtonSecondary>
 	</section>
 
 	<form method="post">
 		<InputField required label="Email">
 			<InputEmail required bind:value={email} name="email" />
-		</InputField> 
+		</InputField>
 
 		<InputPassword required label="Mot de passe" bind:value={password} name="password" />
 
@@ -90,6 +88,12 @@
 	.notice.success {
 		--bg: var(--moss);
 		--fg: var(--cactus);
+	}
+
+	section.through-cas {
+		display: flex;
+		align-items: center;
+		margin: 1.5rem 0;
 	}
 
 	form {
