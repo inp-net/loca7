@@ -1,5 +1,6 @@
 <mjml>
 	<mj-head>
+		<mj-font name="Space Grotesk" href="https://loca7.fr/fonts/import/space-grotesk.css" />
 		<mj-title>{{ title }}</mj-title>
 		<mj-attributes>
 			<mj-text font-family="Space Grotesk,sans" font-size="18px" />
@@ -31,8 +32,8 @@
 			<mj-column>
 				<mj-spacer height="100px" />
 				<mj-text align="center" mj-class="small">
-					<a style="color: black" font-weight="bold" href="https://loca7.enseeiht.fr"
-						>loca7.enseeiht.fr</a
+					<a style="color: black" font-weight="bold" href="https://loca7..fr"
+						>loca7.fr</a
 					>
 				</mj-text>
 			</mj-column>
