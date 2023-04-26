@@ -55,7 +55,7 @@ pnpm concurrently -i npm:dev npm:mailhog # ou lancer pnpm dev et pnpm mailhog da
 
 ### Comptes
 
-- [ ] Intégration avec le LDAP
+- [x] Intégration avec le CAS
 - [ ] Intégration avec [Google reCaptcha v3](https://developers.google.com/recaptcha/docs/v3) à la création et à la connexion
 - [x] Évaluation de la complexité d'un mot de passe avec [zxcvbn](https://github.com/dropbox/zxcvbn)
 
@@ -67,7 +67,7 @@ pnpm concurrently -i npm:dev npm:mailhog # ou lancer pnpm dev et pnpm mailhog da
 
 ### Interface administrateur
 
-- [ ] Vue liste avec même fonctionnalités que la recherche mais:
+- [x] Vue liste avec même fonctionnalités que la recherche mais:
   - Plus compacte
   - Avec des actions pour les admins: supprimer, rendre obsolète/remettre visible
   - Montrer/cacher les obsolètes, les afficher en grisé
