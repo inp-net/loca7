@@ -153,7 +153,8 @@
 		a: { reports: Report[]; updatedAt: Date },
 		b: { reports: Report[]; updatedAt: Date }
 	) =>
-		a.reports.length === b.reports.length
+		// don't sort by number of reports first in archived tab
+		currentCategory === 'archived' || a.reports.length === b.reports.length
 			? effectiveUpdatedAt(a).valueOf() - effectiveUpdatedAt(b).valueOf()
 			: a.reports.length - b.reports.length;
 
