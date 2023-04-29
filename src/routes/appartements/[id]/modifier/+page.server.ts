@@ -8,6 +8,9 @@ import xss from 'xss';
 import { redirect } from '@sveltejs/kit';
 import type { AppartmentKind } from '@prisma/client';
 import { log } from '$lib/server/logging';
+import { sendMail } from '$lib/server/mail';
+import { EDITABLE_FIELDS } from '$lib/appartmentDiff';
+import * as appartmentDiff from '$lib/appartmentDiff';
 
 export const load: PageServerLoad = async ({ locals, params, url }) => {
 	const { user, session } = await locals.validateUser();
@@ -93,7 +96,9 @@ export const actions: Actions = {
 
 		const changingOwner =
 			ownerEmail !== appartment.owner.email &&
-			![ownerEmail, ownerLastName, ownerFirstName, ownerPhone].every((x) => x === '');
+			![ownerEmail, ownerLastName, ownerFirstName, ownerPhone].every(
+				(x) => x === '' || x === undefined
+			);
 
 		if (changingOwner) {
 			let newOwner = await prisma.user.findUnique({
@@ -183,6 +188,31 @@ export const actions: Actions = {
 		// This copy is necessary for photos that have no associated file (or rather the associated file is empty) because they were already uploaded (they were already in the appartment), and their content is not sent in the form data
 		await copyPhotos(edit.photos, appartment.photos);
 		await writePhotosToDisk(edit.photos, files);
+
+		if (!edit.applied) {
+			for (const admin of await prisma.user.findMany({ where: { admin: true } })) {
+				await sendMail({
+					to: admin.email,
+					subject: `Modification de l'annonce #${appartment.number} en attente`,
+					template: 'appartment-edit-to-validate',
+					data: {
+						userFullName: appartment.owner.firstName + ' ' + appartment.owner.lastName,
+						userEmail: appartment.owner.email,
+						number: appartment.number,
+						appartmentId: appartment.id,
+						editId: edit.id,
+						key: undefined /* key & content are inside of the #each edits, but this is to satisfy the (wrongly) generated type */,
+						content: undefined,
+						edits: (Object.keys(EDITABLE_FIELDS) as (keyof typeof EDITABLE_FIELDS)[])
+							.filter((f) => appartmentDiff.modified(f, appartment, edit))
+							.map((f) => ({
+								content: appartmentDiff.modification(f, appartment, edit),
+								key: EDITABLE_FIELDS[f]
+							}))
+					}
+				});
+			}
+		}
 
 		throw redirect(
 			302,

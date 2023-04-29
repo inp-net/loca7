@@ -1,8 +1,13 @@
 import { guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import { openRouteService, tisseo } from '$lib/server/traveltime';
-import { createGhostEmail, ternaryStateCheckboxToBoolean } from '$lib/types';
-import { ENSEEIHT } from '$lib/utils';
+import {
+	DISPLAY_APPARTMENT_KIND,
+	DISPLAY_ASPECT_FIELDS,
+	createGhostEmail,
+	ternaryStateCheckboxToBoolean
+} from '$lib/types';
+import { ENSEEIHT, distanceBetween } from '$lib/utils';
 import type { AppartmentKind, Prisma } from '@prisma/client';
 import { error, redirect } from '@sveltejs/kit';
 import { mkdirSync, writeFileSync } from 'fs';
@@ -12,6 +17,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { writePhotosToDisk } from '$lib/server/photos';
 import { randomUUID } from 'crypto';
 import { log } from '$lib/server/logging';
+import { sendMail } from '$lib/server/mail';
 
 export const load: PageServerLoad = async ({ locals, url, parent }) => {
 	const { session, user } = await locals.validateUser();
@@ -152,10 +158,36 @@ export const actions: Actions = {
 
 			appartment = await prisma.appartment.create({
 				data: appartInput,
-				include: { photos: true }
+				include: { photos: true, owner: true, travelTimeToN7: true }
 			});
 			await writePhotosToDisk(appartment.photos, files);
-
+			for (const admin of await prisma.user.findMany({ where: { admin: true } })) {
+				await sendMail({
+					to: admin.email,
+					subject: `Nouvelle annonce en attente`,
+					template: 'appartment-to-validate',
+					data: {
+						userFullName: appartment.owner.firstName + ' ' + appartment.owner.lastName,
+						userEmail: appartment.owner.email,
+						appartmentId: appartment.id,
+						appartment: {
+							...appartment,
+							availableAt: new Intl.DateTimeFormat('fr-FR').format(
+								appartment.availableAt
+							),
+							displayKind: DISPLAY_APPARTMENT_KIND[appartment.kind],
+							distance:
+								appartment.longitude && appartment.latitude
+									? distanceBetween(appartment, ENSEEIHT)
+									: '?',
+							aspectsLine: Object.entries(DISPLAY_ASPECT_FIELDS)
+								.filter(([key, display]) => appartment[key])
+								.map(([key, display]) => display)
+								.join(', ')
+						}
+					}
+				});
+			}
 			await log.info('submit_appartment', user, { input: appartInput, created: appartment });
 		} catch (err) {
 			await log.fatal(

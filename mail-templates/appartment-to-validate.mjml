@@ -1,0 +1,84 @@
+<mj-section>
+	<mj-column>
+		<mj-text mj-class="title">Nouvelle annonce à valider</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text align="center">
+			{{userFullName}} ({{userEmail}}) a posté une nouvelle annonce.
+		</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text>{{appartment.displayKind}}</mj-text>
+	</mj-column>
+	<mj-column>
+		<mj-text>{{appartment.surface}} m²</mj-text>
+	</mj-column>
+</mj-section>
+<mj-section>
+	<mj-column>
+		<mj-text>Loyer {{appartment.rent}}€</mj-text>
+	</mj-column>
+	<mj-column>
+		<mj-text>Charges {{appartment.charges}}€</mj-text>
+	</mj-column>
+	<mj-column>
+		<mj-text>Caution {{appartment.deposit}}€</mj-text>
+	</mj-column>
+</mj-section>
+<mj-section>
+	<mj-column>
+		<mj-text>Adresse</mj-text>
+	</mj-column>
+	<mj-column>
+		<mj-text>{{appartment.address}}</mj-text>
+	</mj-column>
+</mj-section>
+<mj-section>
+	<mj-column>
+		<mj-text>Trajet</mj-text>
+	</mj-column>
+	<mj-column>
+		<mj-text
+			>à {{appartment.distance}} km: {{appartment.travelTimeToN7.byFoot}} à pied,
+			{{appartment.travelTimeToN7.byBike}} en vélo, {{appartment.travelTimeToN7.byPublicTransport}}
+			en transports</mj-text
+		>
+	</mj-column>
+</mj-section>
+<mj-section>
+	<mj-column>
+		<mj-text>Libéré le</mj-text>
+	</mj-column>
+	<mj-column>
+		<mj-text>{{appartment.availableAt}}</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text>Aspects</mj-text>
+	</mj-column>
+	<mj-column>
+		<mj-text>{{appartment.aspectsLine}}</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-button href="https://loca7.fr/appartements/{{appartmentId}}">Voir l'annonce</mj-button>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text align="center">
+			<a style="color: #009fe3" href="mailto:{{contactEmail}}">{{contactEmail}}</a>
+		</mj-text>
+	</mj-column>
+</mj-section>

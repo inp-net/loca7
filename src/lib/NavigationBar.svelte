@@ -46,10 +46,12 @@
 	afterUpdate(() => {
 		const setPadding = () => {
 			const main = document.body.querySelector('main');
-			if (!main) return;
-			main.style.paddingTop = `${
-				topbarElement.offsetTop + topbarElement.getBoundingClientRect().height + 30
-			}px`;
+			const html = document.querySelector('html');
+			if (!main || !html) return;
+			const padding =
+				topbarElement.offsetTop + topbarElement.getBoundingClientRect().height + 30;
+			main.style.paddingTop = padding + 'px';
+			html.style.scrollPaddingTop = padding + 'px';
 		};
 
 		setPadding();

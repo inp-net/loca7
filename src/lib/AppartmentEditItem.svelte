@@ -1,98 +1,21 @@
 <script lang="ts">
 	import Icon from './Icon.svelte';
 	import { photoURL } from './photos';
-	import type { Appartment, AppartmentEdit, Photo, User } from './types';
-	import htmldiff from 'node-htmldiff';
-	import InputField from './InputField.svelte';
+	import type { Photo, User } from './types';
 	import ButtonSecondary from './ButtonSecondary.svelte';
+	import * as appartmentDiff from './appartmentDiff';
+	import { EDITABLE_FIELDS } from './appartmentDiff';
+	import type { AppartmentEdit, Appartment } from '@prisma/client';
 
 	export let current: Appartment;
 	export let edit: AppartmentEdit;
 	export let user: User;
 
-	const editableFields: Record<keyof Appartment & keyof AppartmentEdit, string> = {
-		address: 'Adresse',
-		latitude: 'Latitude',
-		longitude: 'Longitude',
-		availableAt: 'Disponible au',
-		rent: 'Loyer',
-		charges: 'Charges',
-		deposit: 'Caution',
-		hasFurniture: 'Meublé',
-		hasParking: 'Parking',
-		hasFiberInternet: 'Fibre optique',
-		hasElevator: 'Ascenseur',
-		hasBicycleParking: 'Place pour vélo',
-		kind: 'Type',
-		roomsCount: 'Nombre de chambres',
-		surface: 'Surface',
-		// createdAt: 'Créé le',
-		description: 'Description'
-		// id: 'ID',
-		// photos: 'Photos',
-	};
-
-	function modified(field: keyof Appartment & keyof AppartmentEdit): boolean {
-		if (field === 'photos') {
-			const serialize = (ps: Photo[]) =>
-				JSON.stringify(
-					ps.map((p) => ({
-						contentType: p.contentType,
-						filename: p.filename,
-						hash: p.hash,
-						position: p.position
-					}))
-				);
-			return serialize(current.photos) !== serialize(edit.photos);
-		}
-		return /<(ins|del)/g.test(modification(field));
-	}
-
-	function display(
-		value: string | number | Date | boolean | null,
-		field: keyof Appartment & keyof AppartmentEdit
-	) {
-		if (field === 'description') {
-			return value
-				?.toString()
-				.replaceAll(/<\/?span>/g, '')
-				.replaceAll(/<\/?br>/g, '\n')
-				.replace(/<\/?p>/g, '')
-				.replaceAll(/</g, '&lt;')
-				.replaceAll(/>/g, '&gt;');
-		}
-		switch (typeof value) {
-			case 'number':
-				return (
-					value +
-					(field === 'surface'
-						? ' m²'
-						: ['charges', 'rent', 'deposit'].includes(field)
-						? '€'
-						: '')
-				);
-
-			case 'boolean':
-				return value
-					? '<span class="boolean-true">Oui</span>'
-					: '<span class="boolean-false">Non</span>';
-			default:
-				if (value instanceof Date) {
-					return Intl.DateTimeFormat('fr-FR', { dateStyle: 'medium' }).format(value);
-				}
-				return value?.toString() ?? '';
-		}
-	}
-
-	function modification(field: keyof Appartment & keyof AppartmentEdit): string {
-		return htmldiff(display(current[field], field), display(edit[field], field)).replaceAll(
-			/\n/g,
-			'<br />'
-		);
-	}
+	const modified = (field) => appartmentDiff.modified(field, current, edit);
+	const modification = (field) => appartmentDiff.modification(field, current, edit);
 </script>
 
-<li class="edit-item" class:applied={edit.applied}>
+<li class="edit-item" id="edit-{edit.id}" class:applied={edit.applied}>
 	<p class="date typo-field-label">
 		{Intl.DateTimeFormat('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }).format(
 			edit.appliedAt ?? edit.createdAt
@@ -118,9 +41,11 @@
 				</div>
 			</li>
 		{/if}
-		{#each Object.keys(editableFields).filter(modified) as modifiedFieldName}
+		{#each Object.keys(EDITABLE_FIELDS)
+			.filter((f) => f !== 'photos')
+			.filter(modified) as modifiedFieldName}
 			<li>
-				<span class="label">{editableFields[modifiedFieldName]}</span>
+				<span class="label">{EDITABLE_FIELDS[modifiedFieldName]}</span>
 				{@html modification(modifiedFieldName)}
 			</li>
 		{/each}

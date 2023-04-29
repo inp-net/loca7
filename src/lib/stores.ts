@@ -11,7 +11,8 @@ export const searchCriteria: Writable<SearchCriteria> = persisted('searchCriteri
 	parking: null,
 	fiberInternet: null,
 	elevator: null,
-	type: []
+	type: [],
+	description: ''
 });
 
 export const SORT_OPTIONS = [

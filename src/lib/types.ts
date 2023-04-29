@@ -186,7 +186,8 @@ export const SearchCriteriaSchema = z.object({
 	parking: z.boolean().nullable(),
 	bicycleParking: z.boolean().nullable(),
 	fiberInternet: z.boolean().nullable(),
-	elevator: z.boolean().nullable()
+	elevator: z.boolean().nullable(),
+	description: z.string().optional()
 });
 
 export type GeographicPoint = z.infer<typeof GeographicPointSchema>;
@@ -252,6 +253,14 @@ export const EMPTY_APPARTMENT: WithUndefinableProperties<Appartment> = {
 	surface: undefined,
 	latitude: null,
 	longitude: null
+};
+
+export const DISPLAY_ASPECT_FIELDS: Record<keyof Appartment, string> = {
+	hasFurniture: 'meublé',
+	hasParking: 'parking',
+	hasBicycleParking: 'place pour vélo',
+	hasFiberInternet: 'fibre optique',
+	hasElevator: 'ascenceur'
 };
 
 export function appartmentAccessible(

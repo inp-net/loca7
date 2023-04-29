@@ -1,0 +1,43 @@
+<mj-section>
+	<mj-column>
+		<mj-text mj-class="title">Nouvelle modification à valider</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text align="center">
+			{{userFullName}} ({{userEmail}}) a fait une demande de modification de l'<a
+				href="https://loca7.fr/appartements/{{number}}"
+				>appartement #{{number}}</a
+			>. Voici ce qui est modifié:
+		</mj-text>
+	</mj-column>
+</mj-section>
+
+{{#each edits}}
+<mj-section>
+	<mj-column>
+		<mj-text>{{key}}</mj-text>
+	</mj-column>
+	<mj-column>
+		<mj-text>{{{content}}}</mj-text>
+	</mj-column>
+</mj-section>
+{{/each}}
+
+<mj-section>
+	<mj-column>
+		<mj-button href="https://loca7.fr/appartements/{{appartmentId}}#edit-{{editId}}"
+			>Voir la modification</mj-button
+		>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text align="center">
+			<a style="color: #009fe3" href="mailto:{{contactEmail}}">{{contactEmail}}</a>
+		</mj-text>
+	</mj-column>
+</mj-section>

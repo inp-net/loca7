@@ -66,7 +66,6 @@ export const actions: Actions = {
 				subject: 'Loca7: Votre adresse email a été changée',
 				data: {
 					fullname: user.firstName + ' ' + user.lastName,
-					contactEmail: CONTACT_EMAIL,
 					newEmail: email
 				},
 				template: 'email-changed'
@@ -94,8 +93,7 @@ export const actions: Actions = {
 				to: user.email,
 				subject: 'Loca7: Votre mot de passe a été changé',
 				data: {
-					fullname: user.firstName,
-					contactEmail: CONTACT_EMAIL
+					fullname: user.firstName
 				},
 				template: 'password-changed'
 			});

@@ -15,6 +15,11 @@
 				font-size="21px"
 			/>
 		</mj-attributes>
+		<mj-style inline="inline">
+			ins { background-color: rgb(201, 248, 211) !important; color: rgb(1, 100, 34) !important;
+			text-decoration: none !important; } del { background-color: rgb(245, 180, 180) !important;
+			color: rgb(154, 12, 12) !important; }
+		</mj-style>
 	</mj-head>
 
 	<mj-body>
@@ -32,9 +37,7 @@
 			<mj-column>
 				<mj-spacer height="100px" />
 				<mj-text align="center" mj-class="small">
-					<a style="color: black" font-weight="bold" href="https://loca7..fr"
-						>loca7.fr</a
-					>
+					<a style="color: black" font-weight="bold" href="https://loca7..fr">loca7.fr</a>
 				</mj-text>
 			</mj-column>
 		</mj-section>
