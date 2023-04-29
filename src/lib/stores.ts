@@ -32,3 +32,8 @@ export const searchResultsScrollPosition: Writable<number> = persisted(
 );
 
 export const resultsTab: Writable<'list' | 'map'> = persisted('resultsTab', 'list');
+
+export const dismissedN7ienOnlyWarning: Writable<boolean> = persisted(
+	'dismissedN7ienOnlyWarning',
+	false
+);

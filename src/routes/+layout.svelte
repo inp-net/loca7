@@ -6,12 +6,14 @@
 	import LogoLoca7 from '$lib/LogoLoca7.svelte';
 	import LogoNet7 from '$lib/LogoNet7.svelte';
 	import NavigationBar from '$lib/NavigationBar.svelte';
+	import { dismissedN7ienOnlyWarning } from '$lib/stores';
 	import { closeToast, toasts } from '$lib/toasts';
 	import { dedent } from '$lib/utils';
 	import { fly } from 'svelte/transition';
 	import xss from 'xss';
 	import type { PageData } from './$types';
 	import { tooltip } from '$lib/tooltip';
+	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	export let data: PageData;
 </script>
 
@@ -22,6 +24,29 @@
 	<script src="/vendor/leaflet-gesture-handling.js"></script>
 	<script src="/vendor/polyfills/inert.min.js"></script>
 </svelte:head>
+
+{#if !$dismissedN7ienOnlyWarning && !data.user}
+	<aside class="n7ien-warning">
+		<div class="content">
+			<h1>Ce site est réservé aux (futur·e·s) élève·e·s de l'ENSEEIHT</h1>
+			<section class="options">
+				<ButtonSecondary
+					on:click={() => {
+						$dismissedN7ienOnlyWarning = true;
+						window.location.href = '/appartements/ajouter';
+					}}
+					icon="add">Je veux déposer une annonce</ButtonSecondary
+				>
+				<ButtonSecondary
+					on:click={() => {
+						$dismissedN7ienOnlyWarning = true;
+					}}
+					icon="checkmark">J'en suis un·e</ButtonSecondary
+				>
+			</section>
+		</div>
+	</aside>
+{/if}
 
 <section class="toasts">
 	{#each $toasts as toast (toast.id)}
@@ -244,5 +269,47 @@
 	.toasts article[data-type='info'] {
 		background: var(--ice);
 		color: var(--cobalt);
+	}
+
+	aside.n7ien-warning {
+		position: fixed;
+		inset: 0;
+		background-color: rgba(255, 255, 255, 0.8);
+		display: flex;
+		justify-content: center;
+		align-items: start;
+		z-index: 10000000000;
+		backdrop-filter: blur(15px);
+	}
+
+	@media (prefers-color-scheme: dark) {
+		aside.n7ien-warning {
+			background: rgba(0, 0, 0, 0.75);
+		}
+	}
+
+	aside.n7ien-warning .content {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		height: 100%;
+		width: 100%;
+		padding: 2rem;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+		text-align: center;
+	}
+
+	aside.n7ien-warning h1 {
+		line-height: 1.3;
+	}
+
+	aside.n7ien-warning .options {
+		margin-top: 1rem;
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 </style>
