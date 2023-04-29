@@ -158,7 +158,7 @@ export const actions: Actions = {
 				rent: Number(rent),
 				roomsCount: formDataRaw.get('roomsCount') ? Number(formData.roomsCount) : 0,
 				surface: Number(surface),
-				applied: false,
+				applied: user.admin, // TODO not sure about that, maybe add a checkbox? see #134
 				photos: {
 					createMany: {
 						data: files.map((file) => ({
