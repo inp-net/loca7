@@ -41,7 +41,9 @@
 
 	<section class="through-cas">
 		<p>Vous êtes étudiant à l'n7 ?</p>
-		<ButtonSecondary insideProse href="/login/cas" icon="lock">Se connecter avec le BDE</ButtonSecondary>
+		<ButtonSecondary insideProse href="/login/cas" icon="lock"
+			>Se connecter avec le BDE</ButtonSecondary
+		>
 	</section>
 
 	<form method="post">
@@ -94,6 +96,8 @@
 		display: flex;
 		align-items: center;
 		margin: 1.5rem 0;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 
 	form {
