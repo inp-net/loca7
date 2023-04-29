@@ -14,6 +14,7 @@
 	import type { PageData } from './$types';
 	import { tooltip } from '$lib/tooltip';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
+	import { CONTACT_EMAIL } from '$lib/constants';
 	export let data: PageData;
 </script>
 
@@ -109,6 +110,9 @@
 <slot />
 
 <footer>
+	<section class="help">
+		<ButtonSecondary icon="question" href="mailto:{CONTACT_EMAIL}">Aide</ButtonSecondary>
+	</section>
 	<div class="side-by-side">
 		<section class="about">
 			<LogoLoca7 />

@@ -7,6 +7,7 @@
 	import { browser } from '$app/environment';
 	import LogoLoca7 from './LogoLoca7.svelte';
 	import ButtonPrimary from './ButtonPrimary.svelte';
+	import { CONTACT_EMAIL } from './constants';
 
 	export let user: User | null = null;
 	export let noticeBarAbove: boolean = false;
@@ -171,6 +172,9 @@
 			<form method="post" action="/logout">
 				<ButtonSecondary submits icon="logout">Se déconnecter</ButtonSecondary>
 			</form>
+		</li>
+		<li>
+			<ButtonSecondary icon="question" href="mailto:{CONTACT_EMAIL}">Aide</ButtonSecondary>
 		</li>
 	</ul>
 </nav>
