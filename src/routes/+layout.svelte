@@ -6,7 +6,7 @@
 	import LogoLoca7 from '$lib/LogoLoca7.svelte';
 	import LogoNet7 from '$lib/LogoNet7.svelte';
 	import NavigationBar from '$lib/NavigationBar.svelte';
-	import { dismissedN7ienOnlyWarning } from '$lib/stores';
+	import { darkMode, dismissedN7ienOnlyWarning } from '$lib/stores';
 	import { closeToast, toasts } from '$lib/toasts';
 	import { dedent } from '$lib/utils';
 	import { fly } from 'svelte/transition';
@@ -15,7 +15,15 @@
 	import { tooltip } from '$lib/tooltip';
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import { CONTACT_EMAIL } from '$lib/constants';
+	import { onMount } from 'svelte';
 	export let data: PageData;
+
+	onMount(() => {
+		const html = document.querySelector('html')!;
+		darkMode.subscribe((value) => {
+			html.dataset.darkMode = JSON.stringify(value);
+		});
+	});
 </script>
 
 <svelte:head>
@@ -287,9 +295,12 @@
 	}
 
 	@media (prefers-color-scheme: dark) {
-		aside.n7ien-warning {
+		:global(html[data-dark-mode='null']) aside.n7ien-warning {
 			background: rgba(0, 0, 0, 0.75);
 		}
+	}
+	:global(html[data-dark-mode='true']) aside.n7ien-warning {
+		background: rgba(0, 0, 0, 0.75);
 	}
 
 	aside.n7ien-warning .content {

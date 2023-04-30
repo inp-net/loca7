@@ -1,10 +1,8 @@
-
-
-:root {
+html {
 	color-scheme: light dark;
 }
 
-:root {
+html {
 	--font-main: 'Space Grotesk', sans-serif;
 	--font-mono: 'Space Mono', monospace;
 	--border-width: 2px;
@@ -54,7 +52,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-	:root {
+	html[data-dark-mode=null] {
 		--fg: rgba(255, 255, 255, 1);
 		--muted: rgba(255, 255, 255, 0.75);
 		--bg-muted: rgba(255, 255, 255, 0.25);
@@ -68,6 +66,21 @@
 		--moss: rgb(7, 54, 22);
 		--sky: #0096d6;
 	}
+}
+
+html[data-dark-mode=true] {
+	--fg: rgba(255, 255, 255, 1);
+	--muted: rgba(255, 255, 255, 0.75);
+	--bg-muted: rgba(255, 255, 255, 0.25);
+	--bg: rgb(26, 28, 30);
+	--card-bg: #33373b;
+	--ice: rgb(28, 60, 75);
+	--blood: rgb(240, 50, 50);
+	--rose: rgb(36, 4, 4);
+	--cobalt: rgb(35, 173, 233);
+	--cactus: rgb(95, 228, 124);
+	--moss: rgb(7, 54, 22);
+	--sky: #0096d6;
 }
 
 .typo-title,
@@ -111,8 +124,8 @@ a {
 	color: unset;
 }
 
-p > a:not([class^='button']),
-dd > a,
+p>a:not([class^='button']),
+dd>a,
 a.in-body {
 	color: var(--sky);
 	text-decoration: underline;

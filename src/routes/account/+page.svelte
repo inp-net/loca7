@@ -9,6 +9,8 @@
 	import { page } from '$app/stores';
 	import { addToast, toasts } from '$lib/toasts';
 	import { onMount } from 'svelte';
+	import { darkMode } from '$lib/stores';
+	import InputCheckbox from '$lib/InputCheckbox.svelte';
 	export let data: PageData;
 	$: ({ user } = data);
 
@@ -122,6 +124,15 @@
 		</section>
 	</form>
 
+	<section class="theme">
+		<h2>Thème</h2>
+		<InputCheckbox
+			bind:value={$darkMode}
+			label="Thème sombre"
+			labelNull="Suivre le système"
+		/>
+	</section>
+
 	<form
 		action="?/deleteAccount"
 		method="post"
@@ -188,6 +199,10 @@
 		flex-direction: column;
 		justify-content: center;
 		gap: 1rem;
+	}
+
+	section.theme h2 {
+		margin-bottom: 1rem;
 	}
 
 	section.submit {
