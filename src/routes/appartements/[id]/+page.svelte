@@ -72,7 +72,6 @@
 </svelte:head>
 
 <main>
-
 	{#if reportSubmitted}
 		<section class="notice notice-report-submitted">
 			<span class="icon">
@@ -384,9 +383,11 @@
 			<ButtonSecondary icon="edit" href="/appartements/{appart.id}/modifier"
 				>Modifier</ButtonSecondary
 			>
-			<ButtonSecondary icon="delete" href="/appartements/{appart.id}/supprimer"
-				>Supprimer</ButtonSecondary
-			>
+			{#if appart?.archived || user?.admin}
+				<ButtonSecondary icon="delete" href="/appartements/{appart.id}/supprimer"
+					>Supprimer</ButtonSecondary
+				>
+			{/if}
 			{#if !appart.approved}
 				{#if user?.admin}
 					<ButtonSecondary
