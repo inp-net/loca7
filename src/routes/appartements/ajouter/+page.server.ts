@@ -164,7 +164,7 @@ export const actions: Actions = {
 			for (const admin of await prisma.user.findMany({ where: { admin: true } })) {
 				await sendMail({
 					to: admin.email,
-					subject: `Nouvelle annonce en attente`,
+					subject: `Nouvelle annonce de ${appartment.owner.firstName + ' ' + appartment.owner.lastName} en attente`,
 					template: 'appartment-to-validate',
 					data: {
 						userFullName: appartment.owner.firstName + ' ' + appartment.owner.lastName,
