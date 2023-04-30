@@ -205,3 +205,9 @@ export function sentenceJoin(items: string[]): string {
 	if (items.length === 1) return items[0];
 	return items.slice(0, -1).join(', ') + ' et ' + items[items.length - 1];
 }
+
+export function clamp(value: number, min: number, max: number): number {
+	if (value <= min) return min
+	if (value >= max) return max
+	return value
+}

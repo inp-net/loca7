@@ -1,13 +1,35 @@
 <script lang="ts">
+	import { clamp } from '$lib/utils';
 	import Icon from './Icon.svelte';
 
 	export let contain: boolean = false;
 	export let cover: boolean = false;
 	export let images: string[];
 	export let currentIndex: number = 0;
+
+	let touchStart: { x: number; y: number } | null = null;
+
+	function touchStartHandler(event: TouchEvent) {
+		if (event.changedTouches.length === 1) {
+			touchStart = { x: event.changedTouches[0].screenX, y: event.changedTouches[0].screenY };
+		}
+	}
+
+	function touchEndHandler(event: TouchEvent) {
+		if (!touchStart) return;
+		const movement = touchStart.x - event.changedTouches[0].screenX;
+		// threshold to prevent mis-swipes
+		if (Math.abs(movement) < 10) return;
+		currentIndex = clamp(currentIndex + Math.sign(movement), 0, images.length - 1);
+	}
 </script>
 
-<div class="carousel" class:single-image={images.length === 1}>
+<div
+	class="carousel"
+	class:single-image={images.length === 1}
+	on:touchstart={touchStartHandler}
+	on:touchend={touchEndHandler}
+>
 	<div class="image-gradient-overlay" />
 	<nav>
 		<button
