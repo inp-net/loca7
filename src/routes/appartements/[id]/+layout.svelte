@@ -13,9 +13,8 @@
 	<meta name="og:description" content={appartmentShortDescription(appartment)} />
 	<meta
 		name="og:image"
-		content={appartment.photos.length > 0
-			? photoURL(appartment.photos[0])
-			: '/missing-photo.png'}
+		content={'https://loca7.fr/' +
+			(appartment.photos.length > 0 ? photoURL(appartment.photos[0]) : '/missing-photo.png')}
 	/>
 </svelte:head>
 
