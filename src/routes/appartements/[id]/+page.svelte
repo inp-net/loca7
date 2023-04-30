@@ -38,6 +38,7 @@
 	import AppartmentEditItem from '$lib/AppartmentEditItem.svelte';
 	import type { PublicTransportStation, User } from '@prisma/client';
 	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
+	import ButtonFloating from '$lib/ButtonFloating.svelte';
 
 	export let data: LayoutData;
 	const { user, appartment: appart } = data;
@@ -487,7 +488,7 @@
 	{/if}
 
 	<section class="go-back">
-		<ButtonSecondary icon="back" href="/">Accueil</ButtonSecondary>
+		<ButtonFloating icon="back" href="/">Accueil</ButtonFloating>
 	</section>
 
 	<section class="meta">
@@ -517,6 +518,10 @@
 	section.go-back {
 		justify-content: center;
 		flex-direction: row;
+		position: fixed;
+		inset: auto auto 2rem 2rem;
+		margin-bottom: 0;
+		z-index: 10000;
 	}
 
 	.carousel {
