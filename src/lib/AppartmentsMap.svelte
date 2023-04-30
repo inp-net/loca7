@@ -92,7 +92,8 @@
 	}
 
 	onMount(async () => {
-		map = L.map('map', { gestureHandling: !scrollIsZoom }).setView(locationTuple(center), 15);
+		map = L.map('map', { gestureHandling: !scrollIsZoom, zoomControl: false }).setView(locationTuple(center), 15);
+		map.addControl(L.control.zoom({position: "bottomright"}))
 		map.on('zoomend', () => {
 			document.querySelectorAll('.public-transport-marker-wrapper').forEach((marker) => {
 				marker.style.opacity = map.getZoom() > 15 ? '1' : '0';
@@ -230,6 +231,20 @@
 		font-size: 15px;
 	}
 
+	:global(.leaflet-container [class^='leaflet-control-zoom']) {
+		background: var(--bg);
+	}
+	:global(.leaflet-container [class^='leaflet-control-zoom'] span) {
+		color: var(--fg);
+	}
+	:global(.leaflet-container [class^='leaflet-control-zoom']:hover),
+	:global(.leaflet-container [class^='leaflet-control-zoom']:focus) {
+		background: var(--fg);
+	}
+	:global(.leaflet-container [class^='leaflet-control-zoom']:hover span),
+	:global(.leaflet-container [class^='leaflet-control-zoom']:focus span) {
+		color: var(--bg);
+	}
 	:global(.leaflet-container .leaflet-control-attribution) {
 		background: var(--bg);
 		color: var(--fg);
