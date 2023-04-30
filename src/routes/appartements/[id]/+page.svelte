@@ -72,9 +72,6 @@
 </svelte:head>
 
 <main>
-	<section class="go-back">
-		<ButtonPrimary href="/">Accueil</ButtonPrimary>
-	</section>
 
 	{#if reportSubmitted}
 		<section class="notice notice-report-submitted">
@@ -487,6 +484,10 @@
 			/>
 		</section>
 	{/if}
+
+	<section class="go-back">
+		<ButtonSecondary icon="back" href="/">Accueil</ButtonSecondary>
+	</section>
 
 	<section class="meta">
 		<p class="typo-details">
