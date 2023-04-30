@@ -25,6 +25,8 @@
 	import type { PageData } from './$types';
 	import AppartmentAdminItem from '$lib/AppartmentAdminItem.svelte';
 	import { page } from '$app/stores';
+	import InputSearch from '$lib/InputSearch.svelte';
+	import Fuse from 'fuse.js';
 
 	export let data: PageData;
 
@@ -59,8 +61,28 @@
 		);
 	};
 
+	$: searcher = new Fuse(appartments, {
+		keys: [
+			'description',
+			'address',
+			'number',
+			'id',
+			'owner.name',
+			'owner.email',
+			'owner.phone'
+		],
+		threshold: 0.2,
+		shouldSort: false,
+		distance: 3500,
+		useExtendedSearch: true
+	});
+
 	$searchResults = [...appartments];
-	$: $searchResults = appartments
+	$: $searchResults = (
+		$searchCriteria.description
+			? searcher.search($searchCriteria.description).map((r) => r.item)
+			: appartments
+	)
 		.filter(
 			(appartment) =>
 				aspectCriterias(
@@ -143,6 +165,11 @@
 							bind:value={$searchCriteria.maximumRent}
 							closeKeyboardOnEnter
 						/>
+					</InputField>
+				</div>
+				<div class="text-search">
+					<InputField label="Description, adresse, propriétaire">
+						<InputSearch bind:search={$searchCriteria.description} />
 					</InputField>
 				</div>
 				<InputField label="Type de logement">
@@ -309,6 +336,7 @@
 		justify-content: center;
 		margin-top: 2rem;
 		gap: 1rem;
+		flex-wrap: wrap;
 	}
 
 	.sort {
@@ -363,6 +391,15 @@
 		z-index: 100000;
 		position: fixed;
 		bottom: 2rem;
+	}
+
+	.text-search {
+		width: 100%;
+	}
+
+	/* FIXME this is a workaround because text search glitches in map view (map markers flicker after searching with this) */
+	main[data-view='map'] .text-search {
+		display: none;
 	}
 
 	@media (min-width: 1200px) {
