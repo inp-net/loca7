@@ -5,23 +5,11 @@
 	export let id: string = '';
 	export let icon: IconName;
 	export let href: string = '';
-
-	let hoverOrFocus = false;
 </script>
 
-<svelte:element
-	this={href ? 'a' : 'button'}
-	class="button-floating"
-	{id}
-	{href}
-	on:focus={() => (hoverOrFocus = true)}
-	on:blur={() => (hoverOrFocus = false)}
-	on:mouseenter={() => (hoverOrFocus = true)}
-	on:mouseleave={() => (hoverOrFocus = false)}
-	on:click
->
+<svelte:element this={href ? 'a' : 'button'} class="button-floating" {id} {href} on:click>
 	<div class="icon">
-		<Icon name={icon} color={hoverOrFocus ? 'bg' : 'fg'} />
+		<Icon name={icon} />
 	</div>
 	<slot />
 </svelte:element>
@@ -30,6 +18,7 @@
 	.button-floating {
 		background: var(--bg);
 		color: var(--fg);
+		--icon-color: var(--fg);
 		border-color: transparent;
 		box-shadow: -0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.25);
 		font-size: 1rem;
@@ -52,6 +41,7 @@
 	.button-floating:focus {
 		background: var(--fg);
 		color: var(--bg);
+		--icon-color: var(--bg);
 	}
 
 	.icon {

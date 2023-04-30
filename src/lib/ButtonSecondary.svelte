@@ -10,8 +10,6 @@
 	export let submits = false;
 	export let download: string | undefined = undefined;
 	export let insideProse = false;
-
-	let hoverOrFocus = false;
 </script>
 
 <svelte:element
@@ -24,15 +22,11 @@
 	{download}
 	{formaction}
 	{id}
-	on:focus={() => (hoverOrFocus = true)}
-	on:blur={() => (hoverOrFocus = false)}
-	on:mouseenter={() => (hoverOrFocus = true)}
-	on:mouseleave={() => (hoverOrFocus = false)}
 	on:click
 >
 	{#if icon}
 		<div class="icon">
-			<Icon name={icon} color={dangerous ? '#fff' : hoverOrFocus ? 'bg' : 'fg'} />
+			<Icon name={icon} />
 		</div>
 	{/if}
 	<slot />
@@ -60,12 +54,14 @@
 	.button-secondary:focus {
 		background: var(--fg);
 		color: var(--bg);
+		--icon-color: var(--bg);
 	}
 
 	.button-secondary.dangerous {
 		border-color: var(--mushroom);
 		background-color: var(--mushroom);
 		color: #fff;
+		--icon-color: #fff;
 	}
 
 	.button-secondary.dangerous:hover,

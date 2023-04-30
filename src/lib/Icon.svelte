@@ -5,7 +5,12 @@
 	export let strokeWidth: string = '5';
 	export let color = 'icon-color';
 	export let flip = false;
-	let _color = color.startsWith('#') ? color : `var(--${color}, var(--fg))`;
+	let _color =
+		color === 'currentColor'
+			? color
+			: color.startsWith('#')
+			? color
+			: `var(--${color}, var(--fg))`;
 </script>
 
 <!-- generate cases -->
