@@ -11,9 +11,12 @@
 	<meta name="og:title" content="Loca7: {appartmentTitle(appartment)}" />
 	<meta name="description" content={appartmentShortDescription(appartment)} />
 	<meta name="og:description" content={appartmentShortDescription(appartment)} />
-	{#if appartment.photos.length > 0}
-		<meta name="og:image" content={photoURL(appartment.photos[0])} />
-	{/if}
+	<meta
+		name="og:image"
+		content={appartment.photos.length > 0
+			? photoURL(appartment.photos[0])
+			: '/missing-photo.png'}
+	/>
 </svelte:head>
 
 <slot />
