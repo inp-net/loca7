@@ -4,7 +4,7 @@ workdir /app
 
 copy package.json ./
 copy .npmrc ./
-run npm install
+run npm install --loglevel verbose
 
 copy . .
 run chmod +x entrypoint.sh
