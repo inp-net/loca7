@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			user,
 			`token ${params.token} is invalid (expired or not found)`
 		);
-		throw redirect(302, '/reset-password#invalidToken');
+		throw redirect(302, '/reset-password#invalid-token');
 	}
 };
 
@@ -48,7 +48,7 @@ export const actions: Actions = {
 				user,
 				`token ${params.token} is invalid (expired or not found)`
 			);
-			throw redirect(302, '/reset-password#invalidToken');
+			throw redirect(302, '/reset-password#invalid-token');
 		}
 
 		// Delete all password resets for this user
@@ -108,6 +108,6 @@ export const actions: Actions = {
 			'password ' + creatingPassword ? 'created' : 'changed'
 		);
 
-		throw redirect(302, '/login#passwordResetSuccessful');
+		throw redirect(302, '/login#password-reset-successful');
 	}
 };

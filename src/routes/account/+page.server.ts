@@ -106,7 +106,7 @@ export const actions: Actions = {
 			switch (error.message) {
 				case 'AUTH_INVALID_PASSWORD':
 					await log.error('change_password', user, 'invalid credentials');
-					throw redirect(302, '/account' + url.search + '#invalidCredentials');
+					throw redirect(302, '/account' + url.search + '#invalid-credentials');
 				default:
 					await log.fatal('change_password', user, 'unknown error', error);
 					throw error;
@@ -155,7 +155,7 @@ export const actions: Actions = {
 						await log.error('delete_account', user, 'invalid credentials');
 						throw redirect(
 							302,
-							'/account' + url.search + '#invalidCredentialsDeleteAccount'
+							'/account' + url.search + '#invalid-credentials-delete-account'
 						);
 					default:
 						await log.fatal('delete_account', user, 'unknown error', error);

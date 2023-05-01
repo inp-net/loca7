@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 			user,
 			`token ${params.token} is invalid (expired or not found)`
 		);
-		throw redirect(302, '/validate-email' + url.search + '#invalidToken');
+		throw redirect(302, '/validate-email' + url.search + '#invalid-token');
 	}
 
 	// Delete this validation as well as expired validations

@@ -36,6 +36,6 @@ export const actions: Actions = {
 
 		await log.info('report_appartment', user, { reason, message, appartmentId });
 
-		throw redirect(301, `/appartements/${appartmentId}#reportSubmitted`);
+		throw redirect(301, `/appartements/${appartmentId}#report-submitted`);
 	}
 };

@@ -42,7 +42,7 @@ export const actions: Actions = {
 						email,
 						`invalid credentials (lucia says ${err.message}) `
 					);
-					throw redirect(302, '/login' + url.search + '#invalidCredentials');
+					throw redirect(302, '/login' + url.search + '#invalid-credentials');
 
 				default:
 					await log.fatal('login', email, `unknown error (lucia says ${err.message}) `);

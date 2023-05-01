@@ -65,7 +65,7 @@
 	}
 
 	$: liked = appart.likes.some((like) => like.by.id === user?.id);
-	let reportSubmitted = $page.url.hash === '#reportSubmitted';
+	let reportSubmitted = $page.url.hash === '#report-submitted';
 	let hasPendingModifications = (appart?.history ?? []).filter((h) => !h.applied).length > 0;
 </script>
 

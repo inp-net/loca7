@@ -15,9 +15,9 @@
 	$: ({ user } = data);
 
 	let oldPassword: string = '';
-	let oldPasswordIsInvalid: boolean = $page.url.hash === '#invalidCredentials';
+	let oldPasswordIsInvalid: boolean = $page.url.hash === '#invalid-credentials';
 	let wrongCredentialsWhenConfirmingAccountDeletion =
-		$page.url.hash === '#invalidCredentialsDeleteAccount';
+		$page.url.hash === '#invalid-credentials-delete-account';
 	let newPassword: string = '';
 	let confirmingDeletion = false;
 
@@ -133,7 +133,7 @@
 		action="?/deleteAccount"
 		method="post"
 		class="delete-account"
-		id="invalidCredentialsDeleteAccount"
+		id="invalid-credentials-delete-account"
 	>
 		<h2>Supprimer mon compte</h2>
 		<p class="explain typo-paragraph">

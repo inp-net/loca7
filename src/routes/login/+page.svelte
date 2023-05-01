@@ -12,7 +12,7 @@
 	let email: string = '';
 	let password: string = '';
 
-	let passwordResetSuccessful: boolean = $page.url.hash === '#passwordResetSuccessful';
+	let passwordResetSuccessful: boolean = $page.url.hash === '#password-reset-successful';
 </script>
 
 <svelte:head>
@@ -53,7 +53,7 @@
 
 		<InputPassword required label="Mot de passe" bind:value={password} name="password" />
 
-		{#if $page.url.hash === '#invalidCredentials'}
+		{#if $page.url.hash === '#invalid-credentials'}
 			<p class="error">Coordonnées incorrectes.</p>
 		{/if}
 

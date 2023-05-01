@@ -17,7 +17,7 @@
 <main>
 	<h1>Votre adresse e-mail doit être vérifiée.</h1>
 
-	{#if $page.url.hash === '#invalidToken'}
+	{#if $page.url.hash === '#invalid-token'}
 		<p class="error">Le lien de vérification est invalide ou a expiré.</p>
 	{/if}
 

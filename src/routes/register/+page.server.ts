@@ -71,7 +71,7 @@ export const actions: Actions = {
 					);
 					throw redirect(
 						302,
-						'/register' + url.search + '#duplicateEmail=' + encodeURIComponent(email)
+						'/register' + url.search + '#duplicate-email=' + encodeURIComponent(email)
 					);
 				default:
 					await log.fatal(

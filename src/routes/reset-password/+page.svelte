@@ -23,9 +23,9 @@
 <main>
 	<h1>Réinitialisez votre mot de passe.</h1>
 
-	{#if $page.url.hash === '#invalidToken'}
+	{#if $page.url.hash === '#invalid-token'}
 		<p class="error">Le lien de réinitialisation a expiré ou est invalide.</p>
-	{:else if $page.url.hash === '#noEmail'}
+	{:else if $page.url.hash === '#no-email'}
 		<p class="error">Cette addresse e-mail n'existe pas</p>
 	{/if}
 

@@ -12,8 +12,8 @@
 	import escapeRegex from 'escape-string-regexp';
 
 	export let data: PageData;
-	let duplicateEmail: string = $page.url.hash.startsWith('#duplicateEmail')
-		? decodeURIComponent($page.url.hash.replace('#duplicateEmail=', ''))
+	let duplicateEmail: string = $page.url.hash.startsWith('#duplicate-email')
+		? decodeURIComponent($page.url.hash.replace('#duplicate-email=', ''))
 		: '';
 
 	let user: {
