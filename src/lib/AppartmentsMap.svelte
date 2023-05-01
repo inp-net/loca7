@@ -7,7 +7,7 @@
 	import { ENSEEIHT, readableOn } from './utils';
 	import ButtonCircle from './ButtonCircle.svelte';
 	import type { Appartment, Photo } from '@prisma/client';
-	export let appartments: (Appartment & { photos: Photo })[];
+	export let appartments: (Appartment & { photos: Photo[] })[];
 
 	export let center: GeographicPoint = ENSEEIHT;
 	export let scrollIsZoom: boolean = false;
@@ -92,8 +92,11 @@
 	}
 
 	onMount(async () => {
-		map = L.map('map', { gestureHandling: !scrollIsZoom, zoomControl: false }).setView(locationTuple(center), 15);
-		map.addControl(L.control.zoom({position: "bottomright"}))
+		map = L.map('map', { gestureHandling: !scrollIsZoom, zoomControl: false }).setView(
+			locationTuple(center),
+			15
+		);
+		map.addControl(L.control.zoom({ position: 'bottomright' }));
 		map.on('zoomend', () => {
 			document.querySelectorAll('.public-transport-marker-wrapper').forEach((marker) => {
 				marker.style.opacity = map.getZoom() > 15 ? '1' : '0';

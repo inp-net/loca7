@@ -52,7 +52,7 @@ html {
 }
 
 @media (prefers-color-scheme: dark) {
-	html[data-dark-mode=null] {
+	html[data-dark-mode='null'] {
 		--fg: rgba(255, 255, 255, 1);
 		--muted: rgba(255, 255, 255, 0.75);
 		--bg-muted: rgba(255, 255, 255, 0.25);
@@ -68,7 +68,7 @@ html {
 	}
 }
 
-html[data-dark-mode=true] {
+html[data-dark-mode='true'] {
 	--fg: rgba(255, 255, 255, 1);
 	--muted: rgba(255, 255, 255, 0.75);
 	--bg-muted: rgba(255, 255, 255, 0.25);
@@ -124,8 +124,8 @@ a {
 	color: unset;
 }
 
-p>a:not([class^='button']),
-dd>a,
+p > a:not([class^='button']),
+dd > a,
 a.in-body {
 	color: var(--sky);
 	text-decoration: underline;

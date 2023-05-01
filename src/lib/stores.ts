@@ -42,4 +42,4 @@ export const dismissedN7ienOnlyWarning: Writable<boolean> = persisted(
 	false
 );
 
-export const darkMode: Writable<boolean | null> = persisted('darkMode', null)
+export const darkMode: Writable<boolean | null> = persisted('darkMode', null);

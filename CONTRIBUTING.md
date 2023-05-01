@@ -33,7 +33,7 @@ DATABASE_URL=mysql://root:root@localhost:3306/loca7 # or whatever your connectio
 # note that if you change any of the MAIL_* values, you have to change them in mailhog/
 MAIL_HOST=127.0.0.1
 MAIL_PORT=1025
-MAIL_USER=test 
+MAIL_USER=test
 MAIL_PASS=test
 PUBLIC_CAS_URL=https://cas.dev.inpt.fr
 OPENROUTESERVICE_KEY=... # see https://openrouteservice.org -- the API is completely free
@@ -90,4 +90,3 @@ pnpm mailhog &
 ```bash
 pnpm dev
 ```
-
