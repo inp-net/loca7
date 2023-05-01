@@ -33,6 +33,7 @@ model User {
   Report           Report[]
   PasswordReset    PasswordReset[]
   Log              Log[]
+  Like             Like[]
 
   @@map("user")
 }
@@ -78,6 +79,17 @@ model Key {
   @@map("key")
 }
 
+model Like {
+  id           String     @id @unique @default(cuid())
+  createdAt    DateTime   @default(now())
+  by           User       @relation(fields: [userId], references: [id])
+  of           Appartment @relation(fields: [appartmentId], references: [id])
+  userId       String
+  appartmentId String
+
+  @@unique([userId, appartmentId], name: "oneLikePerUser")
+}
+
 model Appartment {
   id                  String                   @id @unique @default(cuid())
   number              Int                      @unique @default(autoincrement())
@@ -111,6 +123,7 @@ model Appartment {
   archived            Boolean                  @default(false)
   history             AppartmentEdit[]
   importedFromOldSite Boolean                  @default(false)
+  likes               Like[]
 }
 
 model Photo {

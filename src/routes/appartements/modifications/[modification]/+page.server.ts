@@ -8,6 +8,11 @@ import type { Actions, PageServerLoad } from './$types';
 import { writePhotosToDisk, deletePhotosFromDisk, copyPhotos } from '$lib/server/photos';
 import { prisma } from '$lib/server/prisma';
 import { log } from '$lib/server/logging';
+import { aA } from 'vitest/dist/types-71ccd11d';
+import { sendMail } from '$lib/server/mail';
+import { appartmentTitle } from '$lib/types';
+import { EDITABLE_FIELDS } from '$lib/appartmentDiff';
+import * as appartmentDiff from '$lib/appartmentDiff';
 
 export const load: PageServerLoad = async ({ params, locals, url }) => {
 	const { user, session } = await locals.validateUser();
@@ -54,6 +59,18 @@ export const actions: Actions = {
 		});
 
 		if (edit === null) return error(404, { message: 'Modification inexistante' });
+
+		const oldAppartment = await prisma.appartment.findUnique({
+			where: {
+				id: edit.appartment.id
+			},
+			include: {
+				owner: true,
+				photos: true
+			}
+		});
+
+		guards.appartmentExists(oldAppartment);
 
 		await deletePhotosFromDisk(edit.appartment.photos);
 
@@ -125,7 +142,12 @@ export const actions: Actions = {
 				}
 			},
 			include: {
-				photos: true
+				photos: true,
+				likes: {
+					include: {
+						by: true
+					}
+				}
 			}
 		});
 
@@ -140,6 +162,25 @@ export const actions: Actions = {
 		});
 
 		await log.info('approve_appartment_edit', user, { newAppartment, edit });
+
+		await sendMail({
+			to: newAppartment.likes.map((like) => like.by.email),
+			subject: `Une annonce vous intéréssant a été modifiée`,
+			template: 'liked-appartment-was-edited',
+			data: {
+				appartmentTitle: appartmentTitle(oldAppartment),
+				diff: undefined,
+				edits: (Object.keys(EDITABLE_FIELDS) as (keyof typeof EDITABLE_FIELDS)[])
+					.filter((f) => appartmentDiff.modified(f, oldAppartment, edit))
+					.map((f) => ({
+						diff: appartmentDiff.modification(f, oldAppartment, edit),
+						label: EDITABLE_FIELDS[f]
+					})),
+				fullname: user.firstName + ' ' + user.lastName,
+				label: undefined,
+				number: newAppartment.number
+			}
+		});
 
 		throw redirect(302, `/appartements/${newAppartment.id}`);
 	},

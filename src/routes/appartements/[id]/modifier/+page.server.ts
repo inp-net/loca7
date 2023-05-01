@@ -1,5 +1,5 @@
 import { guards } from '$lib/server/lucia';
-import { createGhostEmail } from '$lib/types';
+import { appartmentTitle, createGhostEmail } from '$lib/types';
 import { prisma } from '$lib/server/prisma';
 import { ternaryStateCheckboxToBoolean } from '$lib/types';
 import type { Actions, PageServerLoad } from './$types';
@@ -49,7 +49,8 @@ export const actions: Actions = {
 			where: { id: params.id },
 			include: {
 				owner: true,
-				photos: true
+				photos: true,
+				likes: { include: { by: true } }
 			}
 		});
 		guards.appartmentAccessible(user, appartment);
@@ -189,29 +190,45 @@ export const actions: Actions = {
 		await copyPhotos(edit.photos, appartment.photos);
 		await writePhotosToDisk(edit.photos, files);
 
+		const diffs = (Object.keys(EDITABLE_FIELDS) as (keyof typeof EDITABLE_FIELDS)[])
+			.filter((f) => appartmentDiff.modified(f, appartment, edit))
+			.map((f) => ({
+				diff: appartmentDiff.modification(f, appartment, edit),
+				label: EDITABLE_FIELDS[f]
+			}));
+
 		if (!edit.applied) {
-			for (const admin of await prisma.user.findMany({ where: { admin: true } })) {
-				await sendMail({
-					to: admin.email,
-					subject: `Modification de l'annonce #${appartment.number} en attente`,
-					template: 'appartment-edit-to-validate',
-					data: {
-						userFullName: appartment.owner.firstName + ' ' + appartment.owner.lastName,
-						userEmail: appartment.owner.email,
-						number: appartment.number,
-						appartmentId: appartment.id,
-						editId: edit.id,
-						key: undefined /* key & content are inside of the #each edits, but this is to satisfy the (wrongly) generated type */,
-						content: undefined,
-						edits: (Object.keys(EDITABLE_FIELDS) as (keyof typeof EDITABLE_FIELDS)[])
-							.filter((f) => appartmentDiff.modified(f, appartment, edit))
-							.map((f) => ({
-								content: appartmentDiff.modification(f, appartment, edit),
-								key: EDITABLE_FIELDS[f]
-							}))
-					}
-				});
-			}
+			await sendMail({
+				to: (
+					await prisma.user.findMany({ where: { admin: true } })
+				).map((admin) => admin.email),
+				subject: `Modification de l'annonce #${appartment.number} en attente`,
+				template: 'appartment-edit-to-validate',
+				data: {
+					userFullName: appartment.owner.firstName + ' ' + appartment.owner.lastName,
+					userEmail: appartment.owner.email,
+					number: appartment.number,
+					appartmentId: appartment.id,
+					editId: edit.id,
+					edits: diffs,
+					label: undefined /* key & content are inside of the #each edits, but this is to satisfy the (wrongly) generated type */,
+					diff: undefined
+				}
+			});
+		} else {
+			await sendMail({
+				to: appartment.likes.map((like) => like.by.email),
+				subject: `Une annonce vous intéréssant a été modifiée`,
+				template: 'liked-appartment-was-edited',
+				data: {
+					appartmentTitle: appartmentTitle(appartment),
+					diff: undefined,
+					edits: diffs.filter((diff) => diff.label.toLowerCase() !== 'photos'),
+					fullname: user.firstName + ' ' + user.lastName,
+					label: undefined,
+					number: appartment.number
+				}
+			});
 		}
 
 		throw redirect(

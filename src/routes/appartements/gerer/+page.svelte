@@ -4,7 +4,6 @@
 	import CardAppartment from '$lib/CardAppartment.svelte';
 	import type { Appartment } from '@prisma/client';
 	import type { PageData } from './$types';
-	import { boolean } from 'zod';
 	import InputSelectOne from '$lib/InputSelectOne.svelte';
 
 	export let data: PageData;

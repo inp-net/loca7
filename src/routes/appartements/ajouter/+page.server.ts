@@ -161,33 +161,35 @@ export const actions: Actions = {
 				include: { photos: true, owner: true, travelTimeToN7: true }
 			});
 			await writePhotosToDisk(appartment.photos, files);
-			for (const admin of await prisma.user.findMany({ where: { admin: true } })) {
-				await sendMail({
-					to: admin.email,
-					subject: `Nouvelle annonce de ${appartment.owner.firstName + ' ' + appartment.owner.lastName} en attente`,
-					template: 'appartment-to-validate',
-					data: {
-						userFullName: appartment.owner.firstName + ' ' + appartment.owner.lastName,
-						userEmail: appartment.owner.email,
-						appartmentId: appartment.id,
-						appartment: {
-							...appartment,
-							availableAt: new Intl.DateTimeFormat('fr-FR').format(
-								appartment.availableAt
-							),
-							displayKind: DISPLAY_APPARTMENT_KIND[appartment.kind],
-							distance:
-								appartment.longitude && appartment.latitude
-									? distanceBetween(appartment, ENSEEIHT)
-									: '?',
-							aspectsLine: Object.entries(DISPLAY_ASPECT_FIELDS)
-								.filter(([key, display]) => appartment[key])
-								.map(([key, display]) => display)
-								.join(', ')
-						}
+			await sendMail({
+				to: (
+					await prisma.user.findMany({ where: { admin: true } })
+				).map((admin) => admin.email),
+				subject: `Nouvelle annonce de ${
+					appartment.owner.firstName + ' ' + appartment.owner.lastName
+				} en attente`,
+				template: 'appartment-to-validate',
+				data: {
+					userFullName: appartment.owner.firstName + ' ' + appartment.owner.lastName,
+					userEmail: appartment.owner.email,
+					appartmentId: appartment.id,
+					appartment: {
+						...appartment,
+						availableAt: new Intl.DateTimeFormat('fr-FR').format(
+							appartment.availableAt
+						),
+						displayKind: DISPLAY_APPARTMENT_KIND[appartment.kind],
+						distance:
+							appartment.longitude && appartment.latitude
+								? distanceBetween(appartment, ENSEEIHT)
+								: '?',
+						aspectsLine: Object.entries(DISPLAY_ASPECT_FIELDS)
+							.filter(([key, display]) => appartment[key])
+							.map(([key, display]) => display)
+							.join(', ')
 					}
-				});
-			}
+				}
+			});
 			await log.info('submit_appartment', user, { input: appartInput, created: appartment });
 		} catch (err) {
 			await log.fatal(

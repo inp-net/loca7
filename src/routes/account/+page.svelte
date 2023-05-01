@@ -126,11 +126,7 @@
 
 	<section class="theme">
 		<h2>Thème</h2>
-		<InputCheckbox
-			bind:value={$darkMode}
-			label="Thème sombre"
-			labelNull="Suivre le système"
-		/>
+		<InputCheckbox bind:value={$darkMode} label="Thème sombre" labelNull="Suivre le système" />
 	</section>
 
 	<form

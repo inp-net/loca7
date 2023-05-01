@@ -64,6 +64,7 @@
 		};
 	}
 
+	$: liked = appart.likes.some((like) => like.by.id === user?.id);
 	let reportSubmitted = $page.url.hash === '#reportSubmitted';
 	let hasPendingModifications = (appart?.history ?? []).filter((h) => !h.applied).length > 0;
 </script>
@@ -252,6 +253,29 @@
 						{/if}
 					</p>
 				</div>
+				{#if appart.likes.length > 0 || liked}
+					<div class="row">
+						<span class="icon">
+							<Icon name="heart" />
+						</span>
+						<p class="liked">
+							{#if liked}
+								{#if appart.likes.length == 2}
+									Une autre personne est intéréssée par cette annonce
+								{:else if appart.likes.length > 2}
+									{appart.likes.length - 1} autres personnes sont intéréssées par cette
+									annonce
+								{:else}
+									Vous êtes la seule personne intéréssée par cette annonce
+								{/if}
+							{:else if appart.likes.length === 1}
+								Une personne est intéréssée par cette annonce
+							{:else}
+								{appart.likes.length} personnes sont intéréssées par cette annonce
+							{/if}
+						</p>
+					</div>
+				{/if}
 			</section>
 			<section class="aspects">
 				<!-- <h2>Caractéristiques</h2> -->
@@ -380,6 +404,33 @@
 	<hr />
 
 	<section class="actions">
+		{#if user && appart.owner.id !== user?.id}
+			<div
+				class="tooltip-holder"
+				use:tooltip={liked
+					? 'Ne plus être notifié lors de changements sur cette annonce'
+					: 'Être notifié lorsque cette annonce change'}
+			>
+				<ButtonSecondary
+					on:click={async () => {
+						await fetch(
+							`/appartements/${appart.id}/` + (liked ? 'supprimer-like' : 'liker'),
+							{ method: 'POST' }
+						);
+						if (liked) {
+							appart.likes = appart.likes.filter((like) => like.by.id !== user?.id);
+						} else {
+							appart.likes = [
+								...appart.likes,
+								{ by: user, of: appart, id: null, createdAt: null }
+							];
+						}
+					}}
+					icon={liked ? 'heart-filled' : 'heart'}
+					>{liked ? 'Ne plus suivre' : 'Suivre'}</ButtonSecondary
+				>
+			</div>
+		{/if}
 		{#if user?.admin || appart.owner.id === user?.id}
 			<ButtonSecondary icon="edit" href="/appartements/{appart.id}/modifier"
 				>Modifier</ButtonSecondary
@@ -389,19 +440,18 @@
 					>Supprimer</ButtonSecondary
 				>
 			{/if}
-			{#if !appart.approved}
-				{#if user?.admin}
-					<ButtonSecondary
-						icon="checkmark"
-						on:click={async () => {
-							await fetch(`/appartements/${appart.id}/approuver`, {
-								method: 'post'
-							});
-							appart.approved = true;
-						}}>Approuver</ButtonSecondary
-					>
-				{/if}
-			{:else if appart.archived}
+			{#if !appart.approved && user?.admin}
+				<ButtonSecondary
+					icon="checkmark"
+					on:click={async () => {
+						await fetch(`/appartements/${appart.id}/approuver`, {
+							method: 'post'
+						});
+						appart.approved = true;
+					}}>Approuver</ButtonSecondary
+				>
+			{/if}
+			{#if appart.archived}
 				<ButtonSecondary
 					icon="eye-open"
 					on:click={async () => {

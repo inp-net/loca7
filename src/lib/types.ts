@@ -5,6 +5,7 @@ import { lowerFirstChar, sentenceJoin } from './utils';
 import slugify from 'slugify';
 import { v4 as uuid } from 'uuid';
 import Handlebars from 'handlebars';
+import type { Like } from '@prisma/client';
 
 export type WithUndefinableProperties<T> = {
 	[P in keyof T]: T[P] | undefined;

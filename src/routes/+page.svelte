@@ -43,8 +43,8 @@
 		}
 	});
 
-	let appartments: Appartment[] = [];
-	$: ({ appartments } = data);
+	let appartments: typeof data.appartments;
+	({ appartments } = data);
 
 	const aspectCriteria = (aspectName: keyof typeof $searchCriteria, appartment: Appartment) =>
 		$searchCriteria[aspectName] === null

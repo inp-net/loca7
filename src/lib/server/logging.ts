@@ -25,6 +25,8 @@ export type LogAction =
 	| 'delete_appartment_edit'
 	| 'delete_appartment_report'
 	| 'generate_travel_times'
+	| 'like_appartment'
+	| 'unlike_appartment'
 	| 'misc';
 export const LOG_LEVELS = ['trace', 'info', 'warn', 'error', 'fatal'] as const;
 export type LogLevel = (typeof LOG_LEVELS)[number];

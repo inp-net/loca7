@@ -1,8 +1,11 @@
 import { writable, type Writable } from 'svelte/store';
-import type { Appartment, SearchCriteria } from './types';
+import type { SearchCriteria } from './types';
 import { persisted } from 'svelte-local-storage-store';
+import type { Appartment, Like, Photo, User } from '@prisma/client';
 
-export const searchResults: Writable<Appartment[]> = writable([]);
+export const searchResults: Writable<
+	(Appartment & { owner: User; likes: Like[]; photos: Photo[] })[]
+> = writable([]);
 export const searchCriteria: Writable<SearchCriteria> = persisted('searchCriteria', {
 	minimumSurface: null,
 	bicycleParking: null,

@@ -1,16 +1,13 @@
 <mj-section>
 	<mj-column>
-		<mj-text mj-class="title">Nouvelle modification à valider</mj-text>
+		<mj-text mj-class="title"> {{fullname}}, une annonce vous intéréssant a été modifiée. </mj-text>
 	</mj-column>
 </mj-section>
 
 <mj-section>
 	<mj-column>
 		<mj-text align="center">
-			{{userFullName}} ({{userEmail}}) a fait une demande de modification de l'<a
-				href="https://loca7.fr/appartements/{{number}}"
-				>appartement #{{number}}</a
-			>. Voici ce qui est modifié:
+			L'annonce #{{number}}, {{appartmentTitle}}, a été modifiée. Voici les changements effectués:
 		</mj-text>
 	</mj-column>
 </mj-section>
@@ -28,9 +25,7 @@
 
 <mj-section>
 	<mj-column>
-		<mj-button href="https://loca7.fr/appartements/{{appartmentId}}#edit-{{editId}}"
-			>Voir la modification</mj-button
-		>
+		<mj-button href="https://loca7.fr/appartements/{{ number }}">Voir l'annonce</mj-button>
 	</mj-column>
 </mj-section>
 

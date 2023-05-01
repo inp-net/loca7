@@ -21,6 +21,11 @@ export const load: LayoutServerLoad = async ({ params, locals }) => {
 			travelTimeToN7: true,
 			photos: true,
 			reports: user?.admin,
+			likes: {
+				include: {
+					by: true
+				}
+			},
 			history:
 				user?.admin || user?.id === appart?.ownerId
 					? {

@@ -22,8 +22,8 @@ export type EmailTemplateNameAndData =
 				userEmail: any;
 				number: any;
 				edits: any;
-				key: any;
-				content: any;
+				label: any;
+				diff: any;
 				appartmentId: any;
 				editId: any;
 			};
@@ -33,6 +33,29 @@ export type EmailTemplateNameAndData =
 			data: { userFullName: any; userEmail: any; appartment: any; appartmentId: any };
 	  }
 	| { template: 'email-changed'; data: { fullname: any; newEmail: any } }
+	| {
+			template: 'liked-appartment-was-archived';
+			data: { fullname: any; appartmentTitle: any; address: any; description: any };
+	  }
+	| {
+			template: 'liked-appartment-was-deleted';
+			data: { fullname: any; appartmentTitle: any; address: any; description: any };
+	  }
+	| {
+			template: 'liked-appartment-was-edited';
+			data: {
+				fullname: any;
+				number: any;
+				appartmentTitle: any;
+				edits: any;
+				label: any;
+				diff: any;
+			};
+	  }
+	| {
+			template: 'liked-appartment-was-unarchived';
+			data: { fullname: any; appartmentTitle: any; address: any; description: any };
+	  }
 	| { template: 'password-changed'; data: { fullname: any } }
 	| { template: 'plain'; data: { text: any } }
 	| { template: 'reset-password'; data: { fullname: any; resetPasswordUrl: any } }
@@ -62,7 +85,7 @@ export async function sendMail({
 	subject,
 	data
 }: {
-	to: string;
+	to: string | string[];
 	subject: string;
 } & EmailTemplateNameAndData) {
 	await log.info('send_mail', null, { to, template, subject, data });

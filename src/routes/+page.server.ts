@@ -13,7 +13,8 @@ export const load: PageServerLoad = async () => {
 					owner: true,
 					nearbyStations: true,
 					travelTimeToN7: true,
-					photos: true
+					photos: true,
+					likes: true
 				}
 			})
 		).map((appartment) => ({

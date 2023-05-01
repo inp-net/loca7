@@ -21,6 +21,8 @@ export const NAMES = [
 	'fiber-internet-cancel',
 	'furniture',
 	'furniture-cancel',
+	'heart',
+	'heart-filled',
 	'information',
 	'location',
 	'location-chambre',

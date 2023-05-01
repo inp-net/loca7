@@ -9,6 +9,7 @@
 		type AppartmentKind,
 		type Photo
 	} from './types';
+	import type { Like, User } from '@prisma/client';
 	import { photoURL } from './photos';
 	import {
 		availableAtSentence,
@@ -18,6 +19,7 @@
 		ENSEEIHT,
 		isToday
 	} from './utils';
+	import { tooltip } from './tooltip';
 	const emit = createEventDispatcher();
 
 	export let photos: Photo[] | null;
@@ -39,6 +41,7 @@
 	export let hasElevator: boolean | null;
 	export let editable: boolean = false;
 	export let small: boolean = false;
+	export let likes: Like[] = [];
 
 	let secondsAvailableSince = (Date.now() - availableAt.valueOf()) * 1e-3;
 </script>
@@ -144,6 +147,19 @@
 							><Icon name="elevator{!hasElevator ? '-cancel' : ''}" /></span
 						>
 						{hasElevator ? 'Ascenseur' : "Pas d'ascenseur"}
+					</p>
+				{/if}
+				{#if likes.length > 0}
+					<p
+						class="likes"
+						use:tooltip={(likes.length > 1
+							? `${likes.length} personnes sont intéréssées`
+							: `Une personne est intéréssée`) + ` par cette annonce`}
+					>
+						<span class="icon">
+							<Icon name="heart" />
+						</span>
+						{likes.length}
 					</p>
 				{/if}
 			</section>

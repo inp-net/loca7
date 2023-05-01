@@ -1,0 +1,37 @@
+<mj-section>
+	<mj-column>
+		<mj-text mj-class="title"> {{fullname}}, une annonce vous intéréssant a été archivée. </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text align="center"> Désolé de vous l'apprendre. C'était l'annonce suivante : </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text> {{appartmentTitle}} situé à l'adresse {{address}}. </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text> {{{description}}} </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text>Vous recevrez un mail si celle-ci est de nouveau publiée.</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text align="center">
+			<a style="color: #009fe3" href="mailto:{{contactEmail}}">{{contactEmail}}</a>
+		</mj-text>
+	</mj-column>
+</mj-section>

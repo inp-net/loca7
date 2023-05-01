@@ -7,6 +7,9 @@ import { rmSync } from 'fs';
 import path from 'path';
 import type { Actions, PageServerLoad } from './$types';
 import { log } from '$lib/server/logging';
+import { sendMail } from '$lib/server/mail';
+import { appartmentTitle } from '$lib/types';
+import xss from 'xss';
 
 export const load: PageServerLoad = async ({ locals, params, url }) => {
 	const { session, user } = await locals.validateUser();
@@ -45,7 +48,12 @@ export const actions: Actions = {
 						photos: true
 					}
 				},
-				photos: true
+				photos: true,
+				likes: {
+					include: {
+						by: true
+					}
+				}
 			}
 		});
 
@@ -82,6 +90,18 @@ export const actions: Actions = {
 		});
 
 		await log.info('delete_appartment', user, { appartment });
+
+		await sendMail({
+			to: appartment.likes.map((like) => like.by.email),
+			subject: `Une annonce vous intéréssant a été supprimée`,
+			template: 'liked-appartment-was-deleted',
+			data: {
+				address: appartment.address,
+				appartmentTitle: appartmentTitle(appartment),
+				description: xss(appartment.description),
+				fullname: user.firstName + ' ' + user.lastName
+			}
+		});
 
 		throw redirect(302, user?.admin ? '/administration' : '/appartements/gerer');
 	}
