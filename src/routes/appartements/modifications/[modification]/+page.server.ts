@@ -163,7 +163,7 @@ export const actions: Actions = {
 		await log.info('approve_appartment_edit', user, { newAppartment, edit });
 
 		await sendMail({
-			to: newAppartment.likes.map((like) => like.by.email),
+			to: newAppartment.likes.map((like) => like.by),
 			subject: `Une annonce vous intéréssant a été modifiée`,
 			template: 'liked-appartment-was-edited',
 			data: {
@@ -175,7 +175,6 @@ export const actions: Actions = {
 						diff: appartmentDiff.modification(f, oldAppartment, edit),
 						label: EDITABLE_FIELDS[f]
 					})),
-				fullname: user.firstName + ' ' + user.lastName,
 				label: undefined,
 				number: newAppartment.number
 			}

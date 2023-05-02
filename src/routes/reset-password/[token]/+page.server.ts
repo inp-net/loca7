@@ -94,11 +94,9 @@ export const actions: Actions = {
 			await auth.updateKeyPassword('email', passwordReset.user.email, newPassword);
 		}
 		await sendMail({
-			to: passwordReset.user.email,
+			to: passwordReset.user,
 			subject: 'Loca7: Votre mot de passe a été changé',
-			data: {
-				fullname: passwordReset.user.firstName
-			},
+			data: {},
 			template: 'password-changed'
 		});
 

@@ -217,14 +217,13 @@ export const actions: Actions = {
 			});
 		} else {
 			await sendMail({
-				to: appartment.likes.map((like) => like.by.email),
+				to: appartment.likes.map((like) => like.by),
 				subject: `Une annonce vous intéréssant a été modifiée`,
 				template: 'liked-appartment-was-edited',
 				data: {
 					appartmentTitle: appartmentTitle(appartment),
 					diff: undefined,
 					edits: diffs.filter((diff) => diff.label.toLowerCase() !== 'photos'),
-					fullname: user.firstName + ' ' + user.lastName,
 					label: undefined,
 					number: appartment.number
 				}

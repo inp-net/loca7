@@ -1,7 +1,7 @@
 <mj-section>
 	<mj-column>
 		<mj-text mj-class="title">
-			Bonne nouvelle, {{fullname}}, une annonce vous intéréssant a été remise en ligne.
+			Bonne nouvelle, {{recipient.fullname}}, une annonce vous intéréssant a été remise en ligne.
 		</mj-text>
 	</mj-column>
 </mj-section>

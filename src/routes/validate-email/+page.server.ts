@@ -51,9 +51,8 @@ export const actions: Actions = {
 		await log.info('request_email_validation', user);
 
 		await sendMail({
-			to: user.email,
+			to: user,
 			data: {
-				fullname: user.firstName,
 				validateEmailUrl:
 					`${process.env.ORIGIN || 'http://localhost:5173'}/validate-email/${
 						validation.id

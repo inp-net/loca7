@@ -7,6 +7,7 @@ import path from 'path';
 import { valueOfBooleanString } from './utils';
 import { log } from './logging';
 import { CONTACT_EMAIL } from '$lib/constants';
+import type { User } from '@prisma/client';
 
 // generate:EmailTemplates
 /**
@@ -14,7 +15,7 @@ import { CONTACT_EMAIL } from '$lib/constants';
  * Valid email templates
  */
 export type EmailTemplateNameAndData =
-	| { template: 'announcement'; data: { fullname: any; createAccountUrl: any } }
+	| { template: 'announcement'; data: { createAccountUrl: any } }
 	| {
 			template: 'appartment-edit-to-validate';
 			data: {
@@ -32,40 +33,27 @@ export type EmailTemplateNameAndData =
 			template: 'appartment-to-validate';
 			data: { userFullName: any; userEmail: any; appartment: any; appartmentId: any };
 	  }
-	| { template: 'email-changed'; data: { fullname: any; newEmail: any } }
+	| { template: 'email-changed'; data: { newEmail: any } }
 	| {
 			template: 'liked-appartment-was-archived';
-			data: { fullname: any; appartmentTitle: any; address: any; description: any };
+			data: { appartmentTitle: any; address: any; description: any };
 	  }
 	| {
 			template: 'liked-appartment-was-deleted';
-			data: { fullname: any; appartmentTitle: any; address: any; description: any };
+			data: { appartmentTitle: any; address: any; description: any };
 	  }
 	| {
 			template: 'liked-appartment-was-edited';
-			data: {
-				fullname: any;
-				number: any;
-				appartmentTitle: any;
-				edits: any;
-				label: any;
-				diff: any;
-			};
+			data: { number: any; appartmentTitle: any; edits: any; label: any; diff: any };
 	  }
 	| {
 			template: 'liked-appartment-was-unarchived';
-			data: {
-				fullname: any;
-				appartmentTitle: any;
-				address: any;
-				description: any;
-				number: any;
-			};
+			data: { appartmentTitle: any; address: any; description: any; number: any };
 	  }
-	| { template: 'password-changed'; data: { fullname: any } }
+	| { template: 'password-changed'; data: {} }
 	| { template: 'plain'; data: { text: any } }
-	| { template: 'reset-password'; data: { fullname: any; resetPasswordUrl: any } }
-	| { template: 'validate-email'; data: { fullname: any; validateEmailUrl: any } };
+	| { template: 'reset-password'; data: { resetPasswordUrl: any } }
+	| { template: 'validate-email'; data: { validateEmailUrl: any } };
 
 // end generate
 
@@ -91,10 +79,10 @@ export async function sendMail({
 	subject,
 	data
 }: {
-	to: string | string[];
+	to: (string | User)[] | string | User;
 	subject: string;
 } & EmailTemplateNameAndData) {
-	if (to.length < 1) {
+	if (Array.isArray(to) && to.length < 1) {
 		await log.trace('send_mail', null, 'not sending mail since no addresses were given', {
 			to,
 			template,
@@ -103,20 +91,38 @@ export async function sendMail({
 		});
 		return;
 	}
+	let recipients = Array.isArray(to) ? to : [to];
 	await log.info('send_mail', null, { to, template, subject, data });
 	const computedSubject = Handlebars.compile(subject)(data);
+	const address = (recipient: (typeof recipients)[number]) =>
+		typeof recipient === 'string' ? recipient : recipient.email;
 	const layout = readFileSync('mail-templates/_layout.mjml').toString('utf-8');
-	return mailer.sendMail({
-		from: 'loca7@bde.enseeiht.fr',
-		to,
-		subject: computedSubject,
-		html: mjml2html(
-			Handlebars.compile(
-				layout.replace(
-					'%content%',
-					readFileSync(path.join('mail-templates', template + '.mjml')).toString('utf-8')
-				)
-			)({ title: computedSubject, contactEmail: CONTACT_EMAIL, ...data })
-		).html
-	});
+	for (const recipient of recipients) {
+		let recipientData: { email: string; fullname?: string } = {
+			email: typeof recipient === 'string' ? recipient : recipient.email
+		};
+		if (typeof recipient !== 'string') {
+			recipientData.fullname = recipient.firstName + ' ' + recipient.lastName;
+		}
+		return mailer.sendMail({
+			from: 'loca7@bde.enseeiht.fr',
+			to: address(recipient),
+			subject: computedSubject,
+			html: mjml2html(
+				Handlebars.compile(
+					layout.replace(
+						'%content%',
+						readFileSync(path.join('mail-templates', template + '.mjml')).toString(
+							'utf-8'
+						)
+					)
+				)({
+					recipient: recipientData,
+					title: computedSubject,
+					contactEmail: CONTACT_EMAIL,
+					...data
+				})
+			).html
+		});
+	}
 }

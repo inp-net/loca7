@@ -1,6 +1,8 @@
 <mj-section>
 	<mj-column>
-		<mj-text mj-class="title"> {{fullname}}, votre adresse e-mail a été modifiée. </mj-text>
+		<mj-text mj-class="title">
+			{{recipient.fullname}}, votre adresse e-mail a été modifiée.
+		</mj-text>
 	</mj-column>
 </mj-section>
 

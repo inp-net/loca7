@@ -47,14 +47,13 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 	});
 
 	await sendMail({
-		to: appartment.likes.map((like) => like.by.email),
+		to: appartment.likes.map((like) => like.by),
 		subject: `Une annonce vous intéréssant a été re-publiée`,
 		template: 'liked-appartment-was-unarchived',
 		data: {
 			address: appartment.address,
 			appartmentTitle: appartmentTitle(appartment),
 			description: xss(appartment.description),
-			fullname: user.firstName + ' ' + user.lastName,
 			number: appartment.number
 		}
 	});

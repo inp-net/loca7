@@ -35,14 +35,13 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 	await log.info('archive_appartment', user, 'success', { appartment: params.id });
 
 	await sendMail({
-		to: appartment.likes.map((like) => like.by.email),
+		to: appartment.likes.map((like) => like.by),
 		subject: `Une annonce vous intéréssant a été archivée`,
 		template: 'liked-appartment-was-archived',
 		data: {
 			address: appartment.address,
 			appartmentTitle: appartmentTitle(appartment),
-			description: xss(appartment.description),
-			fullname: user.firstName + ' ' + user.lastName
+			description: xss(appartment.description)
 		}
 	});
 

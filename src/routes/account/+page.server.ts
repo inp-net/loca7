@@ -62,10 +62,9 @@ export const actions: Actions = {
 			});
 
 			await sendMail({
-				to: user.email,
+				to: user,
 				subject: 'Loca7: Votre adresse email a été changée',
 				data: {
-					fullname: user.firstName + ' ' + user.lastName,
 					newEmail: email
 				},
 				template: 'email-changed'
@@ -90,11 +89,9 @@ export const actions: Actions = {
 			await auth.updateKeyPassword('email', user.email, newPassword);
 			await log.info('change_password', user, 'attempt');
 			await sendMail({
-				to: user.email,
+				to: user,
 				subject: 'Loca7: Votre mot de passe a été changé',
-				data: {
-					fullname: user.firstName
-				},
+				data: {},
 				template: 'password-changed'
 			});
 		} catch (error) {

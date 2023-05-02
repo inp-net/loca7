@@ -1,6 +1,6 @@
 <mj-section background-color="#c2e8fc" full-width="full-width">
 	<mj-column>
-		<mj-text mj-class="title"> {{fullname}}, Loca7 fait peau neuve. </mj-text>
+		<mj-text mj-class="title"> {{recipient.fullname}}, Loca7 fait peau neuve. </mj-text>
 	</mj-column>
 	<mj-column>
 		<mj-text> Vous pouvez maintenant gérer vos annonces directement depuis le site. </mj-text>

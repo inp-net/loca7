@@ -55,9 +55,8 @@ export const actions: Actions = {
 		});
 
 		await sendMail({
-			to: email,
+			to: user,
 			data: {
-				fullname: user.firstName,
 				resetPasswordUrl: `${
 					process.env.ORIGIN || 'http://localhost:5173'
 				}/reset-password/${passwordReset.id}`
