@@ -29,7 +29,7 @@
 		</tr>
 		{#each data.logs
 			.filter((l) => shown.includes(['T', 'I', 'W', 'E', 'F'][l.level]))
-			.reverse() as log}
+			.reverse() as log (log.id)}
 			<tr
 				id={log.createdAt.toISOString()}
 				style:--fg="var(--{['muted', 'fg', 'safran', 'blood', 'white'][log.level]}, #fff)"

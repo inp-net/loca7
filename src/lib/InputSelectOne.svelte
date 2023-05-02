@@ -40,7 +40,7 @@
 
 <div class="wrapper" class:errored>
 	<fieldset bind:this={fieldsetElement}>
-		{#each Object.entries(optionsWithDisplay) as [option, display]}
+		{#each Object.entries(optionsWithDisplay) as [option, display] (option)}
 			<label aria-current={option === value}>
 				<input type="radio" {required} {name} bind:group={value} value={option} />
 				<slot {value} {display} {option}>{display}</slot>

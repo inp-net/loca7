@@ -498,7 +498,7 @@
 		<section class="reports">
 			<h2>Signalements</h2>
 			<ul>
-				{#each reports as report}
+				{#each reports as report (report.id)}
 					<li class="report">
 						<span class="reason typo-field-label"
 							>{DISPLAY_REPORT_REASON[report.reason]}</span

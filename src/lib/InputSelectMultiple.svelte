@@ -12,7 +12,7 @@
 </script>
 
 <fieldset>
-	{#each Object.entries(optionsWithDisplay) as [value, display]}
+	{#each Object.entries(optionsWithDisplay) as [value, display] (value)}
 		<label aria-checked={selection.includes(value)}>
 			<div class="icon" aria-hidden={!selection.includes(value)}>
 				<Icon name="checkmark" color="bg" />
