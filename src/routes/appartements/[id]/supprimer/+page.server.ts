@@ -91,7 +91,7 @@ export const actions: Actions = {
 			}
 		});
 
-		await log.info('delete_appartment', user, { appartment });
+		await log.warn('delete_appartment', user, { appartment });
 
 		await sendMail({
 			to: appartment.likes.map((like) => like.by.email),
