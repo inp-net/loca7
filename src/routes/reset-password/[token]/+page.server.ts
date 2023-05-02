@@ -8,15 +8,18 @@ import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { user } = await locals.validateUser();
-	const passwordResets = await prisma.passwordReset.findFirst({
+	const passwordReset = await prisma.passwordReset.findFirst({
 		where: {
 			id: params.token,
 			expires: {
 				gt: Date.now()
 			}
+		},
+		include: {
+			user: true
 		}
 	});
-	if (!passwordResets) {
+	if (!passwordReset) {
 		await log.error(
 			'use_password_reset',
 			user,
@@ -24,6 +27,15 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		);
 		throw redirect(302, '/reset-password#invalid-token');
 	}
+	const currentEmailKey = await prisma.key.findFirst({
+		where: {
+			user: {
+				id: passwordReset.user.id
+			}
+		}
+	});
+	const creatingPassword = !currentEmailKey;
+	return { creatingPassword };
 };
 
 export const actions: Actions = {

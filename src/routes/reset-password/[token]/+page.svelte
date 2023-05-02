@@ -1,6 +1,9 @@
 <script lang="ts">
 	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
 	import InputPassword from '$lib/InputPassword.svelte';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
 </script>
 
 <svelte:head>
@@ -14,7 +17,9 @@
 		<InputPassword feedback value="" label="Mot de passe" name="password" />
 
 		<section class="submit">
-			<ButtonPrimary submits>Changer mon mot de passe</ButtonPrimary>
+			<ButtonPrimary submits
+				>{#if data.creatingPassword}Définir{:else}Changer{/if} mon mot de passe</ButtonPrimary
+			>
 		</section>
 	</form>
 </main>
