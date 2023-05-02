@@ -88,6 +88,15 @@ export async function sendMail({
 	to: string | string[];
 	subject: string;
 } & EmailTemplateNameAndData) {
+	if (to.length < 1) {
+		await log.trace('send_mail', null, 'not sending mail since no addresses were given', {
+			to,
+			template,
+			subject,
+			data
+		});
+		return;
+	}
 	await log.info('send_mail', null, { to, template, subject, data });
 	const computedSubject = Handlebars.compile(subject)(data);
 	const layout = readFileSync('mail-templates/_layout.mjml').toString('utf-8');
