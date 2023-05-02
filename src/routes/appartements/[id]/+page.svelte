@@ -241,18 +241,20 @@
 						</div>
 					</div>
 				{/if}
-				<div class="row">
-					<span class="icon"><Icon name="calendar" /></span>
-					<p class="when">
-						{availableAtSentence(secondsAvailableSince, appart.availableAt)}<wbr />
-						{#if secondsAvailableSince !== 0}
-							<span class="muted"
-								>{#if secondsAvailableSince > 0}il y a{:else}dans{/if}
-								{durationDisplay(Math.abs(secondsAvailableSince))}</span
-							>
-						{/if}
-					</p>
-				</div>
+				{#if appart.availableAt.valueOf() >= Date.now()}
+					<div class="row">
+						<span class="icon"><Icon name="calendar" /></span>
+						<p class="when">
+							{availableAtSentence(secondsAvailableSince, appart.availableAt)}<wbr />
+							{#if secondsAvailableSince !== 0}
+								<span class="muted"
+									>{#if secondsAvailableSince > 0}il y a{:else}dans{/if}
+									{durationDisplay(Math.abs(secondsAvailableSince))}</span
+								>
+							{/if}
+						</p>
+					</div>
+				{/if}
 				{#if appart.likes.length > 0 || liked}
 					<div class="row">
 						<span class="icon">
