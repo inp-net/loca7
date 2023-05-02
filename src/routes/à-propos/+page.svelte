@@ -38,6 +38,8 @@
 		<dd>
 			<a href="https://data.toulouse-metropole.fr">Toulouse Métropole</a>
 		</dd>
+		<dt>Géocodage et adresses postales</dt>
+		<dd><a href="https://adresse.data.gouv.fr/">adresse.data.gouv.fr</a></dd>
 	</dl>
 </main>
 
