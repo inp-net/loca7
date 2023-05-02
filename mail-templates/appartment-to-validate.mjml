@@ -74,11 +74,3 @@
 		<mj-button href="https://loca7.fr/appartements/{{appartmentId}}">Voir l'annonce</mj-button>
 	</mj-column>
 </mj-section>
-
-<mj-section>
-	<mj-column>
-		<mj-text align="center">
-			<a style="color: #009fe3" href="mailto:{{contactEmail}}">{{contactEmail}}</a>
-		</mj-text>
-	</mj-column>
-</mj-section>

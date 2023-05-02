@@ -29,11 +29,3 @@
 		<mj-text>Vous recevrez un mail si celle-ci est de nouveau publiée.</mj-text>
 	</mj-column>
 </mj-section>
-
-<mj-section>
-	<mj-column>
-		<mj-text align="center">
-			<a style="color: #009fe3" href="mailto:{{contactEmail}}">{{contactEmail}}</a>
-		</mj-text>
-	</mj-column>
-</mj-section>

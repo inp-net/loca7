@@ -26,7 +26,7 @@
 		<mj-section background-color="white" full-width="full-width">
 			<mj-column>
 				<mj-image
-					src="https://loca7.ewen.works/loca7-wordmark.svg"
+					src="https://loca7.fr/loca7-wordmark.svg"
 					alt="Logo de Loca7"
 					width="200px"
 				/>
@@ -36,8 +36,16 @@
 		<mj-section full-width="full-width" background-color="#c2e8fc">
 			<mj-column>
 				<mj-spacer height="100px" />
+				<mj-text
+					>Des questions? Contactez nous à
+					<a href="mailto:{{contactEmail}}">{{contactEmail}}</a></mj-text
+				>
+			</mj-column>
+		</mj-section>
+		<mj-section full-width="full-width" background-color="#c2e8fc">
+			<mj-column>
 				<mj-text align="center" mj-class="small">
-					<a style="color: black" font-weight="bold" href="https://loca7..fr">loca7.fr</a>
+					<a style="color: black" font-weight="bold" href="https://loca7.fr">loca7.fr</a>, la plateforme de recherche de logements de l'ENSEEIHT, faite par des étudiants, pour des étudiants.
 				</mj-text>
 			</mj-column>
 		</mj-section>
