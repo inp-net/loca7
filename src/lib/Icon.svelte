@@ -937,6 +937,19 @@
 			fill={_color}
 		/>
 	</svg>
+{:else if name === 'percent'}
+	<svg
+		style:transform={flip ? 'scaleX(-1)' : ''}
+		width="50"
+		height="50"
+		viewBox="0 0 50 50"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<path d="M5 44L43 6" stroke={_color} stroke-width={strokeWidth} />
+		<circle cx="14" cy="13" r="7.5" stroke={_color} stroke-width={strokeWidth} />
+		<circle cx="34" cy="36" r="7.5" stroke={_color} stroke-width={strokeWidth} />
+	</svg>
 {:else if name === 'phone'}
 	<svg
 		style:transform={flip ? 'scaleX(-1)' : ''}

@@ -255,6 +255,19 @@
 						</p>
 					</div>
 				{/if}
+				{#if appart.surface}
+					<div class="row">
+						<span class="icon">
+							<Icon name="percent" />
+						</span>
+						<p class="rate">
+							Le prix au mètre carré est de
+							{new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 }).format(
+								(appart.charges + appart.rent) / appart.surface
+							)} €/m² (charges comprises)
+						</p>
+					</div>
+				{/if}
 				{#if appart.likes.length > 0 || liked}
 					<div class="row">
 						<span class="icon">

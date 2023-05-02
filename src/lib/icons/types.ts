@@ -49,6 +49,7 @@ export const NAMES = [
 	'password-strength-dangerous',
 	'password-strength-good',
 	'password-strength-weak',
+	'percent',
 	'phone',
 	'question',
 	'report',
