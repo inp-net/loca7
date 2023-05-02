@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
-	import { page } from '$app/stores';
+	import { navigating, page } from '$app/stores';
 	import ButtonCircle from '$lib/ButtonCircle.svelte';
 	import Icon from '$lib/Icon.svelte';
 	import LogoLoca7 from '$lib/LogoLoca7.svelte';
@@ -18,11 +18,14 @@
 	import { onMount } from 'svelte';
 	export let data: PageData;
 
+	let ready = false;
+
 	onMount(() => {
 		const html = document.querySelector('html')!;
 		darkMode.subscribe((value) => {
 			html.dataset.darkMode = JSON.stringify(value);
 		});
+		ready = true;
 	});
 </script>
 
@@ -34,7 +37,13 @@
 	<script src="/vendor/polyfills/inert.min.js"></script>
 </svelte:head>
 
-{#if !$dismissedN7ienOnlyWarning && !data.user}
+{#if !ready || $navigating}
+	<aside class="loading">
+		<div class="content">
+			<h1>Chargement en cours…</h1>
+		</div>
+	</aside>
+{:else if !$dismissedN7ienOnlyWarning && !data.user}
 	<aside class="n7ien-warning">
 		<div class="content">
 			<h1>Ce site est réservé aux (futur·e·s) élève·e·s de l'ENSEEIHT</h1>
@@ -283,7 +292,7 @@
 		color: var(--cobalt);
 	}
 
-	aside.n7ien-warning {
+	aside {
 		position: fixed;
 		inset: 0;
 		background-color: rgba(255, 255, 255, 0.8);
@@ -295,15 +304,15 @@
 	}
 
 	@media (prefers-color-scheme: dark) {
-		:global(html[data-dark-mode='null']) aside.n7ien-warning {
+		:global(html[data-dark-mode='null']) aside {
 			background: rgba(0, 0, 0, 0.75);
 		}
 	}
-	:global(html[data-dark-mode='true']) aside.n7ien-warning {
+	:global(html[data-dark-mode='true']) aside {
 		background: rgba(0, 0, 0, 0.75);
 	}
 
-	aside.n7ien-warning .content {
+	aside .content {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
@@ -316,11 +325,11 @@
 		text-align: center;
 	}
 
-	aside.n7ien-warning h1 {
+	aside h1 {
 		line-height: 1.3;
 	}
 
-	aside.n7ien-warning .options {
+	aside .options {
 		margin-top: 1rem;
 		display: flex;
 		gap: 1rem;
