@@ -17,6 +17,9 @@
 	import InputSelectOne from '$lib/InputSelectOne.svelte';
 	import InputSearch from '$lib/InputSearch.svelte';
 	import Icon from '$lib/Icon.svelte';
+	import ButtonColored from '$lib/ButtonColored.svelte';
+	import ButtonCircle from '$lib/ButtonCircle.svelte';
+	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 
 	type AppartmentEdit = AppartmentEditBase & { photos: Photo[] };
 	type Appartment = AppartmentBase & {
@@ -36,6 +39,7 @@
 	};
 	type Status = keyof typeof categories;
 	let eagerStatus: Record<string, Status> = {};
+
 	$: appartments = data.appartments.sort(
 		(a, b) => a.availableAt.valueOf() - b.availableAt.valueOf()
 	);
@@ -162,6 +166,9 @@
 		let appart = appartment(currentCategory, index);
 		eagerStatus[appart.id] = status;
 	};
+
+	let selection: string[] = [];
+	let confirmingBulkDelete = false;
 </script>
 
 <svelte:head>
@@ -198,32 +205,97 @@
 		</div>
 	</section>
 
-	{#if currentCategory === 'pending'}
-		<h2>{byCategory.pending.length || ''} en attente</h2>
-	{:else if currentCategory === 'online'}
-		<h2>{byCategory.online.length || ''} en ligne</h2>
-	{:else if currentCategory === 'reported'}
-		<h2>
-			{byCategory.reported.length || ''} signalée{byCategory.reported.length > 1 ? 's' : ''}
-		</h2>
-	{:else if currentCategory === 'archived'}
-		<h2>
-			{byCategory.archived.length || ''} archivé{byCategory.archived.length > 1 ? 's' : ''}
-		</h2>
-	{:else}
-		<h2>toutes ({byCategory.all.length})</h2>
-	{/if}
+	<section class="bulk-actions" class:danger={confirmingBulkDelete}>
+		{#if confirmingBulkDelete}
+			<p>
+				Êtes-vous sûr·e de vouloir <strong
+					>supprimer {selection.length} annonce{selection.length > 1 ? 's' : ''}</strong
+				> ? Cette action n'est pas réversible.
+			</p>
+			<ButtonColored
+				dangerous
+				on:click={async () => {
+					await Promise.all(
+						selection.map(async (id) => {
+							await fetch(`/appartements/${id}/supprimer?/confirm`, {
+								method: 'POST',
+								body: new FormData()
+							});
+						})
+					);
+					confirmingBulkDelete = false;
+					window.location.reload();
+				}}>Confirmer</ButtonColored
+			>
+		{:else if selection.length > 0}
+			<p>{selection.length} sélectionnée{selection.length > 1 ? 's' : ''}</p>
+			<ButtonColored
+				on:click={async () => {
+					await Promise.all(
+						selection.map(async (id) => {
+							await fetch(`/appartements/${id}/archiver`, { method: 'POST' });
+						})
+					);
+					window.location.reload();
+				}}
+				>Archiver
+			</ButtonColored>
+			<ButtonColored
+				on:click={async () => {
+					await Promise.all(
+						selection.map(async (id) => {
+							await fetch(`/appartements/${id}/approuver`, { method: 'POST' });
+							await fetch(`/appartements/${id}/publier`, { method: 'POST' });
+						})
+					);
+					window.location.reload();
+				}}
+				>Valider & publier
+			</ButtonColored>
+			<ButtonColored
+				dangerous
+				on:click={() => {
+					confirmingBulkDelete = true;
+				}}
+				>Supprimer
+			</ButtonColored>
+			<div class="close">
+				<ButtonCircle
+					on:click={() => {
+						selection = [];
+					}}
+					icon="close"
+				/>
+			</div>
+		{:else}
+			<p>Aucune annonce sélectionnée</p>
+			<ButtonColored
+				on:click={() => {
+					selection = byCategory[currentCategory].map((a) => a.id);
+				}}>Tout sélectionner</ButtonColored
+			>
+		{/if}
+	</section>
 
 	<ul>
 		<VirtualList
 			width="100%"
-			height={Math.min(510, 110 * byCategory[currentCategory].length)}
+			height={Math.min(610, 110 * byCategory[currentCategory].length)}
 			itemCount={byCategory[currentCategory].length}
 			itemSize={110}
 		>
 			<div slot="item" let:index let:style {style}>
 				<AppartmentAdminItem
 					{...appartment(currentCategory, index)}
+					selected={selection.includes(appartment(currentCategory, index).id)}
+					on:select={() => {
+						selection = [...selection, appartment(currentCategory, index).id];
+					}}
+					on:deselect={() => {
+						selection = selection.filter(
+							(id) => id !== appartment(currentCategory, index).id
+						);
+					}}
 					updatedAt={effectiveUpdatedAt(appartment(currentCategory, index))}
 					highlight={appartment(currentCategory, index).matches}
 					approved={status(eagerStatus, appartment(currentCategory, index)) !== 'pending'}
@@ -315,5 +387,16 @@
 		--fg: black;
 		background: var(--acid);
 		color: black;
+	}
+
+	.bulk-actions {
+		display: flex;
+		gap: 1rem;
+		align-items: center;
+		padding: 1rem 0;
+	}
+
+	.bulk-actions .close {
+		margin-left: auto;
 	}
 </style>

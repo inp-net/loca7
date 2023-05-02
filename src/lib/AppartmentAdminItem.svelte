@@ -8,6 +8,7 @@
 	import { photoURL } from './photos';
 	import type { AppartmentEdit } from './types';
 	import HighlightedText from './HighlightedText.svelte';
+	import SmallCheckbox from './SmallCheckbox.svelte';
 	const emit = createEventDispatcher();
 
 	export let id: string;
@@ -24,6 +25,7 @@
 	export let photos: Photo[];
 	export let highlight: readonly Fuse.FuseResultMatch[] = [];
 	export let open: boolean = false;
+	export let selected: boolean = false;
 	let error: string = '';
 
 	const action = (name: 'archiver' | 'publier' | 'approuver') => async () => {
@@ -41,7 +43,19 @@
 		highlight.filter((h) => h.key === key).flatMap((h) => h.indices);
 </script>
 
-<li class:reported={reports.length > 0} class:approved class:open>
+<li class:reported={reports.length > 0} class:approved class:open class:selected>
+	<div class="select">
+		<SmallCheckbox
+			value={selected}
+			on:change={({ target }) => {
+				if (target?.checked) {
+					emit('select');
+				} else {
+					emit('deselect');
+				}
+			}}
+		/>
+	</div>
 	<img src={photos.length > 0 ? photoURL(photos[0]) : '/missing-photo.png'} class="photo" />
 	<svelte:element
 		this={window.innerWidth > 1000 ? 'a' : 'div'}
@@ -141,10 +155,15 @@
 		background: var(--background);
 		padding: 0.75rem 0.5rem;
 	}
-	li.reported {
+	li.reported:not(.selected) {
 		/* using only --bg does not work on .collapse for some reason, but using only --background does not allowing overriding the background color of the action buttons, since they use var(--bg) */
 		--background: var(--rose);
 		--bg: var(--rose);
+		color: var(--blood);
+	}
+	li.selected {
+		--background: var(--ice);
+		--bg: var(--ice);
 	}
 	li.open {
 		position: relative;
@@ -169,10 +188,6 @@
 	}
 	li .row-2 {
 		grid-template-columns: 2fr 7fr 3fr;
-	}
-	li.reported {
-		background-color: var(--rose);
-		color: var(--blood);
 	}
 	li * {
 		color: inherit;
@@ -236,14 +251,24 @@
 			height: 0;
 			opacity: 0;
 		}
+		.select {
+			display: none;
+		}
 	}
 
 	@media (min-width: 1000px) {
 		li {
 			display: grid;
-			grid-template-areas: 'photo row-1 actions' 'photo row-2 actions';
-			grid-template-columns: 5rem 9fr max-content;
+			grid-template-areas: 'checkbox photo row-1 actions' 'checkbox photo row-2 actions';
+			grid-template-columns: 2rem 5rem 9fr max-content;
 			column-gap: 2rem;
+		}
+		.select {
+			grid-area: checkbox;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100%;
 		}
 		.photo {
 			grid-area: photo;
