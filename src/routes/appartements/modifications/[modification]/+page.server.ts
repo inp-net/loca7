@@ -8,7 +8,6 @@ import type { Actions, PageServerLoad } from './$types';
 import { writePhotosToDisk, deletePhotosFromDisk, copyPhotos } from '$lib/server/photos';
 import { prisma } from '$lib/server/prisma';
 import { log } from '$lib/server/logging';
-import { aA } from 'vitest/dist/types-71ccd11d';
 import { sendMail } from '$lib/server/mail';
 import { appartmentTitle } from '$lib/types';
 import { EDITABLE_FIELDS } from '$lib/appartmentDiff';
