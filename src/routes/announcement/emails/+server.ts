@@ -1,6 +1,7 @@
 import { guards } from '$lib/server/lucia';
 import { isGhostEmail } from '$lib/types';
 import type { RequestHandler } from './$types';
+import { prisma } from '$lib/server/prisma';
 
 export const GET: RequestHandler = async ({ url, locals, params }) => {
 	const { user, session } = await locals.validateUser();

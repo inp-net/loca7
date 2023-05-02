@@ -1,6 +1,7 @@
 import { log } from '$lib/server/logging';
 import { guards } from '$lib/server/lucia';
 import type { RequestHandler } from './$types';
+import { prisma } from '$lib/server/prisma';
 
 export const POST: RequestHandler = async ({ params, locals, url }) => {
 	const { user, session } = await locals.validateUser();
