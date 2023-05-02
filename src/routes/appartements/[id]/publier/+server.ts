@@ -54,7 +54,8 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 			address: appartment.address,
 			appartmentTitle: appartmentTitle(appartment),
 			description: xss(appartment.description),
-			fullname: user.firstName + ' ' + user.lastName
+			fullname: user.firstName + ' ' + user.lastName,
+			number: appartment.number
 		}
 	});
 

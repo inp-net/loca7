@@ -54,7 +54,13 @@ export type EmailTemplateNameAndData =
 	  }
 	| {
 			template: 'liked-appartment-was-unarchived';
-			data: { fullname: any; appartmentTitle: any; address: any; description: any };
+			data: {
+				fullname: any;
+				appartmentTitle: any;
+				address: any;
+				description: any;
+				number: any;
+			};
 	  }
 	| { template: 'password-changed'; data: { fullname: any } }
 	| { template: 'plain'; data: { text: any } }
