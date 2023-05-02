@@ -147,15 +147,8 @@
 					API
 				</dt>
 				<dd><a href="/appartements.json">/appartements.json</a></dd>
-				<dt>design, code</dt>
-				<dd><a href="https://ewen.works">Ewen Le Bihan</a></dd>
-				<dt>logo, administration</dt>
-				<dd>Lubin Gauthier</dd>
-				<dt>données tierces de</dt>
-				<dd>
-					<a href="https://openrouteservice.org">openroute service</a>,
-					<a href="https://data.toulouse-metropole.fr">Toulouse Métropole</a>
-				</dd>
+				<dd>en savoir plus</dd>
+				<dd><a href="/à-propos">crédits</a></dd>
 			</dl>
 		</section>
 	</div>
