@@ -399,4 +399,13 @@
 	.bulk-actions .close {
 		margin-left: auto;
 	}
+
+	@media (max-width: 1000px) {
+		.bulk-actions {
+			display: none;
+		}
+		section.filters {
+			margin-bottom: 2rem;
+		}
+	}
 </style>
