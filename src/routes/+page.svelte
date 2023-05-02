@@ -116,8 +116,8 @@
 						return -surface;
 					case "distance à l'n7":
 						return latitude && longitude
-							? Number.MAX_SAFE_INTEGER
-							: distanceBetween({ latitude, longitude }, ENSEEIHT);
+							? distanceBetween({ latitude, longitude }, ENSEEIHT)
+							: Number.MAX_SAFE_INTEGER;
 					case 'délai avant libération':
 						return Date.now() - availableAt.valueOf();
 					default:
