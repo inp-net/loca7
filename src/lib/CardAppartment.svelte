@@ -9,7 +9,7 @@
 		type AppartmentKind,
 		type Photo
 	} from './types';
-	import type { Like, User } from '@prisma/client';
+	import type { Like, TravelTimeToN7, User } from '@prisma/client';
 	import { photoURL } from './photos';
 	import {
 		availableAtSentence,
@@ -30,6 +30,7 @@
 	export let surface: number;
 	export let kind: AppartmentKind;
 	export let roomsCount: number;
+	export let travelTimeToN7: TravelTimeToN7;
 	export let availableAt: Date;
 	export let address: string;
 	export let latitude: number | null;
@@ -84,16 +85,18 @@
 		</section>
 		{#if !small}
 			<section class="situation">
-				<span class="icon"><Icon name="calendar" /></span>
-				<p class="when">
-					{availableAtSentence(secondsAvailableSince, availableAt)}
-					{#if !isToday(availableAt)}
-						<span class="muted"
-							>{#if secondsAvailableSince > 0}il y a{:else}dans{/if}
-							{durationDisplay(Math.abs(secondsAvailableSince))}</span
-						>
-					{/if}
-				</p>
+				{#if availableAt.valueOf() >= Date.now()}
+					<span class="icon"><Icon name="calendar" /></span>
+					<p class="when">
+						{availableAtSentence(secondsAvailableSince, availableAt)}
+						{#if !isToday(availableAt)}
+							<span class="muted"
+								>{#if secondsAvailableSince > 0}il y a{:else}dans{/if}
+								{durationDisplay(Math.abs(secondsAvailableSince))}</span
+							>
+						{/if}
+					</p>
+				{/if}
 				<span class="icon"><Icon name="location" /></span>
 				<p class="where">
 					{address}
@@ -105,6 +108,25 @@
 						>
 					{/if}
 				</p>
+				{#if travelTimeToN7.byBike || travelTimeToN7.byFoot || travelTimeToN7.byPublicTransport}
+					<span
+						class="icon"
+						use:tooltip={"Temps de trajet entre l'école et cet appartement"}
+						><Icon name="travel" /></span
+					>
+					<p class="travel">
+						{#if travelTimeToN7.byFoot !== null}
+							{durationDisplay(travelTimeToN7.byFoot)} à pied
+						{/if}
+						{#if travelTimeToN7.byBike !== null}
+							, {durationDisplay(travelTimeToN7.byBike)} à vélo
+						{/if}
+						{#if travelTimeToN7.byPublicTransport !== null}
+							, {durationDisplay(travelTimeToN7.byPublicTransport)} en transports<wbr
+							/>
+						{/if}
+					</p>
+				{/if}
 			</section>
 			<section class="aspects">
 				{#if hasFurniture !== null}
