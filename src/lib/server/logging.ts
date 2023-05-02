@@ -31,6 +31,20 @@ export type LogAction =
 export const LOG_LEVELS = ['trace', 'info', 'warn', 'error', 'fatal'] as const;
 export type LogLevel = (typeof LOG_LEVELS)[number];
 
+function removeSensitiveFields(o: object): object {
+	if (o === null || o === undefined || typeof o !== "object" || Object.getPrototypeOf(o) !== Object.prototype) {
+		return o
+	}
+	return Object.fromEntries(
+		Object.entries(o)
+			.filter(([key, _]) => !key.includes('password') && !key.includes('Password'))
+			.map(([key, value]) => [
+				key,
+				removeSensitiveFields(value)
+			])
+	);
+}
+
 function serialize(o: any): string {
 	if (typeof o === 'string') {
 		return o;
@@ -39,8 +53,9 @@ function serialize(o: any): string {
 		return o.message + (o.stack ? '\n' + o.stack : '(no stack trace available)');
 	}
 	try {
-		return JSON.stringify(o);
+		return JSON.stringify(removeSensitiveFields(o));
 	} catch (error) {
+		console.error(`could not serialize ${o} as JSON`, error)
 		return o.toString();
 	}
 }
@@ -94,14 +109,12 @@ async function _log(
 					subject: `Loca7: Fatal error when ${action}`,
 					template: 'plain',
 					data: {
-						text: `At ${new Date().toISOString()}<br><strong>${
-							user?.email ?? 'unknown user'
-						}</strong> triggered a fatal error when <strong>${action}</strong>:<br><br>${messageString.replaceAll(
-							'\n',
-							'<br>'
-						)}<br><br><br><br>For some context: <a href="${
-							process.env.ORIGIN || 'http://localhost:5173'
-						}/logs#${createdLog.createdAt.toISOString()}" target="_blank">see logs</a>.`
+						text: `At ${new Date().toISOString()}<br><strong>${user?.email ?? 'unknown user'
+							}</strong> triggered a fatal error when <strong>${action}</strong>:<br><br>${messageString.replaceAll(
+								'\n',
+								'<br>'
+							)}<br><br><br><br>For some context: <a href="${process.env.ORIGIN || 'http://localhost:5173'
+							}/logs#${createdLog.createdAt.toISOString()}" target="_blank">see logs</a>.`
 					}
 				})
 			)
@@ -121,5 +134,5 @@ export const log = Object.fromEntries(
 		((action, by, ...message) => _log(level, action, by, ...message)) as LogFunction
 	])
 ) as {
-	[level in LogLevel]: LogFunction;
-};
+		[level in LogLevel]: LogFunction;
+	};
