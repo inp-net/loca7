@@ -79,6 +79,8 @@ export const actions: Actions = {
 						}
 					);
 					throw error;
+				} else {
+					await log.warn('delete_appartment', user, 'tried to delete non-existent photo', { appartment, photo })
 				}
 			}
 		}
