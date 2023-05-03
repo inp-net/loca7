@@ -514,7 +514,7 @@
 									await fetch(`/signalements/${report.id}/supprimer`, {
 										method: 'post'
 									});
-									reports = reports.filter((r) => r.id === report.id);
+									reports = reports.filter((r) => r.id !== report.id);
 								}}
 								dangerous
 								icon="delete">Supprimer</ButtonSecondary
