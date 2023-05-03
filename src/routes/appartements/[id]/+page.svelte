@@ -859,6 +859,9 @@
 	section.notice .actions {
 		display: flex;
 		gap: 1rem;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
 	}
 
 	section.notice.notice-report-submitted {
