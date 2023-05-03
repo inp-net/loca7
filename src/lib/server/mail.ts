@@ -53,7 +53,27 @@ export type EmailTemplateNameAndData =
 	| { template: 'password-changed'; data: {} }
 	| { template: 'plain'; data: { text: any } }
 	| { template: 'reset-password'; data: { resetPasswordUrl: any } }
-	| { template: 'validate-email'; data: { validateEmailUrl: any } };
+	| { template: 'validate-email'; data: { validateEmailUrl: any } }
+	| {
+			template: 'your-appartment-was-approved';
+			data: { number: any; appartmentTitle: any; address: any; description: any };
+	  }
+	| {
+			template: 'your-appartment-was-archived';
+			data: { number: any; appartmentTitle: any; address: any; description: any };
+	  }
+	| {
+			template: 'your-appartment-was-deleted';
+			data: { number: any; appartmentTitle: any; address: any; description: any };
+	  }
+	| {
+			template: 'your-appartment-was-unarchived';
+			data: { number: any; appartmentTitle: any; address: any; description: any };
+	  }
+	| {
+			template: 'your-edit-was-approved';
+			data: { number: any; edits: any; label: any; diff: any; modificationId: any };
+	  };
 
 // end generate
 

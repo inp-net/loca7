@@ -1,0 +1,31 @@
+<mj-section>
+	<mj-column>
+		<mj-text mj-class="title">
+			Bonne nouvelle, {{recipient.fullname}}. Votre annonce #{{number}} a été approuvée.
+		</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text align="center"> C'est l'annonce suivante : </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text> {{appartmentTitle}} situé à l'adresse {{address}}. </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text> {{{description}}} </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-button href="https://loca7.fr/appartements/{{ number }}">Voir l'annonce</mj-button>
+	</mj-column>
+</mj-section>

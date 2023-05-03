@@ -15,6 +15,7 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 		where: { id: params.id },
 		include: {
 			owner: true,
+			photos: true,
 			likes: {
 				include: {
 					by: true
@@ -28,7 +29,8 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 	await prisma.appartment.update({
 		where: { id: params.id },
 		data: {
-			archived: true
+			archived: true,
+			approved: user.admin
 		}
 	});
 
@@ -42,6 +44,18 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 			address: appartment.address,
 			appartmentTitle: appartmentTitle(appartment),
 			description: xss(appartment.description)
+		}
+	});
+
+	await sendMail({
+		to: appartment.owner,
+		subject: `Votre annonce a été archivée`,
+		template: "your-appartment-was-archived",
+		data: {
+			address: appartment.address,
+			appartmentTitle: appartmentTitle(appartment),
+			description: xss(appartment.description),
+			number: appartment.number,
 		}
 	});
 

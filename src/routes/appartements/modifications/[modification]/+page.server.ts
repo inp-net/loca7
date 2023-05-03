@@ -180,6 +180,24 @@ export const actions: Actions = {
 			}
 		});
 
+		await sendMail({
+			to: oldAppartment.owner,
+			subject: `Votre modification a été approuvée`,
+			template: "your-edit-was-approved",
+			data: {
+				diff: undefined,
+				edits: (Object.keys(EDITABLE_FIELDS) as (keyof typeof EDITABLE_FIELDS)[])
+					.filter((f) => appartmentDiff.modified(f, oldAppartment, edit))
+					.map((f) => ({
+						diff: appartmentDiff.modification(f, oldAppartment, edit),
+						label: EDITABLE_FIELDS[f]
+					})),
+				label: undefined,
+				number: newAppartment.number,
+				modificationId: edit.id,
+			}
+		})
+
 		throw redirect(302, `/appartements/${newAppartment.id}`);
 	},
 

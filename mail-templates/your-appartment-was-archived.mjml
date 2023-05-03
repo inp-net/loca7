@@ -1,0 +1,31 @@
+<mj-section>
+	<mj-column>
+		<mj-text mj-class="title">
+			{{recipient.fullname}}, votre annonce #{{number}} a été archivée.
+		</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text align="center">C'était l'annonce suivante : </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text> {{appartmentTitle}} situé à l'adresse {{address}}. </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text> {{{description}}} </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text>Vous recevrez un mail si celle-ci est de nouveau publiée.</mj-text>
+	</mj-column>
+</mj-section>

@@ -99,16 +99,28 @@ export const actions: Actions = {
 		await log.warn('delete_appartment', user, { appartment });
 
 		await sendMail({
-			to: appartment.likes.map((like) => like.by.email),
+			to: appartment.likes.map((like) => like.by),
 			subject: `Une annonce vous intéréssant a été supprimée`,
 			template: 'liked-appartment-was-deleted',
 			data: {
 				address: appartment.address,
 				appartmentTitle: appartmentTitle(appartment),
 				description: xss(appartment.description),
-				fullname: user.firstName + ' ' + user.lastName
 			}
 		});
+
+		await sendMail({
+			to: appartment.owner,
+			subject: `Votre annonce a été supprimée`,
+			template: 'your-appartment-was-deleted',
+			data: {
+				address: appartment.address,
+				appartmentTitle: appartmentTitle(appartment),
+				description: xss(appartment.description),
+				number: appartment.number,
+			}
+		});
+
 
 		throw redirect(302, user?.admin ? '/administration' : '/appartements/gerer');
 	}

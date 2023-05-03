@@ -1,0 +1,25 @@
+<mj-section>
+	<mj-column>
+		<mj-text mj-class="title">
+			{{recipient.fullname}}, votre annonce #{{number}} a été supprimée.
+		</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text align="center"> C'était l'annonce suivante : </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text> {{appartmentTitle}} situé à l'adresse {{address}}. </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text> {{{description}}} </mj-text>
+	</mj-column>
+</mj-section>

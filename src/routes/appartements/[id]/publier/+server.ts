@@ -58,6 +58,18 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 		}
 	});
 
+	await sendMail({
+		to: appartment.owner,
+		subject: `Votre annonce a été re-publiée`,
+		template: 'your-appartment-was-unarchived',
+		data: {
+			address: appartment.address,
+			appartmentTitle: appartmentTitle(appartment),
+			description: xss(appartment.description),
+			number: appartment.number
+		}
+	});
+
 	return new Response('Publication effectuée avec succès', {
 		status: 200
 	});

@@ -1,0 +1,38 @@
+<mj-section>
+	<mj-column>
+		<mj-text mj-class="title">
+			{{recipient.fullname}}, une modification de votre annonce #{{number}} a été acceptée.
+		</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text align="center"> Voici les changements effectués: </mj-text>
+	</mj-column>
+</mj-section>
+
+{{#each edits}}
+<mj-section>
+	<mj-column>
+		<mj-text>{{label}}</mj-text>
+	</mj-column>
+	<mj-column>
+		<mj-text>{{{diff}}}</mj-text>
+	</mj-column>
+</mj-section>
+{{/each}}
+
+<mj-section>
+	<mj-column>
+		<mj-button href="https://loca7.fr/appartements/{{ number }}">Voir l'annonce</mj-button>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text
+			>Référence technique de la modification approuvée : <code>{{modificationId}}</code></mj-text
+		>
+	</mj-column>
+</mj-section>
