@@ -183,7 +183,7 @@ export const actions: Actions = {
 		await sendMail({
 			to: oldAppartment.owner,
 			subject: `Votre modification a été approuvée`,
-			template: "your-edit-was-approved",
+			template: 'your-edit-was-approved',
 			data: {
 				diff: undefined,
 				edits: (Object.keys(EDITABLE_FIELDS) as (keyof typeof EDITABLE_FIELDS)[])
@@ -194,9 +194,9 @@ export const actions: Actions = {
 					})),
 				label: undefined,
 				number: newAppartment.number,
-				modificationId: edit.id,
+				modificationId: edit.id
 			}
-		})
+		});
 
 		throw redirect(302, `/appartements/${newAppartment.id}`);
 	},

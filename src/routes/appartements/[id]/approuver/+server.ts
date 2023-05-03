@@ -14,7 +14,7 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 		where: { id: params.id },
 		include: {
 			owner: true,
-			photos: true,
+			photos: true
 		}
 	});
 
@@ -32,12 +32,12 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 	await sendMail({
 		to: appartment.owner,
 		subject: 'Votre appartement a été approuvé',
-		template: "your-appartment-was-approved",
+		template: 'your-appartment-was-approved',
 		data: {
 			address: appartment.address,
 			appartmentTitle: appartmentTitle(appartment),
 			description: xss(appartment.description),
-			number: appartment.number,
+			number: appartment.number
 		}
 	});
 

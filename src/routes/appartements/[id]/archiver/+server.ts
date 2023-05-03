@@ -50,12 +50,12 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 	await sendMail({
 		to: appartment.owner,
 		subject: `Votre annonce a été archivée`,
-		template: "your-appartment-was-archived",
+		template: 'your-appartment-was-archived',
 		data: {
 			address: appartment.address,
 			appartmentTitle: appartmentTitle(appartment),
 			description: xss(appartment.description),
-			number: appartment.number,
+			number: appartment.number
 		}
 	});
 

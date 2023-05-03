@@ -105,7 +105,7 @@ export const actions: Actions = {
 			data: {
 				address: appartment.address,
 				appartmentTitle: appartmentTitle(appartment),
-				description: xss(appartment.description),
+				description: xss(appartment.description)
 			}
 		});
 
@@ -117,10 +117,9 @@ export const actions: Actions = {
 				address: appartment.address,
 				appartmentTitle: appartmentTitle(appartment),
 				description: xss(appartment.description),
-				number: appartment.number,
+				number: appartment.number
 			}
 		});
-
 
 		throw redirect(302, user?.admin ? '/administration' : '/appartements/gerer');
 	}
