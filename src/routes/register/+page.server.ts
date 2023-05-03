@@ -1,4 +1,5 @@
 import { auth } from '$lib/server/lucia';
+import { prisma } from '$lib/server/prisma';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { LuciaError } from 'lucia-auth';
 import type { PageServerLoad } from './$types';
@@ -54,6 +55,7 @@ export const actions: Actions = {
 				.filter(Boolean) as PhoneNumber[];
 
 			if (phoneNumbers.some((number) => parsePhoneNumber(phone, 'FR')?.isEqual(number))) {
+				await log.error(`create_account`, null, `fail because duplicate phone`, { inputData })
 				throw redirect(
 					302,
 					'/register' + url.search + '#duplicate-phone=' + encodeURIComponent(phone)
