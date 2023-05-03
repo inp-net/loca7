@@ -2,6 +2,7 @@ import { auth, guards } from '$lib/server/lucia';
 import { sendMail } from '$lib/server/mail';
 import { isGhostEmail } from '$lib/types';
 import type { RequestHandler } from './$types';
+import { prisma } from '$lib/server/prisma';
 
 export const GET: RequestHandler = async ({ url, locals, params }) => {
 	const { user, session } = await locals.validateUser();

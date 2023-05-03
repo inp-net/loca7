@@ -67,6 +67,17 @@ export type EmailTemplateNameAndData =
 			data: { number: any; appartmentTitle: any; address: any; description: any };
 	  }
 	| {
+			template: 'your-appartment-was-reported';
+			data: {
+				number: any;
+				reason: any;
+				appartmentTitleInSentence: any;
+				address: any;
+				message: any;
+				appartUrl: any;
+			};
+	  }
+	| {
 			template: 'your-appartment-was-unarchived';
 			data: { number: any; appartmentTitle: any; address: any; description: any };
 	  }

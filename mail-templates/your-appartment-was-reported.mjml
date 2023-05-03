@@ -1,0 +1,37 @@
+<mj-section>
+	<mj-column>
+		<mj-text mj-class="title">
+			{{recipient.fullname}}, votre annonce #{{number}} a été signalée pour {{reason}}.
+		</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text>
+			Le signalement porte sur {{appartmentTitleInSentence}} situé à l'adresse {{address}}. Voici le
+			signalement :
+		</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text> {{{message}}} </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text>
+			Un·e administrateur·ice traitera ce signalement. Vous pouvez aussi proposer des modifications
+			à votre annonce, ou l'archiver.
+		</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-button href="{{ appartUrl }}"> Voir l'annonce </mj-button>
+	</mj-column>
+</mj-section>
