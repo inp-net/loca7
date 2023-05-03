@@ -45,7 +45,7 @@
 	);
 
 	$: yearsAvailable = [
-		...new Set(appartments.map((a) => a.updatedAt.getFullYear().toString()))
+		...new Set(appartments.map((a) => effectiveUpdatedAt(a).getFullYear().toString()))
 	].sort();
 
 	const isOnline = (a: Appartment) =>
@@ -100,7 +100,7 @@
 	const effectiveUpdatedAt = (appartment: Appartment) =>
 		new Date(
 			Math.max(
-				appartment.updatedAt.valueOf(),
+				appartment.createdAt.valueOf(),
 				...appartment.reports.map((r) => r.createdAt.valueOf()),
 				...appartment.history.map((h) => h.createdAt.valueOf())
 			)
