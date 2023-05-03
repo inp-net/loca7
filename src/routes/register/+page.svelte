@@ -86,11 +86,9 @@
 			<InputPhone
 				name="phone"
 				bind:value={user.phone}
-				schema={z
-					.string()
-					.regex(new RegExp('^(?!' + escapeRegex(duplicatePhone) + '$).*'), {
-						message: 'Ce numéro de téléphone a déjà été utilisé'
-					})}
+				schema={z.custom((value) => value === '' || value !== duplicatePhone, {
+					message: 'Ce numéro de téléphone a déjà été utilisé'
+				})}
 			/>
 		</InputField>
 
