@@ -4,6 +4,7 @@ import { LuciaError } from 'lucia-auth';
 import type { PageServerLoad } from './$types';
 import { log } from '$lib/server/logging';
 import { isGhostEmail } from '$lib/types';
+import parsePhoneNumber, { PhoneNumber } from 'libphonenumber-js';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	const { session, user } = await locals.validateUser();
@@ -32,6 +33,32 @@ export const actions: Actions = {
 				inputData
 			});
 			throw error(400, { message: 'Veuillez renseigner une adresse email valide.' });
+		}
+
+		if (phone !== '' && parsePhoneNumber(phone, 'FR') !== undefined) {
+			const phoneNumbers = (
+				await prisma.user.findMany({
+					where: {
+						phone: {
+							not: {
+								equals: ''
+							}
+						}
+					},
+					select: {
+						phone: true
+					}
+				})
+			)
+				.map(({ phone }) => parsePhoneNumber(phone, 'FR'))
+				.filter(Boolean) as PhoneNumber[];
+
+			if (phoneNumbers.some((number) => parsePhoneNumber(phone, 'FR')?.isEqual(number))) {
+				throw redirect(
+					302,
+					'/register' + url.search + '#duplicate-phone=' + encodeURIComponent(phone)
+				);
+			}
 		}
 
 		try {

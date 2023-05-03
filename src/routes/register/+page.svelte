@@ -10,10 +10,14 @@
 	import { z } from 'zod';
 	import type { PageData, Snapshot } from './$types';
 	import escapeRegex from 'escape-string-regexp';
+	import { EMAIL_REGEX } from '$lib/types';
 
 	export let data: PageData;
 	let duplicateEmail: string = $page.url.hash.startsWith('#duplicate-email')
 		? decodeURIComponent($page.url.hash.replace('#duplicate-email=', ''))
+		: '';
+	let duplicatePhone: string = $page.url.hash.startsWith('#duplicate-phone')
+		? decodeURIComponent($page.url.hash.replace('#duplicate-phone=', ''))
 		: '';
 
 	let user: {
@@ -26,7 +30,7 @@
 		email: duplicateEmail,
 		firstName: '',
 		lastName: '',
-		phone: '',
+		phone: duplicatePhone,
 		password: ''
 	};
 
@@ -51,7 +55,7 @@
 			<InputEmail
 				schema={z
 					.string()
-					.email({ message: "Cet e-mail n'est pas valide" })
+					.regex(EMAIL_REGEX, { message: "Cet e-mail n'est pas valide" })
 					.regex(
 						new RegExp('^(?!' + data.allEmails.map(escapeRegex).join('|') + '$).*'),
 						{
@@ -79,7 +83,15 @@
 		</div>
 
 		<InputField label="Téléphone (conseillé)">
-			<InputPhone name="phone" bind:value={user.phone} />
+			<InputPhone
+				name="phone"
+				bind:value={user.phone}
+				schema={z
+					.string()
+					.regex(new RegExp('^(?!' + escapeRegex(duplicatePhone) + '$).*'), {
+						message: 'Ce numéro de téléphone a déjà été utilisé'
+					})}
+			/>
 		</InputField>
 
 		<InputPassword

@@ -46,6 +46,9 @@ dependencies:
   lexical:
     specifier: ^0.8.1
     version: 0.8.1
+  libphonenumber-js:
+    specifier: ^1.10.28
+    version: 1.10.28
   lodash-es:
     specifier: ^4.17.21
     version: 4.17.21
@@ -2207,6 +2210,10 @@ packages:
 
   /lexical@0.8.1:
     resolution: {integrity: sha512-+dVoQZldtPCLyMgnvbgeYCmfIQilEHrZYGf6Fdpw4Ck0Xvg7IpvMpIKuMsXYsH1t2TlrTQ3qR6cDYvobuU7kMA==}
+    dev: false
+
+  /libphonenumber-js@1.10.28:
+    resolution: {integrity: sha512-1eAgjLrZA0+2Wgw4hs+4Q/kEBycxQo8ZLYnmOvZ3AlM8ImAVAJgDPlZtISLEzD1vunc2q8s2Pn7XwB7I8U3Kzw==}
     dev: false
 
   /local-pkg@0.4.3:
