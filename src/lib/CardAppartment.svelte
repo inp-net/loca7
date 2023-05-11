@@ -30,7 +30,7 @@
 	export let surface: number;
 	export let kind: AppartmentKind;
 	export let roomsCount: number;
-	export let travelTimeToN7: TravelTimeToN7;
+	export let travelTimeToN7: TravelTimeToN7 | null;
 	export let availableAt: Date;
 	export let address: string;
 	export let latitude: number | null;
@@ -108,7 +108,7 @@
 						>
 					{/if}
 				</p>
-				{#if travelTimeToN7.byBike || travelTimeToN7.byFoot || travelTimeToN7.byPublicTransport}
+				{#if travelTimeToN7?.byBike || travelTimeToN7?.byFoot || travelTimeToN7?.byPublicTransport}
 					<span
 						class="icon"
 						use:tooltip={"Temps de trajet entre l'école et cet appartement"}
