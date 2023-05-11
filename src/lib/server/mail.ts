@@ -8,6 +8,7 @@ import { log } from './logging';
 import { CONTACT_EMAIL } from '$lib/constants';
 import type { User } from '@prisma/client';
 import { auth } from './lucia';
+import { prisma } from '$lib/server/prisma';
 
 // generate:EmailTemplates
 /**
