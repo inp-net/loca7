@@ -280,7 +280,8 @@
 	.wrap {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 2rem;
+		column-gap: 2rem;
+		row-gap: 1rem;
 	}
 
 	.owner {
