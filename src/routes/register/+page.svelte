@@ -50,6 +50,10 @@
 		Déjà un compte? <ButtonSecondary insideProse href="/login">Connectez-vous</ButtonSecondary>
 	</p>
 
+	<p class="explain-required-fields">
+		Les champs marqués d'un <span class="required-indicator">*</span> sont requis.
+	</p>
+
 	<form method="post">
 		<InputField label="Email" required>
 			<InputEmail
@@ -140,6 +144,12 @@
 	h1,
 	main > p {
 		text-align: center;
+	}
+
+	.required-indicator {
+		color: var(--sky);
+		margin-left: 0.125rem;
+		transform: scale(1.2) translateY(0.1em);
 	}
 
 	form {
