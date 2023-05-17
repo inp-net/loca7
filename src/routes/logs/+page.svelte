@@ -7,6 +7,23 @@
 	export let data: PageData;
 
 	let shown: string[] = ['I', 'W', 'E', 'F'];
+	let expandedRow: string = '';
+
+	function formatMessage(message: string): string {
+		try {
+			return JSON.stringify(JSON.parse(message), null, 2);
+		} catch (error) {
+			if (message.endsWith('}')) {
+				const [plaintext, ...json] = message.split('{');
+				return plaintext + formatMessage('{' + json.join('{'));
+			}
+			return message;
+		}
+	}
+
+	function id<T>(t: T): T {
+		return t
+	}
 </script>
 
 <main>
@@ -34,12 +51,16 @@
 				id={log.createdAt.toISOString()}
 				style:--fg="var(--{['muted', 'fg', 'safran', 'blood', 'white'][log.level]}, #fff)"
 				style:--bg="var(--{['muted-bg', 'bg', 'plaster', 'rose', 'mushroom'][log.level]})"
+				class:expanded={expandedRow === log.id}
+				on:click={() => {
+					expandedRow = expandedRow === log.id ? '' : log.id;
+				}}
 			>
 				<td>{log.createdAt.toISOString()}</td>
 				<td>{['T', 'I', 'W', 'E', 'F'][log.level]}</td>
 				<td>{log.user?.email || 'unknown'}</td>
 				<td>{log.action}</td>
-				<td>{log.message}</td>
+				<td>{(expandedRow === log.id ? formatMessage : id)(log.message)}</td>
 			</tr>
 		{/each}
 	</table>
@@ -73,6 +94,7 @@
 		padding: 0.5rem;
 		white-space: pre;
 		overflow: scroll;
+		vertical-align: top;
 	}
 	td:nth-child(2),
 	th:nth-child(2) {
