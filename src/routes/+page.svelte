@@ -178,8 +178,8 @@
 						bind:selection={$searchCriteria.type}
 					/>
 				</InputField>
-				<InputField label="Aspects">
-					<div class="aspects">
+				<InputField label="Critères">
+					<div class="criteria">
 						<InputCheckbox
 							labelNull="Peu importe"
 							label="Meublé"
@@ -270,12 +270,12 @@
 	}
 
 	.surface-and-price,
-	.aspects {
+	.criteria {
 		display: flex;
 		gap: 1rem;
 	}
 
-	.aspects {
+	.criteria {
 		flex-wrap: wrap;
 	}
 
