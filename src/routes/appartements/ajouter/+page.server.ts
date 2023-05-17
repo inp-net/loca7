@@ -183,7 +183,7 @@ export const actions: Actions = {
 							appartment.longitude && appartment.latitude
 								? distanceBetween(appartment, ENSEEIHT)
 								: '?',
-						aspectsLine: Object.entries(DISPLAY_ASPECT_FIELDS)
+						criteriaLine: Object.entries(DISPLAY_ASPECT_FIELDS)
 							.filter(([key, display]) => appartment[key])
 							.map(([key, display]) => display)
 							.join(', ')

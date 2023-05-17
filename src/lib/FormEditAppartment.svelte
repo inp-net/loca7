@@ -204,7 +204,7 @@
 		/>
 	</InputField>
 
-	<InputField label="Aspects">
+	<InputField label="Critères">
 		<div class="wrap">
 			<InputCheckbox
 				name="hasFurniture"

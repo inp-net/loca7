@@ -292,7 +292,7 @@
 					</div>
 				{/if}
 			</section>
-			<section class="aspects">
+			<section class="criteria">
 				<!-- <h2>Caractéristiques</h2> -->
 				<ul>
 					{#if appart.hasFurniture !== null}
@@ -674,18 +674,18 @@
 		text-align: right;
 	}
 
-	section.aspects {
+	section.criteria {
 		grid-area: left;
 	}
 
-	section.aspects ul {
+	section.criteria ul {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1rem;
 		padding-left: 0;
 	}
 
-	section.aspects .aspect {
+	section.criteria .aspect {
 		display: flex;
 		flex-direction: column;
 		text-align: center;
@@ -693,11 +693,11 @@
 		width: 5rem;
 	}
 
-	section.aspects .aspect p {
+	section.criteria .aspect p {
 		margin-top: 0.5rem;
 	}
 
-	section.aspects .iconlike {
+	section.criteria .iconlike {
 		margin-top: 5px; /* XXX don't ask me why, real icons are actually 55px tall. putting it as a margin top keeps it somewhat vertically aligned to other icons */
 		height: 50px;
 		--size: 50px;

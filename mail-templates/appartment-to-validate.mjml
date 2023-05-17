@@ -62,10 +62,10 @@
 
 <mj-section>
 	<mj-column>
-		<mj-text>Aspects</mj-text>
+		<mj-text>Critères</mj-text>
 	</mj-column>
 	<mj-column>
-		<mj-text>{{appartment.aspectsLine}}</mj-text>
+		<mj-text>{{appartment.criteriaLine}}</mj-text>
 	</mj-column>
 </mj-section>
 

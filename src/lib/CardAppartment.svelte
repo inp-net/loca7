@@ -128,7 +128,7 @@
 					</p>
 				{/if}
 			</section>
-			<section class="aspects">
+			<section class="criteria">
 				{#if hasFurniture !== null}
 					<p class="furniture">
 						<span class="icon"
@@ -277,20 +277,20 @@
 		color: var(--muted);
 	}
 
-	section.aspects {
+	section.criteria {
 		display: flex;
 		gap: 1rem;
 		margin-top: 1.5rem;
 		flex-wrap: wrap;
 	}
 
-	section.aspects p {
+	section.criteria p {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
 	}
 
-	section.aspects .icon {
+	section.criteria .icon {
 		display: inline-block;
 		height: 1.2em;
 	}
