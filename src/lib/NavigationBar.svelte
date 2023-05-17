@@ -110,7 +110,8 @@
 	<ul class="actions">
 		{#if user}
 			<li>
-				<ButtonSecondary href="/account" icon="user">Mon compte</ButtonSecondary>
+				<ButtonSecondary href="mailto:{CONTACT_EMAIL}" icon="question">Aide</ButtonSecondary
+				>
 			</li>
 			<li>
 				<form method="post" action="/logout">
