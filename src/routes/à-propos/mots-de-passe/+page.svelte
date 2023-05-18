@@ -3,8 +3,11 @@
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import Icon from '$lib/Icon.svelte';
 	import InputPassword from '$lib/InputPassword.svelte';
+	import type { PageData } from './$types';
 
 	const returnTo = $page.url.searchParams.get('from');
+
+	export let data: PageData;
 </script>
 
 <main>
@@ -28,7 +31,12 @@
 	</p>
 
 	<section class="test">
-		<InputPassword feedback label="Testez ici" value="" />
+		<InputPassword
+			feedback
+			userInputs={Object.values(data.user ?? {}).filter((v) => typeof v === 'string')}
+			label="Testez ici"
+			value=""
+		/>
 	</section>
 
 	<section class="learn-more">

@@ -35,7 +35,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		}
 	});
 	const creatingPassword = !currentEmailKey;
-	return { creatingPassword };
+	return { creatingPassword, holder: passwordReset.user };
 };
 
 export const actions: Actions = {

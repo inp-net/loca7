@@ -118,6 +118,7 @@
 			required
 			label="Nouveau mot de passe"
 			feedback
+			userInputs={Object.values(user).filter((v) => v && typeof v === 'string')}
 		/>
 		<section class="submit">
 			<ButtonSecondary submits icon="checkmark">Enregistrer</ButtonSecondary>

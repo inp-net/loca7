@@ -98,6 +98,7 @@
 
 		<InputPassword
 			feedback
+			userInputs={Object.values(user).filter((v) => typeof v === 'string')}
 			required
 			label="Mot de passe"
 			name="password"

@@ -14,7 +14,13 @@
 	<h1>Choisissez votre mot de passe.</h1>
 
 	<form method="post">
-		<InputPassword feedback value="" label="Mot de passe" name="password" />
+		<InputPassword
+			feedback
+			userInputs={Object.values(data.holder).filter((v) => typeof v === 'string')}
+			value=""
+			label="Mot de passe"
+			name="password"
+		/>
 
 		<section class="submit">
 			<ButtonPrimary submits

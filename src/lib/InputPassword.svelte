@@ -20,6 +20,7 @@
 	export let schema: Zod.ZodString = z.string();
 	export let showEmptyErrors = true;
 	export let errorMessage: string | undefined = undefined;
+	export let userInputs: string[] = [];
 
 	let analysis;
 	let strength: 'dangerous' | 'weak' | 'good';
@@ -33,7 +34,7 @@
 		}
 	});
 
-	$: analysis = zxcvbn(value); // TODO use second argument (user inputs)
+	$: analysis = zxcvbn(value, userInputs); 
 	$: strength = analysis.score <= 1 ? 'dangerous' : analysis.score <= 2 ? 'weak' : 'good';
 	$: strengthDisplay = {
 		dangerous: 'dangereuse',
