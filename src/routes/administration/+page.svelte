@@ -240,18 +240,20 @@
 				}}
 				>Archiver
 			</ButtonColored>
-			<ButtonColored
-				on:click={async () => {
-					await Promise.all(
-						selection.map(async (id) => {
-							await fetch(`/appartements/${id}/approuver`, { method: 'POST' });
-							await fetch(`/appartements/${id}/publier`, { method: 'POST' });
-						})
-					);
-					window.location.reload();
-				}}
-				>Valider & publier
-			</ButtonColored>
+			{#if currentCategory !== 'online'}
+				<ButtonColored
+					on:click={async () => {
+						await Promise.all(
+							selection.map(async (id) => {
+								await fetch(`/appartements/${id}/approuver`, { method: 'POST' });
+								await fetch(`/appartements/${id}/publier`, { method: 'POST' });
+							})
+						);
+						window.location.reload();
+					}}
+					>Valider & publier
+				</ButtonColored>
+			{/if}
 			<ButtonColored
 				dangerous
 				on:click={() => {
