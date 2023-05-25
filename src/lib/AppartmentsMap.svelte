@@ -110,7 +110,7 @@
 
 		L.marker(locationTuple(ENSEEIHT), {
 			icon: L.icon({
-				iconUrl: '/icons/location-enseeiht-color.svg',
+				iconUrl: '/icons/location-enseeiht-color-alt.svg',
 				iconSize: [markerSize, markerSize],
 				iconAnchor: [markerSize / 2, markerSize],
 				className: 'enseeiht-icon'
