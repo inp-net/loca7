@@ -128,7 +128,7 @@
 
 <footer>
 	<section class="help">
-		<ButtonSecondary icon="question" href="mailto:{CONTACT_EMAIL}">Aide</ButtonSecondary>
+		<ButtonSecondary icon="question" href="/aide">Aide</ButtonSecondary>
 	</section>
 	<div class="side-by-side">
 		<section class="about">

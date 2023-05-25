@@ -110,7 +110,7 @@
 	<ul class="actions">
 		{#if user}
 			<li>
-				<ButtonSecondary href="mailto:{CONTACT_EMAIL}" icon="question">Aide</ButtonSecondary
+				<ButtonSecondary href="/aide" icon="question">Aide</ButtonSecondary
 				>
 			</li>
 			<li>
@@ -177,7 +177,7 @@
 			</form>
 		</li>
 		<li>
-			<ButtonSecondary icon="question" href="mailto:{CONTACT_EMAIL}">Aide</ButtonSecondary>
+			<ButtonSecondary icon="question" href="/aide">Aide</ButtonSecondary>
 		</li>
 	</ul>
 </nav>
