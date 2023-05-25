@@ -193,6 +193,10 @@
 				<span class="pill" data-done={byCategory.pending.length === 0}
 					>{byCategory.pending.length}
 				</span>
+			{:else if option === 'reported'}
+				<span class="pill danger" data-done={byCategory.reported.length === 0}
+					>{byCategory.reported.length}
+				</span>
 			{/if}
 		</InputSelectOne>
 		<div class="side-by-side">
@@ -372,6 +376,11 @@
 		color: black;
 		padding: 0 0.5rem;
 		border-radius: 100000px;
+	}
+
+	:global(.pill.danger) {
+		background: var(--mushroom);
+		color: #fff;
 	}
 
 	:global(.pill svg) {
