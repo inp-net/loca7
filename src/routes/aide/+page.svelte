@@ -4,6 +4,13 @@
 
 <main>
 	<h1>Comment ajouter une annonce sur Loca7 ?</h1>
+	<h2 class="contact">Vous voulez nous contacter?</h2>
+	<p>
+		Pas de soucis. Vous pouvez envoyer un mail à <a href="mailto:{CONTACT_EMAIL}"
+			>{CONTACT_EMAIL}</a
+		>
+	</p>
+
 	<ul class="steps">
 		<!-- START STEPS -->
 		<li class="step">
@@ -89,13 +96,6 @@
 			<picture />
 		</li>
 	</ul>
-
-	<h2 class="contact">Vous voulez nous contacter?</h2>
-	<p>
-		Pas de soucis. Vous pouvez envoyer un mail à <a href="mailto:{CONTACT_EMAIL}"
-			>{CONTACT_EMAIL}</a
-		>
-	</p>
 </main>
 
 <style>

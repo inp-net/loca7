@@ -110,8 +110,7 @@
 	<ul class="actions">
 		{#if user}
 			<li>
-				<ButtonSecondary href="/aide" icon="question">Aide</ButtonSecondary
-				>
+				<ButtonSecondary href="/aide" icon="question">Aide</ButtonSecondary>
 			</li>
 			<li>
 				<form method="post" action="/logout">

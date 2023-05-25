@@ -57,7 +57,9 @@ export const actions: Actions = {
 				address: report.appartment.address,
 				appartmentTitleInSentence: appartmentTitle(report.appartment, true),
 				message: xss(report.message),
-				appartUrl: (process.env.ORIGIN || 'http://localhost:5173') + `/appartements/${report.appartment.id}`
+				appartUrl:
+					(process.env.ORIGIN || 'http://localhost:5173') +
+					`/appartements/${report.appartment.id}`
 			}
 		});
 

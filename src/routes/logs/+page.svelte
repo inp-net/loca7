@@ -22,7 +22,7 @@
 	}
 
 	function id<T>(t: T): T {
-		return t
+		return t;
 	}
 </script>
 

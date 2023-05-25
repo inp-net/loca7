@@ -34,7 +34,7 @@
 		}
 	});
 
-	$: analysis = zxcvbn(value, userInputs); 
+	$: analysis = zxcvbn(value, userInputs);
 	$: strength = analysis.score <= 1 ? 'dangerous' : analysis.score <= 2 ? 'weak' : 'good';
 	$: strengthDisplay = {
 		dangerous: 'dangereuse',
