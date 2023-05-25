@@ -110,7 +110,7 @@ class Tisseo {
 				position: { latitude: stop.stop_lon, longitude: stop.stop_lat }
 			}))
 			.filter((stop) => Object.keys(DISPLAY_PUBLIC_TRANSPORT_TYPE).includes(stop.route_type))
-			.filter((stop) => Math.abs(distanceBetween(location, stop.position)) < 500)
+			.filter((stop) => Math.abs(distanceBetween(location, stop.position)) < 400)
 			.sort(
 				(a, b) =>
 					distanceBetween(location, a.position) - distanceBetween(location, b.position)
