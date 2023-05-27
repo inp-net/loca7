@@ -16,10 +16,22 @@ export const GET: RequestHandler = async ({ url, locals, params }) => {
 				},
 				keys: {
 					none: {
-						id: {
-							startsWith: 'email:'
-						}
+						OR: [
+							{
+								id: {
+									startsWith: 'email:'
+								}
+							},
+							{
+								id: {
+									startsWith: 'cas:'
+								}
+							}
+						]
 					}
+				},
+				PasswordReset: {
+					none: {}
 				}
 			}
 		})
