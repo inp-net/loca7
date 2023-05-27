@@ -1,0 +1,24 @@
+<mj-section background-color="#c2e8fc" full-width="full-width">
+	<mj-column>
+		<mj-text mj-class="title">
+			Et voilà, {{recipient.fullname}} ! Votre compte Loca7 a été créé.</mj-text
+		>
+	</mj-column>
+</mj-section>
+
+<mj-section>
+	<mj-column>
+		<mj-text>
+			Si jamais vous oubliez votre mot de passe, vous pouvez toujours en choisir un nouveau en
+			cliquant sur "Réinitialisez-le" à la page de connexion.
+		</mj-text>
+		<mj-text> Bonne journée ! </mj-text>
+		<mj-text> Le gestionnaire Loca7. </mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section full-width="full-width">
+	<mj-column>
+		<mj-button href="{{manageAppartmentsUrl}}"> Voir mes annonces </mj-button>
+	</mj-column>
+</mj-section>

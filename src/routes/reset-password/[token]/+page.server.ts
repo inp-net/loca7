@@ -102,16 +102,25 @@ export const actions: Actions = {
 					emailIsValidated: true
 				}
 			});
+			await sendMail({
+				to: passwordReset.user,
+				subject: 'Votre compte Loca7 a été créé',
+				data: {
+					manageAppartmentsUrl: `${
+						process.env.ORIGIN || 'http://localhost:5173'
+					}/appartements/gerer`
+				},
+				template: 'account-created'
+			});
 		} else {
 			await auth.updateKeyPassword('email', passwordReset.user.email, newPassword);
+			await sendMail({
+				to: passwordReset.user,
+				subject: 'Loca7: Votre mot de passe a été changé',
+				data: {},
+				template: 'password-changed'
+			});
 		}
-		await sendMail({
-			to: passwordReset.user,
-			subject: 'Loca7: Votre mot de passe a été changé',
-			data: {},
-			template: 'password-changed'
-		});
-
 		await log.info(
 			'use_password_reset',
 			user,
