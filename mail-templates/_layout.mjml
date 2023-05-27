@@ -3,7 +3,7 @@
 		<mj-font name="Space Grotesk" href="https://loca7.fr/fonts/import/space-grotesk.css" />
 		<mj-title>{{ title }}</mj-title>
 		<mj-attributes>
-			<mj-text font-family="Space Grotesk,sans" font-size="18px" />
+			<mj-text font-family="Space Grotesk, sans-serif" font-size="18px" />
 			<mj-class name="title" font-size="32px" />
 			<mj-class name="small" font-size="14px" />
 			<mj-button
