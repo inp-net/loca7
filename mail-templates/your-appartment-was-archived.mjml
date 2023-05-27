@@ -8,24 +8,25 @@
 
 <mj-section>
 	<mj-column>
-		<mj-text align="center">C'était l'annonce suivante : </mj-text>
-	</mj-column>
-</mj-section>
-
-<mj-section>
-	<mj-column>
-		<mj-text> {{appartmentTitle}} situé à l'adresse {{address}}. </mj-text>
-	</mj-column>
-</mj-section>
-
-<mj-section>
-	<mj-column>
-		<mj-text> {{{description}}} </mj-text>
-	</mj-column>
-</mj-section>
-
-<mj-section>
-	<mj-column>
-		<mj-text>Vous recevrez un mail si celle-ci est de nouveau publiée.</mj-text>
+		<mj-text
+			><strong>Si vous êtes à l’origine de cette action</strong>, alors ce mail sert de
+			confirmation.</mj-text
+		>
+		<mj-text
+			><strong>Si vous n’êtes pas à l’origine de cette action</strong>, c’est que votre annonce a
+			été archivée par le gestionnaire Loca7 car elle a été signalée comme obsolète par
+			quelqu’un.</mj-text
+		>
+		<mj-text
+			><strong>Si</strong> <strong>vous pensez que cette action est une erreur</strong>, vous pouvez
+			dès à présent remettre votre annonce en ligne en vous connectant à votre compte
+			Loca7.</mj-text
+		>
+		<mj-text
+			>Pour vous connecter, rendez-vous sur Loca7 ou cliquez sur ce lien :
+			<a href="https://loca7.fr/login"><em>https://loca7.fr/login</em></a>
+		</mj-text>
+		<mj-text>Bonne journée à vous,</mj-text>
+		<mj-text>Le gestionnaire Loca7.</mj-text>
 	</mj-column>
 </mj-section>

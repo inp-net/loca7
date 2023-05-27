@@ -1,31 +1,40 @@
 <mj-section>
 	<mj-column>
 		<mj-text mj-class="title">
-			Bonne nouvelle, {{recipient.fullname}}. Votre annonce #{{number}} a été approuvée.
+			Bonne nouvelle, {{recipient.fullname}}. Votre annonce #{{number}} a été approuvée !
 		</mj-text>
 	</mj-column>
 </mj-section>
 
 <mj-section>
 	<mj-column>
-		<mj-text align="center"> C'est l'annonce suivante : </mj-text>
+		<mj-text
+			>Elle est dès a présent en ligne, vous pouvez la consulter en cliquant sur ce lien :
+			<a href="https://loca7.fr/appartements/{{ number }}"
+				><em>https://loca7.fr/appartements/{{ number }}</em></a
+			></mj-text
+		>
+		<mj-text
+			>Si vous voulez la <strong>modifier</strong>, vous devez vous
+			<strong>connecter avec votre compte Loca7</strong>, réaliser les modifications, et attendre la
+			validation de celle-ci par le gestionnaire Loca7.
+		</mj-text>
+		<mj-text>Une fois que votre location est occupée, n’oubliez pas de l’archiver !</mj-text>
+		<mj-text
+			>Il faut simplement vous <strong>connecter </strong>avec votre compte Loca7 et l’archiver,
+			vous pourrez la remettre en ligne à tout moment !</mj-text
+		>
+		<mj-text
+			>Pour vous connecter, rendez-vous sur Loca7 ou cliquez sur ce lien :
+			<a href="https://loca7.fr/login"><em>https://loca7.fr/login</em></a>
+		</mj-text>
+		<mj-text>Bonne journée à vous,</mj-text>
+		<mj-text>Le gestionnaire Loca7.</mj-text>
 	</mj-column>
 </mj-section>
 
 <mj-section>
 	<mj-column>
-		<mj-text> {{appartmentTitle}} situé à l'adresse {{address}}. </mj-text>
-	</mj-column>
-</mj-section>
-
-<mj-section>
-	<mj-column>
-		<mj-text> {{{description}}} </mj-text>
-	</mj-column>
-</mj-section>
-
-<mj-section>
-	<mj-column>
-		<mj-button href="https://loca7.fr/appartements/{{ number }}">Voir l'annonce</mj-button>
+		<mj-button href="https://loca7.fr/appartements/{{ number }}">Voir votre annonce</mj-button>
 	</mj-column>
 </mj-section>

@@ -55,14 +55,8 @@ export type EmailTemplateNameAndData =
 	| { template: 'plain'; data: { text: any } }
 	| { template: 'reset-password'; data: { resetPasswordUrl: any } }
 	| { template: 'validate-email'; data: { validateEmailUrl: any } }
-	| {
-			template: 'your-appartment-was-approved';
-			data: { number: any; appartmentTitle: any; address: any; description: any };
-	  }
-	| {
-			template: 'your-appartment-was-archived';
-			data: { number: any; appartmentTitle: any; address: any; description: any };
-	  }
+	| { template: 'your-appartment-was-approved'; data: { number: any } }
+	| { template: 'your-appartment-was-archived'; data: { number: any } }
 	| {
 			template: 'your-appartment-was-deleted';
 			data: { number: any; appartmentTitle: any; address: any; description: any };

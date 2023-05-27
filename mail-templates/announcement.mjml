@@ -3,12 +3,91 @@
 		<mj-text mj-class="title"> {{recipient.fullname}}, Loca7 fait peau neuve. </mj-text>
 	</mj-column>
 	<mj-column>
-		<mj-text> Vous pouvez maintenant gérer vos annonces directement depuis le site. </mj-text>
-		<mj-text> Créez votre compte, et commencez à gérer vos annonces. </mj-text>
-		<mj-text> On a gardé vos anciennes annonces, pas de panique. </mj-text>
+		<mj-text>Bonjour {{recipient.fullname}}.</mj-text>
+		<mj-text><strong>Loca7 fait peau neuve !</strong></mj-text>
+		<mj-text
+			>Il était temps, le site de petites annonces de locations de l’n7 se faisait un peu vieux
+			😬</mj-text
+		>
 	</mj-column>
 </mj-section>
-<mj-section background-color="#c2e8fc" full-width="full-width">
+<mj-section full-width="full-width">
+	<mj-column>
+		<mj-text align="center" color="red"
+			><strong>ATTENTION LIRE ATTENTIVEMENT JUSQU’À LA FIN</strong></mj-text
+		>
+		<mj-text
+			>Avec cette <strong>nouvelle version</strong>, pleins de nouvelles choses sont là, mais
+			toujours le même but : faciliter la recherche de logement des n7iens et futurs
+			n7iens.</mj-text
+		>
+		<mj-text
+			>Premièrement, Loca7 se munit d’un magnifique <strong>logo</strong>, il en fallait forcément
+			un pour représenter notre plateforme unique.</mj-text
+		>
+		<mj-text
+			>Ensuite, Loca7 se transforme en <strong>un superbe site</strong>, design et dans l’air du
+			temps, avec toutes les bonnes informations au bon endroit :
+			<a href="https://loca7.fr/"><em>https://loca7.fr/</em></a></mj-text
+		>
+		<mj-text
+			>Pour faciliter la gestion, que ce soit de notre côté ou du vôtre, nous avons mis en place un
+			système de <strong>compte </strong>pour vous les propriétaires. Avec cette nouvelle façon de
+			gérer vos annonces, adieu les mails à Loca7 pour modifier le loyer, la description ou encore
+			les photos, maintenant vous pourrez faire tout ça tout seul depuis n’importe lequel de vos
+			appareils : vous aurez simplement à vous <strong>connecter </strong>sur votre ordinateur ou
+			smartphone, et vous pourrez facilement publier des annonces pour vos logements disponibles et
+			les mettre à jour en temps réel.
+		</mj-text>
+		<mj-text
+			><strong
+				>Mais attention, le gestionnaire aura toujours un droit d’administration sur tous vos ajouts
+				et toutes vos modifications.</strong
+			></mj-text
+		>
+		<mj-text
+			>Cette nouvelle façon de gérer vous permettra aussi de voir l’ensemble de vos annonces sur une
+			seule page, mais aussi de voir quelles annonces sont publiées, lesquelles sont archivées, et
+			lesquelles sont en attente de validation par l’administrateur.</mj-text
+		>
+		<mj-text
+			>Du côté des étudiants qui visiteront Loca7, rien ne changera,
+			<strong>pas besoin de compte pour consulter Loca7</strong>.
+		</mj-text>
+		<mj-text
+			>Concernant le dépôt d’annonce, nous avons repensé ce processus pour le rendre plus
+			<strong>intuitif</strong>, plus <strong>rapide </strong>et surtout plus
+			<strong>simple</strong>. Nous avons aussi ajouté pleins de nouveaux critères, comme la fibre
+			optique, le parking à vélo et pleins d'autres, le tout pour faciliter la recherche des
+			étudiants, tout en mettant en valeur vos logements.</mj-text
+		>
+		<mj-text
+			>Nous avons aussi repensé la façon de naviguer et de rechercher des logements sur Loca7.
+			Les<strong> critères de recherche</strong> sont sensiblement les mêmes qu’avant, mais en
+			ajoutant les critères spécifiques précisés au-dessus.</mj-text
+		>
+		<mj-text>Évidemment <strong>Loca7 respecte toutes les règles de RGPD</strong>.</mj-text>
+		<mj-text
+			>Nous avons vraiment travaillé dur pour vous proposer un tout nouveau site qui ne fait
+			qu’améliorer votre expérience en tant que propriétaire, mais aussi l’expérience des étudiants
+			qui le visitent et du gestionnaire qui l’administre.</mj-text
+		>
+		<mj-text
+			>Nous espérons avoir bientôt de vos nouvelles et vous voir créer votre compte car
+			<strong>vos annonces vous attendent</strong>, elles sont déjà toutes sur le nouveau Loca7
+			!</mj-text
+		>
+		<mj-text
+			>Nous restons à votre entière disposition pour toutes les questions que vous pourrez avoir,
+			n’hésitez pas à revenir vers nous sur
+			<a href="mailto:{{contactEmail}}"><em>{{contactEmail}}</em></a
+			>.</mj-text
+		>
+		<mj-text>Bonne journée à vous,</mj-text>
+		<mj-text> Le gestionnaire de Loca7. </mj-text>
+	</mj-column>
+</mj-section>
+<mj-section full-width="full-width">
 	<mj-column>
 		<mj-button href="{{createAccountUrl}}"> Créer mon compte </mj-button>
 	</mj-column>
