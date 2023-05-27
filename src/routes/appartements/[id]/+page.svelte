@@ -94,7 +94,7 @@
 					on:click={async () => {
 						await fetch(`/appartements/${appart.id}/publier`, { method: 'POST' });
 						appart.archived = false;
-						appart.approved = true;
+						appart.approved = user?.admin ?? false;
 					}}>Publier</ButtonSecondary
 				>
 			</div>
