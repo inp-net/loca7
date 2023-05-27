@@ -51,7 +51,9 @@
 				<ButtonSecondary
 					on:click={() => {
 						$dismissedN7ienOnlyWarning = true;
-						window.location.href = '/appartements/ajouter';
+						if (!$page.url.pathname.startsWith('/reset-password')) {
+							window.location.href = '/appartements/ajouter';
+						}
 					}}
 					icon="add">Je veux déposer une annonce</ButtonSecondary
 				>
