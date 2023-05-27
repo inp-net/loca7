@@ -8,10 +8,11 @@
 	import LogoLoca7 from './LogoLoca7.svelte';
 	import ButtonPrimary from './ButtonPrimary.svelte';
 	import { CONTACT_EMAIL } from './constants';
+	import { tooltip } from './tooltip';
 
 	export let user: User | null = null;
 	export let noticeBarAbove: boolean = false;
-	export let numberOfManagedAppartments: number = 0;
+	export let numberOfManagedOnlineAppartments: number = 0;
 
 	let topbarElement: HTMLElement;
 	let sidebarOpen: boolean = false;
@@ -47,7 +48,7 @@
 		const setPadding = () => {
 			const main = document.body.querySelector('main');
 			const html = document.querySelector('html');
-			if (!main || !html) return;
+			if (!main || !html || !topbarElement) return;
 			const padding =
 				topbarElement.offsetTop + topbarElement.getBoundingClientRect().height + 30;
 			main.style.paddingTop = padding + 'px';
@@ -95,8 +96,22 @@
 					href="/appartements/gerer"
 					>Mes annonces
 				</ButtonNavigation>
-				{#if numberOfManagedAppartments > 0}
-					<span class="pill">{numberOfManagedAppartments}</span>
+				{#if numberOfManagedOnlineAppartments > 0}
+					<div
+						class="pill"
+						title={`Vous avez ${
+							numberOfManagedOnlineAppartments === 1
+								? 'une annonce'
+								: numberOfManagedOnlineAppartments + ' annonces'
+						} en ligne`}
+						use:tooltip={`Vous avez ${
+							numberOfManagedOnlineAppartments === 1
+								? 'une annonce'
+								: numberOfManagedOnlineAppartments + ' annonces'
+						} en ligne`}
+					>
+						{numberOfManagedOnlineAppartments}
+					</div>
 				{/if}
 			</li>
 			<li>
@@ -155,8 +170,8 @@
 			<ButtonNavigation current={currentPage === 'mes annonces'} href="/appartements/gerer"
 				>Mes annonces</ButtonNavigation
 			>
-			{#if numberOfManagedAppartments > 0}
-				<span class="pill">{numberOfManagedAppartments}</span>
+			{#if numberOfManagedOnlineAppartments > 0}
+				<span class="pill">{numberOfManagedOnlineAppartments}</span>
 			{/if}
 		</li>
 
@@ -314,7 +329,8 @@
 		max-width: 100%;
 	}
 
-	span.pill {
+	.pill {
+		display: inline-block;
 		border-radius: 1000px;
 		padding: 0.125rem 0.5rem;
 		background: var(--ice);

@@ -120,8 +120,8 @@
 	<NavigationBar
 		user={data.user}
 		noticeBarAbove={dev || data.beta}
-		numberOfManagedAppartments={data.appartments?.filter(
-			(a) => a.owner.id === data.user?.id && !a.approved && !a.archived
+		numberOfManagedOnlineAppartments={data.appartments?.filter(
+			(a) => a.owner.id === data.user?.id && a.approved && !a.archived
 		).length ?? 0}
 	/>
 </header>
