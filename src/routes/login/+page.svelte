@@ -13,6 +13,8 @@
 	let password: string = '';
 
 	let passwordResetSuccessful: boolean = $page.url.hash === '#password-reset-successful';
+	let passwordDefinitionSuccessful: boolean =
+		$page.url.hash === '#password-definition-successful';
 </script>
 
 <svelte:head>
@@ -24,6 +26,10 @@
 		<p class="notice success password-reset-successful">
 			Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous
 			connecter.
+		</p>
+	{:else if passwordDefinitionSuccessful}
+		<p class="notice success password-definition-successful">
+			Votre mot de passe a été défini avec succès. Vous pouvez maintenant vous connecter.
 		</p>
 	{/if}
 

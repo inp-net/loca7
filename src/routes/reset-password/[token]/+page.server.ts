@@ -127,6 +127,9 @@ export const actions: Actions = {
 			'password ' + creatingPassword ? 'created' : 'changed'
 		);
 
-		throw redirect(302, '/login#password-reset-successful');
+		throw redirect(
+			302,
+			`/login#password-${creatingPassword ? 'definition' : ' reset'}-successful`
+		);
 	}
 };
