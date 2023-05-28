@@ -12,7 +12,7 @@
 	import { darkMode } from '$lib/stores';
 	import InputCheckbox from '$lib/InputCheckbox.svelte';
 	export let data: PageData;
-	$: ({ user } = data);
+	$: ({ user, userHasNoEmailKey } = data);
 
 	let oldPassword: string = '';
 	let oldPasswordIsInvalid: boolean = $page.url.hash === '#invalid-credentials';
@@ -106,19 +106,21 @@
 	</form>
 
 	<form method="post" action="?/changePassword" class="password">
-		<h2>Changer de mot de passe</h2>
-		<!-- FIXME can't "change" (i.e. create one) when created account thru CAS -->
-
-		<InputPassword
-			bind:value={oldPassword}
-			on:input={() => {
-				oldPasswordIsInvalid = false;
-			}}
-			name="oldPassword"
-			required
-			label="Mot de passe actuel"
-			errorMessage={oldPasswordIsInvalid ? 'Mot de passe invalide' : ''}
-		/>
+		<h2>
+			{#if userHasNoEmailKey}Définir un{:else}Changer de{/if} mot de passe
+		</h2>
+		{#if !userHasNoEmailKey}
+			<InputPassword
+				bind:value={oldPassword}
+				on:input={() => {
+					oldPasswordIsInvalid = false;
+				}}
+				name="oldPassword"
+				required
+				label="Mot de passe actuel"
+				errorMessage={oldPasswordIsInvalid ? 'Mot de passe invalide' : ''}
+			/>
+		{/if}
 		<InputPassword
 			bind:value={newPassword}
 			name="newPassword"
@@ -146,17 +148,23 @@
 		<h2>Supprimer mon compte</h2>
 		<p class="explain typo-paragraph">
 			{#if confirmingDeletion}
-				Pour confirmer, saisissez de nouveau votre mot de passe et email
+				{#if userHasNoEmailKey}
+					Veuillez confirmer.
+				{:else}
+					Pour confirmer, saisissez de nouveau votre mot de passe et email.
+				{/if}
 			{:else}
 				Cette action est irréversible. Vos annonces seront supprimées.
 			{/if}
 		</p>
 		<section class="submit">
 			{#if confirmingDeletion}
-				<InputField required label="email" id="email">
-					<InputEmail value="" required name="email" />
-				</InputField>
-				<InputPassword label="Mot de passe" value="" required name="password" />
+				{#if !userHasNoEmailKey}
+					<InputField required label="email" id="email">
+						<InputEmail value="" required name="email" />
+					</InputField>
+					<InputPassword label="Mot de passe" value="" required name="password" />
+				{/if}
 				<div class="submit-button">
 					<ButtonSecondary submits dangerous
 						>Je confirme la suppression de mon compte</ButtonSecondary

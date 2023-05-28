@@ -14,7 +14,10 @@ import { rmSync } from 'fs';
 export const load: PageServerLoad = async ({ locals, url }) => {
 	const { user, session } = await locals.validateUser();
 	guards.emailValidated(user, session, url);
-	return { user };
+	const userHasNoEmailKey = (await auth.getAllUserKeys(user.id)).every(
+		(key) => key?.providerId !== 'email'
+	);
+	return { user, userHasNoEmailKey };
 };
 
 export const actions: Actions = {
@@ -88,14 +91,25 @@ export const actions: Actions = {
 		const { user, session } = await locals.validateUser();
 		guards.emailValidated(user, session, url);
 
-		const { oldPassword, newPassword } = Object.fromEntries(await request.formData()) as Record<
-			string,
-			string
-		>;
+		const { oldPassword = '', newPassword } = Object.fromEntries(
+			await request.formData()
+		) as Record<string, string>;
+
+		const userHasNoEmailKey = (await auth.getAllUserKeys(user.id)).every(
+			(key) => key?.providerId !== 'email'
+		);
 
 		try {
-			await auth.validateKeyPassword('email', user.email, oldPassword);
-			await auth.updateKeyPassword('email', user.email, newPassword);
+			if (userHasNoEmailKey) {
+				await auth.createKey(user.id, {
+					password: newPassword,
+					providerId: 'email',
+					providerUserId: user.email
+				});
+			} else {
+				await auth.validateKeyPassword('email', user.email, oldPassword);
+				await auth.updateKeyPassword('email', user.email, newPassword);
+			}
 			await log.info('change_password', user, 'attempt');
 			await sendMail({
 				to: user,
@@ -140,15 +154,16 @@ export const actions: Actions = {
 		const { user, session } = await locals.validateUser();
 		guards.loggedIn(user, session, url);
 
-		const { email, password } = Object.fromEntries(await request.formData()) as Record<
-			string,
-			string
-		>;
 		const thruCAS = (await auth.getAllUserKeys(user.id)).some(
 			(key) => key?.providerId === 'cas'
 		);
 
 		if (!thruCAS) {
+			const { email, password } = Object.fromEntries(await request.formData()) as Record<
+				string,
+				string
+			>;
+
 			try {
 				await auth.validateKeyPassword('email', email, password);
 			} catch (error) {
