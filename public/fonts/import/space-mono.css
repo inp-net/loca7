@@ -4,11 +4,15 @@
 	font-family: 'Space Mono';
 	font-style: normal;
 	font-weight: 400;
-	src: url('../space-mono-v12-latin-regular.eot'); /* IE9 Compat Modes */
-	src: url('../space-mono-v12-latin-regular.eot?#iefix') format('embedded-opentype'),
-		/* IE6-IE8 */ url('../space-mono-v12-latin-regular.woff2') format('woff2'),
-		/* Super Modern Browsers */ url('../space-mono-v12-latin-regular.woff') format('woff'),
-		/* Modern Browsers */ url('../space-mono-v12-latin-regular.ttf') format('truetype'),
-		/* Safari, Android, iOS */ url('../space-mono-v12-latin-regular.svg#SpaceMono')
-			format('svg'); /* Legacy iOS */
+	src: url('https://loca7.fr/fonts/space-mono-v12-latin-regular.eot'); /* IE9 Compat Modes */
+	src: url('https://loca7.fr/fonts/space-mono-v12-latin-regular.eot?#iefix')
+			format('embedded-opentype'),
+		/* IE6-IE8 */ url('https://loca7.fr/fonts/space-mono-v12-latin-regular.woff2')
+			format('woff2'),
+		/* Super Modern Browsers */ url('https://loca7.fr/fonts/space-mono-v12-latin-regular.woff')
+			format('woff'),
+		/* Modern Browsers */ url('https://loca7.fr/fonts/space-mono-v12-latin-regular.ttf')
+			format('truetype'),
+		/* Safari, Android, iOS */
+			url('https://loca7.fr/fonts/space-mono-v12-latin-regular.svg#SpaceMono') format('svg'); /* Legacy iOS */
 }
