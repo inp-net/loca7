@@ -111,6 +111,8 @@ export const actions: Actions = {
 
 			switch (error.message) {
 				case 'AUTH_INVALID_PASSWORD':
+				case 'AUTH_INVALID_KEY_ID':
+				case 'AUTH_INVALID_USER_ID':
 					await log.error('change_password', user, 'invalid credentials');
 					throw redirect(302, '/account' + url.search + '#invalid-credentials');
 				default:
