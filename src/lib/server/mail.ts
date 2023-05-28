@@ -118,7 +118,7 @@ export async function sendMail({
 		});
 		return;
 	}
-	let recipients = Array.isArray(to) ? to : [to];
+	const recipients = Array.isArray(to) ? to : [to];
 	await log.info('send_mail', null, { to, template, subject, data });
 	const computedSubject = Handlebars.compile(subject)(data);
 	const address = (recipient: (typeof recipients)[number]) =>
@@ -133,7 +133,7 @@ export async function sendMail({
 		if (
 			recipientUser &&
 			(await auth.getAllUserKeys(recipientUser.id)).length === 0 &&
-			template !== 'announcement'
+			!['announcement', 'reset-password', 'password-changed'].includes(template)
 		) {
 			await log.warn(
 				'send_mail',
