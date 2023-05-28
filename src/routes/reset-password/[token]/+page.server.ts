@@ -27,32 +27,43 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		);
 		throw redirect(302, '/reset-password#invalid-token');
 	}
-	const currentEmailKey = await prisma.key.findFirst({
-		where: {
-			user: {
-				id: passwordReset.user.id
+	try {
+		const currentEmailKey = await prisma.key.findFirst({
+			where: {
+				user: {
+					id: passwordReset.user.id
+				}
 			}
-		}
-	});
-	const creatingPassword = !currentEmailKey;
-	return { creatingPassword, holder: passwordReset.user };
+		});
+		const creatingPassword = !currentEmailKey;
+		return { creatingPassword, holder: passwordReset.user };
+	} catch (err) {
+		await log.fatal('use_password_reset', user, `while finding current email key: ${err}`);
+		throw error(500, {
+			message: `Une erreur s’est produite. Veuillez réessayer. Code technique: FINDING_CURRENT_EMAIL_KEY`
+		});
+	}
 };
 
 export const actions: Actions = {
 	default: async ({ request, params, locals, url }) => {
 		const { user, session } = await locals.validateUser();
 
-		const passwordReset = await prisma.passwordReset.findFirst({
-			where: {
-				id: params.token,
-				expires: {
-					gt: Date.now()
+		const passwordReset = await prisma.passwordReset
+			.findFirst({
+				where: {
+					id: params.token,
+					expires: {
+						gt: Date.now()
+					}
+				},
+				include: {
+					user: true
 				}
-			},
-			include: {
-				user: true
-			}
-		});
+			})
+			.catch(async (err) => {
+				await log.fatal('use_password_reset', user, `while finding password reset: ${err}`);
+			});
 
 		if (!passwordReset) {
 			await log.error(
@@ -64,18 +75,36 @@ export const actions: Actions = {
 		}
 
 		// Delete all password resets for this user
-		await prisma.passwordReset.deleteMany({
-			where: {
-				user: {
-					id: passwordReset.user.id
+		await prisma.passwordReset
+			.deleteMany({
+				where: {
+					user: {
+						id: passwordReset.user.id
+					}
 				}
-			}
-		});
+			})
+			.catch(async (err) => {
+				await log.fatal(
+					'use_password_reset',
+					user,
+					`while deleting password resets: ${err} ${JSON.stringify(
+						{ passwordReset },
+						(_, v) => (typeof v === 'bigint' ? v.toString() : v)
+					)}`
+				);
+			});
 
 		const newPassword = (await request.formData()).get('password')?.toString();
 
 		if (!newPassword) {
-			await log.error('use_password_reset', user, `no password given`);
+			await log.error(
+				'use_password_reset',
+				user ?? passwordReset.user,
+				`no password given. user is ${user ? 'logged in' : 'password reset holder'} ` +
+					JSON.stringify(passwordReset, (_, v) =>
+						typeof v === 'bigint' ? v.toString() : v
+					)
+			);
 			throw error(400, { message: "Aucun mot de passe n'a été fourni." });
 		}
 
@@ -89,19 +118,39 @@ export const actions: Actions = {
 		const creatingPassword = !currentEmailKey;
 
 		if (creatingPassword) {
-			await auth.createKey(passwordReset.user.id, {
-				password: newPassword,
-				providerId: 'email',
-				providerUserId: passwordReset.user.email
-			});
-			await prisma.user.update({
-				where: {
-					id: passwordReset.user.id
-				},
-				data: {
-					emailIsValidated: true
-				}
-			});
+			await auth
+				.createKey(passwordReset.user.id, {
+					password: newPassword,
+					providerId: 'email',
+					providerUserId: passwordReset.user.email
+				})
+				.catch(async (err) => {
+					await log.fatal(
+						'use_password_reset',
+						user,
+						`while creating key: ${err} ${JSON.stringify({ passwordReset }, (_, v) =>
+							typeof v === 'bigint' ? v.toString() : v
+						)}`
+					);
+				});
+			await prisma.user
+				.update({
+					where: {
+						id: passwordReset.user.id
+					},
+					data: {
+						emailIsValidated: true
+					}
+				})
+				.catch(async (err) => {
+					await log.fatal(
+						'use_password_reset',
+						user,
+						`while updating user: ${err} ${JSON.stringify({ passwordReset }, (_, v) =>
+							typeof v === 'bigint' ? v.toString() : v
+						)}`
+					);
+				});
 			await sendMail({
 				to: passwordReset.user,
 				subject: 'Votre compte Loca7 a été créé',
@@ -113,7 +162,17 @@ export const actions: Actions = {
 				template: 'account-created'
 			});
 		} else {
-			await auth.updateKeyPassword('email', passwordReset.user.email, newPassword);
+			await auth
+				.updateKeyPassword('email', passwordReset.user.email, newPassword)
+				.catch(async (err) => {
+					await log.fatal(
+						'use_password_reset',
+						user,
+						`while updating key: ${err} ${JSON.stringify({ passwordReset }, (_, v) =>
+							typeof v === 'bigint' ? v.toString() : v
+						)}`
+					);
+				});
 			await sendMail({
 				to: passwordReset.user,
 				subject: 'Loca7: Votre mot de passe a été changé',
@@ -123,8 +182,11 @@ export const actions: Actions = {
 		}
 		await log.info(
 			'use_password_reset',
-			user,
-			'password ' + creatingPassword ? 'created' : 'changed'
+			user ?? passwordReset.user,
+			`password ${creatingPassword ? 'created' : 'changed'} for ${
+				passwordReset.user.email
+			}. user is ${user ? 'logged in' : 'password reset holder'} ` +
+				JSON.stringify(passwordReset, (_, v) => (typeof v === 'bigint' ? v.toString() : v))
 		);
 
 		throw redirect(
