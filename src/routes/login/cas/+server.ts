@@ -4,6 +4,7 @@ import { log } from '$lib/server/logging';
 import { prisma } from '$lib/server/prisma';
 import * as cas from '$lib/server/cas';
 import { auth } from '$lib/server/lucia';
+import { LuciaError, type User } from 'lucia-auth';
 
 export const GET: RequestHandler = async ({ url, locals }) => {
 	const ticket = url.searchParams.get('ticket');
@@ -27,11 +28,20 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 			ticket
 		);
 
-		let user = await prisma.user.findUnique({
-			where: {
-				email
+		let user: User | null = null;
+		try {
+			({ user } = await auth.getKeyUser('cas', username));
+		} catch (err) {
+			if (
+				err instanceof LuciaError &&
+				(err.message === 'AUTH_INVALID_USER_ID' || err.message === 'AUTH_INVALID_KEY_ID')
+			) {
+				user = null;
+			} else {
+				await log.fatal('login', email, `unknown error ${err}`);
+				throw error(500, 'Connexion impossible.');
 			}
-		});
+		}
 
 		if (user === null) {
 			await log.info(

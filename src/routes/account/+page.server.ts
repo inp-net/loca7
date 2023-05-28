@@ -60,6 +60,9 @@ export const actions: Actions = {
 				where: {
 					user: {
 						id: user.id
+					},
+					id: {
+						startsWith: 'email:'
 					}
 				},
 				data: {
