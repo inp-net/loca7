@@ -39,6 +39,7 @@
 		name="description"
 		content="La plateforme de recherche de logements pour les étudiants de l'ENSEEIHT"
 	/>
+	<meta name="google-site-verification" content="AojZE0ImxVuRfmgnvzJKz0hmodtO84v3m44VjAeydHw" />
 </svelte:head>
 
 {#if !ready || $navigating}
