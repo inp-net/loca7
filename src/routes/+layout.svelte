@@ -35,6 +35,10 @@
 	<script src="/vendor/leaflet.js"></script>
 	<script src="/vendor/leaflet-gesture-handling.js"></script>
 	<script src="/vendor/polyfills/inert.min.js"></script>
+	<meta
+		name="description"
+		content="La plateforme de recherche de logements pour les étudiants de l'ENSEEIHT"
+	/>
 </svelte:head>
 
 {#if !ready || $navigating}
