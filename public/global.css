@@ -44,9 +44,9 @@ html {
 	--blood: rgba(154, 12, 12, 1);
 	--rose: rgba(245, 180, 180, 1);
 	--acid: rgba(89, 237, 121, 1);
+	--cactus: rgb(1, 100, 34);
 	--gold: rgba(230, 176, 36, 1);
 	--safran: rgba(179, 109, 4, 1);
-	--cactus: rgb(1, 100, 34);
 	--plaster: rgba(252, 229, 169, 1);
 	--moss: rgb(201, 248, 211);
 	--sky: #007baf;
@@ -66,6 +66,9 @@ html {
 		--cactus: rgb(95, 228, 124);
 		--moss: rgb(7, 54, 22);
 		--sky: #0096d6;
+		--gold: rgba(230, 176, 36, 1);
+		--plaster: rgb(54, 38, 14);
+		--safran: rgb(235, 186, 62);
 	}
 }
 
@@ -82,6 +85,9 @@ html[data-dark-mode='true'] {
 	--cactus: rgb(95, 228, 124);
 	--moss: rgb(7, 54, 22);
 	--sky: #0096d6;
+	--gold: rgba(230, 176, 36, 1);
+	--plaster: rgb(54, 38, 14);
+	--safran: rgb(235, 186, 62);
 }
 
 .typo-title,
