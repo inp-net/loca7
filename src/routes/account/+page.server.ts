@@ -26,6 +26,12 @@ export const actions: Actions = {
 			await request.formData()
 		) as Record<string, string>;
 
+		if (user.email !== email) {
+			if (await prisma.user.findUnique({ where: { email } })) {
+				throw redirect(302, '/account' + url.search + '#email-already-in-use');
+			}
+		}
+
 		await prisma.user.update({
 			where: { id: user.id },
 			data: {

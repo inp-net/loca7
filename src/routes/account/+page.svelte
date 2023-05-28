@@ -18,12 +18,19 @@
 	let oldPasswordIsInvalid: boolean = $page.url.hash === '#invalid-credentials';
 	let wrongCredentialsWhenConfirmingAccountDeletion =
 		$page.url.hash === '#invalid-credentials-delete-account';
+	let emailAlreadyInUse = $page.url.hash === '#email-already-in-use';
 	let newPassword: string = '';
 	let confirmingDeletion = false;
 
 	onMount(() => {
 		if (wrongCredentialsWhenConfirmingAccountDeletion) {
 			addToast('error', 'E-mail ou mot de passe incorrect');
+		}
+		if (emailAlreadyInUse) {
+			addToast(
+				'error',
+				"Cette adresse e-mail est déjà utilisée. Impossible de changer l'adresse e-mail."
+			);
 		}
 	});
 </script>
