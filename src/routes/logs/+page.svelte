@@ -2,6 +2,7 @@
 	import InputField from '$lib/InputField.svelte';
 	import InputSelectMultiple from '$lib/InputSelectMultiple.svelte';
 	import { tooltip } from '$lib/tooltip';
+	import xss from 'xss';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -52,15 +53,24 @@
 				style:--fg="var(--{['muted', 'fg', 'safran', 'blood', 'white'][log.level]}, #fff)"
 				style:--bg="var(--{['muted-bg', 'bg', 'plaster', 'rose', 'mushroom'][log.level]})"
 				class:expanded={expandedRow === log.id}
-				on:click={() => {
-					expandedRow = expandedRow === log.id ? '' : log.id;
+				on:click={(e) => {
+					if (e.ctrlKey) {
+						expandedRow = expandedRow === log.id ? '' : log.id;
+					}
 				}}
 			>
 				<td>{log.createdAt.toISOString()}</td>
 				<td>{['T', 'I', 'W', 'E', 'F'][log.level]}</td>
 				<td>{log.user?.email || 'unknown'}</td>
 				<td>{log.action}</td>
-				<td>{(expandedRow === log.id ? formatMessage : id)(log.message)}</td>
+				<td
+					>{@html (expandedRow === log.id ? formatMessage : id)(
+						xss(log.message)
+					).replaceAll(
+						'&lt;redacted&gt;',
+						'<span class="redacted">&lt;redacted&gt;</span>'
+					)}</td
+				>
 			</tr>
 		{/each}
 	</table>
@@ -105,5 +115,9 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+	}
+	:global(span.redacted) {
+		color: var(--blood);
+		font-weight: bold;
 	}
 </style>

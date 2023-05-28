@@ -41,9 +41,12 @@ function removeSensitiveFields(o: object): object {
 		return o;
 	}
 	return Object.fromEntries(
-		Object.entries(o)
-			.filter(([key, _]) => !key.includes('password') && !key.includes('Password'))
-			.map(([key, value]) => [key, removeSensitiveFields(value)])
+		Object.entries(o).map(([key, value]) => [
+			key,
+			key.toString().toLowerCase().includes('password')
+				? '<redacted>'
+				: removeSensitiveFields(value)
+		])
 	);
 }
 
