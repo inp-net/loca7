@@ -4,11 +4,14 @@
 	import { tooltip } from '$lib/tooltip';
 	import xss from 'xss';
 	import type { PageData } from './$types';
+	import { page } from '$app/stores';
 
 	export let data: PageData;
 
 	let shown: string[] = ['I', 'W', 'E', 'F'];
 	let expandedRow: string = '';
+	let highlightLog: string = '';
+	$: highlightLog = $page.url.hash.replace('#', '');
 
 	function formatMessage(message: string): string {
 		try {
@@ -53,6 +56,7 @@
 				style:--fg="var(--{['muted', 'fg', 'safran', 'blood', 'white'][log.level]}, #fff)"
 				style:--bg="var(--{['muted-bg', 'bg', 'plaster', 'rose', 'mushroom'][log.level]})"
 				class:expanded={expandedRow === log.id}
+				class:highlighted={highlightLog === log.createdAt.toISOString()}
 				on:click={(e) => {
 					if (e.ctrlKey) {
 						expandedRow = expandedRow === log.id ? '' : log.id;
@@ -94,6 +98,18 @@
 	}
 	tr {
 		background-color: var(--bg);
+	}
+	tr.highlighted {
+		border-top: 3px solid var(--fg);
+		border-bottom: 3px solid var(--fg);
+	}
+	tr:not(.highlighted) td:first-child::before {
+		content: '  ';
+	}
+	tr.highlighted td:first-child::before {
+		content: '• ';
+		/* font-size: 2rem; */
+		font-weight: bold;
 	}
 	th {
 		text-align: left;
