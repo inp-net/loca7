@@ -40,7 +40,8 @@ export const actions: Actions = {
 					await log.error(
 						'login',
 						email,
-						`invalid credentials (lucia says ${err.message}) `
+						`invalid credentials (lucia says ${err.message})`,
+						{ tried: { email, password } }
 					);
 					throw redirect(302, '/login' + url.search + '#invalid-credentials');
 
