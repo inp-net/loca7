@@ -76,7 +76,7 @@ class Tisseo {
 		if (!location.latitude || !location.longitude) {
 			return [];
 		}
-		const allStops = (await (await fetch('/tisseo-stops.json')).json()) as {
+		const allStops = (await (await fetch((process.env.ORIGIN || 'http://localhost:5173') + '/tisseo-stops.json')).json()) as {
 			stop_id: `stop_point:SP_${number}`;
 			stop_code: `${number}`;
 			stop_name: string;

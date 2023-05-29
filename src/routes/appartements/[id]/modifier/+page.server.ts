@@ -3,7 +3,7 @@ import { appartmentTitle, createGhostEmail } from '$lib/types';
 import { prisma } from '$lib/server/prisma';
 import { ternaryStateCheckboxToBoolean } from '$lib/types';
 import type { Actions, PageServerLoad } from './$types';
-import { copyPhotos, writePhotosToDisk } from '$lib/server/photos';
+import { copyPhotos, deletePhotosFromDisk, writePhotosToDisk } from '$lib/server/photos';
 import xss from 'xss';
 import { redirect } from '@sveltejs/kit';
 import type { AppartmentKind } from '@prisma/client';
@@ -11,6 +11,8 @@ import { log } from '$lib/server/logging';
 import { sendMail } from '$lib/server/mail';
 import { EDITABLE_FIELDS } from '$lib/appartmentDiff';
 import * as appartmentDiff from '$lib/appartmentDiff';
+import { openRouteService, tisseo } from '$lib/server/traveltime';
+import { ENSEEIHT } from '$lib/utils';
 
 export const load: PageServerLoad = async ({ locals, params, url }) => {
 	const { user, session } = await locals.validateUser();
@@ -216,6 +218,95 @@ export const actions: Actions = {
 				}
 			});
 		} else {
+			// XXX code copied from /modifications/[modification]/+page.server.ts, should be refactored
+			await deletePhotosFromDisk(appartment.photos);
+
+			const newAppartment = await prisma.appartment.update({
+				where: {
+					id: appartment.id
+				},
+				data: {
+					address: edit.address,
+					approved: undefined,
+					archived: undefined,
+					availableAt: edit.availableAt,
+					charges: edit.charges,
+					createdAt: undefined,
+					deposit: edit.deposit,
+					description: edit.description,
+					hasFurniture: edit.hasFurniture,
+					hasParking: edit.hasParking,
+					hasBicycleParking: edit.hasBicycleParking,
+					hasFiberInternet: edit.hasFiberInternet,
+					hasElevator: edit.hasElevator,
+					history: undefined,
+					id: undefined,
+					kind: edit.kind,
+					latitude: edit.latitude,
+					longitude: edit.longitude,
+					nearbyStations: {
+						deleteMany: {},
+						createMany: {
+							data:
+								edit.latitude && edit.longitude
+									? await tisseo.nearbyStations(edit, fetch)
+									: []
+						}
+					},
+					owner: undefined,
+					ownerId: undefined,
+					rent: edit.rent,
+					reports: undefined,
+					roomsCount: edit.roomsCount,
+					surface: edit.surface,
+					photos: {
+						deleteMany: {},
+						createMany: {
+							data: edit.photos.map((photo) => ({
+								contentType: photo.contentType,
+								filename: photo.filename,
+								position: photo.position,
+								hash: photo.hash
+							}))
+						}
+					},
+					travelTimeToN7: {
+						update: {
+							byBike:
+								edit.latitude && edit.longitude
+									? Math.floor(
+											await openRouteService.travelTime(
+												'bike',
+												edit,
+												ENSEEIHT
+											)
+									  )
+									: null,
+							byFoot:
+								edit.latitude && edit.longitude
+									? Math.floor(
+											await openRouteService.travelTime(
+												'foot',
+												edit,
+												ENSEEIHT
+											)
+									  )
+									: null,
+							byPublicTransport: null // TODO
+						}
+					}
+				},
+				include: {
+					photos: true,
+					likes: {
+						include: {
+							by: true
+						}
+					}
+				}
+			});
+
+			await copyPhotos(newAppartment.photos, edit.photos);
 			await sendMail({
 				to: appartment.likes.map((like) => like.by),
 				subject: `Une annonce vous intéréssant a été modifiée`,
