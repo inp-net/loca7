@@ -302,7 +302,9 @@
 									name={appart.hasFurniture ? 'furniture' : 'furniture-cancel'}
 								/>
 							</div>
-							<p class="typo-paragraph">Meublé</p>
+							<p class="typo-paragraph">
+								{#if !appart.hasFurniture}Non-{/if}Meublé
+							</p>
 						</li>
 					{/if}
 					{#if appart.hasParking}
@@ -326,7 +328,9 @@
 							<span class="icon">
 								<Icon name="elevator{!appart.hasElevator ? '-cancel' : ''}" />
 							</span>
-							<p class="typo-paragraph">Ascenseur</p>
+							<p class="typo-paragraph">
+								{#if !appart.hasElevator}Pas d'ascenseur{:else}Ascenseur{/if}
+							</p>
 						</li>
 					{/if}
 					{#if appart.hasBicycleParking}
