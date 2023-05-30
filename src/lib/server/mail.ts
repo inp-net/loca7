@@ -141,7 +141,7 @@ export async function sendMail({
 				`not sending mail to ${recipientUser.id} because they have no auth keys`,
 				{ to, template, subject, data }
 			);
-			return;
+			continue;
 		}
 		return mailer.sendMail({
 			from: 'loca7@bde.enseeiht.fr',
