@@ -1,0 +1,46 @@
+import { guards } from '$lib/server/lucia';
+import { sendMail } from '$lib/server/mail';
+import xss from 'xss';
+import type { PageServerLoad, Actions } from './$types';
+import { log } from '$lib/server/logging';
+
+export const load: PageServerLoad = async ({ locals, url }) => {
+	const { session, user } = await locals.validateUser();
+	guards.isAdmin(user, session, url);
+
+	return {};
+};
+
+export const actions: Actions = {
+	async send({ locals, request, url }) {
+		const { session, user } = await locals.validateUser();
+		guards.isAdmin(user, session, url);
+
+		const {
+			email: emailString,
+			subject,
+			body
+		} = Object.fromEntries(await request.formData()) as Record<string, string>;
+		const emails = emailString
+			.split(',')
+			.map((email) => email.trim())
+			.filter((email) => email.length > 0);
+		await log.info('send_mail', user, 'Sending mail manually', {
+			emailString,
+			subject,
+			emails,
+			body
+		});
+
+		await sendMail({
+			to: emails,
+			subject,
+			template: 'plain',
+			data: {
+				text: xss(body)
+			}
+		});
+
+		return { status: 200 };
+	}
+};
