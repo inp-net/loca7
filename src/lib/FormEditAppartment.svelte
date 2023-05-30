@@ -22,6 +22,7 @@
 	import InputEmail from './InputEmail.svelte';
 	import Fuse from 'fuse.js';
 	import Icon from './Icon.svelte';
+	import { MAX_PHOTO_SIZE_BYTES } from './constants';
 
 	export let appartment: Appartment;
 	export let action: string | undefined = undefined;
@@ -249,7 +250,12 @@
 	</div>
 
 	<InputField label="Photos">
-		<InputImages name="photos" appartmentId={appartment.id} bind:value={appartment.photos} />
+		<InputImages
+			name="photos"
+			appartmentId={appartment.id}
+			bind:value={appartment.photos}
+			sizeLimit={MAX_PHOTO_SIZE_BYTES}
+		/>
 	</InputField>
 
 	<p class="explain-validation">

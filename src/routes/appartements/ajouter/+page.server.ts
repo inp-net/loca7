@@ -62,105 +62,102 @@ export const actions: Actions = {
 		const latitude = addressLatitude && addressLongitude ? Number(addressLatitude) : null;
 		const longitude = addressLatitude && addressLongitude ? Number(addressLongitude) : null;
 
-		let appartment;
-		try {
-			const appartInput: Prisma.AppartmentCreateArgs['data'] = {
-				photos: {
-					createMany: {
-						data: files.map((file) => ({
-							filename: file.name,
-							contentType: file.type,
-							position: photosOrder.indexOf(file.name)
-						}))
-					}
-				},
-				rent: Number(rent),
-				charges: Number(charges),
-				deposit: Number(deposit),
-				surface: Number(surface),
-				kind: kind as AppartmentKind,
-				roomsCount: Object.keys(formData).includes('roomsCount')
-					? Number(formData.roomsCount)
-					: 0,
-				availableAt: new Date(Date.parse(availableAt)),
-				address: xss(address),
-				latitude,
-				longitude,
-				description: xss(description),
-				createdByAdmin: user.admin,
-				approved: user.admin,
-				owner: {
-					connectOrCreate: {
-						create: {
-							email:
-								ownerEmail ||
-								createGhostEmail(ownerFirstName ?? '', ownerLastName ?? ''),
-							firstName: ownerFirstName ?? '',
-							lastName: ownerLastName ?? '',
-							phone: ownerPhone ?? '',
-							agencyName: ownerAgencyName ?? '',
-							agencyWebsite: ownerAgencyWebsite ?? ''
-						},
-						where: {
-							email: ownerEmail || user.email
-						}
-					}
-				},
-				travelTimeToN7: {
+		const appartInput: Prisma.AppartmentCreateArgs['data'] = {
+			photos: {
+				createMany: {
+					data: files.map((file) => ({
+						filename: file.name,
+						contentType: file.type,
+						position: photosOrder.indexOf(file.name)
+					}))
+				}
+			},
+			rent: Number(rent),
+			charges: Number(charges),
+			deposit: Number(deposit),
+			surface: Number(surface),
+			kind: kind as AppartmentKind,
+			roomsCount: Object.keys(formData).includes('roomsCount')
+				? Number(formData.roomsCount)
+				: 0,
+			availableAt: new Date(Date.parse(availableAt)),
+			address: xss(address),
+			latitude,
+			longitude,
+			description: xss(description),
+			createdByAdmin: user.admin,
+			approved: user.admin,
+			owner: {
+				connectOrCreate: {
 					create: {
-						byFoot: null,
-						byBike: null,
-						byPublicTransport: null
+						email:
+							ownerEmail ||
+							createGhostEmail(ownerFirstName ?? '', ownerLastName ?? ''),
+						firstName: ownerFirstName ?? '',
+						lastName: ownerLastName ?? '',
+						phone: ownerPhone ?? '',
+						agencyName: ownerAgencyName ?? '',
+						agencyWebsite: ownerAgencyWebsite ?? ''
+					},
+					where: {
+						email: ownerEmail || user.email
 					}
-				},
-				hasFurniture: Object.keys(formData).includes('hasFurniture')
-					? ternaryStateCheckboxToBoolean(formData.hasFurniture)
-					: null,
-				hasParking: Object.keys(formData).includes('hasParking')
-					? ternaryStateCheckboxToBoolean(formData.hasParking)
-					: null,
-				hasBicycleParking: Object.keys(formData).includes('hasBicycleParking')
-					? ternaryStateCheckboxToBoolean(formData.hasParking)
-					: null,
-				hasFiberInternet: Object.keys(formData).includes('hasFiberInternet')
-					? ternaryStateCheckboxToBoolean(formData.hasFiberInternet)
-					: null,
-				hasElevator: Object.keys(formData).includes('hasElevator')
-					? ternaryStateCheckboxToBoolean(formData.hasElevator)
-					: null
-			};
-			if (latitude && longitude) {
-				appartInput.travelTimeToN7.create = {
-					byBike:
-						Math.floor(
-							await openRouteService.travelTime(
-								'bike',
-								{ latitude, longitude },
-								ENSEEIHT
-							)
-						) || null,
-					byFoot:
-						Math.floor(
-							await openRouteService.travelTime(
-								'foot',
-								{ latitude, longitude },
-								ENSEEIHT
-							)
-						) || null,
+				}
+			},
+			travelTimeToN7: {
+				create: {
+					byFoot: null,
+					byBike: null,
 					byPublicTransport: null
-				};
-				appartInput.nearbyStations = {
-					createMany: {
-						data: await tisseo.nearbyStations({ latitude, longitude }, fetch)
-					}
-				};
-			}
+				}
+			},
+			hasFurniture: Object.keys(formData).includes('hasFurniture')
+				? ternaryStateCheckboxToBoolean(formData.hasFurniture)
+				: null,
+			hasParking: Object.keys(formData).includes('hasParking')
+				? ternaryStateCheckboxToBoolean(formData.hasParking)
+				: null,
+			hasBicycleParking: Object.keys(formData).includes('hasBicycleParking')
+				? ternaryStateCheckboxToBoolean(formData.hasParking)
+				: null,
+			hasFiberInternet: Object.keys(formData).includes('hasFiberInternet')
+				? ternaryStateCheckboxToBoolean(formData.hasFiberInternet)
+				: null,
+			hasElevator: Object.keys(formData).includes('hasElevator')
+				? ternaryStateCheckboxToBoolean(formData.hasElevator)
+				: null
+		};
+		if (latitude && longitude) {
+			appartInput.travelTimeToN7.create = {
+				byBike:
+					Math.floor(
+						await openRouteService.travelTime('bike', { latitude, longitude }, ENSEEIHT)
+					) || null,
+				byFoot:
+					Math.floor(
+						await openRouteService.travelTime('foot', { latitude, longitude }, ENSEEIHT)
+					) || null,
+				byPublicTransport: null
+			};
+			appartInput.nearbyStations = {
+				createMany: {
+					data: await tisseo.nearbyStations({ latitude, longitude }, fetch)
+				}
+			};
+		}
 
-			appartment = await prisma.appartment.create({
+		const appartment = await prisma.appartment
+			.create({
 				data: appartInput,
 				include: { photos: true, owner: true, travelTimeToN7: true }
+			})
+			.catch(async (e) => {
+				await log.fatal('submit_appartment', user, e);
+				throw error(500, { message: "Impossible de créer l'annonce" });
 			});
-			await writePhotosToDisk(appartment.photos, files);
+
+		await writePhotosToDisk(appartment.photos, files);
+		try {
 			await sendMail({
 				to: (
 					await prisma.user.findMany({ where: { admin: true } })
@@ -206,7 +203,9 @@ export const actions: Actions = {
 				'files',
 				files
 			);
-			throw error(500, { message: "Impossible de poster l'annonce" });
+			throw error(500, {
+				message: "Impossible de poster l'annonce. Vérifiez la taille de vos images."
+			});
 		}
 
 		throw redirect(302, '/appartements/gerer');

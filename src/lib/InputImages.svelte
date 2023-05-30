@@ -8,6 +8,7 @@
 	import { getDataURL } from './utils';
 
 	export let name: string | undefined = undefined;
+	export let sizeLimit: number = 0; // in bytes
 	export let appartmentId: string;
 	export let value: Photo[] = [];
 	export let previewURLs: Record<string, string> = Object.fromEntries(
@@ -150,6 +151,17 @@
 	</div>
 </label>
 
+{#if sizeLimit > 0}
+	<div class="warning-size-limit">
+		<span class="icon">
+			<Icon name="password-strength-weak" />
+		</span>
+		Les photos doivent peser moins de {sizeLimit < 1e6
+			? sizeLimit / 1e3 + 'ko'
+			: sizeLimit / 1e6 + 'Mo'}.
+	</div>
+{/if}
+
 <style>
 	.dropzone {
 		min-height: 10rem;
@@ -244,5 +256,16 @@
 
 	.dropzone.dragging-over-dropzone {
 		border-color: var(--sky);
+	}
+
+	.warning-size-limit {
+		margin-top: 0.5rem;
+		gap: 0.25em;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.warning-size-limit .icon {
+		height: 1.75em;
 	}
 </style>

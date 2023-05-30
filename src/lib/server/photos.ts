@@ -5,9 +5,15 @@ import { photoURL } from '$lib/photos';
 import type { Photo } from '@prisma/client';
 import sharp from 'sharp';
 import { publicPath } from './utils';
+import { log } from './logging';
+import { MAX_PHOTO_SIZE_BYTES } from '$lib/constants';
 
 export async function writePhotosToDisk(photos: Photo[], files: File[]) {
+	await log.trace('submit_appartment', null, 'Writing photos to disk');
 	for (const photo of photos) {
+		await log.trace('submit_appartment', null, 'Writing photo to disk', {
+			photo: photo.filename
+		});
 		const file = files.find((file) => file.name === photo.filename);
 		if (!file) continue;
 
@@ -15,8 +21,10 @@ export async function writePhotosToDisk(photos: Photo[], files: File[]) {
 
 		if (buffer.length === 0) continue;
 
-		if (buffer.byteLength > 10e6) {
-			throw error(400, { message: 'Les photos doivent faire moins de 10 Mo' });
+		if (buffer.byteLength > MAX_PHOTO_SIZE_BYTES) {
+			throw error(400, {
+				message: `Les photos doivent faire moins de ${MAX_PHOTO_SIZE_BYTES * 1e-6} Mo`
+			});
 		}
 
 		compressPhoto(Buffer.from(await file.arrayBuffer()), publicPath(photoURL(photo)));
