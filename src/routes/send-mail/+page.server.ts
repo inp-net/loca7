@@ -19,8 +19,10 @@ export const actions: Actions = {
 		const {
 			email: emailString,
 			subject,
-			body
+			body,
+            bypassAuthKeyCheck
 		} = Object.fromEntries(await request.formData()) as Record<string, string>;
+        console.log(bypassAuthKeyCheck);
 		const emails = emailString
 			.split(',')
 			.map((email) => email.trim())
@@ -35,6 +37,7 @@ export const actions: Actions = {
 		await sendMail({
 			to: emails,
 			subject,
+            bypassAuthKeyCheck: bypassAuthKeyCheck === 'on',
 			template: 'plain',
 			data: {
 				text: xss(body)

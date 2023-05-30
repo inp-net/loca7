@@ -8,6 +8,7 @@
 	import BaseInputText from '$lib/BaseInputText.svelte';
 	import { z } from 'zod';
 	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
+	import InputCheckbox from '$lib/InputCheckbox.svelte';
 
 	export let data: PageData;
 	let { allEmails } = data;
@@ -56,6 +57,11 @@
 					: 'inconnus'}
 			/>
 		</InputField>
+
+		<p class="hint">L'e-mail est envoyé séparément à chaque destinataire.</p>
+
+		<InputCheckbox tristate={false} value={false} name="bypassAuthKeyCheck" label="Comptes non activés" labelFalse="Ne pas envoyer" labelTrue="Envoyer" />
+
 
 		<InputField label="Objet">
 			<InputText name="subject" bind:value={subject} />

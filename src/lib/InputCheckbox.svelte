@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import Icon from './Icon.svelte';
 
+	export let tristate: boolean = true;
 	export let value: boolean | null = null;
 	export let name: string | undefined = undefined;
 	let previousValue: boolean | null = value;
@@ -34,7 +35,7 @@
 	});
 </script>
 
-<label class="input-checkbox">
+<label class="input-checkbox" class:tristate>
 	<input
 		type="checkbox"
 		bind:this={checkboxElement}
@@ -45,7 +46,7 @@
 			} else if (previousValue === true) {
 				setTriState(event.target, false);
 			} else {
-				setTriState(event.target, null);
+				setTriState(event.target, tristate ? null : true);
 			}
 			value = getTriState(event.target);
 			previousValue = value;
@@ -55,7 +56,7 @@
 	<div class="checkbox" data-state={JSON.stringify(value)}>
 		<Icon
 			name={value ? 'checkmark' : 'close'}
-			color="bg"
+			color='icon-color'
 			strokeWidth="calc(var(--border-width) * 2)"
 		/>
 	</div>
@@ -87,6 +88,7 @@
 		display: none;
 	}
 	.checkbox {
+		--icon-color: var(--fg);
 		grid-area: box;
 		display: inline-block;
 		width: 2rem;
@@ -104,7 +106,8 @@
 		left: calc(2rem / 2 - var(--border-width) / 2);
 	}
 	.checkbox[data-state='true'],
-	.checkbox[data-state='false'] {
+	.tristate .checkbox[data-state='false'] {
+		--icon-color: var(--bg);
 		background: var(--fg);
 	}
 	label {

@@ -100,14 +100,19 @@ export const mailer = nodemailer.createTransport({
 		: {})
 });
 
+/**
+ * When multiple recipients are given, one email is sent per recipient (no need to worry about BCC)
+ */
 export async function sendMail({
 	template,
 	to,
 	subject,
-	data
+	data,
+	bypassAuthKeyCheck = false
 }: {
 	to: (string | User)[] | string | User;
 	subject: string;
+	bypassAuthKeyCheck?: boolean;
 } & EmailTemplateNameAndData) {
 	if (Array.isArray(to) && to.length < 1) {
 		await log.trace('send_mail', null, 'not sending mail since no addresses were given', {
@@ -131,6 +136,7 @@ export async function sendMail({
 				? await prisma.user.findUnique({ where: { email: recipient } })
 				: recipient;
 		if (
+			!bypassAuthKeyCheck &&
 			recipientUser &&
 			(await auth.getAllUserKeys(recipientUser.id)).length === 0 &&
 			!['announcement', 'reset-password', 'password-changed'].includes(template)
