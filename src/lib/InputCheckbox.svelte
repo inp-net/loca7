@@ -54,11 +54,13 @@
 	/>
 	<input type="hidden" {name} value={value === null ? 'indeterminate' : value ? 'on' : 'off'} />
 	<div class="checkbox" data-state={JSON.stringify(value)}>
-		<Icon
-			name={value ? 'checkmark' : 'close'}
-			color='icon-color'
-			strokeWidth="calc(var(--border-width) * 2)"
-		/>
+		{#if value !== null}
+			<Icon
+				name={value ? 'checkmark' : 'close'}
+				color="icon-color"
+				strokeWidth="calc(var(--border-width) * 2)"
+			/>
+		{/if}
 	</div>
 	<div class="labels">
 		<span class="label typo-paragraph">{label}</span>
