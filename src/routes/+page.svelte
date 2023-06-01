@@ -19,7 +19,7 @@
 		searchResultsScrollPosition
 	} from '$lib/stores';
 	import { DISPLAY_APPARTMENT_KIND } from '$lib/types';
-	import { distanceBetween, ENSEEIHT, titleCase } from '$lib/utils';
+	import { distanceBetween, ENSEEIHT, upperFirstChar } from '$lib/utils';
 	import type { Appartment } from '@prisma/client';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
@@ -49,7 +49,7 @@
 	const aspectCriteria = (aspectName: keyof typeof $searchCriteria, appartment: Appartment) =>
 		$searchCriteria[aspectName] === null
 			? true
-			: appartment['has' + titleCase(aspectName)] === $searchCriteria[aspectName];
+			: appartment['has' + upperFirstChar(aspectName)] === $searchCriteria[aspectName];
 
 	const aspectCriterias = (
 		appartment: Appartment,
