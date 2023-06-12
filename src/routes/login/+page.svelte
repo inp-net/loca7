@@ -59,8 +59,10 @@
 
 		<InputPassword required label="Mot de passe" bind:value={password} name="password" />
 
-		{#if $page.url.hash === '#invalid-credentials'}
-			<p class="error">Coordonnées incorrectes.</p>
+		{#if $page.url.hash === '#invalid-email'}
+			<p class="error">Adresse e-mail incorrecte.</p>
+		{:else if $page.url.hash === '#invalid-password'}
+			<p class="error">Mot de passe incorrect.</p>
 		{/if}
 
 		<p class="reset">

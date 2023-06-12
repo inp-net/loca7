@@ -43,7 +43,7 @@ export const actions: Actions = {
 						`invalid credentials (lucia says ${err.message})`,
 						{ tried: { email, password } }
 					);
-					throw redirect(302, '/login' + url.search + '#invalid-credentials');
+					throw redirect(302, `/login${url.search}#invalid-${err.message === 'AUTH_INVALID_PASSWORD' ? 'password' : 'email'}`);
 
 				default:
 					await log.fatal('login', email, `unknown error (lucia says ${err.message}) `);
