@@ -10,7 +10,7 @@
 		<dt>AE 2022-2023 (Sable)</dt>
 		<dd><a href="https://bde.enseeiht.fr/annuaire/fiche/gauthilu">Lubin Gauthier</a></dd>
 		<dt>AE 2023-2024</dt>
-		<dd>À venir…</dd>
+		<dd><a href="https://bde.enseeiht.fr/annuaire/fiche/mangeng">Guilhem Mangenot</a></dd>
 	</dl>
 
 	<h2>Développeur·se·s</h2>
