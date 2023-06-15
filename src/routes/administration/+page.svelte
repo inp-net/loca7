@@ -70,7 +70,8 @@
 			'address',
 			'description',
 			'number',
-			'owner.name',
+			'owner.firstName',
+			'owner.lastName',
 			'owner.email',
 			'owner.phone'
 		],
