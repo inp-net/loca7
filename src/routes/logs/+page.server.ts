@@ -4,7 +4,7 @@ import { prisma } from '$lib/server/prisma';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	const { user, session } = await locals.validateUser();
-	guards.isGod(user, session, url);
+	guards.isGodOrAdmin(user, session, url);
 
 	const logs = await prisma.log.findMany({
 		include: {
