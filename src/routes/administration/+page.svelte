@@ -73,7 +73,9 @@
 			'owner.firstName',
 			'owner.lastName',
 			'owner.email',
-			'owner.phone'
+			'owner.phone',
+			'owner.agencyName',
+			'owner.agencyWebsite'
 		],
 		threshold: 0.2,
 		includeMatches: true,
