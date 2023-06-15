@@ -103,9 +103,11 @@
 			>€</span
 		>
 		<span class="data"
-			><HighlightedText indices={indices('owner.name', highlight)}
-				>{owner.firstName} {owner.lastName.toUpperCase()}</HighlightedText
-			></span
+			><HighlightedText indices={indices('owner.firstName', highlight)}
+				>{owner.firstName} </HighlightedText
+			>
+		<HighlightedText indices={indices('owner.lastName', highlight)}>{owner.lastName.toUpperCase()}</HighlightedText>
+			</span
 		>
 		<span class="data"
 			>{Intl.DateTimeFormat('fr-FR', { dateStyle: 'short' }).format(updatedAt)}</span
