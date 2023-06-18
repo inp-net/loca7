@@ -39,6 +39,7 @@
 	import type { PublicTransportStation, User } from '@prisma/client';
 	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
 	import ButtonFloating from '$lib/ButtonFloating.svelte';
+	import { differenceInMonths } from 'date-fns';
 
 	export let data: LayoutData;
 	const { user, appartment: appart } = data;
@@ -356,6 +357,20 @@
 					{/if}
 				</ul>
 			</section>
+
+			{#if differenceInMonths(new Date(), appart.availableAt) >= 6}
+				<section class="call-to-report">
+					<h2>Cet appartement n'est plus libre?</h2>
+					<p>Si vous avez eu confirmation que l'appartement n'était plus disponible,</p>
+					<div class="button">
+						<ButtonSecondary
+							href="/appartements/{appart.number}/signaler?reason=obsolete"
+							icon="report"
+							dangerous>Signalez l'annonce comme obsolète.</ButtonSecondary
+						>
+					</div>
+				</section>
+			{/if}
 		</div>
 
 		<div class="column">
@@ -906,5 +921,18 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+	}
+
+	section.call-to-report {
+		padding: 2rem;
+		background: var(--rose);
+		border-radius: 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	section.call-to-report h2 {
+		color: var(--blood);
 	}
 </style>
