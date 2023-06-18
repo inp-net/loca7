@@ -11,7 +11,7 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 	guards.emailValidated(user, session, url);
 
 	const appartment = await prisma.appartment.findUnique({
-		where: { id: params.id },
+		where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
 		include: {
 			owner: true,
 			photos: true,
@@ -32,7 +32,7 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 	}
 
 	const newAppartment = await prisma.appartment.update({
-		where: { id: params.id },
+		where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
 		data: {
 			// Only approve if the user is an admin, else leave it as it was before
 			// This prevents non-admins from approving their posts but still allows them to unmark them as archived

@@ -86,13 +86,13 @@
 		<section class="notice notice-archived">
 			<p class="typo-paragraph">Cette annonce est archivée</p>
 			<div class="actions">
-				<ButtonSecondary icon="delete" href="/appartements/{appart.id}/supprimer"
+				<ButtonSecondary icon="delete" href="/appartements/{appart.number}/supprimer"
 					>Supprimer</ButtonSecondary
 				>
 				<ButtonSecondary
 					icon="eye-open"
 					on:click={async () => {
-						await fetch(`/appartements/${appart.id}/publier`, { method: 'POST' });
+						await fetch(`/appartements/${appart.number}/publier`, { method: 'POST' });
 						appart.archived = false;
 						appart.approved = user?.admin ?? false;
 					}}>Publier</ButtonSecondary
@@ -121,13 +121,15 @@
 						>
 					{/if}
 					{#if !appart.approved && user?.admin}
-						<ButtonSecondary icon="delete" href="/appartements/{appart.id}/supprimer"
+						<ButtonSecondary
+							icon="delete"
+							href="/appartements/{appart.number}/supprimer"
 							>Supprimer</ButtonSecondary
 						>
 						<ButtonSecondary
 							icon="checkmark"
 							on:click={async () => {
-								await fetch(`/appartements/${appart.id}/publier`, {
+								await fetch(`/appartements/${appart.number}/publier`, {
 									method: 'POST'
 								});
 								window.location.reload();
@@ -451,11 +453,11 @@
 			</div>
 		{/if}
 		{#if user?.admin || appart.owner.id === user?.id}
-			<ButtonSecondary icon="edit" href="/appartements/{appart.id}/modifier"
+			<ButtonSecondary icon="edit" href="/appartements/{appart.number}/modifier"
 				>Modifier</ButtonSecondary
 			>
 			{#if appart?.archived || user?.admin}
-				<ButtonSecondary icon="delete" href="/appartements/{appart.id}/supprimer"
+				<ButtonSecondary icon="delete" href="/appartements/{appart.number}/supprimer"
 					>Supprimer</ButtonSecondary
 				>
 			{/if}
@@ -463,7 +465,7 @@
 				<ButtonSecondary
 					icon="checkmark"
 					on:click={async () => {
-						await fetch(`/appartements/${appart.id}/approuver`, {
+						await fetch(`/appartements/${appart.number}/approuver`, {
 							method: 'post'
 						});
 						appart.approved = true;
@@ -474,7 +476,7 @@
 				<ButtonSecondary
 					icon="eye-open"
 					on:click={async () => {
-						await fetch(`/appartements/${appart.id}/publier`, {
+						await fetch(`/appartements/${appart.number}/publier`, {
 							method: 'post'
 						});
 						appart.archived = false;
@@ -484,7 +486,7 @@
 				<ButtonSecondary
 					icon="eye-cancel"
 					on:click={async () => {
-						await fetch(`/appartements/${appart.id}/archiver`, {
+						await fetch(`/appartements/${appart.number}/archiver`, {
 							method: 'post'
 						});
 						appart.archived = true;
@@ -492,7 +494,7 @@
 				>
 			{/if}
 		{:else}
-			<ButtonSecondary icon="report" dangerous href="/appartements/{appart.id}/signaler"
+			<ButtonSecondary icon="report" dangerous href="/appartements/{appart.number}/signaler"
 				>Signaler</ButtonSecondary
 			>
 		{/if}
@@ -562,12 +564,15 @@
 
 	<section class="meta">
 		<p class="typo-details">
-			Annonce n°<a href="/appartements/{appart.number}">{appart.number}</a>
 			{#if appart.importedFromOldSite}
-				&bull;
 				<a href="https://bde.enseeiht.fr/services/logement/{appart.number}"
-					>voir sur l'ancien site</a
-				>{/if}
+					>voir sur l'ancient site</a
+				> &bull;{/if}
+			{#if isNaN(Number($page.params.id))}
+				annonce n°<a href="/appartements/{appart.number}">{appart.number}</a>
+			{:else}
+				identifiant de l'annonce: <a href="/appartements/{appart.id}">{appart.id}</a>
+			{/if}
 		</p>
 	</section>
 </main>

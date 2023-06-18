@@ -24,7 +24,7 @@
 
 	export let photos: Photo[] | null;
 	export let archived: boolean;
-	export let id: string;
+	export let number: number;
 	export let rent: number;
 	export let charges: number;
 	export let surface: number;
@@ -51,7 +51,7 @@
 	<section class="photos">
 		<svelte:element
 			this={photos?.length < 2 ? 'a' : 'div'}
-			href={photos?.length < 2 ? `/appartements/${id}` : undefined}
+			href={photos?.length < 2 ? `/appartements/${number}` : undefined}
 			class="photo-maybe-link"
 		>
 			<CarouselImages
@@ -60,7 +60,7 @@
 			/>
 		</svelte:element>
 	</section>
-	<a class="content" href="/appartements/{id}">
+	<a class="content" href="/appartements/{number}">
 		<section class="figures">
 			<section class="price">
 				<p class="typo-big-figure rent">{rent + charges}€</p>
@@ -189,23 +189,25 @@
 	</a>
 	{#if editable}
 		<section class="editable">
-			<ButtonColored href="/appartements/{id}/modifier">Modifier</ButtonColored>
+			<ButtonColored href="/appartements/{number}/modifier">Modifier</ButtonColored>
 			{#if !archived}
 				<ButtonColored
 					on:click={async () => {
-						await fetch(`/appartements/${id}/archiver`, { method: 'POST' });
+						await fetch(`/appartements/${number}/archiver`, { method: 'POST' });
 						window.location.reload();
 					}}>Archiver</ButtonColored
 				>
 			{:else}
 				<ButtonColored
 					on:click={async () => {
-						await fetch(`/appartements/${id}/publier`, { method: 'POST' });
+						await fetch(`/appartements/${number}/publier`, { method: 'POST' });
 						window.location.reload();
 					}}>Publier</ButtonColored
 				>
 			{/if}
-			<ButtonColored dangerous href="/appartements/{id}/supprimer">Supprimer</ButtonColored>
+			<ButtonColored dangerous href="/appartements/{number}/supprimer"
+				>Supprimer</ButtonColored
+			>
 		</section>
 	{/if}
 </article>

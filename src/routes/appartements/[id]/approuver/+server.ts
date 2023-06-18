@@ -11,7 +11,7 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 	guards.isAdmin(user, session, url);
 
 	const appartment = await prisma.appartment.findUnique({
-		where: { id: params.id },
+		where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
 		include: {
 			owner: true,
 			photos: true
@@ -21,7 +21,7 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 	guards.appartmentExists(appartment);
 
 	await prisma.appartment.update({
-		where: { id: params.id },
+		where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
 		data: {
 			approved: true
 		}

@@ -19,9 +19,7 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 	guards.emailValidated(user, session, url);
 
 	const appartment = await prisma.appartment.findFirst({
-		where: {
-			id: params.id
-		},
+		where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
 		include: {
 			owner: true,
 			nearbyStations: true,
@@ -48,7 +46,7 @@ export const actions: Actions = {
 		const { user, session } = await locals.validateUser();
 		guards.emailValidated(user, session, url);
 		const appartment = await prisma.appartment.findUnique({
-			where: { id: params.id },
+			where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
 			include: {
 				owner: true,
 				photos: true,

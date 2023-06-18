@@ -17,9 +17,7 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 	guards.emailValidated(user, session, url);
 
 	const appartment = await prisma.appartment.findFirst({
-		where: {
-			id: params.id
-		},
+		where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
 		include: {
 			photos: true,
 			owner: true
@@ -38,9 +36,7 @@ export const actions: Actions = {
 		guards.emailValidated(user, session, url);
 
 		const appartment = await prisma.appartment.findFirst({
-			where: {
-				id: params.id
-			},
+			where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
 			include: {
 				owner: true,
 				history: {
@@ -91,9 +87,7 @@ export const actions: Actions = {
 		}
 
 		await prisma.appartment.delete({
-			where: {
-				id: params.id
-			}
+			where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) }
 		});
 
 		await log.warn('delete_appartment', user, { appartment });

@@ -8,7 +8,7 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 	guards.loggedIn(user, session, url);
 
 	const appartment = await prisma.appartment.findUnique({
-		where: { id: params.id },
+		where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
 		include: { owner: true }
 	});
 

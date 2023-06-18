@@ -11,7 +11,6 @@
 	import SmallCheckbox from './SmallCheckbox.svelte';
 	const emit = createEventDispatcher();
 
-	export let id: string;
 	export let number: number;
 	export let owner: { firstName: string; lastName: string };
 	export let updatedAt: Date;
@@ -29,7 +28,7 @@
 	let error: string = '';
 
 	const action = (name: 'archiver' | 'publier' | 'approuver') => async () => {
-		const response = await fetch(`/appartements/${id}/${name}`, { method: 'post' });
+		const response = await fetch(`/appartements/${number}/${name}`, { method: 'post' });
 		if (response.status === 200) {
 			emit(name);
 		} else {
@@ -59,7 +58,7 @@
 	<img src={photos.length > 0 ? photoURL(photos[0]) : '/missing-photo.png'} class="photo" />
 	<svelte:element
 		this={window.innerWidth > 1000 ? 'a' : 'div'}
-		href="/appartements/{id}"
+		href="/appartements/{number}"
 		class="row-1"
 		on:click={() => {
 			open = !open;
@@ -84,7 +83,7 @@
 	</svelte:element>
 	<svelte:element
 		this={window.innerWidth > 1000 ? 'a' : 'div'}
-		href="/appartements/{id}"
+		href="/appartements/{number}"
 		class="row-2"
 		on:click={() => {
 			open = !open;
@@ -104,18 +103,19 @@
 		>
 		<span class="data"
 			><HighlightedText indices={indices('owner.firstName', highlight)}
-				>{owner.firstName} </HighlightedText
+				>{owner.firstName}
+			</HighlightedText>
+			<HighlightedText indices={indices('owner.lastName', highlight)}
+				>{owner.lastName.toUpperCase()}</HighlightedText
 			>
-		<HighlightedText indices={indices('owner.lastName', highlight)}>{owner.lastName.toUpperCase()}</HighlightedText>
-			</span
-		>
+		</span>
 		<span class="data"
 			>{Intl.DateTimeFormat('fr-FR', { dateStyle: 'short' }).format(updatedAt)}</span
 		>
 	</svelte:element>
 	<div class="actions" class:open>
 		{#if history.some((h) => !h.applied)}
-			<ButtonSecondary href="/appartements/{id}#modifications" icon="editor-list"
+			<ButtonSecondary href="/appartements/{number}#modifications" icon="editor-list"
 				>Modifications</ButtonSecondary
 			>
 		{:else if archived}
@@ -130,13 +130,13 @@
 			>
 		{/if}
 		{#if approved && !archived}
-			<ButtonSecondary href="/appartements/{id}/modifier" icon="edit"
+			<ButtonSecondary href="/appartements/{number}/modifier" icon="edit"
 				>Modifier</ButtonSecondary
 			>
 		{:else}
-			<ButtonSecondary href="/appartements/{id}" icon="add">Voir</ButtonSecondary>
+			<ButtonSecondary href="/appartements{number}" icon="add">Voir</ButtonSecondary>
 		{/if}
-		<ButtonSecondary href="/appartements/{id}/supprimer" icon="delete">Suppr.</ButtonSecondary>
+		<ButtonSecondary href="/appartements/{number}/supprimer" icon="delete">Suppr.</ButtonSecondary>
 	</div>
 	<button
 		class:open

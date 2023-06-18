@@ -18,7 +18,7 @@
 
 <section class="card">
 	<CardAppartment
-		id="d217afc8-a1de-4e16-bca8-f2be002e5b27"
+		number={4}
 		address="Rue du Poit de Guilheméry, Toulouse"
 		surface={27}
 		hasFurniture
@@ -33,7 +33,7 @@
 		hasParking={false}
 	/>
 	<CardAppartment
-		id="714d4595-e085-46e9-a0a6-3698d523ece2"
+		number={5}
 		address="Rue Dupont, 31500 Toulouse"
 		surface={67}
 		hasFurniture

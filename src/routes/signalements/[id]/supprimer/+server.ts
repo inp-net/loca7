@@ -8,7 +8,7 @@ export const POST: RequestHandler = async ({ locals, params, url }) => {
 	guards.isAdmin(user, session, url);
 
 	await prisma.report.delete({
-		where: { id: params.id }
+		where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) }
 	});
 
 	await log.info('delete_appartment_report', user, 'success', { appartment: params.id });
