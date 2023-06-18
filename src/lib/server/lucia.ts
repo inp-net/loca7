@@ -44,6 +44,11 @@ export const guards: {
 		session: Session | null,
 		url: URL
 	) => asserts user is User & { emailIsValidated: true; god: true };
+	isGodOrAdmin: (
+		user: User | null,
+		session: Session | null,
+		url: URL
+	) => asserts user is User & { emailIsValidated: true } & ({ admin: true } | { god: true });
 	isAdminElseRedirect: (
 		user: User | null,
 		session: Session | null,
@@ -121,5 +126,11 @@ export const guards: {
 	isGod(user, session, url) {
 		guards.emailValidated(user, session, url);
 		if (!user.god) throw error(401, { message: "Vous n'êtes pas un dieu" });
+	},
+
+	isGodOrAdmin(user, session, url) {
+		guards.emailValidated(user, session, url);
+		if (!user.god && !user.admin)
+			throw error(401, { message: "Vous n'êtes pas un dieu ou un administrateur" });
 	}
 };
