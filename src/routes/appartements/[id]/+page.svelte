@@ -581,7 +581,7 @@
 		<p class="typo-details">
 			{#if appart.importedFromOldSite}
 				<a href="https://bde.enseeiht.fr/services/logement/{appart.number}"
-					>voir sur l'ancient site</a
+					>voir sur l'ancien site</a
 				> &bull;{/if}
 			{#if isNaN(Number($page.params.id))}
 				annonce n°<a href="/appartements/{appart.number}">{appart.number}</a>
