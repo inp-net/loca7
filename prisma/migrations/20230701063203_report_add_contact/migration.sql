@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Report` ADD COLUMN `contact` VARCHAR(191) NOT NULL DEFAULT '';

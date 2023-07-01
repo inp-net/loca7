@@ -185,6 +185,7 @@ model Report {
   appartmentId String
   author       User?        @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId     String?
+  contact      String       @default("")
 }
 
 enum ReportReason {

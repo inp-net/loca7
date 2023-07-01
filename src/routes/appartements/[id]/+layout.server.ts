@@ -40,6 +40,7 @@ export const load: LayoutServerLoad = async ({ params, locals }) => {
 	guards.appartmentAccessible(user, appartment);
 
 	return {
+		user,
 		appartment: {
 			...appartment,
 			photos: appartment.photos.sort((a, b) => a.position - b.position)

@@ -14,13 +14,14 @@ export const actions: Actions = {
 		const { user, session } = await locals.validateUser();
 		// TODO rate limit (prisma rate limits to 10 req per 10 seconds but we should handle it to show users a nice message)
 
-		const { reason, message, appartmentId } = Object.fromEntries(
+		const { reason, message, appartmentId, contact } = Object.fromEntries(
 			await request.formData()
 		) as Record<string, string>;
 
 		const report = await prisma.report.create({
 			data: {
 				message: xss(message),
+				contact,
 				reason: reason as ReportReason,
 				appartment: {
 					connect: {

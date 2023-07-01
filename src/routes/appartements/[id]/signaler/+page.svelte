@@ -4,6 +4,7 @@
 	import InputField from '$lib/InputField.svelte';
 	import InputRichText from '$lib/InputRichText.svelte';
 	import InputSelectOne from '$lib/InputSelectOne.svelte';
+	import InputText from '$lib/InputText.svelte';
 	import { appartmentTitle } from '$lib/types';
 	import type { PageData } from './$types';
 
@@ -37,6 +38,11 @@
 
 		<InputField label="Explication">
 			<InputRichText name="message" />
+		</InputField>
+
+		<InputField label="Vos coordonées (optionnel)">
+			<InputText value={data.user?.email ?? data.user?.phone ?? ""} initial={data.user?.email ?? data.user?.phone ?? undefined} name="contact" placeholder="Adresse e-mail ou numéro de téléphone" ></InputText>	
+			<p class="explanation-contact typo-details">Cela nous permettra de revenir vers vous suite à votre signalement.</p>
 		</InputField>
 
 		<input type="hidden" name="appartmentId" value={data.appartment.id} />
@@ -98,5 +104,9 @@
 	form section.submit {
 		display: flex;
 		justify-content: center;
+	}
+
+	.explanation-contact {
+		margin-top: 0.5rem;
 	}
 </style>
