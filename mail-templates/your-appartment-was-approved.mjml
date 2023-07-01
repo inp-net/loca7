@@ -37,4 +37,7 @@
 	<mj-column>
 		<mj-button href="https://loca7.fr/appartements/{{ number }}">Voir votre annonce</mj-button>
 	</mj-column>
+	<mj-column>
+		<mj-button href="https://loca7.fr/appartements/{{ number }}/modifier">La modifier</mj-button>
+	</mj-column>
 </mj-section>
