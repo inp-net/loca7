@@ -60,8 +60,14 @@
 
 		<p class="hint">L'e-mail est envoyé séparément à chaque destinataire.</p>
 
-		<InputCheckbox tristate={false} value={false} name="bypassAuthKeyCheck" label="Comptes non activés" labelFalse="Ne pas envoyer" labelTrue="Envoyer" />
-
+		<InputCheckbox
+			tristate={false}
+			value={false}
+			name="bypassAuthKeyCheck"
+			label="Comptes non activés"
+			labelFalse="Ne pas envoyer"
+			labelTrue="Envoyer"
+		/>
 
 		<InputField label="Objet">
 			<InputText name="subject" bind:value={subject} />

@@ -41,8 +41,15 @@
 		</InputField>
 
 		<InputField label="Vos coordonées (optionnel)">
-			<InputText value={data.user?.email ?? data.user?.phone ?? ""} initial={data.user?.email ?? data.user?.phone ?? undefined} name="contact" placeholder="Adresse e-mail ou numéro de téléphone" ></InputText>	
-			<p class="explanation-contact typo-details">Cela nous permettra de revenir vers vous suite à votre signalement.</p>
+			<InputText
+				value={data.user?.email ?? data.user?.phone ?? ''}
+				initial={data.user?.email ?? data.user?.phone ?? undefined}
+				name="contact"
+				placeholder="Adresse e-mail ou numéro de téléphone"
+			/>
+			<p class="explanation-contact typo-details">
+				Cela nous permettra de revenir vers vous suite à votre signalement.
+			</p>
 		</InputField>
 
 		<input type="hidden" name="appartmentId" value={data.appartment.id} />

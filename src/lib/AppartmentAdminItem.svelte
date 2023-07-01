@@ -136,7 +136,9 @@
 		{:else}
 			<ButtonSecondary href="/appartements{number}" icon="add">Voir</ButtonSecondary>
 		{/if}
-		<ButtonSecondary href="/appartements/{number}/supprimer" icon="delete">Suppr.</ButtonSecondary>
+		<ButtonSecondary href="/appartements/{number}/supprimer" icon="delete"
+			>Suppr.</ButtonSecondary
+		>
 	</div>
 	<button
 		class:open
