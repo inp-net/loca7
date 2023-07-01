@@ -114,6 +114,8 @@ h2 {
 p {
 	font-size: var(--size-paragraph);
 	font-weight: var(--weight-paragraph);
+	letter-spacing: normal;
+	text-transform: none;
 }
 
 .typo-details {

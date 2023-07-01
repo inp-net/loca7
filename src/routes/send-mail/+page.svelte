@@ -9,12 +9,25 @@
 	import { z } from 'zod';
 	import ButtonPrimary from '$lib/ButtonPrimary.svelte';
 	import InputCheckbox from '$lib/InputCheckbox.svelte';
+	import { page } from '$app/stores';
 
 	export let data: PageData;
 	let { allEmails } = data;
 	let recipients: string = '';
 	let subject: string = '';
 	let body: string = '';
+	let bypassAuthKeyCheck = false;
+
+	$: {
+		if (!recipients) {
+			recipients = $page.url.searchParams.get('to') ?? ''
+			if (recipients) {
+				bypassAuthKeyCheck = true;
+			}
+		}
+		body = body || `<p><span>${$page.url.searchParams.get('body') ?? ''}</span></p>`
+		subject = subject || ($page.url.searchParams.get('subject') ?? '')
+	}
 
 	const emailSearcher = new Fuse(allEmails, {
 		shouldSort: true,
@@ -62,7 +75,7 @@
 
 		<InputCheckbox
 			tristate={false}
-			value={false}
+			value={bypassAuthKeyCheck}
 			name="bypassAuthKeyCheck"
 			label="Comptes non activés"
 			labelFalse="Ne pas envoyer"

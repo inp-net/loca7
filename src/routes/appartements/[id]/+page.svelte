@@ -520,7 +520,7 @@
 			<h2>Signalements</h2>
 			<ul>
 				{#each reports as report (report.id)}
-					<li class="report">
+					<li class="report" class:has-contact={Boolean(report.contact)}>
 						<span class="reason typo-field-label"
 							>{DISPLAY_REPORT_REASON[report.reason]}</span
 						>
@@ -528,6 +528,21 @@
 							<div class="body">{@html report.message}</div>
 						{:else}
 							<div class="body empty">Aucun message</div>
+						{/if}
+						{#if report.contact}
+							<div class="contact">
+								<div class="typo-field-label label">Signalé par 
+							<span class="action typo-paragraph">
+								{#if report.contact.includes('@')}
+								<ButtonSecondary insideProse icon="email" href="/send-mail?{new URLSearchParams({to: report.contact, subject: `À propos de votre signalement de l'annonce #${appart.number}`, body: `Référence du signalement: ${report.id}`}).toString()}">Contacter</ButtonSecondary>
+								{:else}
+								<ButtonSecondary insideProse icon="phone" href="tel:{report.contact}">Contacter</ButtonSecondary>
+								{/if}
+							</span>
+							</div>
+
+								{report.contact}
+							</div>
 						{/if}
 						<div class="actions">
 							<ButtonSecondary
@@ -823,9 +838,17 @@
 		border: var(--border-width) solid var(--muted);
 	}
 
-	.report .actions {
+	.report .contact {
 		margin-top: auto;
 	}
+
+	.report:not(.has-contact) .actions {
+		margin-top: auto;
+	}
+	.report.has-contact .actions {
+		margin-top: 0.5rem;
+	}
+
 	.report .body.empty {
 		font-style: italic;
 		color: var(--muted);
