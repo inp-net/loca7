@@ -15,19 +15,42 @@ export async function writePhotosToDisk(photos: Photo[], files: File[]) {
 			photo: photo.filename
 		});
 		const file = files.find((file) => file.name === photo.filename);
-		if (!file) continue;
+		if (!file) {
+			await log.warn(
+				'submit_appartment',
+				null,
+				`Couldn't find file ${photo.filename} in files ${JSON.stringify(
+					files.map(({ name }) => name)
+				)}`
+			);
+			continue;
+		}
 
 		const buffer = Buffer.from(await file.arrayBuffer());
 
-		if (buffer.length === 0) continue;
+		if (buffer.length === 0) {
+			await log.warn(
+				'submit_appartment',
+				null,
+				`While writing photo ${photo.filename}: buffer is empty`
+			);
+			continue;
+		}
 
 		if (buffer.byteLength > MAX_PHOTO_SIZE_BYTES) {
 			throw error(400, {
 				message: `Les photos doivent faire moins de ${MAX_PHOTO_SIZE_BYTES * 1e-6} Mo`
 			});
 		}
-
-		compressPhoto(Buffer.from(await file.arrayBuffer()), publicPath(photoURL(photo)));
+		try {
+			compressPhoto(Buffer.from(await file.arrayBuffer()), publicPath(photoURL(photo)));
+		} catch (err) {
+			await log.error(
+				'submit_appartment',
+				null,
+				`While compressing photo ${photo.filename}: ${err}`
+			);
+		}
 	}
 }
 
@@ -40,7 +63,9 @@ export async function copyPhotos(to: Photo[], from: Photo[]) {
 }
 
 export async function compressPhoto(buf: Buffer, filename: string) {
-	await sharp(buf)
+	await sharp(buf, {
+		failOn: 'none'
+	})
 		.resize({
 			width: 1000,
 			withoutEnlargement: true
