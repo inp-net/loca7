@@ -7,7 +7,6 @@
 	import { browser } from '$app/environment';
 	import LogoLoca7 from './LogoLoca7.svelte';
 	import ButtonPrimary from './ButtonPrimary.svelte';
-	import { CONTACT_EMAIL } from './constants';
 	import { tooltip } from './tooltip';
 
 	export let user: User | null = null;
@@ -16,7 +15,7 @@
 
 	let topbarElement: HTMLElement;
 	let sidebarOpen: boolean = false;
-	let currentPage: 'recherche' | 'administration' | 'mes annonces' | 'mon compte' = 'recherche';
+	let currentPage: 'recherche' | 'administration' | 'mes annonces' | 'mon compte' | 'suivis' = 'recherche';
 
 	function getCurrentPage(url: URL): typeof currentPage {
 		if (url.pathname.startsWith('/validate-email') && url.searchParams.has('go')) {
@@ -30,6 +29,9 @@
 			/^\/appartements\/[^\/]+\/modifier/.test(url.pathname)
 		)
 			return 'mes annonces';
+		if (url.pathname.startsWith('/appartements/suivis')) {
+			return 'suivis'
+		}
 		if (url.pathname.startsWith('/account')) return 'mon compte';
 		return 'recherche';
 	}
@@ -114,6 +116,11 @@
 					</div>
 				{/if}
 			</li>
+
+
+			<li>
+				<ButtonNavigation current={currentPage === "suivis"} href="/appartements/suivis">Suivies</ButtonNavigation>
+			</li>
 			<li>
 				<ButtonNavigation current={currentPage === 'mon compte'} href="/account"
 					>Mon compte</ButtonNavigation
@@ -174,6 +181,10 @@
 				<span class="pill">{numberOfManagedOnlineAppartments}</span>
 			{/if}
 		</li>
+
+			<li>
+				<ButtonNavigation current={currentPage === "suivis"} href="/appartements/suivis">Suivies</ButtonNavigation>
+			</li>
 
 		<li>
 			<ButtonNavigation current={currentPage === 'mon compte'} href="/account"

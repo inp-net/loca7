@@ -41,6 +41,7 @@
 	export let hasFiberInternet: boolean | null;
 	export let hasElevator: boolean | null;
 	export let editable: boolean = false;
+	export let dislikeable = false
 	export let small: boolean = false;
 	export let likes: Like[] = [];
 
@@ -187,8 +188,9 @@
 			</section>
 		{/if}
 	</a>
-	{#if editable}
+	{#if editable || dislikeable}
 		<section class="editable">
+			{#if editable}
 			<ButtonColored href="/appartements/{number}/modifier">Modifier</ButtonColored>
 			{#if !archived}
 				<ButtonColored
@@ -208,6 +210,10 @@
 			<ButtonColored dangerous href="/appartements/{number}/supprimer"
 				>Supprimer</ButtonColored
 			>
+			{/if}
+			{#if dislikeable}
+			<ButtonColored dangerous href="/appartements/{number}/supprimer-like">Ne plus suivre</ButtonColored>
+			{/if}
 		</section>
 	{/if}
 </article>
