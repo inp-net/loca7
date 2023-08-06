@@ -30,7 +30,7 @@ export const POST: RequestHandler = async ({ params, locals, url }) => {
 		where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
 		data: {
 			archived: true,
-			approved: user.admin
+			approved: true // always approve archived appartments
 		}
 	});
 
