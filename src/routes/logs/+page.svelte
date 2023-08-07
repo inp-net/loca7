@@ -5,9 +5,13 @@
 	import xss from 'xss';
 	import type { PageData } from './$types';
 	import { page } from '$app/stores';
+	import { range } from '$lib/utils';
+	import Icon from '$lib/Icon.svelte';
 
 	export let data: PageData;
 
+	$: currentPage = Number.parseFloat($page.url.searchParams.get('page') ?? '1')
+	$: otherQueryParams = new URLSearchParams(Object.fromEntries([...$page.url.searchParams.entries()].filter(([k, v]) => k !== "page"))).toString()
 	let shown: string[] = ['I', 'W', 'E', 'F'];
 	let expandedRow: string = '';
 	let highlightLog: string = '';
@@ -78,6 +82,28 @@
 			</tr>
 		{/each}
 	</table>
+
+	<section class="pages">
+		<ul>
+{#if currentPage > 1}
+				<li class="previous"><a href="?page={currentPage -1}&{otherQueryParams}">
+					<div class="icon">
+						<Icon name="next" flip></Icon>
+					</div>
+				</a></li>
+{/if}
+			{#each range(1, data.pagesCount) as pageNumber}
+			<li class:current={pageNumber===currentPage}><a href="?page={pageNumber}&{otherQueryParams}">{pageNumber}</a></li>
+			{/each}
+{#if currentPage < data.pagesCount}
+				<li class="next"><a href="?page={currentPage +1}&{otherQueryParams}">
+					<div class="icon">
+						<Icon name="next"></Icon>
+					</div>
+				</a></li>
+{/if}
+		</ul>
+	</section>
 </main>
 
 <style>
@@ -135,5 +161,39 @@
 	:global(span.redacted) {
 		color: var(--blood);
 		font-weight: bold;
+	}
+
+	section.pages {
+		margin-top: 2rem;
+	}
+
+	section.pages ul {
+		display: flex;
+		list-style: none;
+		gap: 1rem;
+		align-items: center;
+		font-size: 1.2rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+	section.pages :global(.icon) {
+		width: 1.5em;
+		height: 1.5em;
+	}
+	section.pages li:not(.next):not(.previous) {
+		padding: .25em;
+		width: 1.5rem;
+		height: 1.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--ice);
+		border-radius: 50%;
+	}
+	section.pages a {
+		font-weight: bold;
+	}
+	section.pages .current a {
+		color: var(--cobalt);
 	}
 </style>

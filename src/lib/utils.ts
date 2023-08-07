@@ -215,3 +215,7 @@ export function clamp(value: number, min: number, max: number): number {
 	if (value >= max) return max;
 	return value;
 }
+
+export function range(start: number, end: number): number[] {
+	return Array.from({ length: end - start }, (_, i) => start + i);
+}
