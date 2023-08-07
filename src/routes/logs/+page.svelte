@@ -10,8 +10,10 @@
 
 	export let data: PageData;
 
-	$: currentPage = Number.parseFloat($page.url.searchParams.get('page') ?? '1')
-	$: otherQueryParams = new URLSearchParams(Object.fromEntries([...$page.url.searchParams.entries()].filter(([k, v]) => k !== "page"))).toString()
+	$: currentPage = Number.parseFloat($page.url.searchParams.get('page') ?? '1');
+	$: otherQueryParams = new URLSearchParams(
+		Object.fromEntries([...$page.url.searchParams.entries()].filter(([k, v]) => k !== 'page'))
+	).toString();
 	let shown: string[] = ['I', 'W', 'E', 'F'];
 	let expandedRow: string = '';
 	let highlightLog: string = '';
@@ -52,9 +54,7 @@
 			<th>action</th>
 			<th>message</th>
 		</tr>
-		{#each data.logs
-			.filter((l) => shown.includes(['T', 'I', 'W', 'E', 'F'][l.level]))
-			.reverse() as log (log.id)}
+		{#each data.logs.filter( (l) => shown.includes(['T', 'I', 'W', 'E', 'F'][l.level]) ) as log (log.id)}
 			<tr
 				id={log.createdAt.toISOString()}
 				style:--fg="var(--{['muted', 'fg', 'safran', 'blood', 'white'][log.level]}, #fff)"
@@ -85,23 +85,29 @@
 
 	<section class="pages">
 		<ul>
-{#if currentPage > 1}
-				<li class="previous"><a href="?page={currentPage -1}&{otherQueryParams}">
-					<div class="icon">
-						<Icon name="next" flip></Icon>
-					</div>
-				</a></li>
-{/if}
+			{#if currentPage > 1}
+				<li class="previous">
+					<a href="?page={currentPage - 1}&{otherQueryParams}">
+						<div class="icon">
+							<Icon name="next" flip />
+						</div>
+					</a>
+				</li>
+			{/if}
 			{#each range(1, data.pagesCount) as pageNumber}
-			<li class:current={pageNumber===currentPage}><a href="?page={pageNumber}&{otherQueryParams}">{pageNumber}</a></li>
+				<li class:current={pageNumber === currentPage}>
+					<a href="?page={pageNumber}&{otherQueryParams}">{pageNumber}</a>
+				</li>
 			{/each}
-{#if currentPage < data.pagesCount}
-				<li class="next"><a href="?page={currentPage +1}&{otherQueryParams}">
-					<div class="icon">
-						<Icon name="next"></Icon>
-					</div>
-				</a></li>
-{/if}
+			{#if currentPage < data.pagesCount}
+				<li class="next">
+					<a href="?page={currentPage + 1}&{otherQueryParams}">
+						<div class="icon">
+							<Icon name="next" />
+						</div>
+					</a>
+				</li>
+			{/if}
 		</ul>
 	</section>
 </main>
@@ -181,7 +187,7 @@
 		height: 1.5em;
 	}
 	section.pages li:not(.next):not(.previous) {
-		padding: .25em;
+		padding: 0.25em;
 		width: 1.5rem;
 		height: 1.5rem;
 		display: flex;
