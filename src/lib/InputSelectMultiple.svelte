@@ -57,6 +57,7 @@
 
 	.icon {
 		height: 1em;
+		width: 1em;
 
 		transition: all 0.25s ease;
 	}

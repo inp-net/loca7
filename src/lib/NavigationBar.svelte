@@ -255,6 +255,7 @@
 
 	.logo {
 		max-height: 2rem;
+		width: 133px;
 	}
 
 	nav.topbar ul {

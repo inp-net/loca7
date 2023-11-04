@@ -271,7 +271,9 @@
 
 	.surface-and-price,
 	.criteria {
-		display: flex;
+		/*display: flex;*/
+		display: grid;
+		grid-template-columns: repeat(auto-fill, 10em);
 		gap: 1rem;
 	}
 
