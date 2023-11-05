@@ -62,7 +62,7 @@
 
 <style>
 	svg {
-		width: 100%;
+		width: 132.9px;
 		height: 100%;
 		object-fit: contain;
 		max-height: 2rem;

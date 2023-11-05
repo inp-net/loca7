@@ -279,6 +279,7 @@
 	section.situation .icon {
 		display: inline-block;
 		height: 1.2em;
+		width: 1.2em;
 	}
 
 	p .muted {
@@ -301,6 +302,7 @@
 	section.criteria .icon {
 		display: inline-block;
 		height: 1.2em;
+		width: 1.2em;
 	}
 
 	article .content:hover,

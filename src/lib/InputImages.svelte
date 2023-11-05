@@ -247,6 +247,7 @@
 
 	.dropzone:not(.empty) .icon {
 		height: 2rem;
+		width: 2rem;
 	}
 
 	/** Dragging somewhere */
@@ -267,5 +268,6 @@
 	}
 	.warning-size-limit .icon {
 		height: 1.75em;
+		width: 1.75em;
 	}
 </style>
