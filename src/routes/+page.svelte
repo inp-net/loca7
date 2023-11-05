@@ -172,41 +172,45 @@
 						<InputSearch bind:search={$searchCriteria.description} />
 					</InputField>
 				</div>
-				<InputField label="Type de logement">
-					<InputSelectMultiple
-						options={DISPLAY_APPARTMENT_KIND}
-						bind:selection={$searchCriteria.type}
-					/>
-				</InputField>
-				<InputField label="Critères">
-					<div class="criteria">
-						<InputCheckbox
-							labelNull="Peu importe"
-							label="Meublé"
-							bind:value={$searchCriteria.furniture}
+				<div class="type-search">
+					<InputField label="Type de logement">
+						<InputSelectMultiple
+							options={DISPLAY_APPARTMENT_KIND}
+							bind:selection={$searchCriteria.type}
 						/>
-						<InputCheckbox
-							labelNull="Peu importe"
-							label="Parking"
-							bind:value={$searchCriteria.parking}
-						/>
-						<InputCheckbox
-							labelNull="Peu importe"
-							label="Parking vélo"
-							bind:value={$searchCriteria.bicycleParking}
-						/>
-						<InputCheckbox
-							labelNull="Peu importe"
-							label="Fibre optique"
-							bind:value={$searchCriteria.fiberInternet}
-						/>
-						<InputCheckbox
-							labelNull="Peu importe"
-							label="Ascenseur"
-							bind:value={$searchCriteria.elevator}
-						/>
-					</div>
-				</InputField>
+					</InputField>
+				</div>
+				<div class="checkbox-search">
+					<InputField label="Critères">
+						<div class="criteria">
+							<InputCheckbox
+								labelNull="Peu importe"
+								label="Meublé"
+								bind:value={$searchCriteria.furniture}
+							/>
+							<InputCheckbox
+								labelNull="Peu importe"
+								label="Parking"
+								bind:value={$searchCriteria.parking}
+							/>
+							<InputCheckbox
+								labelNull="Peu importe"
+								label="Parking vélo"
+								bind:value={$searchCriteria.bicycleParking}
+							/>
+							<InputCheckbox
+								labelNull="Peu importe"
+								label="Fibre optique"
+								bind:value={$searchCriteria.fiberInternet}
+							/>
+							<InputCheckbox
+								labelNull="Peu importe"
+								label="Ascenseur"
+								bind:value={$searchCriteria.elevator}
+							/>
+						</div>
+					</InputField>
+				</div>
 			</form>
 			<section class="search-actions">
 				<ButtonSecondary
@@ -269,12 +273,23 @@
 		margin-bottom: 2rem;
 	}
 
-	.surface-and-price,
+	.surface-and-price {
+		/*display: flex;*/
+		display: grid;
+		grid-template-columns: repeat(auto-fill, 12em);
+		align-items: center;
+		justify-content: space-between;
+		row-gap: 1rem;
+	}
+
 	.criteria {
 		/*display: flex;*/
 		display: grid;
 		grid-template-columns: repeat(auto-fill, 10em);
-		gap: 1rem;
+		align-items: center;
+		justify-content: start;
+		row-gap: 1rem;
+		/*gap: 1rem;*/
 	}
 
 	.criteria {
@@ -395,7 +410,7 @@
 		bottom: 2rem;
 	}
 
-	.text-search {
+	.surface-and-price, .text-search, .type-search, .checkbox-search {
 		width: 100%;
 	}
 
