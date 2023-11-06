@@ -361,7 +361,7 @@
 		z-index: 20;
 	}
 
-	.results {
+	.results { /* DISPLAY GRID */
 		display: flex;
 		flex-direction: column;
 		padding: 0;
@@ -377,9 +377,10 @@
 		margin-top: 2rem;
 		list-style: none;
 		gap: 3rem;
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
+		
+		display: grid;
+		grid-template-columns: repeat(auto-fill, 400px);
+		
 		justify-content: center;
 		width: 100%;
 	}
