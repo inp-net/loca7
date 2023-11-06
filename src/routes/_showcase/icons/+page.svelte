@@ -39,6 +39,7 @@
 	}
 
 	.icon {
+		height: 3rem;
 		width: 3rem;
 	}
 </style>

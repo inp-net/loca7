@@ -44,6 +44,7 @@
 	section.icon {
 		--fg: var(--diamond);
 		height: 10rem;
+		width: 10rem;
 	}
 
 	section {
