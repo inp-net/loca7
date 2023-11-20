@@ -227,8 +227,10 @@
 
 		background: var(--card-bg, var(--bg));
 		border-radius: 1rem;
-		/* width: 600px; */
-		max-width: 400px;
+
+		width: 400px;
+		height: 500px;
+
 		overflow: hidden;
 	}
 

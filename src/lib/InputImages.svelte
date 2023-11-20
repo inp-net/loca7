@@ -181,6 +181,7 @@
 
 	.dropzone.empty .icon {
 		height: 3rem;
+		width: 3rem;
 	}
 
 	.dropzone:not(.empty) {

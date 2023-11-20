@@ -90,3 +90,13 @@ pnpm mailhog &
 ```bash
 pnpm dev
 ```
+
+## Editing the database manually and recieving mails via mailhog
+
+1. Launch prisma studio
+
+```bash
+pnpm prisma studio
+```
+
+2. The mailhog client is on `http://localhost:8025`

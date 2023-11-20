@@ -679,6 +679,7 @@
 	section .row .icon {
 		display: inline-block;
 		height: 1.2em;
+		width: 1.2em;
 	}
 
 	p.traveltime {
@@ -739,6 +740,7 @@
 	section.criteria .iconlike {
 		margin-top: 5px; /* XXX don't ask me why, real icons are actually 55px tall. putting it as a margin top keeps it somewhat vertically aligned to other icons */
 		height: 50px;
+		width: 50px;
 		--size: 50px;
 		font-size: var(--size);
 		font-weight: bold;
@@ -923,6 +925,7 @@
 	section.notice.notice-report-submitted .icon {
 		--icon-color: var(--cactus);
 		height: 1.5em;
+		width: 1.5em;
 	}
 
 	section.notice-pending {
