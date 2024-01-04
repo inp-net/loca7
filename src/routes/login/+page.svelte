@@ -45,9 +45,9 @@
 
 	<h1>Connexion</h1>
 
-	<section class="through-cas">
+	<section class="through-oauth">
 		<p>Vous êtes étudiant à l'n7 ?</p>
-		<ButtonSecondary insideProse href="/login/cas" icon="lock"
+		<ButtonSecondary insideProse href="https://churros.inpt.fr/authorize?" icon="lock"
 			>Se connecter avec le BDE</ButtonSecondary
 		>
 	</section>
@@ -100,7 +100,7 @@
 		--fg: var(--cactus);
 	}
 
-	section.through-cas {
+	section.through-oauth {
 		display: flex;
 		align-items: center;
 		margin: 1.5rem 0;
