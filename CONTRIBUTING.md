@@ -35,7 +35,7 @@ MAIL_HOST=127.0.0.1
 MAIL_PORT=1025
 MAIL_USER=test
 MAIL_PASS=test
-CHURROS_CLIENT_ID=...
+CHURROS_CLIENT_ID=... # see https://churros.inpt.fr/developers -- put http://localhost:5173/login/callback in the Allowed Redirect URIs
 CHURROS_CLIENT_SECRET=...
 OPENROUTESERVICE_KEY=... # see https://openrouteservice.org -- the API is completely free
 ```
