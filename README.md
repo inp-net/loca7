@@ -18,20 +18,7 @@ Il y a également une copie locale importable dans figma, au nom de `/prototype.
 
 ## Développement
 
-### Prérequis
-
-- Serveur PostgreSQL lancé
-- [MailHog](https://github.com/mailhog/MailHog) installé
-- (Optionnel) [pnpm](https://pnpm.io/installation) installé
-
-```bash
-git clone https://git.inpt.fr/INP-net/loca7
-cd loca7
-pnpm i
-mv .env.example .env # remplacer les valeurs à l'intérieur si nécéssaire
-pnpm run pushdb
-pnpm concurrently -i npm:dev npm:mailhog # ou lancer pnpm dev et pnpm mailhog dans 2 terminaux
-```
+Voir [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ## Roadmap
 
@@ -55,7 +42,7 @@ pnpm concurrently -i npm:dev npm:mailhog # ou lancer pnpm dev et pnpm mailhog da
 
 ### Comptes
 
-- [x] Intégration avec le CAS
+- [x] Intégration avec l'[OAuth Churros](https://wiki.inpt.fr/inp-net/public/oauth-churros)
 - [ ] Intégration avec [Google reCaptcha v3](https://developers.google.com/recaptcha/docs/v3) à la création et à la connexion
 - [x] Évaluation de la complexité d'un mot de passe avec [zxcvbn](https://github.com/dropbox/zxcvbn)
 
@@ -76,7 +63,7 @@ pnpm concurrently -i npm:dev npm:mailhog # ou lancer pnpm dev et pnpm mailhog da
 
 - [Svelte](https://svelte.dev) pour le frontend
 - [SvelteKit](https://kit.svelte.dev) pour le backend
-- [PostgreSQL](https://postgresql.org) pour la base de données
+- [MySQL](https://mysql.com) pour la base de données
 - [MJML](https://mjml.io) pour la génération d'e-mails
 
 ## Architecture
