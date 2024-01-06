@@ -1,10 +1,8 @@
-import { OAUTH_CLIENT_SECRET } from '$env/static/private';
-import { PUBLIC_OAUTH_CLIENT_ID } from '$env/static/public';
 import { ChurrosClient } from '@inp-net/churros-client';
 
 export const churros = new ChurrosClient({
-	client_id: PUBLIC_OAUTH_CLIENT_ID,
-	client_secret: OAUTH_CLIENT_SECRET,
+	client_id: process.env.PUBLIC_OAUTH_CLIENT_ID,
+	client_secret: process.env.OAUTH_CLIENT_SECRET,
 	redirect_uri: 'http://localhost:5173/login/callback'
 });
 
