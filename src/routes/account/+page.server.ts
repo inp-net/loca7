@@ -154,11 +154,11 @@ export const actions: Actions = {
 		const { user, session } = await locals.validateUser();
 		guards.loggedIn(user, session, url);
 
-		const thruCAS = (await auth.getAllUserKeys(user.id)).some(
-			(key) => key?.providerId === 'cas'
+		const thruOauth = (await auth.getAllUserKeys(user.id)).some(
+			(key) => key?.providerId === 'oauth'
 		);
 
-		if (!thruCAS) {
+		if (!thruOauth) {
 			const { email, password } = Object.fromEntries(await request.formData()) as Record<
 				string,
 				string

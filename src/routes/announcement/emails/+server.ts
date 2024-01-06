@@ -20,7 +20,7 @@ export const GET: RequestHandler = async ({ url, locals, params }) => {
 							},
 							{
 								id: {
-									startsWith: 'cas:'
+									startsWith: 'oauth:'
 								}
 							}
 						]
