@@ -3,6 +3,7 @@ import { error, redirect, type Actions } from '@sveltejs/kit';
 import { LuciaError } from 'lucia-auth';
 import type { PageServerLoad } from './$types';
 import { log } from '$lib/server/logging';
+import { churros } from '$lib/server/oauth';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { user, session } = await locals.validateUser();
@@ -17,7 +18,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals, url }) => {
+	manual: async ({ request, locals, url }) => {
 		const { email, password } = Object.fromEntries(await request.formData()) as Record<
 			string,
 			string
@@ -58,5 +59,20 @@ export const actions: Actions = {
 
 		await log.info('login', email, 'success');
 		throw redirect(302, url.searchParams.get('go') ?? '/');
+	},
+
+	async oauth({ request }) {
+		const data = await request.formData();
+		if (data.get('accessToken')) {
+			throw redirect(
+				302,
+				'/login/callback/done?' +
+					new URLSearchParams({
+						access_token: data.get('accessToken')?.toString() ?? ''
+					})
+			);
+		}
+		churros.state = data.get('csrfToken')?.toString() ?? '';
+		throw redirect(302, churros.authorizationURL);
 	}
 };
