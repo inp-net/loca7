@@ -3,7 +3,7 @@ import { ChurrosClient } from '@inp-net/churros-client';
 export const churros = new ChurrosClient({
 	client_id: process.env.PUBLIC_OAUTH_CLIENT_ID,
 	client_secret: process.env.OAUTH_CLIENT_SECRET,
-	redirect_uri: 'http://localhost:5173/login/callback'
+	redirect_uri: (process.env.NODE_ENV === "development" ? 'http://localhost:5173' : process.env.ORIGIN) + '/login/callback'
 });
 
 export async function login(code: string): Promise<string> {
