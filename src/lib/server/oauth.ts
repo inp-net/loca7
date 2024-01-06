@@ -1,45 +1,29 @@
-import { log } from './logging';
+import { OAUTH_CLIENT_SECRET } from '$env/static/private';
+import { PUBLIC_OAUTH_CLIENT_ID } from '$env/static/public';
+import { ChurrosClient } from '@inp-net/churros-client';
 
-export async function login(code: string): Promise<{
-	username: string;
-	email: string;
-	firstName: string;
-	lastName: string;
-	groups: string[];
-	isRoot: boolean;
-}> {
-	const response = await fetch(`https://churros.inpt.fr/token`, {
-		method: 'POST',
-		body: new URLSearchParams({
-			grant_type: 'authorization_code',
-			code,
-			redirect_uri: `${process.env.ORIGIN}/login/callback`
-		}),
-		headers: {
-			Authorization: `Basic ${Buffer.from(
-				`${process.env.CHURROS_CLIENT_ID}:${process.env.CHURROS_CLIENT_SECRET}`
-			).toString('base64')}`
-		}
-	});
-	const json = await response.json();
+export const churros = new ChurrosClient({
+	client_id: PUBLIC_OAUTH_CLIENT_ID,
+	client_secret: OAUTH_CLIENT_SECRET,
+	redirect_uri: 'http://localhost:5173/login/callback'
+});
 
-	await log.trace('login', null, `response ${response.status} from OAuth`, json);
+export async function login(code: string): Promise<string> {
+	// CSRF protection check occured in the frontend beforehand
+	// this means that the URL where this function is called should absolutely not be added to the allowed redirect URIs
+	churros.state = '';
+	const token = await churros.getToken(code, '');
+	return token;
+}
 
-	const { email, firstName, lastName, groups, uid, admin } = json as {
-		email: string;
-		firstName: string;
-		lastName: string;
-		groups: { group: { uid: string } }[];
-		uid: string;
-		admin: boolean;
-	};
+export async function identity(accessToken: string) {
+	const user = await churros.getUserInfo(accessToken);
 
 	return {
-		username: uid,
-		email,
-		firstName,
-		lastName,
-		groups: groups.map(({ group }) => group.uid),
-		isRoot: admin
+		username: user.uid,
+		groups: user.groupsUids,
+		// @ts-expect-error @inp-net/churros-client forgot to include this in UserInfo type lmao
+		isRoot: user.admin,
+		...user
 	};
 }

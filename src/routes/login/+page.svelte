@@ -5,13 +5,15 @@
 	import InputEmail from '$lib/InputEmail.svelte';
 	import InputField from '$lib/InputField.svelte';
 	import InputPassword from '$lib/InputPassword.svelte';
-	import type { ActionData } from './$types';
-
-	export let form: ActionData;
+	import { oauthCSRFToken, oauthAccessToken } from '$lib/stores';
+	import { onMount } from 'svelte';
 
 	let email: string = '';
 	let password: string = '';
 
+	onMount(() => {
+		$oauthCSRFToken = Math.random().toString(36).slice(2);
+	});
 	let passwordResetSuccessful: boolean = $page.url.hash === '#password-reset-successful';
 	let passwordDefinitionSuccessful: boolean =
 		$page.url.hash === '#password-definition-successful';
@@ -45,14 +47,17 @@
 
 	<h1>Connexion</h1>
 
-	<section class="through-oauth">
-		<p>Vous êtes étudiant à l'n7 ?</p>
-		<ButtonSecondary insideProse href="https://churros.inpt.fr/authorize?" icon="lock"
-			>Se connecter avec le BDE</ButtonSecondary
-		>
-	</section>
+	<form class="through-oauth" method="post" action="?/oauth">
+		<p>Vous êtes étudiant·e à l'n7 ?</p>
+		<ButtonSecondary insideProse submits icon="lock"
+			>Connexion via
+			<img src="https://churros.inpt.fr/wordmark.svg" alt="Churros" class="inline-logo" />
+		</ButtonSecondary>
+		<input type="hidden" name="csrfToken" value={$oauthCSRFToken} />
+		<input type="hidden" name="accessToken" value={$oauthAccessToken} />
+	</form>
 
-	<form method="post">
+	<form method="post" action="?/manual">
 		<InputField required label="Email">
 			<InputEmail required bind:value={email} name="email" />
 		</InputField>
@@ -100,12 +105,22 @@
 		--fg: var(--cactus);
 	}
 
-	section.through-oauth {
+	.through-oauth {
 		display: flex;
 		align-items: center;
 		margin: 1.5rem 0;
 		flex-wrap: wrap;
 		justify-content: center;
+		gap: 0.25rem;
+	}
+
+	.inline-logo {
+		height: 1.3em;
+	}
+
+	.through-oauth :global(.button-secondary:focus-visible .inline-logo),
+	.through-oauth :global(.button-secondary:hover .inline-logo) {
+		filter: grayscale(1) invert(1);
 	}
 
 	form {
@@ -132,10 +147,6 @@
 	main h1,
 	main p {
 		text-align: center;
-	}
-
-	h1 + p {
-		margin-bottom: 2rem;
 	}
 
 	h1 {

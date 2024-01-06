@@ -35,7 +35,8 @@ MAIL_HOST=127.0.0.1
 MAIL_PORT=1025
 MAIL_USER=test
 MAIL_PASS=test
-PUBLIC_CAS_URL=https://cas.dev.inpt.fr
+CHURROS_CLIENT_ID=...
+CHURROS_CLIENT_SECRET=...
 OPENROUTESERVICE_KEY=... # see https://openrouteservice.org -- the API is completely free
 ```
 

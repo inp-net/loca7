@@ -43,3 +43,6 @@ export const dismissedN7ienOnlyWarning: Writable<boolean> = persisted(
 );
 
 export const darkMode: Writable<boolean | null> = persisted('darkMode', null);
+
+export const oauthAccessToken: Writable<string> = persisted('oauthAccessToken', '');
+export const oauthCSRFToken: Writable<string> = persisted('oauthState', '');
