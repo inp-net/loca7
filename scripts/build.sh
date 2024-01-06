@@ -1,6 +1,6 @@
 set -xe
 
-VERSION=1.10.1
+VERSION=1.11.0
 
 echo "{ \"version\": \"$VERSION\", \"commit\": \"$(git rev-parse HEAD)\" }" > ../public/version.json
 
