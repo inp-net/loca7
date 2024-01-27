@@ -229,7 +229,6 @@
 		border-radius: 1rem;
 
 		width: 400px;
-		height: 500px;
 
 		overflow: hidden;
 	}
