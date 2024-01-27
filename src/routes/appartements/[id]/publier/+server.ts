@@ -7,7 +7,8 @@ import xss from 'xss';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ params, locals, url }) => {
-	const { user, session } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.emailValidated(user, session, url);
 
 	const appartment = await prisma.appartment.findUnique({

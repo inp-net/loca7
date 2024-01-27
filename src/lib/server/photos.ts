@@ -38,7 +38,7 @@ export async function writePhotosToDisk(photos: Photo[], files: File[]) {
 		}
 
 		if (buffer.byteLength > MAX_PHOTO_SIZE_BYTES) {
-			throw error(400, {
+			error(400, {
 				message: `Les photos doivent faire moins de ${MAX_PHOTO_SIZE_BYTES * 1e-6} Mo`
 			});
 		}

@@ -3,7 +3,7 @@ import type { RequestHandler } from './$types';
 import { log } from '$lib/server/logging';
 import * as oauth from '$lib/server/oauth';
 import { auth } from '$lib/server/lucia';
-import { LuciaError, type User } from 'lucia-auth';
+import { LuciaError, type User } from 'lucia';
 
 export const GET: RequestHandler = async ({ url, locals }) => {
 	const authorizationCode = url.searchParams.get('code');
@@ -18,7 +18,7 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 				null,
 				'redirecting to login page /login code AND access_token missing'
 			);
-			throw redirect(303, '/login');
+			redirect(303, '/login');
 		}
 
 		try {
@@ -31,10 +31,10 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 				'while logging in through OAuth:',
 				JSON.stringify({ error })
 			);
-			throw redirect(303, '/login/callback?error=unauthorized');
+			redirect(303, '/login/callback?error=unauthorized');
 		}
 
-		throw redirect(303, `/login/callback?access_token=${accessToken}`);
+		redirect(303, `/login/callback?access_token=${accessToken}`);
 	}
 
 	try {
@@ -46,7 +46,7 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 			'while getting user info through OAuth:',
 			JSON.stringify(error)
 		);
-		throw redirect(303, '/login/callback?error=unauthorized');
+		redirect(303, '/login/callback?error=unauthorized');
 	}
 
 	try {
@@ -69,7 +69,8 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 					await auth.getKeyUser('oauth', username).catch(() => false)
 				);
 				if (!hasOauthKey)
-					await auth.createKey(casUser.id, {
+					await auth.createKey({
+						userId: casUser.id,
 						providerId: 'oauth',
 						providerUserId: username,
 						password: null
@@ -87,7 +88,7 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 				} else {
 					await log.fatal('login', email, `unknown error ${err}`);
 
-					throw error(500, 'Connexion impossible.');
+					error(500, 'Connexion impossible.');
 				}
 		}
 
@@ -117,7 +118,8 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 			await log.info('create_account', 'created account from OAuth data', { user });
 		} else {
 			if ((await auth.getKey('oauth', username)) === null) {
-				await auth.createKey(user.id, {
+				await auth.createKey({
+					userId: user.id,
 					providerId: 'oauth',
 					providerUserId: username,
 					password: null
@@ -129,14 +131,14 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 			});
 		}
 	} catch (err) {
-		throw redirect(303, '/login');
+		redirect(303, '/login');
 	}
 
 	await log.info('login', user.email, 'success, through OAuth');
 	try {
-		locals.setSession(await auth.createSession(user.id));
+		locals.setSession(await auth.createSession({ userId: user.id }));
 	} catch (error) {
 		await log.error('login', user.email, 'error while creating session thru OAuth', error);
 	}
-	throw redirect(303, '/');
+	redirect(303, '/');
 };

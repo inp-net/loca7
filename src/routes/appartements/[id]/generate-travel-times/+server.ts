@@ -6,7 +6,8 @@ import { ENSEEIHT } from '$lib/utils';
 import { log } from '$lib/server/logging';
 
 export const GET: RequestHandler = async ({ request, params, locals }) => {
-	const { user, session } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	const appartment = await prisma.appartment.findUnique({
 		where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
 		include: {

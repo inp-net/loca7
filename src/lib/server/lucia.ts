@@ -1,15 +1,15 @@
 import { dev } from '$app/environment';
 import { prisma } from '$lib/server/prisma';
 import { appartmentAccessible } from '$lib/types';
-import prismaAdapter from '@lucia-auth/adapter-prisma';
+import { prisma as prismaAdapter } from '@lucia-auth/adapter-prisma';
 import type { User } from '@prisma/client';
 import { error, redirect } from '@sveltejs/kit';
-import lucia, { type Session } from 'lucia-auth';
+import { lucia, type Session } from 'lucia';
 
 export const auth = lucia({
 	adapter: prismaAdapter(prisma),
 	env: dev ? 'DEV' : 'PROD',
-	transformUserData(userData) {
+	getUserAttributes(userData) {
 		return {
 			id: userData.id,
 			firstName: userData.firstName,
@@ -28,38 +28,48 @@ export const auth = lucia({
 export type Auth = typeof auth;
 
 export const guards: {
-	loggedIn: (user: User | null, session: Session | null, url: URL) => asserts user is User;
+	loggedIn: (
+		user: User | undefined | null,
+		session: Session | undefined | null,
+		url: URL
+	) => asserts user is User;
 	emailValidated: (
-		user: User | null,
-		session: Session | null,
+		user: User | undefined | null,
+		session: Session | undefined | null,
 		url: URL
 	) => asserts user is User & { emailIsValidated: true };
 	isAdmin: (
-		user: User | null,
-		session: Session | null,
+		user: User | undefined | null,
+		session: Session | undefined | null,
 		url: URL
 	) => asserts user is User & { emailIsValidated: true; admin: true };
 	isGod: (
-		user: User | null,
-		session: Session | null,
+		user: User | undefined | null,
+		session: Session | undefined | null,
 		url: URL
 	) => asserts user is User & { emailIsValidated: true; god: true };
 	isGodOrAdmin: (
-		user: User | null,
-		session: Session | null,
+		user: User | undefined | null,
+		session: Session | undefined | null,
 		url: URL
 	) => asserts user is User & { emailIsValidated: true } & ({ admin: true } | { god: true });
 	isAdminElseRedirect: (
-		user: User | null,
-		session: Session | null,
+		user: User | undefined | null,
+		session: Session | undefined | null,
 		url: URL
 	) => asserts user is User & { emailIsValidated: true; admin: true };
 	appartmentAccessible: (
-		user: User | null,
-		appartment: { approved: boolean; archived: boolean; owner: { id: string } } | null
+		user: User | undefined | null,
+		appartment:
+			| { approved: boolean; archived: boolean; owner: { id: string } }
+			| undefined
+			| null
 	) => asserts appartment;
 	appartmentExists: (
-		appartment: { approved: boolean; archived: boolean; owner: { id: string } } | null
+		appartment:
+			| { approved: boolean; archived: boolean; owner: { id: string } }
+			| undefined
+			| null
 	) => asserts appartment;
 	appartmentOwnedByUser: (
 		user: User,
@@ -70,7 +80,7 @@ export const guards: {
 	 * Checks if the user is logged in, if not, redirects to /login
 	 */
 	loggedIn(user, session, url) {
-		if (!(user && session)) throw redirect(302, '/login?go=' + url.pathname);
+		if (!(user && session)) redirect(302, '/login?go=' + url.pathname);
 	},
 	/**
 	 * Checks if the user has validated their email, if not, redirects to /validate-email
@@ -78,7 +88,7 @@ export const guards: {
 	 */
 	emailValidated(user, session, url) {
 		guards.loggedIn(user, session, url);
-		if (!user.emailIsValidated) throw redirect(302, '/validate-email?go=' + url.pathname);
+		if (!user.emailIsValidated) redirect(302, '/validate-email?go=' + url.pathname);
 	},
 	/**
 	 * Checks if the user is an admin, if not, throws an error
@@ -87,22 +97,22 @@ export const guards: {
 	 */
 	isAdmin(user, session, url) {
 		guards.emailValidated(user, session, url);
-		if (!user.admin) throw error(401, { message: "Vous n'êtes pas administrateur" });
+		if (!user.admin) error(401, { message: "Vous n'êtes pas administrateur" });
 	},
 	/**
 	 * Acts like guards.isAdmin, but redirects to / instead of throwing an error
 	 */
 	isAdminElseRedirect(user, session, url) {
 		guards.emailValidated(user, session, url);
-		if (!user.admin) throw redirect(302, '/');
+		if (!user.admin) redirect(302, '/');
 	},
 	/**
 	 * Checks if the appartement is accessible to the user, if not, throws an error
 	 * WARNING: Does not imply a check to see if the user is logged in
 	 */
 	appartmentAccessible(user, appartment) {
-		if (appartment === null || !appartmentAccessible(user, appartment))
-			throw error(404, {
+		if (!appartment || !appartmentAccessible(user, appartment))
+			error(404, {
 				message: "Cette annonce n'existe pas, ou n'est pas (encore) publique"
 			});
 	},
@@ -111,7 +121,7 @@ export const guards: {
 	 * WARNING: Does not imply a check to see if the user is logged in
 	 */
 	appartmentExists(appartment) {
-		if (appartment === null) throw error(404, { message: "Cette annonce n'existe pas" });
+		if (appartment === null) error(404, { message: "Cette annonce n'existe pas" });
 	},
 
 	/**
@@ -120,17 +130,17 @@ export const guards: {
 	 */
 	appartmentOwnedByUser(user, appartment) {
 		if (appartment === null || appartment.owner.id !== user?.id)
-			throw error(404, { message: "Cette annonce n'existe pas" });
+			error(404, { message: "Cette annonce n'existe pas" });
 	},
 
 	isGod(user, session, url) {
 		guards.emailValidated(user, session, url);
-		if (!user.god) throw error(401, { message: "Vous n'êtes pas un dieu" });
+		if (!user.god) error(401, { message: "Vous n'êtes pas un dieu" });
 	},
 
 	isGodOrAdmin(user, session, url) {
 		guards.emailValidated(user, session, url);
 		if (!user.god && !user.admin)
-			throw error(401, { message: "Vous n'êtes pas un dieu ou un administrateur" });
+			error(401, { message: "Vous n'êtes pas un dieu ou un administrateur" });
 	}
 };

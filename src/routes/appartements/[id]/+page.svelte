@@ -107,7 +107,8 @@
 			<p class="typo-title">
 				Cette annonce {#if !appart.approved}n'a pas encore été approuvée{/if}
 				{#if hasPendingModifications && !appart.approved}et{/if}
-				{#if hasPendingModifications} a des modifications en attente{/if}
+				{#if hasPendingModifications}
+					a des modifications en attente{/if}
 			</p>
 			{#if !user?.admin}
 				<p class="explainer typo-paragraph">
@@ -531,15 +532,29 @@
 						{/if}
 						{#if report.contact}
 							<div class="contact">
-								<div class="typo-field-label label">Signalé par 
-							<span class="action typo-paragraph">
-								{#if report.contact.includes('@')}
-								<ButtonSecondary insideProse icon="email" href="/send-mail?{new URLSearchParams({to: report.contact, subject: `À propos de votre signalement de l'annonce #${appart.number}`, body: `Référence du signalement: ${report.id}`}).toString()}">Contacter</ButtonSecondary>
-								{:else}
-								<ButtonSecondary insideProse icon="phone" href="tel:{report.contact}">Contacter</ButtonSecondary>
-								{/if}
-							</span>
-							</div>
+								<div class="typo-field-label label">
+									Signalé par
+									<span class="action typo-paragraph">
+										{#if report.contact.includes('@')}
+											<ButtonSecondary
+												insideProse
+												icon="email"
+												href="/send-mail?{new URLSearchParams({
+													to: report.contact,
+													subject: `À propos de votre signalement de l'annonce #${appart.number}`,
+													body: `Référence du signalement: ${report.id}`
+												}).toString()}">Contacter</ButtonSecondary
+											>
+										{:else}
+											<ButtonSecondary
+												insideProse
+												icon="phone"
+												href="tel:{report.contact}"
+												>Contacter</ButtonSecondary
+											>
+										{/if}
+									</span>
+								</div>
 
 								{report.contact}
 							</div>

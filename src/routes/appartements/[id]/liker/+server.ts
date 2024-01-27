@@ -4,7 +4,8 @@ import type { RequestHandler } from './$types';
 import { prisma } from '$lib/server/prisma';
 
 export const POST: RequestHandler = async ({ params, locals, url }) => {
-	const { user, session } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.loggedIn(user, session, url);
 
 	const appartment = await prisma.appartment.findUnique({

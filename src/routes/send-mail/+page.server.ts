@@ -5,7 +5,8 @@ import type { PageServerLoad, Actions } from './$types';
 import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.isAdmin(user, session, url);
 
 	return {};
@@ -13,7 +14,8 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 export const actions: Actions = {
 	async send({ locals, request, url }) {
-		const { session, user } = await locals.validateUser();
+		const session = await locals.auth.validate();
+		const user = session?.user;
 		guards.isAdmin(user, session, url);
 
 		const {

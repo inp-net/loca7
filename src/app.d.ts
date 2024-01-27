@@ -4,19 +4,19 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			validate: import('@lucia-auth/sveltekit').Validate;
-			validateUser: import('@lucia-auth/sveltekit').ValidateUser;
-			setSession: import('@lucia-auth/sveltekit').SetSession;
+			auth: import('lucia').AuthRequest;
 		}
 		// interface PageData {}
 		// interface Platform {}
 	}
-	var prisma: PrismaClient;
+	let prisma: PrismaClient;
 
 	/// <reference types="lucia-auth" />
 	declare namespace Lucia {
 		type Auth = import('$lib/server/lucia').Auth;
-		type UserAttributes = Omit<import('$lib/types').User, 'id'>;
+		type DatabaseUserAttributes = Omit<import('$lib/types').User, 'id'>;
+		// eslint-disable-next-line @typescript-eslint/ban-types
+		type DatabaseSessionAttributes = {};
 	}
 }
 

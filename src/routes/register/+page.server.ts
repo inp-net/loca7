@@ -1,18 +1,19 @@
 import { auth } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import { LuciaError } from 'lucia-auth';
+import { LuciaError } from 'lucia';
 import type { PageServerLoad } from './$types';
 import { log } from '$lib/server/logging';
 import { isGhostEmail } from '$lib/types';
 import parsePhoneNumber, { PhoneNumber } from 'libphonenumber-js';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 
 	if (session) {
 		await log.info('create_account', user, 'already logged in, redirecting', { session });
-		throw redirect(302, '/' + url.search);
+		redirect(302, '/' + url.search);
 	}
 };
 
@@ -26,14 +27,14 @@ export const actions: Actions = {
 			await log.error('create_account', null, `fail because blank name`, {
 				inputData
 			});
-			throw error(400, { message: 'Veuillez renseigner votre nom.' });
+			error(400, { message: 'Veuillez renseigner votre nom.' });
 		}
 
 		if (isGhostEmail(email)) {
 			await log.error('create_account', null, `fail because ghost email used`, {
 				inputData
 			});
-			throw error(400, { message: 'Veuillez renseigner une adresse email valide.' });
+			error(400, { message: 'Veuillez renseigner une adresse email valide.' });
 		}
 
 		if (phone !== '' && parsePhoneNumber(phone, 'FR') !== undefined) {
@@ -58,7 +59,7 @@ export const actions: Actions = {
 				await log.error(`create_account`, null, `fail because duplicate phone`, {
 					inputData
 				});
-				throw redirect(
+				redirect(
 					302,
 					'/register' + url.search + '#duplicate-phone=' + encodeURIComponent(phone)
 				);
@@ -89,7 +90,7 @@ export const actions: Actions = {
 				await log.fatal('create_account', email, `NON-LUCIA unknown error`, err, {
 					inputData
 				});
-				throw error(500);
+				error(500);
 			}
 
 			switch (err.message) {
@@ -100,7 +101,7 @@ export const actions: Actions = {
 						`duplicate email (lucia says ${err.message})`,
 						{ inputData }
 					);
-					throw redirect(
+					redirect(
 						302,
 						'/register' + url.search + '#duplicate-email=' + encodeURIComponent(email)
 					);
@@ -111,11 +112,11 @@ export const actions: Actions = {
 						`unknown error (lucia says ${err.message})`,
 						{ inputData }
 					);
-					throw error(400, { message: 'Inscription impossible.' });
+					error(400, { message: 'Inscription impossible.' });
 			}
 		}
 
 		await log.info('create_account', email, 'success', { inputData });
-		throw redirect(302, '/login' + url.search);
+		redirect(302, '/login' + url.search);
 	}
 };

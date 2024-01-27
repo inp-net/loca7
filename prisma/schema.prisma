@@ -3,7 +3,7 @@
 
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "debian-openssl-1.1.x"]
+  binaryTargets = ["native"]
 }
 
 datasource db {
@@ -71,8 +71,6 @@ model Key {
   id              String  @id @unique
   hashed_password String?
   user_id         String
-  primary         Boolean
-  expires         BigInt?
   user            User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@index([user_id])

@@ -6,7 +6,8 @@ import { photoURL } from '$lib/photos';
 import { env } from 'process';
 
 export const GET: RequestHandler = async ({ params, locals }) => {
-	const { user } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	const appart = await prisma.appartment.findUnique({
 		where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
 		include: {

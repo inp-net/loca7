@@ -4,12 +4,13 @@ import type { RequestHandler } from './$types';
 import { log } from '$lib/server/logging';
 
 export const POST: RequestHandler = async ({ locals, url }) => {
-	const { user, session } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.loggedIn(user, session, url);
 
 	await auth.invalidateSession(session.sessionId);
 	locals.setSession(null);
 
 	await log.info('logout', user, 'success');
-	throw redirect(302, '/?reload');
+	redirect(302, '/?reload');
 };

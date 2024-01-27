@@ -361,7 +361,8 @@
 		z-index: 20;
 	}
 
-	.results { /* DISPLAY GRID */
+	.results {
+		/* DISPLAY GRID */
 		display: flex;
 		flex-direction: column;
 		padding: 0;
@@ -377,10 +378,10 @@
 		margin-top: 2rem;
 		list-style: none;
 		gap: 3rem;
-		
+
 		display: grid;
 		grid-template-columns: repeat(auto-fill, 400px);
-		
+
 		justify-content: center;
 		width: 100%;
 	}
@@ -411,7 +412,10 @@
 		bottom: 2rem;
 	}
 
-	.surface-and-price, .text-search, .type-search, .checkbox-search {
+	.surface-and-price,
+	.text-search,
+	.type-search,
+	.checkbox-search {
 		width: 100%;
 	}
 

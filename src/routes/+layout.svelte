@@ -33,6 +33,8 @@
 	<link rel="stylesheet" href="/vendor/leaflet.css" />
 	<link rel="stylesheet" href="/vendor/leaflet-gesture-handling.min.css" />
 	<!-- <script src="/vendor/leaflet.js"></script> -->
+	<!-- <script src="/vendor/leaflet.js"></script> -->
+	<!-- <script src="/vendor/leaflet.js"></script> -->
 	<script src="/vendor/leaflet-gesture-handling.js"></script>
 	<!-- <script src="/vendor/polyfills/inert.min.js"></script> -->
 	<meta
@@ -75,7 +77,7 @@
 
 <section class="toasts">
 	{#each $toasts as toast (toast.id)}
-		<article transition:fly class="toast" data-type={toast.type}>
+		<article transition:fly|global class="toast" data-type={toast.type}>
 			<Icon
 				color={{ error: '#fff', info: 'cobalt' }[toast.type]}
 				name={{ error: 'report', info: 'information' }[toast.type]}

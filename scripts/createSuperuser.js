@@ -2,8 +2,8 @@ import { text } from '@clack/prompts';
 import { PrismaClient } from '@prisma/client';
 import { intro, outro } from '@clack/prompts';
 
-import lucia from 'lucia-auth';
-import luciaPrismaAdapter from '@lucia-auth/adapter-prisma';
+import { lucia } from 'lucia';
+import { prisma as luciaPrismaAdapter } from '@lucia-auth/adapter-prisma';
 intro('Creating a superuser');
 
 const prisma = new PrismaClient();

@@ -4,6 +4,9 @@ import type { RequestHandler } from '../$types';
 import path from 'path';
 
 export const GET: RequestHandler = ({ params }) => {
-	const data = fs.readFileSync(publicPath(path.join('photos', params.path)));
+	const filepath = publicPath(path.join('photos', params.path));
+	const exists = fs.existsSync(filepath);
+	if (!exists) return new Response(null, { status: 404 });
+	const data = fs.readFileSync(filepath);
 	return new Response(data);
 };

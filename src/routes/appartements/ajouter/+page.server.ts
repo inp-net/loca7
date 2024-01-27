@@ -20,7 +20,8 @@ import { log } from '$lib/server/logging';
 import { sendMail } from '$lib/server/mail';
 
 export const load: PageServerLoad = async ({ locals, url, parent }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.emailValidated(user, session, url);
 
 	return { ...(await parent()), user };
@@ -28,7 +29,8 @@ export const load: PageServerLoad = async ({ locals, url, parent }) => {
 
 export const actions: Actions = {
 	postAppartment: async ({ request, locals, fetch, url }) => {
-		const { user, session } = await locals.validateUser();
+		const session = await locals.auth.validate();
+		const user = session?.user;
 		guards.emailValidated(user, session, url);
 
 		const formDataRaw = await request.formData();
@@ -153,15 +155,15 @@ export const actions: Actions = {
 			})
 			.catch(async (e) => {
 				await log.fatal('submit_appartment', user, e);
-				throw error(500, { message: "Impossible de créer l'annonce" });
+				error(500, { message: "Impossible de créer l'annonce" });
 			});
 
 		await writePhotosToDisk(appartment.photos, files);
 		try {
 			await sendMail({
-				to: (
-					await prisma.user.findMany({ where: { admin: true } })
-				).map((admin) => admin.email),
+				to: (await prisma.user.findMany({ where: { admin: true } })).map(
+					(admin) => admin.email
+				),
 				subject: `Nouvelle annonce de ${
 					appartment.owner.firstName + ' ' + appartment.owner.lastName
 				} en attente`,
@@ -203,11 +205,11 @@ export const actions: Actions = {
 				'files',
 				files
 			);
-			throw error(500, {
+			error(500, {
 				message: "Impossible de poster l'annonce. Vérifiez la taille de vos images."
 			});
 		}
 
-		throw redirect(302, '/appartements/gerer');
+		redirect(302, '/appartements/gerer');
 	}
 };

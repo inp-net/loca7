@@ -86,5 +86,8 @@
 			"milestone": "1.0",
 			"noItemText": "No issues."
 		}
-	]
+	],
+	"emmet.includeLanguages": {
+		"mjml": "html"
+	}
 }

@@ -9,8 +9,8 @@
 		color === 'currentColor'
 			? color
 			: color.startsWith('#')
-			? color
-			: `var(--${color}, var(--fg))`;
+				? color
+				: `var(--${color}, var(--fg))`;
 </script>
 
 <!-- generate cases -->

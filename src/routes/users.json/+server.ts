@@ -3,7 +3,8 @@ import type { RequestHandler } from './$types';
 import { prisma } from '$lib/server/prisma';
 
 export const GET: RequestHandler = async ({ params, locals, url }) => {
-	const { user, session } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.isAdmin(user, session, url);
 
 	const users = await prisma.user.findMany({});

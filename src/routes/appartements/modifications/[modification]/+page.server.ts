@@ -14,7 +14,8 @@ import { EDITABLE_FIELDS } from '$lib/appartmentDiff';
 import * as appartmentDiff from '$lib/appartmentDiff';
 
 export const load: PageServerLoad = async ({ params, locals, url }) => {
-	const { user, session } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.emailValidated(user, session, url);
 
 	const modification = await prisma.appartmentEdit.findUnique({
@@ -37,7 +38,8 @@ export const load: PageServerLoad = async ({ params, locals, url }) => {
 
 export const actions: Actions = {
 	async apply({ params, locals, fetch, url }) {
-		const { user, session } = await locals.validateUser();
+		const session = await locals.auth.validate();
+		const user = session?.user;
 		guards.isAdmin(user, session, url);
 
 		const edit = await prisma.appartmentEdit.findUnique({
@@ -128,13 +130,13 @@ export const actions: Actions = {
 							edit.latitude && edit.longitude
 								? Math.floor(
 										await openRouteService.travelTime('bike', edit, ENSEEIHT)
-								  )
+									)
 								: null,
 						byFoot:
 							edit.latitude && edit.longitude
 								? Math.floor(
 										await openRouteService.travelTime('foot', edit, ENSEEIHT)
-								  )
+									)
 								: null,
 						byPublicTransport: null // TODO
 					}
@@ -198,11 +200,12 @@ export const actions: Actions = {
 			}
 		});
 
-		throw redirect(302, `/appartements/${newAppartment.id}`);
+		redirect(302, `/appartements/${newAppartment.id}`);
 	},
 
 	async delete({ params, locals, url }) {
-		const { user, session } = await locals.validateUser();
+		const session = await locals.auth.validate();
+		const user = session?.user;
 		guards.emailValidated(user, session, url);
 		const modification = await prisma.appartmentEdit.findUnique({
 			where: {
@@ -228,6 +231,6 @@ export const actions: Actions = {
 			}
 		});
 
-		throw redirect(302, `/appartements/${modification.appartment.id}`);
+		redirect(302, `/appartements/${modification.appartment.id}`);
 	}
 };

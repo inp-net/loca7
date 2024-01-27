@@ -1,7 +1,7 @@
 import { auth, guards } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
-import { LuciaError } from 'lucia-auth';
+import { LuciaError } from 'lucia';
 import type { Actions, PageServerLoad } from './$types';
 import { sendMail } from '$lib/server/mail';
 import { CONTACT_EMAIL } from '$lib/constants';
@@ -12,7 +12,8 @@ import { photoURL } from '$lib/photos';
 import { rmSync } from 'fs';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
-	const { user, session } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.emailValidated(user, session, url);
 	const userHasNoEmailKey = (await auth.getAllUserKeys(user.id)).every(
 		(key) => key?.providerId !== 'email'
@@ -22,7 +23,8 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 export const actions: Actions = {
 	async updateProfile({ locals, request, url }) {
-		const { user, session } = await locals.validateUser();
+		const session = await locals.auth.validate();
+		const user = session?.user;
 		guards.emailValidated(user, session, url);
 
 		const { firstName, lastName, email, phone, agencyName, agencyWebsite } = Object.fromEntries(
@@ -31,7 +33,7 @@ export const actions: Actions = {
 
 		if (user.email !== email) {
 			if (await prisma.user.findUnique({ where: { email } })) {
-				throw redirect(302, '/account' + url.search + '#email-already-in-use');
+				redirect(302, '/account' + url.search + '#email-already-in-use');
 			}
 		}
 
@@ -84,11 +86,12 @@ export const actions: Actions = {
 		}
 
 		await log.info('change_email', user, 'success', { from: user.email, to: email });
-		throw redirect(302, '/account');
+		redirect(302, '/account');
 	},
 
 	async changePassword({ locals, request, fetch, url }) {
-		const { user, session } = await locals.validateUser();
+		const session = await locals.auth.validate();
+		const user = session?.user;
 		guards.emailValidated(user, session, url);
 
 		const { oldPassword = '', newPassword } = Object.fromEntries(
@@ -101,7 +104,8 @@ export const actions: Actions = {
 
 		try {
 			if (userHasNoEmailKey) {
-				await auth.createKey(user.id, {
+				await auth.createKey({
+					userId: user.id,
 					password: newPassword,
 					providerId: 'email',
 					providerUserId: user.email
@@ -128,7 +132,7 @@ export const actions: Actions = {
 				case 'AUTH_INVALID_KEY_ID':
 				case 'AUTH_INVALID_USER_ID':
 					await log.error('change_password', user, 'invalid credentials');
-					throw redirect(302, '/account' + url.search + '#invalid-credentials');
+					redirect(302, '/account' + url.search + '#invalid-credentials');
 				default:
 					await log.fatal('change_password', user, 'unknown error', error);
 					throw error;
@@ -139,7 +143,8 @@ export const actions: Actions = {
 	},
 
 	async toggleAdmin({ locals, url }) {
-		const { user, session } = await locals.validateUser();
+		const session = await locals.auth.validate();
+		const user = session?.user;
 		guards.isGod(user, session, url);
 
 		await prisma.user.update({
@@ -151,7 +156,8 @@ export const actions: Actions = {
 	},
 
 	async deleteAccount({ locals, url, request }) {
-		const { user, session } = await locals.validateUser();
+		const session = await locals.auth.validate();
+		const user = session?.user;
 		guards.loggedIn(user, session, url);
 
 		const thruOauth = (await auth.getAllUserKeys(user.id)).some(
@@ -176,7 +182,7 @@ export const actions: Actions = {
 					case 'AUTH_INVALID_PASSWORD':
 					case 'AUTH_INVALID_KEY_ID':
 						await log.error('delete_account', user, 'invalid credentials');
-						throw redirect(
+						redirect(
 							302,
 							'/account' + url.search + '#invalid-credentials-delete-account'
 						);
@@ -226,6 +232,6 @@ export const actions: Actions = {
 		await auth.deleteUser(user.id);
 
 		await log.warn('delete_account', null, `deleted ${user.email}`);
-		throw redirect(302, '/');
+		redirect(302, '/');
 	}
 };

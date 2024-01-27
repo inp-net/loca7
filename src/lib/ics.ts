@@ -66,7 +66,7 @@ export async function ics({
 							new File([value], filename, { type: 'text/calendar' })
 						),
 						filename
-				  })
+					})
 		);
 	});
 }

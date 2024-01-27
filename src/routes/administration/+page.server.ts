@@ -3,7 +3,8 @@ import { prisma } from '$lib/server/prisma';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, url, parent }) => {
-	const { user, session } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.isAdminElseRedirect(user, session, url);
 
 	const appartments = await prisma.appartment.findMany({

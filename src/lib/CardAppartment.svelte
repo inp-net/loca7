@@ -41,7 +41,7 @@
 	export let hasFiberInternet: boolean | null;
 	export let hasElevator: boolean | null;
 	export let editable: boolean = false;
-	export let dislikeable = false
+	export let dislikeable = false;
 	export let small: boolean = false;
 	export let likes: Like[] = [];
 
@@ -191,28 +191,30 @@
 	{#if editable || dislikeable}
 		<section class="editable">
 			{#if editable}
-			<ButtonColored href="/appartements/{number}/modifier">Modifier</ButtonColored>
-			{#if !archived}
-				<ButtonColored
-					on:click={async () => {
-						await fetch(`/appartements/${number}/archiver`, { method: 'POST' });
-						window.location.reload();
-					}}>Archiver</ButtonColored
+				<ButtonColored href="/appartements/{number}/modifier">Modifier</ButtonColored>
+				{#if !archived}
+					<ButtonColored
+						on:click={async () => {
+							await fetch(`/appartements/${number}/archiver`, { method: 'POST' });
+							window.location.reload();
+						}}>Archiver</ButtonColored
+					>
+				{:else}
+					<ButtonColored
+						on:click={async () => {
+							await fetch(`/appartements/${number}/publier`, { method: 'POST' });
+							window.location.reload();
+						}}>Publier</ButtonColored
+					>
+				{/if}
+				<ButtonColored dangerous href="/appartements/{number}/supprimer"
+					>Supprimer</ButtonColored
 				>
-			{:else}
-				<ButtonColored
-					on:click={async () => {
-						await fetch(`/appartements/${number}/publier`, { method: 'POST' });
-						window.location.reload();
-					}}>Publier</ButtonColored
-				>
-			{/if}
-			<ButtonColored dangerous href="/appartements/{number}/supprimer"
-				>Supprimer</ButtonColored
-			>
 			{/if}
 			{#if dislikeable}
-			<ButtonColored dangerous href="/appartements/{number}/supprimer-like">Ne plus suivre</ButtonColored>
+				<ButtonColored dangerous href="/appartements/{number}/supprimer-like"
+					>Ne plus suivre</ButtonColored
+				>
 			{/if}
 		</section>
 	{/if}

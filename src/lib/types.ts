@@ -266,7 +266,7 @@ export const DISPLAY_ASPECT_FIELDS: Record<keyof Appartment, string> = {
 };
 
 export function appartmentAccessible(
-	user: (User & { id: string }) | null,
+	user: (User & { id: string }) | null | undefined,
 	appartment: { approved: boolean; archived: boolean; owner: { id: string } }
 ) {
 	if (appartment.approved && !appartment.archived) return true;
@@ -298,7 +298,7 @@ export function appartmentTitle(appartment: Appartment, insideSentence = false):
 				: 'Bien'
 			: (insideSentence ? lowercaseDisplayAppartmentKind : DISPLAY_APPARTMENT_KIND)[
 					appartment.kind
-			  ]
+				]
 	} de ${appartment.surface}m² à ${appartment.rent + appartment.charges}€/mois`;
 }
 

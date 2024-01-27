@@ -3,7 +3,8 @@ import { prisma } from '$lib/server/prisma';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ params, locals }) => {
-	const { user } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	const appart = await prisma.appartment.findUnique({
 		where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
 		include: {
@@ -32,7 +33,7 @@ export const load: LayoutServerLoad = async ({ params, locals }) => {
 							include: {
 								photos: true
 							}
-					  }
+						}
 					: false
 		}
 	});

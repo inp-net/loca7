@@ -9,17 +9,17 @@
 	const foregroundColor = dangerous
 		? 'blood'
 		: warns
-		? 'safran'
-		: successful
-		? 'cactus'
-		: 'cobalt';
+			? 'safran'
+			: successful
+				? 'cactus'
+				: 'cobalt';
 	const pressedBackgroundColor = dangerous
 		? 'mushroom'
 		: warns
-		? 'gold'
-		: successful
-		? 'acid'
-		: 'sky';
+			? 'gold'
+			: successful
+				? 'acid'
+				: 'sky';
 </script>
 
 <svelte:element

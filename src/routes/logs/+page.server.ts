@@ -3,7 +3,8 @@ import type { PageServerLoad } from './$types';
 import { prisma } from '$lib/server/prisma';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
-	const { user, session } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.isGodOrAdmin(user, session, url);
 	const page = Number.parseFloat(url.searchParams.get('page') ?? '1');
 	const pagesize = Number.parseFloat(url.searchParams.get('pagesize') ?? '300');

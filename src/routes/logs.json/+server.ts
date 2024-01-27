@@ -3,7 +3,8 @@ import { prisma } from '$lib/server/prisma';
 import { guards } from '$lib/server/lucia';
 
 export const GET: RequestHandler = async ({ locals, url }) => {
-	const { user, session } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.isGodOrAdmin(user, session, url);
 
 	const logs = await prisma.log.findMany({ orderBy: { createdAt: 'desc' } });

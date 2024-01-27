@@ -20,13 +20,13 @@
 
 	$: {
 		if (!recipients) {
-			recipients = $page.url.searchParams.get('to') ?? ''
+			recipients = $page.url.searchParams.get('to') ?? '';
 			if (recipients) {
 				bypassAuthKeyCheck = true;
 			}
 		}
-		body = body || `<p><span>${$page.url.searchParams.get('body') ?? ''}</span></p>`
-		subject = subject || ($page.url.searchParams.get('subject') ?? '')
+		body = body || `<p><span>${$page.url.searchParams.get('body') ?? ''}</span></p>`;
+		subject = subject || ($page.url.searchParams.get('subject') ?? '');
 	}
 
 	const emailSearcher = new Fuse(allEmails, {
@@ -66,8 +66,8 @@
 				unit={recipients === ''
 					? ''
 					: recipients.split(',').every((email) => allEmails.includes(email.trim()))
-					? ''
-					: 'inconnus'}
+						? ''
+						: 'inconnus'}
 			/>
 		</InputField>
 

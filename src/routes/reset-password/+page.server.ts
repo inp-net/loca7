@@ -10,7 +10,8 @@ import type { Actions, PageServerLoad } from './$types';
 import { log } from '$lib/server/logging';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const { user, session } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	return { user };
 };
 
@@ -19,7 +20,7 @@ export const actions: Actions = {
 		const email = (await request.formData()).get('email')?.toString();
 		if (!email) {
 			await log.error('request_password_reset', null, 'no email given');
-			throw redirect(302, `/reset-password#no-email`);
+			redirect(302, `/reset-password#no-email`);
 		}
 
 		const user = await prisma.user.findUnique({
@@ -28,7 +29,7 @@ export const actions: Actions = {
 
 		if (!user) {
 			await log.error('request_password_reset', null, `email ${email} not found`);
-			throw redirect(302, `/reset-password?email=${encodeURIComponent(email)}#no-email`);
+			redirect(302, `/reset-password?email=${encodeURIComponent(email)}#no-email`);
 		}
 
 		const passwordReset = await prisma.passwordReset.create({
@@ -67,6 +68,6 @@ export const actions: Actions = {
 
 		await log.info('request_password_reset', user, 'success');
 
-		throw redirect(302, `/reset-password?email=${encodeURIComponent(email)}#sent`);
+		redirect(302, `/reset-password?email=${encodeURIComponent(email)}#sent`);
 	}
 };

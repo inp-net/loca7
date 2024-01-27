@@ -5,7 +5,8 @@
 	font-style: normal;
 	font-weight: 500;
 	src: url('https://loca7.fr/fonts/space-grotesk-v15-latin-ext_latin-500.eot'); /* IE9 Compat Modes */
-	src: url('https://loca7.fr/fonts/space-grotesk-v15-latin-ext_latin-500.eot?#iefix')
+	src:
+		url('https://loca7.fr/fonts/space-grotesk-v15-latin-ext_latin-500.eot?#iefix')
 			format('embedded-opentype'),
 		/* IE6-IE8 */ url('https://loca7.fr/fonts/space-grotesk-v15-latin-ext_latin-500.woff2')
 			format('woff2'),
@@ -26,7 +27,8 @@
 	font-style: normal;
 	font-weight: 700;
 	src: url('https://loca7.fr/fonts/space-grotesk-v15-latin-ext_latin-700.eot'); /* IE9 Compat Modes */
-	src: url('https://loca7.fr/fonts/space-grotesk-v15-latin-ext_latin-700.eot?#iefix')
+	src:
+		url('https://loca7.fr/fonts/space-grotesk-v15-latin-ext_latin-700.eot?#iefix')
 			format('embedded-opentype'),
 		/* IE6-IE8 */ url('https://loca7.fr/fonts/space-grotesk-v15-latin-ext_latin-700.woff2')
 			format('woff2'),

@@ -15,8 +15,8 @@ import { checksumFile } from '../src/lib/server/utils';
 import xss from 'xss';
 import type { User, TravelTimeToN7, Report, AppartmentKind } from '@prisma/client';
 import tisseoStops from '../public/tisseo-stops.json' assert { type: 'json' };
-import lucia from 'lucia-auth';
-import luciaPrismaAdapter from '@lucia-auth/adapter-prisma';
+import { lucia } from 'lucia';
+import { prisma as luciaPrismaAdapter } from '@lucia-auth/adapter-prisma';
 import createPassword from 'password';
 import oldLogements from './old-data/logements.json' assert { type: 'json' };
 import oldPhotos from './old-data/photos.json' assert { type: 'json' };
@@ -369,7 +369,7 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 										hash: await checksumFile(
 											path.join(__dirname, 'old-data', photo?.photo)
 										)
-									} as Photo)
+									}) as Photo
 							)
 					)
 				}
@@ -383,7 +383,7 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 								reason: 'obsolete',
 								createdAt: new Date(appart.date_maj),
 								message: "L'annonce est obsolète (importé depuis l'ancien site)"
-							} as Report)
+							}) as Report
 					)
 				}
 			}
@@ -424,22 +424,25 @@ async function appartment(ghost: User, appart: AppartmentOld, photos: PhotoOld[]
 
 async function importData(ghost: User, appartments: AppartmentOld[], photos: PhotoOld[]) {
 	const users: Record<string, User> = {};
-	const appartmentsByOwner = appartments.reduce((acc, appart) => {
-		const key = fixEmailTypos(
-			appart.contact_mail?.trim().toLocaleLowerCase() ||
-				createGhostEmail(
-					appart.contact_prenom,
-					appart.contact_nom,
-					appart.uuid_proprietaire
-				)
-		);
-		if (!acc[key]) acc[key] = [];
-		acc[key].push({
-			...appart,
-			newEmail: key
-		});
-		return acc;
-	}, {} as Record<string, (AppartmentOld & { newEmail: string })[]>);
+	const appartmentsByOwner = appartments.reduce(
+		(acc, appart) => {
+			const key = fixEmailTypos(
+				appart.contact_mail?.trim().toLocaleLowerCase() ||
+					createGhostEmail(
+						appart.contact_prenom,
+						appart.contact_nom,
+						appart.uuid_proprietaire
+					)
+			);
+			if (!acc[key]) acc[key] = [];
+			acc[key].push({
+				...appart,
+				newEmail: key
+			});
+			return acc;
+		},
+		{} as Record<string, (AppartmentOld & { newEmail: string })[]>
+	);
 
 	// create users
 	for (const apparts of nqdm(Object.values(appartmentsByOwner))) {

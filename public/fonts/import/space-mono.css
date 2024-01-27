@@ -5,7 +5,8 @@
 	font-style: normal;
 	font-weight: 400;
 	src: url('https://loca7.fr/fonts/space-mono-v12-latin-regular.eot'); /* IE9 Compat Modes */
-	src: url('https://loca7.fr/fonts/space-mono-v12-latin-regular.eot?#iefix')
+	src:
+		url('https://loca7.fr/fonts/space-mono-v12-latin-regular.eot?#iefix')
 			format('embedded-opentype'),
 		/* IE6-IE8 */ url('https://loca7.fr/fonts/space-mono-v12-latin-regular.woff2')
 			format('woff2'),

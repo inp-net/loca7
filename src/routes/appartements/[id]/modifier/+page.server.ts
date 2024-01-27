@@ -15,7 +15,8 @@ import { openRouteService, tisseo } from '$lib/server/traveltime';
 import { ENSEEIHT } from '$lib/utils';
 
 export const load: PageServerLoad = async ({ locals, params, url }) => {
-	const { user, session } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.emailValidated(user, session, url);
 
 	const appartment = await prisma.appartment.findFirst({
@@ -43,7 +44,8 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 
 export const actions: Actions = {
 	edit: async ({ request, locals, params, url }) => {
-		const { user, session } = await locals.validateUser();
+		const session = await locals.auth.validate();
+		const user = session?.user;
 		guards.emailValidated(user, session, url);
 		const appartment = await prisma.appartment.findUnique({
 			where: isNaN(Number(params.id)) ? { id: params.id } : { number: Number(params.id) },
@@ -199,9 +201,9 @@ export const actions: Actions = {
 
 		if (!edit.applied) {
 			await sendMail({
-				to: (
-					await prisma.user.findMany({ where: { admin: true } })
-				).map((admin) => admin.email),
+				to: (await prisma.user.findMany({ where: { admin: true } })).map(
+					(admin) => admin.email
+				),
 				subject: `Modification de l'annonce #${appartment.number} en attente`,
 				template: 'appartment-edit-to-validate',
 				data: {
@@ -278,7 +280,7 @@ export const actions: Actions = {
 												edit,
 												ENSEEIHT
 											)
-									  )
+										)
 									: null,
 							byFoot:
 								edit.latitude && edit.longitude
@@ -288,7 +290,7 @@ export const actions: Actions = {
 												edit,
 												ENSEEIHT
 											)
-									  )
+										)
 									: null,
 							byPublicTransport: null // TODO
 						}
@@ -319,7 +321,7 @@ export const actions: Actions = {
 			});
 		}
 
-		throw redirect(
+		redirect(
 			302,
 			user?.admin ? `/administration` : `/appartements/${appartment.id}/modifier/fait`
 		);

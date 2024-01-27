@@ -4,7 +4,8 @@ import { prisma } from '$lib/server/prisma';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ locals, params, url }) => {
-	const { user, session } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.isAdmin(user, session, url);
 
 	await prisma.report.delete({

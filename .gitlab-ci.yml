@@ -1,9 +1,11 @@
 image: node:18
 
 stages:
-  - test
+  - build
 
-check_prisma_imports:
-  stage: test
+build:
+  stage: build
+  only:
+    - v.* # only run for new versions
   script:
-    - npm run check-prisma-imports
+    - cd scripts/; ./build.sh

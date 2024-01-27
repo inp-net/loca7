@@ -11,7 +11,8 @@ import { lowerFirstChar } from '$lib/utils';
 
 export const actions: Actions = {
 	default: async ({ locals, request, url }) => {
-		const { user, session } = await locals.validateUser();
+		const session = await locals.auth.validate();
+		const user = session?.user;
 		// TODO rate limit (prisma rate limits to 10 req per 10 seconds but we should handle it to show users a nice message)
 
 		const { reason, message, appartmentId, contact } = Object.fromEntries(
@@ -33,7 +34,7 @@ export const actions: Actions = {
 							connect: {
 								id: user.id
 							}
-					  }
+						}
 					: undefined
 			},
 			include: {
@@ -64,6 +65,6 @@ export const actions: Actions = {
 			}
 		});
 
-		throw redirect(301, `/appartements/${appartmentId}#report-submitted`);
+		redirect(301, `/appartements/${appartmentId}#report-submitted`);
 	}
 };

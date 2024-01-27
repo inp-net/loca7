@@ -3,7 +3,8 @@ import { prisma } from '$lib/server/prisma';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 	guards.emailValidated(user, session, url);
 
 	let conditions = [{ owner: { id: user.id } }];

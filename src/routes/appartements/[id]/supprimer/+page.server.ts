@@ -1,18 +1,18 @@
-import { guards } from '$lib/server/lucia';
-import { prisma } from '$lib/server/prisma';
 import { photoURL } from '$lib/photos';
-import { publicPath } from '$lib/server/utils';
-import { error, redirect } from '@sveltejs/kit';
-import { rmSync } from 'fs';
-import path from 'path';
-import type { Actions, PageServerLoad } from './$types';
 import { log } from '$lib/server/logging';
+import { guards } from '$lib/server/lucia';
 import { sendMail } from '$lib/server/mail';
+import { prisma } from '$lib/server/prisma';
+import { publicPath } from '$lib/server/utils';
 import { appartmentTitle } from '$lib/types';
+import { redirect } from '@sveltejs/kit';
+import { rmSync } from 'fs';
 import xss from 'xss';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, params, url }) => {
-	const { session, user } = await locals.validateUser();
+	const session = await locals.auth.validate();
+	const user = session?.user;
 
 	guards.emailValidated(user, session, url);
 
@@ -31,7 +31,8 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 
 export const actions: Actions = {
 	confirm: async ({ locals, params, url }) => {
-		const { session, user } = await locals.validateUser();
+		const session = await locals.auth.validate();
+		const user = session?.user;
 
 		guards.emailValidated(user, session, url);
 
@@ -115,6 +116,6 @@ export const actions: Actions = {
 			}
 		});
 
-		throw redirect(302, user?.admin ? '/administration' : '/appartements/gerer');
+		redirect(302, user?.admin ? '/administration' : '/appartements/gerer');
 	}
 };

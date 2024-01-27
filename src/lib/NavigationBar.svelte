@@ -15,7 +15,8 @@
 
 	let topbarElement: HTMLElement;
 	let sidebarOpen: boolean = false;
-	let currentPage: 'recherche' | 'administration' | 'mes annonces' | 'mon compte' | 'suivis' = 'recherche';
+	let currentPage: 'recherche' | 'administration' | 'mes annonces' | 'mon compte' | 'suivis' =
+		'recherche';
 
 	function getCurrentPage(url: URL): typeof currentPage {
 		if (url.pathname.startsWith('/validate-email') && url.searchParams.has('go')) {
@@ -30,7 +31,7 @@
 		)
 			return 'mes annonces';
 		if (url.pathname.startsWith('/appartements/suivis')) {
-			return 'suivis'
+			return 'suivis';
 		}
 		if (url.pathname.startsWith('/account')) return 'mon compte';
 		return 'recherche';
@@ -117,9 +118,10 @@
 				{/if}
 			</li>
 
-
 			<li>
-				<ButtonNavigation current={currentPage === "suivis"} href="/appartements/suivis">Suivies</ButtonNavigation>
+				<ButtonNavigation current={currentPage === 'suivis'} href="/appartements/suivis"
+					>Suivies</ButtonNavigation
+				>
 			</li>
 			<li>
 				<ButtonNavigation current={currentPage === 'mon compte'} href="/account"
@@ -182,9 +184,11 @@
 			{/if}
 		</li>
 
-			<li>
-				<ButtonNavigation current={currentPage === "suivis"} href="/appartements/suivis">Suivies</ButtonNavigation>
-			</li>
+		<li>
+			<ButtonNavigation current={currentPage === 'suivis'} href="/appartements/suivis"
+				>Suivies</ButtonNavigation
+			>
+		</li>
 
 		<li>
 			<ButtonNavigation current={currentPage === 'mon compte'} href="/account"
