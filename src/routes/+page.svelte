@@ -379,7 +379,7 @@
 		gap: 3rem;
 		
 		display: grid;
-		grid-template-columns: repeat(auto-fill, 400px);
+		grid-template-columns: repeat(auto-fill, min(100%, 400px));
 		
 		justify-content: center;
 		width: 100%;

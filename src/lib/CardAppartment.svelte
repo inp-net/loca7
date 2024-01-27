@@ -228,8 +228,6 @@
 		background: var(--card-bg, var(--bg));
 		border-radius: 1rem;
 
-		width: 400px;
-
 		overflow: hidden;
 	}
 
