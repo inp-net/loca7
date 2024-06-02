@@ -24,6 +24,11 @@
 				nouvelle version)
 			</p>
 		</li>
+		<li>
+			<p>
+				<a href="https://theobessel.fr">Théo Bessel</a> (contributions sur le front principalement)
+			</p>
+		</li>
 	</ul>
 
 	<h2>Données tierces</h2>

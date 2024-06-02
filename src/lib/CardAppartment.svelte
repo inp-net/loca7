@@ -46,6 +46,7 @@
 	export let likes: Like[] = [];
 
 	let secondsAvailableSince = (Date.now() - availableAt.valueOf()) * 1e-3;
+	let hasCriterias = [hasBicycleParking, hasElevator, hasFiberInternet, hasFurniture, hasParking].some(c => c !== null);
 </script>
 
 <article class:editable class:small class:photo-is-clickable={photos?.length < 2}>
@@ -129,6 +130,8 @@
 					</p>
 				{/if}
 			</section>
+
+			{#if hasCriterias}
 			<section class="criteria">
 				{#if hasFurniture !== null}
 					<p class="furniture">
@@ -186,6 +189,7 @@
 					</p>
 				{/if}
 			</section>
+			{/if}
 		{/if}
 	</a>
 	{#if editable || dislikeable}
@@ -229,18 +233,23 @@
 		border-radius: 1rem;
 
 		overflow: hidden;
+		height: 100%;
 	}
 
 	.content {
 		padding: 1.5em;
 		transition: all 0.25s ease;
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
 	}
 
 	section.photos {
 		position: relative;
 		/* width: 300px; */
 		height: 200px;
-		flex-grow: 1;
+		/* flex-grow: 1; */
 		flex-shrink: 0;
 	}
 
