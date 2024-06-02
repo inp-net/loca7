@@ -284,10 +284,14 @@
 	}
 
 	.wrap {
-		display: flex;
-		flex-wrap: wrap;
-		column-gap: 2rem;
+		/*display: flex;*/
+		display: grid;
+		grid-template-columns: repeat(auto-fill, 12em);
+		align-items: center;
+		justify-content: start;
 		row-gap: 1rem;
+		/*gap: 1rem;*/
+		flex-wrap: wrap;
 	}
 
 	.owner {

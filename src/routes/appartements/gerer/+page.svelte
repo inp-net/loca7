@@ -93,13 +93,15 @@
 	}
 
 	ul.appartments {
-		margin-top: 3rem;
-		padding-left: 0;
+		margin-top: 2rem;
 		list-style: none;
-		flex-wrap: wrap;
-		display: flex;
-		gap: 2rem;
+		gap: 3rem;
+		
+		display: grid;
+		grid-template-columns: repeat(auto-fill, min(100%, 450px));
+		
 		justify-content: center;
+		width: 100%;
 	}
 
 	main.empty {

@@ -16,31 +16,39 @@ import { titleCase } from "$lib/utils";
 </svelte:head>
 
 <main class:empty={appartments.length === 0}>
-<h1>Mes appartements suivis</h1>
+    <h1>Mes appartements suivis</h1>
 
-<ul class="appartments">
-    {#each appartments as appartment}
-    <li>
-        <CardAppartment dislikeable {...appartment}></CardAppartment>
-    </li>
-    {:else}
-    <li>
-
-Aucune annonce suivie. Suivez des annonces en cliquant sur <ButtonSecondary insideProse icon="heart">Suivre</ButtonSecondary> depuis la page d'une annonce.
-    </li>
-    {/each}
-</ul>
+    <ul class="appartments">
+        {#each appartments as appartment}
+        <li>
+            <CardAppartment dislikeable {...appartment}></CardAppartment>
+        </li>
+        {:else}
+        <li>
+            Aucune annonce suivie. Suivez des annonces en cliquant sur <ButtonSecondary insideProse icon="heart">Suivre</ButtonSecondary> depuis la page d'une annonce.
+        </li>
+        {/each}
+    </ul>
 </main>
 
 <style>
-    .appartments {
-        display: flex;
-        padding-left: 0;
-        flex-wrap: wrap;
-        list-style: none;
-        justify-content: center;
-        margin-top: 2rem;
-    }
+    ul.appartments {
+		margin-top: 2rem;
+		list-style: none;
+		gap: 3rem;
+		
+		display: grid;
+		grid-template-columns: repeat(auto-fill, min(100%, 450px));
+		
+		justify-content: center;
+		width: 100%;
+	}
+
+    main {
+		max-width: 1200px;
+		width: 100%;
+		margin: 0 auto;
+	}
 
     h1 {
         text-align: center;

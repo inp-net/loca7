@@ -22,7 +22,8 @@
 		"update-mail-templates": "tsx mail-templates/updateTypes.ts",
 		"update-icons": "python src/lib/fillIconComponent.py",
 		"generate": "concurrently npm:update-mail-templates npm:update-icons && pnpm format",
-		"staging:deploy": "ssh ewen@ewen.works 'bash --login -c ~/www/loca7.ewen.works/update-staging'"
+		"staging:deploy": "ssh ewen@ewen.works 'bash --login -c ~/www/loca7.ewen.works/update-staging'",
+		"create-superuser": "tsx scripts/createSuperuser.js"
 	},
 	"prisma": {
 		"seed": "tsx scripts/seed.ts"

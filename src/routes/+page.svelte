@@ -234,7 +234,7 @@
 					<InputSelectOne options={SORT_OPTIONS} bind:value={$searchSortBy} />
 				</InputField>
 			</div>
-			<ul class="results">
+			<ul>
 				{#each $searchResults as appartment (appartment.id)}
 					<li>
 						<CardAppartment {...appartment} />
@@ -290,9 +290,6 @@
 		justify-content: start;
 		row-gap: 1rem;
 		/*gap: 1rem;*/
-	}
-
-	.criteria {
 		flex-wrap: wrap;
 	}
 
