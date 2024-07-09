@@ -14,6 +14,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		allEmails,
 		appartments,
 		beta: process.env.STAGE === 'beta',
+        notice: process.env.NOTICE_BANNER,
 		currentCommit: VERSION_DATA?.commit,
 		currentVersion: VERSION_DATA?.version || '?'
 	};

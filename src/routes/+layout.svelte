@@ -121,6 +121,10 @@
 				>
 			</p>
 		</div>
+	{:else if data.notice}
+		<div class="notice">
+			<p>{@html data.notice}</p>
+		</div>
 	{/if}
 	<NavigationBar
 		user={data.user}
