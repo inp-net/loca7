@@ -2,7 +2,7 @@
   <img width="300" src="public/loca7-wordmark.svg">
   <br>
   <a href="https://loca7.fr">
-    <img src="https://status.inpt.fr/api/badge/293/status" />
+    <img src="https://status.inpt.fr/api/badge/293/status?label=loca7.fr" />
   </a>
 </div>
 
