@@ -1,9 +1,9 @@
 <div align="center">
   <img width="300" src="public/loca7-wordmark.svg">
   <br>
-  <a href="https://wakatime.com/@ewen_lbh/projects/adljqhspbi"><img src="https://wakatime.com/badge/user/0054cecb-dd63-44eb-9e94-ed53ccb8506a/project/92917f76-b95c-4e47-bc96-986e5e983a37.svg" alt="wakatime"></a>
-  <a href="https://loca7.vercel.app"><img src="https://vercelbadge.vercel.app/api/ewen-lbh/loca7"></a>
-<img alt="W3C Validation" src="https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Floca7.vercel.app&label=w3c%20validation">
+  <a href="https://loca7.fr">
+    <img src="https://status.inpt.fr/api/badge/293/status" />
+  </a>
 </div>
 
 Loca7 est le site de recherche de logement pour les étudiants de l'ENSEEIHT.
