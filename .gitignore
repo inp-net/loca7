@@ -16,3 +16,4 @@ scripts/importOldData.py
 scripts/old-data/
 created-users.json
 public/version.json
+mysql
