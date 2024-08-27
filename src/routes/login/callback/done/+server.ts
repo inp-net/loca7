@@ -5,7 +5,7 @@ import * as oauth from '$lib/server/oauth';
 import { auth } from '$lib/server/lucia';
 import { LuciaError, type User } from 'lucia-auth';
 
-export const GET: RequestHandler = async ({ url, locals }) => {
+export const GET: RequestHandler = async ({ url, locals, cookies }) => {
 	const authorizationCode = url.searchParams.get('code');
 	let accessToken = url.searchParams.get('access_token');
 	let oauthUserInfo: Awaited<ReturnType<typeof oauth.identity>>;
@@ -22,7 +22,7 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 		}
 
 		try {
-			accessToken = await oauth.login(authorizationCode);
+			accessToken = await oauth.login(authorizationCode, url.toString());
 		} catch (error) {
 			console.error(error);
 			await log.error(
@@ -34,17 +34,22 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 			throw redirect(303, '/login/callback?error=unauthorized');
 		}
 
+		if (!accessToken) {
+			await log.error('login', null, 'OAuth login failed: no access token');
+			throw redirect(303, '/login/callback?error=unauthorized');
+		}
+
 		throw redirect(303, `/login/callback?access_token=${accessToken}`);
 	}
 
+	oauthUserInfo = await oauth.identity(accessToken);
 	try {
-		oauthUserInfo = await oauth.identity(accessToken);
 	} catch (error) {
 		await log.error(
 			'login',
 			null,
 			'while getting user info through OAuth:',
-			JSON.stringify(error)
+			JSON.stringify({ error, oauthUserInfo })
 		);
 		throw redirect(303, '/login/callback?error=unauthorized');
 	}
@@ -138,5 +143,6 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 	} catch (error) {
 		await log.error('login', user.email, 'error while creating session thru OAuth', error);
 	}
+	cookies.set('authed_via', 'oauth', { path: '/' });
 	throw redirect(303, '/');
 };

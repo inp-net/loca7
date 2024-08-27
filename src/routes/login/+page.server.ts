@@ -3,7 +3,8 @@ import { error, redirect, type Actions } from '@sveltejs/kit';
 import { LuciaError } from 'lucia-auth';
 import type { PageServerLoad } from './$types';
 import { log } from '$lib/server/logging';
-import { churros } from '$lib/server/oauth';
+import { OAUTH_AUTHORIZATION_URL, OAUTH_SCOPES } from '$env/static/private';
+import { PUBLIC_OAUTH_CLIENT_ID } from '$env/static/public';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { user, session } = await locals.validateUser();
@@ -72,7 +73,13 @@ export const actions: Actions = {
 					})
 			);
 		}
-		churros.state = data.get('csrfToken')?.toString() ?? '';
-		throw redirect(302, churros.authorizationURL);
+		throw redirect(
+			302,
+			`${OAUTH_AUTHORIZATION_URL}?response_type=code&client_id=${PUBLIC_OAUTH_CLIENT_ID}&scopes=${OAUTH_SCOPES.split(
+				' '
+			).join('+')}&redirect_uri=${encodeURIComponent(
+				new URL('/login/callback', request.url).toString()
+			)}&state=${data.get('csrfToken') ?? ''}`
+		);
 	}
 };

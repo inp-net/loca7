@@ -49,9 +49,13 @@
 
 	<form class="through-oauth" method="post" action="?/oauth">
 		<p>Vous êtes étudiant·e à l'n7 ?</p>
-		<ButtonSecondary insideProse submits icon="lock"
-			>Connexion via
-			<img src="https://churros.inpt.fr/wordmark.svg" alt="Churros" class="inline-logo" />
+		<ButtonSecondary insideProse submits>
+			Connexion via
+			<img
+				src="https://git.inpt.fr/inp-net/visual-identity/-/raw/main/wordmark-color.svg"
+				alt="Churros"
+				class="inline-logo"
+			/>
 		</ButtonSecondary>
 		<input type="hidden" name="csrfToken" value={$oauthCSRFToken} />
 		<input type="hidden" name="accessToken" value={$oauthAccessToken} />
@@ -115,7 +119,7 @@
 	}
 
 	.inline-logo {
-		height: 1.3em;
+		height: 0.8em;
 	}
 
 	.through-oauth :global(.button-secondary:focus-visible .inline-logo),
