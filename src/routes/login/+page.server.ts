@@ -3,8 +3,8 @@ import { error, redirect, type Actions } from '@sveltejs/kit';
 import { LuciaError } from 'lucia-auth';
 import type { PageServerLoad } from './$types';
 import { log } from '$lib/server/logging';
-import { OAUTH_AUTHORIZATION_URL, OAUTH_SCOPES } from '$env/static/private';
-import { PUBLIC_OAUTH_CLIENT_ID } from '$env/static/public';
+import { env as secrets } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { user, session } = await locals.validateUser();
@@ -75,7 +75,7 @@ export const actions: Actions = {
 		}
 		throw redirect(
 			302,
-			`${OAUTH_AUTHORIZATION_URL}?response_type=code&client_id=${PUBLIC_OAUTH_CLIENT_ID}&scopes=${OAUTH_SCOPES.split(
+			`${secrets.OAUTH_AUTHORIZATION_URL}?response_type=code&client_id=${env.PUBLIC_OAUTH_CLIENT_ID}&scopes=${secrets.OAUTH_SCOPES.split(
 				' '
 			).join('+')}&redirect_uri=${encodeURIComponent(
 				new URL('/login/callback', request.url).toString()

@@ -1,16 +1,16 @@
-import { OAUTH_CLIENT_SECRET, OAUTH_TOKEN_URL, OAUTH_USERINFO_URL } from '$env/static/private';
-import { PUBLIC_OAUTH_CLIENT_ID } from '$env/static/public';
+import { env as secrets } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
 
 export async function login(code: string, origin: string): Promise<string> {
-	console.log({ creds: `${PUBLIC_OAUTH_CLIENT_ID}:${OAUTH_CLIENT_SECRET}` });
+	console.log({ creds: `${env.PUBLIC_OAUTH_CLIENT_ID}:${secrets.OAUTH_CLIENT_SECRET}` });
 	const encodedCredentials = Buffer.from(
-		`${PUBLIC_OAUTH_CLIENT_ID}:${OAUTH_CLIENT_SECRET}`,
+		`${env.PUBLIC_OAUTH_CLIENT_ID}:${secrets.OAUTH_CLIENT_SECRET}`,
 		'utf-8'
 	).toString('base64');
 	console.log({ encodedCredentials, code });
 	// CSRF protection check occured in the frontend beforehand
 	// this means that the URL where this function is called should absolutely not be added to the allowed redirect URIs
-	const response = await fetch(OAUTH_TOKEN_URL, {
+	const response = await fetch(secrets.OAUTH_TOKEN_URL, {
 		method: 'POST',
 		headers: {
 			Authorization: `Basic ${encodedCredentials}`,
@@ -19,7 +19,7 @@ export async function login(code: string, origin: string): Promise<string> {
 		body: new URLSearchParams({
 			grant_type: 'authorization_code',
 			code,
-			client_id: PUBLIC_OAUTH_CLIENT_ID,
+			client_id: env.PUBLIC_OAUTH_CLIENT_ID,
 			redirect_uri: new URL('/login/callback', origin).toString()
 		}).toString()
 	}).then((res) => res.text());
@@ -35,7 +35,7 @@ export async function login(code: string, origin: string): Promise<string> {
 }
 
 export async function identity(accessToken: string) {
-	const response = await fetch(OAUTH_USERINFO_URL, {
+	const response = await fetch(secrets.OAUTH_USERINFO_URL, {
 		method: 'POST',
 		headers: {
 			Authorization: `Bearer ${accessToken}`
