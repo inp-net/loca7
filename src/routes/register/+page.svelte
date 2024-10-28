@@ -12,7 +12,11 @@
 	import escapeRegex from 'escape-string-regexp';
 	import { EMAIL_REGEX } from '$lib/types';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 	let duplicateEmail: string = $page.url.hash.startsWith('#duplicate-email')
 		? decodeURIComponent($page.url.hash.replace('#duplicate-email=', ''))
 		: '';
@@ -26,13 +30,13 @@
 		lastName: string;
 		phone: string;
 		password: string;
-	} = {
+	} = $state({
 		email: duplicateEmail,
 		firstName: '',
 		lastName: '',
 		phone: duplicatePhone,
 		password: ''
-	};
+	});
 
 	export const snapshot: Snapshot = {
 		capture: () => user,

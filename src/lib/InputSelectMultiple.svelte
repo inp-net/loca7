@@ -1,14 +1,22 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import Icon from './Icon.svelte';
 
-	export let name: string = '';
-	export let options: string[] | Record<string, string>;
-	export let selection: string[] = [];
+	interface Props {
+		name?: string;
+		options: string[] | Record<string, string>;
+		selection?: string[];
+	}
 
-	let optionsWithDisplay: Record<string, string> = {};
-	$: optionsWithDisplay = Array.isArray(options)
-		? Object.fromEntries(options.map((option) => [option, option]))
-		: options;
+	let { name = '', options, selection = $bindable([]) }: Props = $props();
+
+	let optionsWithDisplay: Record<string, string> = $state({});
+	run(() => {
+		optionsWithDisplay = Array.isArray(options)
+			? Object.fromEntries(options.map((option) => [option, option]))
+			: options;
+	});
 </script>
 
 <fieldset>

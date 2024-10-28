@@ -11,20 +11,39 @@
 	import SmallCheckbox from './SmallCheckbox.svelte';
 	const emit = createEventDispatcher();
 
-	export let number: number;
-	export let owner: { firstName: string; lastName: string };
-	export let updatedAt: Date;
-	export let reports: any[];
-	export let approved: boolean;
-	export let address: string;
-	export let rent: number;
-	export let charges: number;
-	export let archived: boolean;
-	export let history: AppartmentEdit[];
-	export let photos: Photo[];
-	export let highlight: readonly Fuse.FuseResultMatch[] = [];
-	export let open: boolean = false;
-	export let selected: boolean = false;
+	interface Props {
+		number: number;
+		owner: { firstName: string; lastName: string };
+		updatedAt: Date;
+		reports: any[];
+		approved: boolean;
+		address: string;
+		rent: number;
+		charges: number;
+		archived: boolean;
+		history: AppartmentEdit[];
+		photos: Photo[];
+		highlight?: readonly Fuse.FuseResultMatch[];
+		open?: boolean;
+		selected?: boolean;
+	}
+
+	let {
+		number,
+		owner,
+		updatedAt,
+		reports,
+		approved,
+		address,
+		rent,
+		charges,
+		archived,
+		history,
+		photos,
+		highlight = [],
+		open = $bindable(false),
+		selected = false
+	}: Props = $props();
 	let error: string = '';
 
 	const action = (name: 'archiver' | 'publier' | 'approuver') => async () => {
@@ -56,63 +75,63 @@
 		/>
 	</div>
 	<img src={photos.length > 0 ? photoURL(photos[0]) : '/missing-photo.png'} class="photo" />
-		<svelte:element
-			this={window.innerWidth > 1000 ? 'a' : 'div'}
-			href="/appartements/{number}"
-			class="row-1"
-			on:click={() => {
+	<svelte:element
+		this={window.innerWidth > 1000 ? 'a' : 'div'}
+		href="/appartements/{number}"
+		class="row-1"
+		onclick={() => {
+			open = !open;
+			emit(open ? 'open' : 'close');
+		}}
+		onkeypress={(e) => {
+			if (e.key === 'Enter') {
 				open = !open;
 				emit(open ? 'open' : 'close');
-			}}
-			on:keypress={(e) => {
-				if (e.key === 'Enter') {
-					open = !open;
-					emit(open ? 'open' : 'close');
-				}
-			}}
+			}
+		}}
+	>
+		<span class="data"
+			>#<HighlightedText indices={indices('number', highlight)}>{number}</HighlightedText
+			></span
 		>
-			<span class="data"
-				>#<HighlightedText indices={indices('number', highlight)}>{number}</HighlightedText
-				></span
-			>
-			<span class="data"
-				><HighlightedText indices={indices('address', highlight)}>{address}</HighlightedText
-				></span
-			>
-			<span class="data reports">{reports.length}</span>
-		</svelte:element>
-		<svelte:element
-			this={window.innerWidth > 1000 ? 'a' : 'div'}
-			href="/appartements/{number}"
-			class="row-2"
-			on:click={() => {
+		<span class="data"
+			><HighlightedText indices={indices('address', highlight)}>{address}</HighlightedText
+			></span
+		>
+		<span class="data reports">{reports.length}</span>
+	</svelte:element>
+	<svelte:element
+		this={window.innerWidth > 1000 ? 'a' : 'div'}
+		href="/appartements/{number}"
+		class="row-2"
+		onclick={() => {
+			open = !open;
+			emit(open ? 'open' : 'close');
+		}}
+		onkeypress={(e) => {
+			if (e.key === 'Enter') {
 				open = !open;
 				emit(open ? 'open' : 'close');
-			}}
-			on:keypress={(e) => {
-				if (e.key === 'Enter') {
-					open = !open;
-					emit(open ? 'open' : 'close');
-				}
-			}}
+			}
+		}}
+	>
+		<span class="data"
+			><HighlightedText indices={indices('rent', highlight)}>{rent}</HighlightedText>€ + <HighlightedText
+				indices={indices('charges', highlight)}>{charges}</HighlightedText
+			>€</span
 		>
-			<span class="data"
-				><HighlightedText indices={indices('rent', highlight)}>{rent}</HighlightedText>€ + <HighlightedText
-					indices={indices('charges', highlight)}>{charges}</HighlightedText
-				>€</span
+		<span class="data"
+			><HighlightedText indices={indices('owner.firstName', highlight)}
+				>{owner.firstName}
+			</HighlightedText>
+			<HighlightedText indices={indices('owner.lastName', highlight)}
+				>{owner.lastName.toUpperCase()}</HighlightedText
 			>
-			<span class="data"
-				><HighlightedText indices={indices('owner.firstName', highlight)}
-					>{owner.firstName}
-				</HighlightedText>
-				<HighlightedText indices={indices('owner.lastName', highlight)}
-					>{owner.lastName.toUpperCase()}</HighlightedText
-				>
-			</span>
-			<span class="data"
-				>{Intl.DateTimeFormat('fr-FR', { dateStyle: 'short' }).format(updatedAt)}</span
-			>
-		</svelte:element>
+		</span>
+		<span class="data"
+			>{Intl.DateTimeFormat('fr-FR', { dateStyle: 'short' }).format(updatedAt)}</span
+		>
+	</svelte:element>
 	<div class="actions" class:open>
 		{#if history.some((h) => !h.applied)}
 			<ButtonSecondary href="/appartements/{number}#modifications" icon="editor-list"
@@ -143,7 +162,7 @@
 	<button
 		class:open
 		class="collapse"
-		on:click={() => {
+		onclick={() => {
 			open = false;
 			emit('close');
 		}}

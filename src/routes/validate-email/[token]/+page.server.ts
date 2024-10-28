@@ -6,7 +6,7 @@ import { log } from '$lib/server/logging';
 export const load: PageServerLoad = async ({ locals, params, url }) => {
 	const { user, session } = await locals.validateUser();
 	if (!(user && session)) {
-		throw redirect(302, '/login');
+		redirect(302, '/login');
 	}
 
 	const emailValidations = await prisma.emailValidation.findFirst({
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 			user,
 			`token ${params.token} is invalid (expired or not found)`
 		);
-		throw redirect(302, '/validate-email' + url.search + '#invalid-token');
+		redirect(302, '/validate-email' + url.search + '#invalid-token');
 	}
 
 	// Delete this validation as well as expired validations
@@ -61,6 +61,6 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 
 	const redirectTo = url.searchParams.get('go');
 	if (redirectTo) {
-		throw redirect(302, redirectTo);
+		redirect(302, redirectTo);
 	}
 };

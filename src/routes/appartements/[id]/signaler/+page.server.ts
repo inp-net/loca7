@@ -33,7 +33,7 @@ export const actions: Actions = {
 							connect: {
 								id: user.id
 							}
-					  }
+						}
 					: undefined
 			},
 			include: {
@@ -64,6 +64,6 @@ export const actions: Actions = {
 			}
 		});
 
-		throw redirect(301, `/appartements/${appartmentId}#report-submitted`);
+		redirect(301, `/appartements/${appartmentId}#report-submitted`);
 	}
 };

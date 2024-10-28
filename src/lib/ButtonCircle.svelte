@@ -1,20 +1,27 @@
 <script lang="ts">
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import Icon from './Icon.svelte';
 	import type { Name as IconName } from './icons/types';
 
-	export let id: string = '';
-	export let icon: IconName;
+	interface Props {
+		id?: string;
+		icon: IconName;
+	}
 
-	let hoverOrFocus = false;
+	let { id = '', icon }: Props = $props();
+
+	let hoverOrFocus = $state(false);
 </script>
 
 <button
 	{id}
-	on:focus={() => (hoverOrFocus = true)}
-	on:blur={() => (hoverOrFocus = false)}
-	on:mouseenter={() => (hoverOrFocus = true)}
-	on:mouseleave={() => (hoverOrFocus = false)}
-	on:click
+	onfocus={() => (hoverOrFocus = true)}
+	onblur={() => (hoverOrFocus = false)}
+	onmouseenter={() => (hoverOrFocus = true)}
+	onmouseleave={() => (hoverOrFocus = false)}
+	onclick={bubble('click')}
 	type="button"
 >
 	<Icon name={icon} color={hoverOrFocus ? '#fffa' : 'bg'} />

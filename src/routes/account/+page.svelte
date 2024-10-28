@@ -11,16 +11,20 @@
 	import { onMount } from 'svelte';
 	import { darkMode } from '$lib/stores';
 	import InputCheckbox from '$lib/InputCheckbox.svelte';
-	export let data: PageData;
-	$: ({ user, userHasNoEmailKey } = data);
+	interface Props {
+		data: PageData;
+	}
 
-	let oldPassword: string = '';
-	let oldPasswordIsInvalid: boolean = $page.url.hash === '#invalid-credentials';
+	let { data }: Props = $props();
+	let { user, userHasNoEmailKey } = $derived(data);
+
+	let oldPassword: string = $state('');
+	let oldPasswordIsInvalid: boolean = $state($page.url.hash === '#invalid-credentials');
 	let wrongCredentialsWhenConfirmingAccountDeletion =
 		$page.url.hash === '#invalid-credentials-delete-account';
 	let emailAlreadyInUse = $page.url.hash === '#email-already-in-use';
-	let newPassword: string = '';
-	let confirmingDeletion = false;
+	let newPassword: string = $state('');
+	let confirmingDeletion = $state(false);
 
 	onMount(() => {
 		if (wrongCredentialsWhenConfirmingAccountDeletion) {

@@ -115,6 +115,6 @@ export const actions: Actions = {
 			}
 		});
 
-		throw redirect(302, user?.admin ? '/administration' : '/appartements/gerer');
+		redirect(302, user?.admin ? '/administration' : '/appartements/gerer');
 	}
 };

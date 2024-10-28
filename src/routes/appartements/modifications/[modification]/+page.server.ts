@@ -128,13 +128,13 @@ export const actions: Actions = {
 							edit.latitude && edit.longitude
 								? Math.floor(
 										await openRouteService.travelTime('bike', edit, ENSEEIHT)
-								  )
+									)
 								: null,
 						byFoot:
 							edit.latitude && edit.longitude
 								? Math.floor(
 										await openRouteService.travelTime('foot', edit, ENSEEIHT)
-								  )
+									)
 								: null,
 						byPublicTransport: null // TODO
 					}
@@ -198,7 +198,7 @@ export const actions: Actions = {
 			}
 		});
 
-		throw redirect(302, `/appartements/${newAppartment.id}`);
+		redirect(302, `/appartements/${newAppartment.id}`);
 	},
 
 	async delete({ params, locals, url }) {
@@ -228,6 +228,6 @@ export const actions: Actions = {
 			}
 		});
 
-		throw redirect(302, `/appartements/${modification.appartment.id}`);
+		redirect(302, `/appartements/${modification.appartment.id}`);
 	}
 };

@@ -2,11 +2,6 @@
 	import { onMount } from 'svelte';
 	import Icon from './Icon.svelte';
 
-	export let tristate: boolean = true;
-	export let value: boolean | null = null;
-	export let name: string | undefined = undefined;
-	let previousValue: boolean | null = value;
-
 	const getTriState = (target: HTMLInputElement) => {
 		return target.indeterminate ? null : target.checked;
 	};
@@ -22,16 +17,32 @@
 		previousValue = value;
 	};
 
-	export let labelTrue: string = 'Oui';
-	export let labelFalse: string = 'Non';
-	export let labelNull: string = 'Inconnu';
-	export let label: string;
+	interface Props {
+		tristate?: boolean;
+		value?: boolean | null;
+		name?: string | undefined;
+		labelTrue?: string;
+		labelFalse?: string;
+		labelNull?: string;
+		label: string;
+	}
 
-	let checkboxElement: HTMLInputElement;
+	let {
+		tristate = true,
+		value = $bindable(null),
+		name = undefined,
+		labelTrue = 'Oui',
+		labelFalse = 'Non',
+		labelNull = 'Inconnu',
+		label
+	}: Props = $props();
+
+	let previousValue: boolean | null = $state(value);
+	let checkboxElement: HTMLInputElement | undefined = $state();
 
 	onMount(async () => {
 		previousValue = value;
-		setTriState(checkboxElement, value);
+		if (checkboxElement) setTriState(checkboxElement, value);
 	});
 </script>
 
@@ -39,8 +50,9 @@
 	<input
 		type="checkbox"
 		bind:this={checkboxElement}
-		on:change={(event) => {
+		onchange={(event) => {
 			event.preventDefault();
+			if (!(event.target instanceof HTMLInputElement)) return;
 			if (previousValue === null) {
 				setTriState(event.target, true);
 			} else if (previousValue === true) {

@@ -3,18 +3,31 @@
 	import BaseInputText from './BaseInputText.svelte';
 	import { EMAIL_REGEX } from './types';
 
-	export let id: string | undefined = undefined;
-	export let name: string | undefined = undefined;
-	export let initial: string | undefined = undefined;
-	export let placeholder: string | undefined = undefined;
-	export let value: string;
-	export let unit: string = '';
-	export let suggestions: string[] | undefined = undefined;
-	export let required: boolean = false;
+	interface Props {
+		id?: string | undefined;
+		name?: string | undefined;
+		initial?: string | undefined;
+		placeholder?: string | undefined;
+		value: string;
+		unit?: string;
+		suggestions?: string[] | undefined;
+		required?: boolean;
+		schema?: Zod.ZodString;
+	}
 
-	export let schema: Zod.ZodString = z.string().regex(EMAIL_REGEX, {
-		message: 'Adresse email invalide'
-	}); /* don't use .email() until https://github.com/colinhacks/zod/pull/2224 gets merged, someone@laplace.univ-tlse.fr does not pass!!!! */
+	let {
+		id = undefined,
+		name = undefined,
+		initial = undefined,
+		placeholder = undefined,
+		value = $bindable(),
+		unit = '',
+		suggestions = undefined,
+		required = false,
+		schema = z.string().regex(EMAIL_REGEX, {
+			message: 'Adresse email invalide'
+		})
+	}: Props = $props();
 </script>
 
 <BaseInputText

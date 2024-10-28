@@ -4,8 +4,12 @@
 	import { appartmentTitle } from '$lib/types';
 	import type { PageData } from './$types';
 
-	export let data: PageData;
-	$: ({ appartment } = data);
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
+	let { appartment } = $derived(data);
 </script>
 
 <svelte:head>

@@ -16,9 +16,14 @@
 	import ButtonSecondary from '$lib/ButtonSecondary.svelte';
 	import { CONTACT_EMAIL } from '$lib/constants';
 	import { onMount } from 'svelte';
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+		children?: import('svelte').Snippet;
+	}
 
-	let ready = false;
+	let { data, children }: Props = $props();
+
+	let ready = $state(false);
 
 	onMount(() => {
 		const html = document.querySelector('html')!;
@@ -134,7 +139,7 @@
 	/>
 </header>
 
-<slot />
+{@render children?.()}
 
 <footer>
 	<section class="help">

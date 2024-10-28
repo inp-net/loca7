@@ -22,31 +22,64 @@
 	import { tooltip } from './tooltip';
 	const emit = createEventDispatcher();
 
-	export let photos: Photo[] | null;
-	export let archived: boolean;
-	export let number: number;
-	export let rent: number;
-	export let charges: number;
-	export let surface: number;
-	export let kind: AppartmentKind;
-	export let roomsCount: number;
-	export let travelTimeToN7: TravelTimeToN7 | null;
-	export let availableAt: Date;
-	export let address: string;
-	export let latitude: number | null;
-	export let longitude: number | null;
-	export let hasFurniture: boolean | null;
-	export let hasParking: boolean | null;
-	export let hasBicycleParking: boolean | null;
-	export let hasFiberInternet: boolean | null;
-	export let hasElevator: boolean | null;
-	export let editable: boolean = false;
-	export let dislikeable = false
-	export let small: boolean = false;
-	export let likes: Like[] = [];
+	interface Props {
+		photos: Photo[] | null;
+		archived: boolean;
+		number: number;
+		rent: number;
+		charges: number;
+		surface: number;
+		kind: AppartmentKind;
+		roomsCount: number;
+		travelTimeToN7: TravelTimeToN7 | null;
+		availableAt: Date;
+		address: string;
+		latitude: number | null;
+		longitude: number | null;
+		hasFurniture: boolean | null;
+		hasParking: boolean | null;
+		hasBicycleParking: boolean | null;
+		hasFiberInternet: boolean | null;
+		hasElevator: boolean | null;
+		editable?: boolean;
+		dislikeable?: boolean;
+		small?: boolean;
+		likes?: Like[];
+	}
+
+	let {
+		photos,
+		archived,
+		number,
+		rent,
+		charges,
+		surface,
+		kind,
+		roomsCount,
+		travelTimeToN7,
+		availableAt,
+		address,
+		latitude,
+		longitude,
+		hasFurniture,
+		hasParking,
+		hasBicycleParking,
+		hasFiberInternet,
+		hasElevator,
+		editable = false,
+		dislikeable = false,
+		small = false,
+		likes = []
+	}: Props = $props();
 
 	let secondsAvailableSince = (Date.now() - availableAt.valueOf()) * 1e-3;
-	let hasCriterias = [hasBicycleParking, hasElevator, hasFiberInternet, hasFurniture, hasParking].some(c => c !== null);
+	let hasCriterias = [
+		hasBicycleParking,
+		hasElevator,
+		hasFiberInternet,
+		hasFurniture,
+		hasParking
+	].some((c) => c !== null);
 </script>
 
 <article class:editable class:small class:photo-is-clickable={photos?.length < 2}>
@@ -132,91 +165,93 @@
 			</section>
 
 			{#if hasCriterias}
-			<section class="criteria">
-				{#if hasFurniture !== null}
-					<p class="furniture">
-						<span class="icon"
-							><Icon name="furniture{!hasFurniture ? '-cancel' : ''}" /></span
+				<section class="criteria">
+					{#if hasFurniture !== null}
+						<p class="furniture">
+							<span class="icon"
+								><Icon name="furniture{!hasFurniture ? '-cancel' : ''}" /></span
+							>
+							{hasFurniture ? 'Meublé' : 'Non meublé'}
+						</p>
+					{/if}
+					{#if hasParking !== null}
+						<p class="parking">
+							<span class="icon"
+								><Icon name="parking{!hasParking ? '-cancel' : ''}" /></span
+							>
+							{hasParking ? 'Place de parking' : 'Pas de place de parking'}
+						</p>
+					{/if}
+					{#if hasBicycleParking !== null}
+						<p class="bicycle-parking">
+							<span class="icon"
+								><Icon name="bike{!hasBicycleParking ? '-cancel' : ''}" /></span
+							>
+							{hasBicycleParking ? 'Place pour vélo' : 'Pas de place pour vélo'}
+						</p>
+					{/if}
+					{#if hasFiberInternet !== null}
+						<p class="fiber-internet">
+							<span class="icon"
+								><Icon
+									name="fiber-internet{!hasFiberInternet ? '-cancel' : ''}"
+								/></span
+							>
+							{hasFiberInternet ? 'Fibre optique' : 'Pas de fibre optique'}
+						</p>
+					{/if}
+					{#if hasElevator !== null}
+						<p class="elevator">
+							<span class="icon"
+								><Icon name="elevator{!hasElevator ? '-cancel' : ''}" /></span
+							>
+							{hasElevator ? 'Ascenseur' : "Pas d'ascenseur"}
+						</p>
+					{/if}
+					{#if likes.length > 0}
+						<p
+							class="likes"
+							use:tooltip={(likes.length > 1
+								? `${likes.length} personnes sont intéréssées`
+								: `Une personne est intéréssée`) + ` par cette annonce`}
 						>
-						{hasFurniture ? 'Meublé' : 'Non meublé'}
-					</p>
-				{/if}
-				{#if hasParking !== null}
-					<p class="parking">
-						<span class="icon"
-							><Icon name="parking{!hasParking ? '-cancel' : ''}" /></span
-						>
-						{hasParking ? 'Place de parking' : 'Pas de place de parking'}
-					</p>
-				{/if}
-				{#if hasBicycleParking !== null}
-					<p class="bicycle-parking">
-						<span class="icon"
-							><Icon name="bike{!hasBicycleParking ? '-cancel' : ''}" /></span
-						>
-						{hasBicycleParking ? 'Place pour vélo' : 'Pas de place pour vélo'}
-					</p>
-				{/if}
-				{#if hasFiberInternet !== null}
-					<p class="fiber-internet">
-						<span class="icon"
-							><Icon
-								name="fiber-internet{!hasFiberInternet ? '-cancel' : ''}"
-							/></span
-						>
-						{hasFiberInternet ? 'Fibre optique' : 'Pas de fibre optique'}
-					</p>
-				{/if}
-				{#if hasElevator !== null}
-					<p class="elevator">
-						<span class="icon"
-							><Icon name="elevator{!hasElevator ? '-cancel' : ''}" /></span
-						>
-						{hasElevator ? 'Ascenseur' : "Pas d'ascenseur"}
-					</p>
-				{/if}
-				{#if likes.length > 0}
-					<p
-						class="likes"
-						use:tooltip={(likes.length > 1
-							? `${likes.length} personnes sont intéréssées`
-							: `Une personne est intéréssée`) + ` par cette annonce`}
-					>
-						<span class="icon">
-							<Icon name="heart" />
-						</span>
-						{likes.length}
-					</p>
-				{/if}
-			</section>
+							<span class="icon">
+								<Icon name="heart" />
+							</span>
+							{likes.length}
+						</p>
+					{/if}
+				</section>
 			{/if}
 		{/if}
 	</a>
 	{#if editable || dislikeable}
 		<section class="editable">
 			{#if editable}
-			<ButtonColored href="/appartements/{number}/modifier">Modifier</ButtonColored>
-			{#if !archived}
-				<ButtonColored
-					on:click={async () => {
-						await fetch(`/appartements/${number}/archiver`, { method: 'POST' });
-						window.location.reload();
-					}}>Archiver</ButtonColored
+				<ButtonColored href="/appartements/{number}/modifier">Modifier</ButtonColored>
+				{#if !archived}
+					<ButtonColored
+						on:click={async () => {
+							await fetch(`/appartements/${number}/archiver`, { method: 'POST' });
+							window.location.reload();
+						}}>Archiver</ButtonColored
+					>
+				{:else}
+					<ButtonColored
+						on:click={async () => {
+							await fetch(`/appartements/${number}/publier`, { method: 'POST' });
+							window.location.reload();
+						}}>Publier</ButtonColored
+					>
+				{/if}
+				<ButtonColored dangerous href="/appartements/{number}/supprimer"
+					>Supprimer</ButtonColored
 				>
-			{:else}
-				<ButtonColored
-					on:click={async () => {
-						await fetch(`/appartements/${number}/publier`, { method: 'POST' });
-						window.location.reload();
-					}}>Publier</ButtonColored
-				>
-			{/if}
-			<ButtonColored dangerous href="/appartements/{number}/supprimer"
-				>Supprimer</ButtonColored
-			>
 			{/if}
 			{#if dislikeable}
-			<ButtonColored dangerous href="/appartements/{number}/supprimer-like">Ne plus suivre</ButtonColored>
+				<ButtonColored dangerous href="/appartements/{number}/supprimer-like"
+					>Ne plus suivre</ButtonColored
+				>
 			{/if}
 		</section>
 	{/if}

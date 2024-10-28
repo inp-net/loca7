@@ -1,11 +1,18 @@
 <script lang="ts">
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import Icon from './Icon.svelte';
 
-	export let value: boolean;
+	interface Props {
+		value: boolean;
+	}
+
+	let { value = $bindable() }: Props = $props();
 </script>
 
 <label class="input-checkbox">
-	<input type="checkbox" bind:checked={value} on:change />
+	<input type="checkbox" bind:checked={value} onchange={bubble('change')} />
 	<div class="checkbox">
 		<Icon
 			name={value ? 'checkmark' : 'close'}

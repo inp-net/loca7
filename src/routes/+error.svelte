@@ -18,7 +18,7 @@
 		<p>
 			{@html $page?.error?.message === 'Internal Error'
 				? 'Erreur interne'
-				: $page.error?.message ?? "Quelque chose s'est mal passé."}
+				: ($page.error?.message ?? "Quelque chose s'est mal passé.")}
 		</p>
 	{/if}
 </main>

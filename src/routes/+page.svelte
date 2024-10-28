@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { browser } from '$app/environment';
 	import AppartmentsMap from '$lib/AppartmentsMap.svelte';
 	import ButtonFloating from '$lib/ButtonFloating.svelte';
@@ -28,7 +30,11 @@
 	import InputSearch from '$lib/InputSearch.svelte';
 	import Fuse from 'fuse.js';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	onMount(() => {
 		if (window.scrollY === 0) {
@@ -43,7 +49,7 @@
 		}
 	});
 
-	let appartments: typeof data.appartments;
+	let appartments: typeof data.appartments = $state();
 	({ appartments } = data);
 
 	const aspectCriteria = (aspectName: keyof typeof $searchCriteria, appartment: Appartment) =>
@@ -61,72 +67,77 @@
 		);
 	};
 
-	$: searcher = new Fuse(appartments, {
-		keys: [
-			'description',
-			'address',
-			'number',
-			'id',
-			'owner.name',
-			'owner.email',
-			'owner.phone'
-		],
-		threshold: 0.2,
-		shouldSort: false,
-		distance: 3500,
-		useExtendedSearch: true
-	});
+	let searcher = $derived(
+		new Fuse(appartments, {
+			keys: [
+				'description',
+				'address',
+				'number',
+				'id',
+				'owner.name',
+				'owner.email',
+				'owner.phone'
+			],
+			threshold: 0.2,
+			shouldSort: false,
+			distance: 3500,
+			useExtendedSearch: true
+		})
+	);
 
 	$searchResults = [...appartments];
-	$: $searchResults = (
-		$searchCriteria.description
-			? searcher.search($searchCriteria.description).map((r) => r.item)
-			: appartments
-	)
-		.filter(
-			(appartment) =>
-				aspectCriterias(
-					appartment,
-					'furniture',
-					'parking',
-					'bicycleParking',
-					'fiberInternet',
-					'elevator'
-				) &&
-				(!$searchCriteria.maximumRent || appartment.rent <= $searchCriteria.maximumRent) &&
-				(!$searchCriteria.minimumSurface ||
-					appartment.surface >= $searchCriteria.minimumSurface) &&
-				(!$searchCriteria.type.length || $searchCriteria.type.includes(appartment.kind))
+	run(() => {
+		$searchResults = (
+			$searchCriteria.description
+				? searcher.search($searchCriteria.description).map((r) => r.item)
+				: appartments
 		)
-		.sort((a, b) => {
-			const quantity = ({
-				charges,
-				rent,
-				surface,
-				latitude,
-				longitude,
-				availableAt
-			}: Appartment) => {
-				switch ($searchSortBy) {
-					case 'prix':
-						return charges + rent;
-					case 'prix/m²':
-						return surface ? (charges + rent) / surface : Number.MAX_SAFE_INTEGER;
-					case 'surface':
-						return -surface;
-					case "distance à l'n7":
-						return latitude && longitude
-							? distanceBetween({ latitude, longitude }, ENSEEIHT)
-							: Number.MAX_SAFE_INTEGER;
-					case 'délai avant libération':
-						return Date.now() - availableAt.valueOf();
-					default:
-						return 0;
-				}
-			};
+			.filter(
+				(appartment) =>
+					aspectCriterias(
+						appartment,
+						'furniture',
+						'parking',
+						'bicycleParking',
+						'fiberInternet',
+						'elevator'
+					) &&
+					(!$searchCriteria.maximumRent ||
+						appartment.rent <= $searchCriteria.maximumRent) &&
+					(!$searchCriteria.minimumSurface ||
+						appartment.surface >= $searchCriteria.minimumSurface) &&
+					(!$searchCriteria.type.length || $searchCriteria.type.includes(appartment.kind))
+			)
+			.sort((a, b) => {
+				const quantity = ({
+					charges,
+					rent,
+					surface,
+					latitude,
+					longitude,
+					availableAt
+				}: Appartment) => {
+					switch ($searchSortBy) {
+						case 'prix':
+							return charges + rent;
+						case 'prix/m²':
+							return surface ? (charges + rent) / surface : Number.MAX_SAFE_INTEGER;
+						case 'surface':
+							return -surface;
+						case "distance à l'n7":
+							return latitude && longitude
+								? distanceBetween({ latitude, longitude }, ENSEEIHT)
+								: Number.MAX_SAFE_INTEGER;
+						case 'délai avant libération':
+							return Date.now() - availableAt.valueOf();
+						default:
+							return 0;
+					}
+				};
 
-			return quantity(a) - quantity(b);
-		});
+				return quantity(a) - quantity(b);
+			});
+	});
 
 	function toggleTab(e) {
 		e.target.blur();
@@ -358,7 +369,8 @@
 		z-index: 20;
 	}
 
-	.results { /* DISPLAY GRID */
+	.results {
+		/* DISPLAY GRID */
 		display: flex;
 		flex-direction: column;
 		padding: 0;
@@ -374,10 +386,10 @@
 		margin-top: 2rem;
 		list-style: none;
 		gap: 3rem;
-		
+
 		display: grid;
 		grid-template-columns: repeat(auto-fill, min(100%, 400px));
-		
+
 		justify-content: center;
 		width: 100%;
 	}
@@ -408,7 +420,10 @@
 		bottom: 2rem;
 	}
 
-	.surface-and-price, .text-search, .type-search, .checkbox-search {
+	.surface-and-price,
+	.text-search,
+	.type-search,
+	.checkbox-search {
 		width: 100%;
 	}
 

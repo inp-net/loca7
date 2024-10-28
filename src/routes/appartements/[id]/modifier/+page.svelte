@@ -5,10 +5,14 @@
 	import type { User } from '@prisma/client';
 	import type { LayoutData } from '../$types';
 
-	export let data: LayoutData;
+	interface Props {
+		data: LayoutData;
+	}
+
+	let { data }: Props = $props();
 	let user: User = data.user!;
 	const initialAppartment = data.appartment;
-	let appartment = { ...initialAppartment };
+	let appartment = $state({ ...initialAppartment });
 	let allEmails = data.allEmails;
 </script>
 

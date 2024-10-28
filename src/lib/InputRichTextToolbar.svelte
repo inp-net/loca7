@@ -6,11 +6,15 @@
 	import InputText from './InputText.svelte';
 	import ButtonCircle from './ButtonCircle.svelte';
 
-	export let editor: LexicalEditor;
+	interface Props {
+		editor: LexicalEditor;
+	}
 
-	let addingLink: boolean = false;
-	let currentLinkUrl: string = '';
-	let currentLinkName: string = '';
+	let { editor }: Props = $props();
+
+	let addingLink: boolean = $state(false);
+	let currentLinkUrl: string = $state('');
+	let currentLinkName: string = $state('');
 
 	let blockType = 'paragraph';
 

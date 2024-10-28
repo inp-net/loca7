@@ -1,17 +1,31 @@
 <script lang="ts">
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import Icon from './Icon.svelte';
 	import type { Name as IconName } from './icons/types';
 
-	export let id: string = '';
-	export let icon: IconName;
-	export let href: string = '';
+	interface Props {
+		id?: string;
+		icon: IconName;
+		href?: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let { id = '', icon, href = '', children }: Props = $props();
 </script>
 
-<svelte:element this={href ? 'a' : 'button'} class="button-floating" {id} {href} on:click>
+<svelte:element
+	this={href ? 'a' : 'button'}
+	class="button-floating"
+	{id}
+	{href}
+	onclick={bubble('click')}
+>
 	<div class="icon">
 		<Icon name={icon} />
 	</div>
-	<slot />
+	{@render children?.()}
 </svelte:element>
 
 <style>

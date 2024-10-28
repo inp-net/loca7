@@ -32,7 +32,7 @@ export const load: LayoutServerLoad = async ({ params, locals }) => {
 							include: {
 								photos: true
 							}
-					  }
+						}
 					: false
 		}
 	});

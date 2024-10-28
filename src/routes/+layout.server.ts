@@ -3,7 +3,7 @@ import { prisma } from '$lib/server/prisma';
 import VERSION_DATA from '../../public/version.json' assert { type: 'json' };
 
 export const load: LayoutServerLoad = async ({ locals }) => {
-	const { user, session } = await locals.validateUser();
+	const { user } = await locals.validateUser();
 	const appartments = await prisma.appartment.findMany({ include: { owner: true } });
 	const allEmails: string[] = (await prisma.user.findMany({ select: { email: true } })).map(
 		(u) => u.email
@@ -14,7 +14,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		allEmails,
 		appartments,
 		beta: process.env.STAGE === 'beta',
-        notice: process.env.NOTICE_BANNER,
+		notice: process.env.NOTICE_BANNER,
 		currentCommit: VERSION_DATA?.commit,
 		currentVersion: VERSION_DATA?.version || '?'
 	};

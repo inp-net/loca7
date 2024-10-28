@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import ButtonCircle from './ButtonCircle.svelte';
 	import Icon from './Icon.svelte';
 	import SortableList from './SortableList.svelte';
@@ -7,33 +9,45 @@
 	import { photoURL } from './photos';
 	import { getDataURL } from './utils';
 
-	export let name: string | undefined = undefined;
-	export let sizeLimit: number = 0; // in bytes
-	export let appartmentId: string;
-	export let value: Photo[] = [];
-	export let previewURLs: Record<string, string> = Object.fromEntries(
-		value.map((v) => [v.filename, photoURL(v)])
-	);
-	export let fileObjects: Record<string, File> = Object.fromEntries(
-		value.map((v) => [
-			v.filename,
-			new File([], v.filename, {
-				type: v.contentType
-			})
-		])
-	);
-	let empty: boolean;
+	interface Props {
+		name?: string | undefined;
+		sizeLimit?: number;
+		appartmentId: string;
+		value?: Photo[];
+		previewURLs?: Record<string, string>;
+		fileObjects?: Record<string, File>;
+	}
+
+	let {
+		name = undefined,
+		sizeLimit = 0,
+		appartmentId,
+		value = $bindable([]),
+		previewURLs = $bindable(Object.fromEntries(value.map((v) => [v.filename, photoURL(v)]))),
+		fileObjects = $bindable(
+			Object.fromEntries(
+				value.map((v) => [
+					v.filename,
+					new File([], v.filename, {
+						type: v.contentType
+					})
+				])
+			)
+		)
+	}: Props = $props();
+	let empty: boolean = $derived(value.length === 0);
 	let dragging: boolean = false;
 	let draggingOverDropzone: boolean = false;
-	let inputDom: HTMLInputElement;
+	let inputDom: HTMLInputElement = $state();
 
 	function updateDOM(target: HTMLInputElement, fileObjects: Record<string, File>) {
 		if (!target) return;
 		target.files = fileListOf(Object.values(fileObjects));
 	}
 
-	$: empty = value.length === 0;
-	$: updateDOM(inputDom, fileObjects);
+	run(() => {
+		updateDOM(inputDom, fileObjects);
+	});
 
 	function fileListOf(files: File[]): FileList {
 		const filelist = new DataTransfer();
@@ -93,7 +107,7 @@
 		multiple
 		{name}
 		bind:this={inputDom}
-		on:change={(e) => {
+		onchange={(e) => {
 			addPhotos(e.target.files);
 		}}
 		accept="image/*"
@@ -111,22 +125,24 @@
 			Glissez-déposer vos fichiers ici
 		</p>
 	{:else}
-		<SortableList bind:list={value} key="filename" let:item={photo} let:index>
-			<li class="image-item">
-				<button
-					type="button"
-					class="drag"
-					use:tooltip={'Glissez pour réordonner les images'}
-				>
-					<Icon name="drag-handle" />
-				</button>
-				<span class="position">{index + 1}</span>
-				<img src={previewURLs[photo.filename]} />
-				<span class="name typo-paragraph">
-					{photo.filename}
-				</span>
-				<ButtonCircle on:click={() => deletePhoto(photo)} icon="delete" />
-			</li>
+		<SortableList bind:list={value} key="filename">
+			{#snippet children({ item: photo, index })}
+				<li class="image-item">
+					<button
+						type="button"
+						class="drag"
+						use:tooltip={'Glissez pour réordonner les images'}
+					>
+						<Icon name="drag-handle" />
+					</button>
+					<span class="position">{index + 1}</span>
+					<img src={previewURLs[photo.filename]} />
+					<span class="name typo-paragraph">
+						{photo.filename}
+					</span>
+					<ButtonCircle on:click={() => deletePhoto(photo)} icon="delete" />
+				</li>
+			{/snippet}
 		</SortableList>
 	{/if}
 	<div class="icon">

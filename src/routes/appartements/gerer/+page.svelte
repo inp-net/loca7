@@ -6,8 +6,12 @@
 	import type { PageData } from './$types';
 	import InputSelectOne from '$lib/InputSelectOne.svelte';
 
-	export let data: PageData;
-	$: ({ appartments } = data);
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
+	let { appartments } = $derived(data);
 
 	const categories = {
 		all: 'toutes',
@@ -18,7 +22,7 @@
 
 	type Status = keyof typeof categories;
 
-	let currentCategory: Status = 'all';
+	let currentCategory: Status = $state('all');
 
 	function inCategory(category: Status): (a: Appartment) => boolean {
 		return (a) => {
@@ -96,10 +100,10 @@
 		margin-top: 2rem;
 		list-style: none;
 		gap: 3rem;
-		
+
 		display: grid;
 		grid-template-columns: repeat(auto-fill, min(100%, 450px));
-		
+
 		justify-content: center;
 		width: 100%;
 	}

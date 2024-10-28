@@ -2,13 +2,25 @@
 	import BaseInputText from './BaseInputText.svelte';
 	import { z } from 'zod';
 
-	export let id: string | undefined = undefined;
-	export let name: string | undefined = undefined;
-	export let initial: string | undefined = undefined;
-	export let placeholder: string | undefined = undefined;
-	export let value: string;
-	export let schema: Zod.ZodString = z.string();
-	export let required: boolean = false;
+	interface Props {
+		id?: string | undefined;
+		name?: string | undefined;
+		initial?: string | undefined;
+		placeholder?: string | undefined;
+		value: string;
+		schema?: Zod.ZodString;
+		required?: boolean;
+	}
+
+	let {
+		id = undefined,
+		name = undefined,
+		initial = undefined,
+		placeholder = undefined,
+		value = $bindable(),
+		schema = z.string(),
+		required = false
+	}: Props = $props();
 </script>
 
 <BaseInputText

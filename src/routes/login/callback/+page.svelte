@@ -8,7 +8,7 @@
 	const responseState = $page.url.searchParams.get('state');
 	const errorCode = $page.url.searchParams.get('error');
 	const accessTokenFromServer = $page.url.searchParams.get('access_token');
-	let error = '';
+	let error = $state('');
 
 	function tryRedirect(params: { access_token: string } | { code: string }): void {
 		window.location.href = '/login/callback/done?' + new URLSearchParams(params);

@@ -5,18 +5,23 @@
 	 */
 	import { flip } from 'svelte/animate';
 
-	export let list: any[] = [];
-	export let key: string = 'id';
-	export let removesItems = false;
+	interface Props {
+		list?: any[];
+		key?: string;
+		removesItems?: boolean;
+		children?: import('svelte').Snippet<[any]>;
+	}
 
-	let ghost: HTMLDivElement;
-	let grabbed: HTMLElement | null;
+	let { list = $bindable([]), key = 'id', removesItems = false, children }: Props = $props();
+
+	let ghost: HTMLDivElement = $state();
+	let grabbed: HTMLElement | null = $state();
 
 	let lastTarget: HTMLElement;
 
-	let mouseY = 0; // pointer y coordinate within client
-	let offsetY = 0; // y distance from top of grabbed element to pointer
-	let layerY = 0; // distance from top of list to top of client
+	let mouseY = $state(0); // pointer y coordinate within client
+	let offsetY = $state(0); // y distance from top of grabbed element to pointer
+	let layerY = $state(0); // distance from top of list to top of client
 
 	function grab(clientY: number, element: HTMLElement) {
 		// modify grabbed element
@@ -96,23 +101,23 @@
 		class={grabbed ? 'item haunting' : 'item'}
 		style={'top: ' + (mouseY + offsetY - layerY) + 'px'}
 	>
-		<p />
+		<p></p>
 	</div>
 	<div
 		class="list"
-		on:mousemove={function (ev) {
+		onmousemove={function (ev) {
 			ev.stopPropagation();
 			drag(ev.clientY);
 		}}
-		on:touchmove={function (ev) {
+		ontouchmove={function (ev) {
 			ev.stopPropagation();
 			drag(ev.touches[0].clientY);
 		}}
-		on:mouseup={function (ev) {
+		onmouseup={function (ev) {
 			ev.stopPropagation();
 			release(ev);
 		}}
-		on:touchend={function (ev) {
+		ontouchend={function (ev) {
 			ev.stopPropagation();
 			release(ev.touches[0]);
 		}}
@@ -124,17 +129,17 @@
 				data-index={i}
 				data-id={getKey(datum)}
 				data-grabY="0"
-				on:mousedown={function (ev) {
+				onmousedown={function (ev) {
 					grab(ev.clientY, this);
 				}}
-				on:touchstart={function (ev) {
+				ontouchstart={function (ev) {
 					grab(ev.touches[0].clientY, this);
 				}}
-				on:mouseenter={function (ev) {
+				onmouseenter={function (ev) {
 					ev.stopPropagation();
 					dragEnter(ev, ev.target);
 				}}
-				on:touchmove={function (ev) {
+				ontouchmove={function (ev) {
 					ev.stopPropagation();
 					ev.preventDefault();
 					touchEnter(ev.touches[0]);
@@ -142,13 +147,13 @@
 				animate:flip={{ duration: 200 }}
 			>
 				<div class="content">
-					<slot item={datum} index={i}>{datum}</slot>
+					{#if children}{@render children({ item: datum, index: i })}{:else}{datum}{/if}
 				</div>
 
 				<div class="buttons delete">
 					{#if removesItems}
 						<button
-							on:click={function (ev) {
+							onclick={function (ev) {
 								removeDatum(i);
 							}}
 						>

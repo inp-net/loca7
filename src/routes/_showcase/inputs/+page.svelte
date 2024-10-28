@@ -7,11 +7,11 @@
 	import InputSelectMultiple from '$lib/InputSelectMultiple.svelte';
 	import InputSelectOne from '$lib/InputSelectOne.svelte';
 
-	let surface: number = 650;
-	let counter: number = -4294967295;
-	let teo: number = 1_000_000_000;
+	let surface: number = $state(650);
+	let counter: number = $state(-4294967295);
+	let teo: number = $state(1_000_000_000);
 
-	let ternaryState: boolean | null = null;
+	let ternaryState: boolean | null = $state(null);
 </script>
 
 <h1>Inputs</h1>

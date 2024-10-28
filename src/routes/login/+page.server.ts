@@ -10,11 +10,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const { user, session } = await locals.validateUser();
 
 	if (user && !user.emailIsValidated) {
-		throw redirect(302, '/validate-email');
+		redirect(302, '/validate-email');
 	}
 
 	if (session) {
-		throw redirect(302, '/');
+		redirect(302, '/');
 	}
 };
 
@@ -32,7 +32,7 @@ export const actions: Actions = {
 		} catch (err) {
 			console.error(err);
 			if (!(err instanceof LuciaError)) {
-				throw error(500);
+				error(500);
 			}
 			switch (err.message) {
 				case 'AUTH_INVALID_PASSWORD':
@@ -45,7 +45,7 @@ export const actions: Actions = {
 						`invalid credentials (lucia says ${err.message})`,
 						{ tried: { email, password } }
 					);
-					throw redirect(
+					redirect(
 						302,
 						`/login${url.search}#invalid-${
 							err.message === 'AUTH_INVALID_PASSWORD' ? 'password' : 'email'
@@ -54,18 +54,18 @@ export const actions: Actions = {
 
 				default:
 					await log.fatal('login', email, `unknown error (lucia says ${err.message}) `);
-					throw error(400, { message: 'Connexion impossible.' });
+					error(400, { message: 'Connexion impossible.' });
 			}
 		}
 
 		await log.info('login', email, 'success');
-		throw redirect(302, url.searchParams.get('go') ?? '/');
+		redirect(302, url.searchParams.get('go') ?? '/');
 	},
 
 	async oauth({ request }) {
 		const data = await request.formData();
 		if (data.get('accessToken')) {
-			throw redirect(
+			redirect(
 				302,
 				'/login/callback/done?' +
 					new URLSearchParams({
@@ -73,7 +73,7 @@ export const actions: Actions = {
 					})
 			);
 		}
-		throw redirect(
+		redirect(
 			302,
 			`${secrets.OAUTH_AUTHORIZATION_URL}?response_type=code&client_id=${env.PUBLIC_OAUTH_CLIENT_ID}&scopes=${secrets.OAUTH_SCOPES.split(
 				' '

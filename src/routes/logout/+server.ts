@@ -13,8 +13,8 @@ export const POST: RequestHandler = async ({ locals, url, cookies }) => {
 
 	await log.info('logout', user, 'success');
 	if (cookies.get('authed_via') === 'oauth') {
-		cookies.delete('authed_via');
-		throw redirect(302, secrets.OAUTH_LOGOUT_URL);
+		/* @migration task: add path argument */ cookies.delete('authed_via');
+		redirect(302, secrets.OAUTH_LOGOUT_URL);
 	}
-	throw redirect(302, '/?reload');
+	redirect(302, '/?reload');
 };

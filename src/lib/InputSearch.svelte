@@ -4,7 +4,11 @@
 	import BaseInputText from './BaseInputText.svelte';
 	const emit = createEventDispatcher();
 
-	export let search: string;
+	interface Props {
+		search: string;
+	}
+
+	let { search = $bindable() }: Props = $props();
 
 	// TODO add clear button
 </script>

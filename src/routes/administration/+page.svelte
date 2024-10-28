@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import VirtualList from 'svelte-tiny-virtual-list';
 	import AppartmentAdminItem from '$lib/AppartmentAdminItem.svelte';
 	import { debounce } from 'lodash-es';
@@ -29,7 +31,11 @@
 		photos: Photo[];
 	};
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 	const categories = {
 		pending: 'en attente',
 		reported: 'signalée',
@@ -38,15 +44,7 @@
 		all: 'toutes'
 	};
 	type Status = keyof typeof categories;
-	let eagerStatus: Record<string, Status> = {};
-
-	$: appartments = data.appartments.sort(
-		(a, b) => a.availableAt.valueOf() - b.availableAt.valueOf()
-	);
-
-	$: yearsAvailable = [
-		...new Set(appartments.map((a) => effectiveUpdatedAt(a).getFullYear().toString()))
-	].sort();
+	let eagerStatus: Record<string, Status> = $state({});
 
 	const isOnline = (a: Appartment) =>
 		status(eagerStatus, a) === 'online' && a.history.every((h) => h.applied);
@@ -57,40 +55,16 @@
 	const isYearSelected = (years: string[]) => (a: Appartment) =>
 		years.length === 0 || years.includes(effectiveUpdatedAt(a).getFullYear().toString());
 
-	let currentCategory: Status = 'pending';
-
-	$: searcher = new Fuse(appartments.filter(isYearSelected(years)), {
-		keys: [
-			'rent',
-			'charges',
-			'deposit',
-			'surface',
-			'kind',
-			'address',
-			'description',
-			'number',
-			'owner.firstName',
-			'owner.lastName',
-			'owner.email',
-			'owner.phone',
-			'owner.agencyName',
-			'owner.agencyWebsite'
-		],
-		threshold: 0.2,
-		includeMatches: true,
-		shouldSort: false,
-		distance: 3500, // by analysis of imported data, description character length is at most 3148, wth most below 2000. (20 apparts have more than 2k chars in description)
-		useExtendedSearch: true
-	});
+	let currentCategory: Status = $state('pending');
 
 	let byCategory: Record<Status, (Appartment & { matches: readonly Fuse.FuseResultMatch[] })[]> =
-		{
+		$state({
 			pending: [],
 			archived: [],
 			online: [],
 			reported: [],
 			all: []
-		};
+		});
 
 	const appartment = (category: keyof typeof byCategory, index: number) =>
 		byCategory[category][index];
@@ -129,17 +103,15 @@
 		};
 	}, 300);
 
-	$: updateSearchResults(search, years);
-	$: eagerStatus, updateSearchResults(search, years);
+	let search: string = $state('');
 
-	let search: string = '';
-
-	let years: string[] =
+	let years: string[] = $state(
 		new Date().getMonth() >= 9
 			? [new Date().getFullYear().toString()]
-			: [new Date().getFullYear().toString(), (new Date().getFullYear() - 1).toString()];
+			: [new Date().getFullYear().toString(), (new Date().getFullYear() - 1).toString()]
+	);
 
-	let openAppartmentId: string = '';
+	let openAppartmentId: string = $state('');
 
 	function status(
 		eagerStatus: Record<string, Status>,
@@ -169,8 +141,45 @@
 		eagerStatus[appart.id] = status;
 	};
 
-	let selection: string[] = [];
-	let confirmingBulkDelete = false;
+	let selection: string[] = $state([]);
+	let confirmingBulkDelete = $state(false);
+	let appartments = $derived(
+		data.appartments.sort((a, b) => a.availableAt.valueOf() - b.availableAt.valueOf())
+	);
+	let yearsAvailable = $derived(
+		[...new Set(appartments.map((a) => effectiveUpdatedAt(a).getFullYear().toString()))].sort()
+	);
+	let searcher = $derived(
+		new Fuse(appartments.filter(isYearSelected(years)), {
+			keys: [
+				'rent',
+				'charges',
+				'deposit',
+				'surface',
+				'kind',
+				'address',
+				'description',
+				'number',
+				'owner.firstName',
+				'owner.lastName',
+				'owner.email',
+				'owner.phone',
+				'owner.agencyName',
+				'owner.agencyWebsite'
+			],
+			threshold: 0.2,
+			includeMatches: true,
+			shouldSort: false,
+			distance: 3500, // by analysis of imported data, description character length is at most 3148, wth most below 2000. (20 apparts have more than 2k chars in description)
+			useExtendedSearch: true
+		})
+	);
+	run(() => {
+		updateSearchResults(search, years);
+	});
+	run(() => {
+		eagerStatus, updateSearchResults(search, years);
+	});
 </script>
 
 <svelte:head>
@@ -187,19 +196,19 @@
 				])
 			)}
 			bind:value={currentCategory}
-			let:display
-			let:option
 		>
-			{display}
-			{#if option === 'pending'}
-				<span class="pill" data-done={byCategory.pending.length === 0}
-					>{byCategory.pending.length}
-				</span>
-			{:else if option === 'reported'}
-				<span class="pill danger" data-done={byCategory.reported.length === 0}
-					>{byCategory.reported.length}
-				</span>
-			{/if}
+			{#snippet children({ display, option })}
+				{display}
+				{#if option === 'pending'}
+					<span class="pill" data-done={byCategory.pending.length === 0}
+						>{byCategory.pending.length}
+					</span>
+				{:else if option === 'reported'}
+					<span class="pill danger" data-done={byCategory.reported.length === 0}
+						>{byCategory.reported.length}
+					</span>
+				{/if}
+			{/snippet}
 		</InputSelectOne>
 		<div class="side-by-side">
 			<InputField label="Dernière modification">
@@ -292,31 +301,34 @@
 			itemCount={byCategory[currentCategory].length}
 			itemSize={110}
 		>
-			<div slot="item" let:index let:style {style}>
-				<AppartmentAdminItem
-					{...appartment(currentCategory, index)}
-					selected={selection.includes(appartment(currentCategory, index).id)}
-					on:select={() => {
-						selection = [...selection, appartment(currentCategory, index).id];
-					}}
-					on:deselect={() => {
-						selection = selection.filter(
-							(id) => id !== appartment(currentCategory, index).id
-						);
-					}}
-					updatedAt={effectiveUpdatedAt(appartment(currentCategory, index))}
-					highlight={appartment(currentCategory, index).matches}
-					approved={status(eagerStatus, appartment(currentCategory, index)) !== 'pending'}
-					archived={status(eagerStatus, appartment(currentCategory, index)) ===
-						'archived'}
-					on:approuver={setEagerStatus(index, 'online')}
-					on:archiver={setEagerStatus(index, 'archived')}
-					on:publier={setEagerStatus(index, 'online')}
-					open={openAppartmentId === appartment(currentCategory, index).id}
-					on:close={() => (openAppartmentId = '')}
-					on:open={() => (openAppartmentId = appartment(currentCategory, index).id)}
-				/>
-			</div>
+			{#snippet item({ index, style })}
+				<div {style}>
+					<AppartmentAdminItem
+						{...appartment(currentCategory, index)}
+						selected={selection.includes(appartment(currentCategory, index).id)}
+						on:select={() => {
+							selection = [...selection, appartment(currentCategory, index).id];
+						}}
+						on:deselect={() => {
+							selection = selection.filter(
+								(id) => id !== appartment(currentCategory, index).id
+							);
+						}}
+						updatedAt={effectiveUpdatedAt(appartment(currentCategory, index))}
+						highlight={appartment(currentCategory, index).matches}
+						approved={status(eagerStatus, appartment(currentCategory, index)) !==
+							'pending'}
+						archived={status(eagerStatus, appartment(currentCategory, index)) ===
+							'archived'}
+						on:approuver={setEagerStatus(index, 'online')}
+						on:archiver={setEagerStatus(index, 'archived')}
+						on:publier={setEagerStatus(index, 'online')}
+						open={openAppartmentId === appartment(currentCategory, index).id}
+						on:close={() => (openAppartmentId = '')}
+						on:open={() => (openAppartmentId = appartment(currentCategory, index).id)}
+					/>
+				</div>
+			{/snippet}
 		</VirtualList>
 
 		{#if byCategory[currentCategory].length <= 0}

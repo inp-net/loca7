@@ -153,15 +153,15 @@ export const actions: Actions = {
 			})
 			.catch(async (e) => {
 				await log.fatal('submit_appartment', user, e);
-				throw error(500, { message: "Impossible de créer l'annonce" });
+				error(500, { message: "Impossible de créer l'annonce" });
 			});
 
 		await writePhotosToDisk(appartment.photos, files);
 		try {
 			await sendMail({
-				to: (
-					await prisma.user.findMany({ where: { admin: true } })
-				).map((admin) => admin.email),
+				to: (await prisma.user.findMany({ where: { admin: true } })).map(
+					(admin) => admin.email
+				),
 				subject: `Nouvelle annonce de ${
 					appartment.owner.firstName + ' ' + appartment.owner.lastName
 				} en attente`,
@@ -203,11 +203,11 @@ export const actions: Actions = {
 				'files',
 				files
 			);
-			throw error(500, {
+			error(500, {
 				message: "Impossible de poster l'annonce. Vérifiez la taille de vos images."
 			});
 		}
 
-		throw redirect(302, '/appartements/gerer');
+		redirect(302, '/appartements/gerer');
 	}
 };

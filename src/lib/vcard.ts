@@ -21,7 +21,7 @@ export function vcard(user: { name: string; phone?: string; email: string }): {
 		? new TelProperty(
 				[new TypeParameter(new TextType('home'), 'TelProperty')],
 				new TextType(user?.phone)
-		  )
+			)
 		: null;
 	const email = new EmailProperty(
 		[new PrefParameter(new IntegerType(1))],

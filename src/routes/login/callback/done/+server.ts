@@ -18,7 +18,7 @@ export const GET: RequestHandler = async ({ url, locals, cookies }) => {
 				null,
 				'redirecting to login page /login code AND access_token missing'
 			);
-			throw redirect(303, '/login');
+			redirect(303, '/login');
 		}
 
 		try {
@@ -31,15 +31,15 @@ export const GET: RequestHandler = async ({ url, locals, cookies }) => {
 				'while logging in through OAuth:',
 				JSON.stringify({ error })
 			);
-			throw redirect(303, '/login/callback?error=unauthorized');
+			redirect(303, '/login/callback?error=unauthorized');
 		}
 
 		if (!accessToken) {
 			await log.error('login', null, 'OAuth login failed: no access token');
-			throw redirect(303, '/login/callback?error=unauthorized');
+			redirect(303, '/login/callback?error=unauthorized');
 		}
 
-		throw redirect(303, `/login/callback?access_token=${accessToken}`);
+		redirect(303, `/login/callback?access_token=${accessToken}`);
 	}
 
 	oauthUserInfo = await oauth.identity(accessToken);
@@ -51,7 +51,7 @@ export const GET: RequestHandler = async ({ url, locals, cookies }) => {
 			'while getting user info through OAuth:',
 			JSON.stringify({ error, oauthUserInfo })
 		);
-		throw redirect(303, '/login/callback?error=unauthorized');
+		redirect(303, '/login/callback?error=unauthorized');
 	}
 
 	try {
@@ -92,7 +92,7 @@ export const GET: RequestHandler = async ({ url, locals, cookies }) => {
 				} else {
 					await log.fatal('login', email, `unknown error ${err}`);
 
-					throw error(500, 'Connexion impossible.');
+					error(500, 'Connexion impossible.');
 				}
 		}
 
@@ -134,7 +134,7 @@ export const GET: RequestHandler = async ({ url, locals, cookies }) => {
 			});
 		}
 	} catch (err) {
-		throw redirect(303, '/login');
+		redirect(303, '/login');
 	}
 
 	await log.info('login', user.email, 'success, through OAuth');
@@ -144,5 +144,5 @@ export const GET: RequestHandler = async ({ url, locals, cookies }) => {
 		await log.error('login', user.email, 'error while creating session thru OAuth', error);
 	}
 	cookies.set('authed_via', 'oauth', { path: '/' });
-	throw redirect(303, '/');
+	redirect(303, '/');
 };

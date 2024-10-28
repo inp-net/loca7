@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			user,
 			`token ${params.token} is invalid (expired or not found)`
 		);
-		throw redirect(302, '/reset-password#invalid-token');
+		redirect(302, '/reset-password#invalid-token');
 	}
 	try {
 		const currentEmailKey = await prisma.key.findFirst({
@@ -39,7 +39,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		return { creatingPassword, holder: passwordReset.user };
 	} catch (err) {
 		await log.fatal('use_password_reset', user, `while finding current email key: ${err}`);
-		throw error(500, {
+		error(500, {
 			message: `Une erreur s’est produite. Veuillez réessayer. Code technique: FINDING_CURRENT_EMAIL_KEY`
 		});
 	}
@@ -71,7 +71,7 @@ export const actions: Actions = {
 				user,
 				`token ${params.token} is invalid (expired or not found)`
 			);
-			throw redirect(302, '/reset-password#invalid-token');
+			redirect(302, '/reset-password#invalid-token');
 		}
 
 		// Delete all password resets for this user
@@ -105,7 +105,7 @@ export const actions: Actions = {
 						typeof v === 'bigint' ? v.toString() : v
 					)
 			);
-			throw error(400, { message: "Aucun mot de passe n'a été fourni." });
+			error(400, { message: "Aucun mot de passe n'a été fourni." });
 		}
 
 		const currentEmailKey = await prisma.key.findFirst({
@@ -189,9 +189,6 @@ export const actions: Actions = {
 				JSON.stringify(passwordReset, (_, v) => (typeof v === 'bigint' ? v.toString() : v))
 		);
 
-		throw redirect(
-			302,
-			`/login#password-${creatingPassword ? 'definition' : ' reset'}-successful`
-		);
+		redirect(302, `/login#password-${creatingPassword ? 'definition' : ' reset'}-successful`);
 	}
 };

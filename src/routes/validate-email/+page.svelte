@@ -5,7 +5,11 @@
 	import { VALIDATION_LINK_VALID_FOR_MILLISECONDS } from '$lib/constants';
 	import type { PageData } from './$types';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	let sent: boolean = $page.url.hash === '#sent';
 </script>

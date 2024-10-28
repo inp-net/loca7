@@ -2,7 +2,12 @@
 	import { photoURL } from '$lib/photos';
 	import { appartmentShortDescription, appartmentTitle } from '$lib/types';
 	import type { LayoutData } from './$types';
-	export let data: LayoutData;
+	interface Props {
+		data: LayoutData;
+		children?: import('svelte').Snippet;
+	}
+
+	let { data, children }: Props = $props();
 	const appartment = data.appartment;
 </script>
 
@@ -18,4 +23,4 @@
 	/>
 </svelte:head>
 
-<slot />
+{@render children?.()}

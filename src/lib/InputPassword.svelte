@@ -9,24 +9,45 @@
 	import { browser } from '$app/environment';
 	import { tooltip } from './tooltip';
 
-	export let value: string;
-	export let placeholder: string = '';
-	export let id: string | undefined = undefined;
-	export let name: string | undefined = undefined;
-	export let shown = false;
-	export let label: string;
-	export let feedback: boolean = false;
-	export let required: boolean = false;
-	export let schema: Zod.ZodString = z.string();
-	export let showEmptyErrors = true;
-	export let errorMessage: string | undefined = undefined;
-	export let userInputs: string[] = [];
+	interface Props {
+		value: string;
+		placeholder?: string;
+		id?: string | undefined;
+		name?: string | undefined;
+		shown?: boolean;
+		label: string;
+		feedback?: boolean;
+		required?: boolean;
+		schema?: Zod.ZodString;
+		showEmptyErrors?: boolean;
+		errorMessage?: string | undefined;
+		userInputs?: string[];
+	}
 
-	let analysis;
-	let strength: 'dangerous' | 'weak' | 'good';
-	let crackTimeDisplay: string;
+	let {
+		value = $bindable(),
+		placeholder = '',
+		id = undefined,
+		name = undefined,
+		shown = $bindable(false),
+		label,
+		feedback = false,
+		required = false,
+		schema = z.string(),
+		showEmptyErrors = true,
+		errorMessage = undefined,
+		userInputs = []
+	}: Props = $props();
 
-	let currentPage: string = '';
+	let analysis = $derived(zxcvbn(value, userInputs));
+	let strength: 'dangerous' | 'weak' | 'good' = $derived(
+		analysis.score <= 1 ? 'dangerous' : analysis.score <= 2 ? 'weak' : 'good'
+	);
+	let crackTimeDisplay: string = $derived(
+		durationDisplay(analysis.crack_times_seconds.offline_slow_hashing_1e4_per_second)
+	);
+
+	let currentPage: string = $state('');
 
 	onMount(() => {
 		if (browser) {
@@ -34,15 +55,12 @@
 		}
 	});
 
-	$: analysis = zxcvbn(value, userInputs);
-	$: strength = analysis.score <= 1 ? 'dangerous' : analysis.score <= 2 ? 'weak' : 'good';
-	$: strengthDisplay = {
-		dangerous: 'dangereuse',
-		weak: 'faible',
-		good: 'suffisante'
-	}[strength];
-	$: crackTimeDisplay = durationDisplay(
-		analysis.crack_times_seconds.offline_slow_hashing_1e4_per_second
+	let strengthDisplay = $derived(
+		{
+			dangerous: 'dangereuse',
+			weak: 'faible',
+			good: 'suffisante'
+		}[strength]
 	);
 </script>
 

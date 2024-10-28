@@ -199,9 +199,9 @@ export const actions: Actions = {
 
 		if (!edit.applied) {
 			await sendMail({
-				to: (
-					await prisma.user.findMany({ where: { admin: true } })
-				).map((admin) => admin.email),
+				to: (await prisma.user.findMany({ where: { admin: true } })).map(
+					(admin) => admin.email
+				),
 				subject: `Modification de l'annonce #${appartment.number} en attente`,
 				template: 'appartment-edit-to-validate',
 				data: {
@@ -278,7 +278,7 @@ export const actions: Actions = {
 												edit,
 												ENSEEIHT
 											)
-									  )
+										)
 									: null,
 							byFoot:
 								edit.latitude && edit.longitude
@@ -288,7 +288,7 @@ export const actions: Actions = {
 												edit,
 												ENSEEIHT
 											)
-									  )
+										)
 									: null,
 							byPublicTransport: null // TODO
 						}
@@ -319,7 +319,7 @@ export const actions: Actions = {
 			});
 		}
 
-		throw redirect(
+		redirect(
 			302,
 			user?.admin ? `/administration` : `/appartements/${appartment.id}/modifier/fait`
 		);

@@ -7,7 +7,11 @@
 
 	const returnTo = $page.url.searchParams.get('from');
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 </script>
 
 <main>

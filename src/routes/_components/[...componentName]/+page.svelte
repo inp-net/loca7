@@ -1,25 +1,29 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { page } from '$app/stores';
 
 	let [componentName, slotContent] = $page.params['componentName'].split('/', 2);
-	let props = Object.fromEntries(
-		Array(...$page.url.searchParams.entries()).map(([k, v]) => {
-			let value;
-			if (v === '') {
-				value = true;
-			} else {
-				try {
-					value = JSON.parse(v);
-				} catch (e) {
-					value = v;
+	let props = $state(
+		Object.fromEntries(
+			Array(...$page.url.searchParams.entries()).map(([k, v]) => {
+				let value;
+				if (v === '') {
+					value = true;
+				} else {
+					try {
+						value = JSON.parse(v);
+					} catch (e) {
+						value = v;
+					}
 				}
-			}
-			return [k, value];
-		})
+				return [k, value];
+			})
+		)
 	);
 
-	let title: string;
-	$: {
+	let title: string = $state();
+	run(() => {
 		title = `<${componentName}`;
 		if (Object.keys(props).length > 0) {
 			title +=
@@ -33,12 +37,12 @@
 		} else {
 			title += '/>';
 		}
-	}
+	});
 
-	let wireframe = false;
-	let componentDomNode: HTMLElement;
-	let newPropKey = '';
-	let newPropValue = '';
+	let wireframe = $state(false);
+	let componentDomNode: HTMLElement = $state();
+	let newPropKey = $state('');
+	let newPropValue = $state('');
 </script>
 
 <svelte:head>
@@ -50,11 +54,11 @@
 	{#await import(`../../../lib/${componentName}.svelte`) then component}
 		<main class:wireframe bind:this={componentDomNode}>
 			{#if slotContent}
-				<svelte:component this={component.default} {...props}>
+				<component.default {...props}>
 					{slotContent}
-				</svelte:component>
+				</component.default>
 			{:else}
-				<svelte:component this={component.default} {...props} />
+				<component.default {...props} />
 			{/if}
 		</main>
 		<section class="props">
@@ -62,7 +66,7 @@
 				<label for={`prop-${key}`}
 					>{key}
 					<input id={`prop-${key}`} type="text" bind:value={props[key]} />
-					<button on:click={() => delete props[key]}>del</button>
+					<button onclick={() => delete props[key]}>del</button>
 				</label>
 			{/each}
 
@@ -71,7 +75,7 @@
 				<input type="text" bind:value={newPropKey} />
 				<input type="text" bind:value={newPropValue} />
 				<button
-					on:click={() => {
+					onclick={() => {
 						props[newPropKey] = JSON.parse(newPropValue);
 						newPropKey = '';
 						newPropValue = '';

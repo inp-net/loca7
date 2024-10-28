@@ -21,7 +21,7 @@
 
 			<picture>
 				<img src="aide/step-0.png" />
-				<div class="cursor" style="top: -36.25%;" />
+				<div class="cursor" style="top: -36.25%;"></div>
 			</picture>
 		</li>
 
@@ -33,7 +33,7 @@
 
 			<picture>
 				<img src="aide/step-1.png" />
-				<div class="cursor" style="top: -12.083333333333334%;" />
+				<div class="cursor" style="top: -12.083333333333334%;"></div>
 			</picture>
 		</li>
 
@@ -45,7 +45,7 @@
 
 			<picture>
 				<img src="aide/step-2.png" />
-				<div class="cursor" style="bottom: -15%;" />
+				<div class="cursor" style="bottom: -15%;"></div>
 			</picture>
 		</li>
 
@@ -57,7 +57,7 @@
 
 			<picture>
 				<img src="aide/step-3.png" />
-				<div class="cursor" style="" />
+				<div class="cursor" style=""></div>
 			</picture>
 		</li>
 
@@ -69,7 +69,7 @@
 
 			<picture>
 				<img src="aide/step-4.png" />
-				<div class="cursor" style="top: -10.208333333333334%;" />
+				<div class="cursor" style="top: -10.208333333333334%;"></div>
 			</picture>
 		</li>
 
@@ -81,7 +81,7 @@
 
 			<picture>
 				<img src="aide/step-5.png" />
-				<div class="cursor" style="" />
+				<div class="cursor" style=""></div>
 			</picture>
 		</li>
 		<!-- END STEPS -->
@@ -93,7 +93,7 @@
 					soumettre.
 				</p>
 			</div>
-			<picture />
+			<picture></picture>
 		</li>
 	</ul>
 </main>

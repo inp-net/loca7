@@ -1,10 +1,15 @@
 <script lang="ts">
-	export let id: string = '';
-	export let href: string;
-	export let current: boolean = false;
+	interface Props {
+		id?: string;
+		href: string;
+		current?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let { id = '', href, current = false, children }: Props = $props();
 </script>
 
-<a aria-current={current} {href} {id}><slot /></a>
+<a aria-current={current} {href} {id}>{@render children?.()}</a>
 
 <style>
 	a {

@@ -70,7 +70,7 @@ export const guards: {
 	 * Checks if the user is logged in, if not, redirects to /login
 	 */
 	loggedIn(user, session, url) {
-		if (!(user && session)) throw redirect(302, '/login?go=' + url.pathname);
+		if (!(user && session)) redirect(302, '/login?go=' + url.pathname);
 	},
 	/**
 	 * Checks if the user has validated their email, if not, redirects to /validate-email
@@ -78,7 +78,7 @@ export const guards: {
 	 */
 	emailValidated(user, session, url) {
 		guards.loggedIn(user, session, url);
-		if (!user.emailIsValidated) throw redirect(302, '/validate-email?go=' + url.pathname);
+		if (!user.emailIsValidated) redirect(302, '/validate-email?go=' + url.pathname);
 	},
 	/**
 	 * Checks if the user is an admin, if not, throws an error
@@ -87,14 +87,14 @@ export const guards: {
 	 */
 	isAdmin(user, session, url) {
 		guards.emailValidated(user, session, url);
-		if (!user.admin) throw error(401, { message: "Vous n'êtes pas administrateur" });
+		if (!user.admin) error(401, { message: "Vous n'êtes pas administrateur" });
 	},
 	/**
 	 * Acts like guards.isAdmin, but redirects to / instead of throwing an error
 	 */
 	isAdminElseRedirect(user, session, url) {
 		guards.emailValidated(user, session, url);
-		if (!user.admin) throw redirect(302, '/');
+		if (!user.admin) redirect(302, '/');
 	},
 	/**
 	 * Checks if the appartement is accessible to the user, if not, throws an error
@@ -102,7 +102,7 @@ export const guards: {
 	 */
 	appartmentAccessible(user, appartment) {
 		if (appartment === null || !appartmentAccessible(user, appartment))
-			throw error(404, {
+			error(404, {
 				message: "Cette annonce n'existe pas, ou n'est pas (encore) publique"
 			});
 	},
@@ -111,7 +111,7 @@ export const guards: {
 	 * WARNING: Does not imply a check to see if the user is logged in
 	 */
 	appartmentExists(appartment) {
-		if (appartment === null) throw error(404, { message: "Cette annonce n'existe pas" });
+		if (appartment === null) error(404, { message: "Cette annonce n'existe pas" });
 	},
 
 	/**
@@ -120,17 +120,17 @@ export const guards: {
 	 */
 	appartmentOwnedByUser(user, appartment) {
 		if (appartment === null || appartment.owner.id !== user?.id)
-			throw error(404, { message: "Cette annonce n'existe pas" });
+			error(404, { message: "Cette annonce n'existe pas" });
 	},
 
 	isGod(user, session, url) {
 		guards.emailValidated(user, session, url);
-		if (!user.god) throw error(401, { message: "Vous n'êtes pas un dieu" });
+		if (!user.god) error(401, { message: "Vous n'êtes pas un dieu" });
 	},
 
 	isGodOrAdmin(user, session, url) {
 		guards.emailValidated(user, session, url);
 		if (!user.god && !user.admin)
-			throw error(401, { message: "Vous n'êtes pas un dieu ou un administrateur" });
+			error(401, { message: "Vous n'êtes pas un dieu ou un administrateur" });
 	}
 };

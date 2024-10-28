@@ -41,9 +41,13 @@
 	import ButtonFloating from '$lib/ButtonFloating.svelte';
 	import { differenceInMonths } from 'date-fns';
 
-	export let data: LayoutData;
-	const { user, appartment: appart } = data;
-	let reports = appart.reports;
+	interface Props {
+		data: LayoutData;
+	}
+
+	let { data }: Props = $props();
+	const { user, appartment: appart } = $state(data);
+	let reports = $state(appart.reports);
 
 	let secondsAvailableSince = (Date.now() - appart.availableAt.valueOf()) * 1e-3;
 
@@ -65,7 +69,7 @@
 		};
 	}
 
-	$: liked = appart.likes.some((like) => like.by.id === user?.id);
+	let liked = $derived(appart.likes.some((like) => like.by.id === user?.id));
 	let reportSubmitted = $page.url.hash === '#report-submitted';
 	let hasPendingModifications = (appart?.history ?? []).filter((h) => !h.applied).length > 0;
 </script>
@@ -107,7 +111,8 @@
 			<p class="typo-title">
 				Cette annonce {#if !appart.approved}n'a pas encore été approuvée{/if}
 				{#if hasPendingModifications && !appart.approved}et{/if}
-				{#if hasPendingModifications} a des modifications en attente{/if}
+				{#if hasPendingModifications}
+					a des modifications en attente{/if}
 			</p>
 			{#if !user?.admin}
 				<p class="explainer typo-paragraph">
@@ -531,15 +536,29 @@
 						{/if}
 						{#if report.contact}
 							<div class="contact">
-								<div class="typo-field-label label">Signalé par 
-							<span class="action typo-paragraph">
-								{#if report.contact.includes('@')}
-								<ButtonSecondary insideProse icon="email" href="/send-mail?{new URLSearchParams({to: report.contact, subject: `À propos de votre signalement de l'annonce #${appart.number}`, body: `Référence du signalement: ${report.id}`}).toString()}">Contacter</ButtonSecondary>
-								{:else}
-								<ButtonSecondary insideProse icon="phone" href="tel:{report.contact}">Contacter</ButtonSecondary>
-								{/if}
-							</span>
-							</div>
+								<div class="typo-field-label label">
+									Signalé par
+									<span class="action typo-paragraph">
+										{#if report.contact.includes('@')}
+											<ButtonSecondary
+												insideProse
+												icon="email"
+												href="/send-mail?{new URLSearchParams({
+													to: report.contact,
+													subject: `À propos de votre signalement de l'annonce #${appart.number}`,
+													body: `Référence du signalement: ${report.id}`
+												}).toString()}">Contacter</ButtonSecondary
+											>
+										{:else}
+											<ButtonSecondary
+												insideProse
+												icon="phone"
+												href="tel:{report.contact}"
+												>Contacter</ButtonSecondary
+											>
+										{/if}
+									</span>
+								</div>
 
 								{report.contact}
 							</div>

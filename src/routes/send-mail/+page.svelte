@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import InputField from '$lib/InputField.svelte';
 	import Fuse from 'fuse.js';
 	import type { PageData } from './$types';
@@ -11,23 +13,27 @@
 	import InputCheckbox from '$lib/InputCheckbox.svelte';
 	import { page } from '$app/stores';
 
-	export let data: PageData;
-	let { allEmails } = data;
-	let recipients: string = '';
-	let subject: string = '';
-	let body: string = '';
-	let bypassAuthKeyCheck = false;
+	interface Props {
+		data: PageData;
+	}
 
-	$: {
+	let { data }: Props = $props();
+	let { allEmails } = data;
+	let recipients: string = $state('');
+	let subject: string = $state('');
+	let body: string = $state('');
+	let bypassAuthKeyCheck = $state(false);
+
+	run(() => {
 		if (!recipients) {
-			recipients = $page.url.searchParams.get('to') ?? ''
+			recipients = $page.url.searchParams.get('to') ?? '';
 			if (recipients) {
 				bypassAuthKeyCheck = true;
 			}
 		}
-		body = body || `<p><span>${$page.url.searchParams.get('body') ?? ''}</span></p>`
-		subject = subject || ($page.url.searchParams.get('subject') ?? '')
-	}
+		body = body || `<p><span>${$page.url.searchParams.get('body') ?? ''}</span></p>`;
+		subject = subject || ($page.url.searchParams.get('subject') ?? '');
+	});
 
 	const emailSearcher = new Fuse(allEmails, {
 		shouldSort: true,
@@ -35,8 +41,8 @@
 		useExtendedSearch: true
 	});
 
-	let emailSuggestions: string[] = [];
-	$: {
+	let emailSuggestions: string[] = $state([]);
+	run(() => {
 		const emails = recipients
 			.split(',')
 			.map((e) => e.trim())
@@ -50,7 +56,7 @@
 				.search(lastEmail)
 				.map((r) => [...emails.slice(0, emails.length - 1), r.item].join(', '));
 		}
-	}
+	});
 </script>
 
 <main>
@@ -66,8 +72,8 @@
 				unit={recipients === ''
 					? ''
 					: recipients.split(',').every((email) => allEmails.includes(email.trim()))
-					? ''
-					: 'inconnus'}
+						? ''
+						: 'inconnus'}
 			/>
 		</InputField>
 

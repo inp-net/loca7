@@ -1,16 +1,20 @@
 <script lang="ts">
 	import type { Name as IconName } from '$lib/icons/types';
 
-	export let name: IconName;
-	export let strokeWidth: string = '5';
-	export let color = 'icon-color';
-	export let flip = false;
+	interface Props {
+		name: IconName;
+		strokeWidth?: string;
+		color?: string;
+		flip?: boolean;
+	}
+
+	let { name, strokeWidth = '5', color = 'icon-color', flip = false }: Props = $props();
 	let _color =
 		color === 'currentColor'
 			? color
 			: color.startsWith('#')
-			? color
-			: `var(--${color}, var(--fg))`;
+				? color
+				: `var(--${color}, var(--fg))`;
 </script>
 
 <!-- generate cases -->

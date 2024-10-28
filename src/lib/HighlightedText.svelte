@@ -4,16 +4,21 @@
 	const first = ([first]: Fuse.RangeTuple) => first;
 	const second = ([, second]: Fuse.RangeTuple) => second;
 
-	export let indices: Fuse.RangeTuple[] | undefined = [];
+	interface Props {
+		indices?: Fuse.RangeTuple[] | undefined;
+		children?: import('svelte').Snippet;
+	}
+
+	let { indices = [], children }: Props = $props();
 
 	const startsHighlight = (index: number, indices) => (indices || []).map(first).includes(index);
 	const endsHighlight = (index: number, indices) => (indices || []).map(second).includes(index);
 
-	let highlightSource: HTMLSpanElement;
+	let highlightSource: HTMLSpanElement = $state();
 </script>
 
 <span class="highlight-source" bind:this={highlightSource}>
-	<slot><!-- optional fallback --></slot>
+	{#if children}{@render children()}{:else}<!-- optional fallback -->{/if}
 </span>
 
 {@html Array.from(highlightSource?.innerHTML || '')

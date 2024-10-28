@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { run, createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { createEventDispatcher, onMount } from 'svelte';
 	import Icon from './Icon.svelte';
 	import { v4 as uuidv4 } from 'uuid';
@@ -7,27 +10,69 @@
 	import type { ZodSchema } from 'zod';
 	const emit = createEventDispatcher();
 
-	export let type: HTMLInputElement['type'];
-	export let value: string | number | Date | null | undefined;
-	export let id: string = `input-${uuidv4()}`;
-	export let autocomplete: string | undefined = undefined;
-	export let name: string | undefined = undefined;
-	export let initial: string | number | Date | null | undefined = undefined;
-	export let unit: string = '';
-	export let placeholder: string = '';
-	export let actionIcon: IconName | '' = '';
-	export let suggestions: string[] | undefined = undefined;
-	export let required: boolean = false;
-	export let schema: ZodSchema;
-	export let leftIcon: IconName | '' = '';
-	export let closeKeyboardOnEnter: boolean = false;
+	let _errorMessage: string = $state('');
+	interface Props {
+		type: HTMLInputElement['type'];
+		value: string | number | Date | null | undefined;
+		id?: string;
+		autocomplete?: string | undefined;
+		name?: string | undefined;
+		initial?: string | number | Date | null | undefined;
+		unit?: string;
+		placeholder?: string;
+		actionIcon?: IconName | '';
+		suggestions?: string[] | undefined;
+		required?: boolean;
+		schema: ZodSchema;
+		leftIcon?: IconName | '';
+		closeKeyboardOnEnter?: boolean;
+		errorMessage?: string;
+		messageIsWarning?: boolean;
+	}
 
-	let showEmptyErrors: boolean = false;
-	let valueString: string =
+	let {
+		type,
+		value = $bindable(),
+		id = `input-${uuidv4()}`,
+		autocomplete = undefined,
+		name = undefined,
+		initial = undefined,
+		unit = '',
+		placeholder = '',
+		actionIcon = '',
+		suggestions = undefined,
+		required = false,
+		schema,
+		leftIcon = '',
+		closeKeyboardOnEnter = false,
+		errorMessage = '',
+		messageIsWarning = false
+	}: Props = $props();
+
+	let showEmptyErrors: boolean = $state(false);
+	let valueString: string = $state(
 		type === 'date' && value instanceof Date
 			? value?.toISOString()?.split('T')[0]
-			: value?.toString() ?? '';
-	$: {
+			: (value?.toString() ?? '')
+	);
+
+	let errored = $state(false);
+
+	let resettable = $state(false);
+
+	let focused = $state(false);
+
+	let inputContainer: HTMLDivElement | undefined = $state();
+
+	onMount(() => {
+		inputContainer
+			?.closest('form')
+			?.querySelector('button[type=submit]')
+			?.addEventListener('click', () => {
+				showEmptyErrors = true;
+			});
+	});
+	run(() => {
 		switch (type) {
 			case 'number':
 				value = +valueString.replace(',', '.');
@@ -42,12 +87,8 @@
 			default:
 				value = valueString;
 		}
-	}
-
-	export let errorMessage: string = '';
-	let _errorMessage: string = '';
-	export let messageIsWarning: boolean = false;
-	$: {
+	});
+	run(() => {
 		if (valueString === '' && !showEmptyErrors) {
 			_errorMessage = '';
 		} else if (errorMessage !== '') {
@@ -71,25 +112,12 @@
 				}
 			}
 		}
-	}
-
-	let errored = false;
-	$: errored = _errorMessage !== '';
-
-	let resettable = false;
-	$: resettable = typeof initial !== 'undefined' && value !== initial;
-
-	let focused = false;
-
-	let inputContainer: HTMLDivElement;
-
-	onMount(() => {
-		inputContainer
-			.closest('form')
-			?.querySelector('button[type=submit]')
-			?.addEventListener('click', () => {
-				showEmptyErrors = true;
-			});
+	});
+	run(() => {
+		errored = _errorMessage !== '';
+	});
+	run(() => {
+		resettable = typeof initial !== 'undefined' && value !== initial;
 	});
 </script>
 
@@ -133,8 +161,8 @@
 			/>
 		{:else}
 			<input
-				on:keyup
-				on:keypress={(e) => {
+				onkeyup={bubble('keyup')}
+				onkeypress={(e) => {
 					if (e.key === 'Enter' && closeKeyboardOnEnter) {
 						e.target.blur();
 					}
@@ -146,18 +174,18 @@
 				{required}
 				{autocomplete}
 				{placeholder}
-				on:input={(e) => {
+				oninput={(e) => {
 					valueString = e.target?.value;
 					if (valueString === undefined) valueString = '';
 					if (valueString !== '') showEmptyErrors = true;
 					emit('input', e);
 				}}
-				on:focus={() => (focused = true)}
-				on:blur={() => (focused = false)}
+				onfocus={() => (focused = true)}
+				onblur={() => (focused = false)}
 			/>
 		{/if}
 		{#if actionIcon}
-			<button type="button" class="action" on:click={() => emit('action')}>
+			<button type="button" class="action" onclick={() => emit('action')}>
 				<Icon name={actionIcon} color="fg" />
 			</button>
 		{/if}
@@ -165,13 +193,13 @@
 			<button
 				type="button"
 				class="reset"
-				on:click|stopPropagation={() => {
+				onclick={stopPropagation(() => {
 					value = initial;
 					valueString =
 						type === 'date' && value instanceof Date
 							? value?.toISOString()?.split('T')[0]
-							: value?.toString() ?? '';
-				}}
+							: (value?.toString() ?? '');
+				})}
 			>
 				<Icon name="reset" color="fg" />
 			</button>

@@ -1,15 +1,33 @@
 <script lang="ts">
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import Icon from './Icon.svelte';
 	import type { Name as IconName } from './icons/types';
 
-	export let icon: IconName = '';
-	export let id: string = '';
-	export let href: string = '';
-	export let formaction: string | undefined = undefined;
-	export let dangerous: boolean = false;
-	export let submits = false;
-	export let download: string | undefined = undefined;
-	export let insideProse = false;
+	interface Props {
+		icon?: IconName;
+		id?: string;
+		href?: string;
+		formaction?: string | undefined;
+		dangerous?: boolean;
+		submits?: boolean;
+		download?: string | undefined;
+		insideProse?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		icon = '',
+		id = '',
+		href = '',
+		formaction = undefined,
+		dangerous = false,
+		submits = false,
+		download = undefined,
+		insideProse = false,
+		children
+	}: Props = $props();
 </script>
 
 <svelte:element
@@ -22,14 +40,14 @@
 	{download}
 	{formaction}
 	{id}
-	on:click
+	onclick={bubble('click')}
 >
 	{#if icon}
 		<div class="icon">
 			<Icon name={icon} />
 		</div>
 	{/if}
-	<slot />
+	{@render children?.()}
 </svelte:element>
 
 <style>

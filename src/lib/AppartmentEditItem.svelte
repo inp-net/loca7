@@ -7,9 +7,13 @@
 	import { EDITABLE_FIELDS } from './appartmentDiff';
 	import type { AppartmentEdit, Appartment } from '@prisma/client';
 
-	export let current: Appartment;
-	export let edit: AppartmentEdit;
-	export let user: User;
+	interface Props {
+		current: Appartment;
+		edit: AppartmentEdit;
+		user: User;
+	}
+
+	let { current, edit, user }: Props = $props();
 
 	const modified = (field) => appartmentDiff.modified(field, current, edit);
 	const modification = (field) => appartmentDiff.modification(field, current, edit);

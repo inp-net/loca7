@@ -2,17 +2,29 @@
 	import { z } from 'zod';
 	import BaseInputText from './BaseInputText.svelte';
 
-	export let unit: string = '';
-	export let value: number | undefined;
-	export let id: string | undefined = undefined;
-	export let name: string | undefined = undefined;
-	export let initial: number | undefined = undefined;
-	export let placeholder: string = '';
-	export let closeKeyboardOnEnter: boolean = false;
+	interface Props {
+		unit?: string;
+		value: number | undefined;
+		id?: string | undefined;
+		name?: string | undefined;
+		initial?: number | undefined;
+		placeholder?: string;
+		closeKeyboardOnEnter?: boolean;
+		schema?: Zod.ZodSchema;
+		required?: boolean;
+	}
 
-	export let schema: Zod.ZodSchema = z.number();
-
-	export let required: boolean = false;
+	let {
+		unit = '',
+		value = $bindable(),
+		id = undefined,
+		name = undefined,
+		initial = undefined,
+		placeholder = '',
+		closeKeyboardOnEnter = false,
+		schema = z.number(),
+		required = false
+	}: Props = $props();
 </script>
 
 <BaseInputText

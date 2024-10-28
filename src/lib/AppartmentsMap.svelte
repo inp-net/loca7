@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { onMount } from 'svelte';
 	import CardAppartment from './CardAppartment.svelte';
 	import CarouselImages from './CarouselImages.svelte';
@@ -7,13 +9,22 @@
 	import { ENSEEIHT, readableOn } from './utils';
 	import ButtonCircle from './ButtonCircle.svelte';
 	import type { Appartment, Photo } from '@prisma/client';
-	export let appartments: (Appartment & { photos: Photo[] })[];
 
-	export let center: GeographicPoint = ENSEEIHT;
-	export let scrollIsZoom: boolean = false;
-	export let publicTransportStations: boolean = false;
+	interface Props {
+		appartments: (Appartment & { photos: Photo[] })[];
+		center?: GeographicPoint;
+		scrollIsZoom?: boolean;
+		publicTransportStations?: boolean;
+	}
 
-	let leaflet;
+	let {
+		appartments,
+		center = ENSEEIHT,
+		scrollIsZoom = false,
+		publicTransportStations = false
+	}: Props = $props();
+
+	let leaflet = $state();
 	let map;
 	let appartmentsLayer;
 	const markerSize = 40;
@@ -141,10 +152,12 @@
 		updateMarkers(appartments);
 	});
 
-	$: updateMarkers(appartments);
+	run(() => {
+		updateMarkers(appartments);
+	});
 </script>
 
-<div id="map" class="map" bind:this={leaflet} />
+<div id="map" class="map" bind:this={leaflet}></div>
 
 <aside class="map-marker-popups">
 	<div class="map-enseeiht-popup">

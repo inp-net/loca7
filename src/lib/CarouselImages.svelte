@@ -2,10 +2,14 @@
 	import { clamp } from '$lib/utils';
 	import Icon from './Icon.svelte';
 
-	export let contain: boolean = false;
-	export let cover: boolean = false;
-	export let images: string[];
-	export let currentIndex: number = 0;
+	interface Props {
+		contain?: boolean;
+		cover?: boolean;
+		images: string[];
+		currentIndex?: number;
+	}
+
+	let { contain = false, cover = false, images, currentIndex = $bindable(0) }: Props = $props();
 
 	let touchStart: { x: number; y: number } | null = null;
 
@@ -27,15 +31,15 @@
 <div
 	class="carousel"
 	class:single-image={images.length === 1}
-	on:touchstart={touchStartHandler}
-	on:touchend={touchEndHandler}
+	ontouchstart={touchStartHandler}
+	ontouchend={touchEndHandler}
 >
-	<div class="image-gradient-overlay" />
+	<div class="image-gradient-overlay"></div>
 	<nav>
 		<button
 			aria-hidden={currentIndex <= 0}
 			class="prev arrow"
-			on:click={() => {
+			onclick={() => {
 				currentIndex--;
 			}}><Icon color="#fff" name="next" flip /></button
 		>
@@ -44,17 +48,17 @@
 				<li>
 					<button
 						aria-current={currentIndex === i}
-						on:click={() => {
+						onclick={() => {
 							currentIndex = i;
 						}}
-					/>
+					></button>
 				</li>
 			{/each}
 		</ul>
 		<button
 			aria-hidden={currentIndex >= images.length - 1}
 			class="next arrow"
-			on:click={() => {
+			onclick={() => {
 				currentIndex++;
 			}}><Icon color="#fff" name="next" /></button
 		>

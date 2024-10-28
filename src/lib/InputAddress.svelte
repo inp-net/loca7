@@ -1,29 +1,48 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import BaseInputText from './BaseInputText.svelte';
 	import { v4 as uuidv4 } from 'uuid';
 	import { distanceBetween, ENSEEIHT } from './utils';
 	import { throttle } from 'lodash-es';
 	import { z } from 'zod';
 
-	export let value: string;
-	export let latitude: number | null = null;
-	export let longitude: number | null = null;
-	export let id: string = `input-address-${uuidv4()}`;
-	export let name: string | undefined = undefined;
-	export let initial: string | undefined = undefined;
-	export let placeholder: string = '';
-	export let required: boolean = false;
-	export let showEmptyErrors: boolean = true;
-	export let schema: Zod.ZodString = z.string();
+	interface Props {
+		value: string;
+		latitude?: number | null;
+		longitude?: number | null;
+		id?: string;
+		name?: string | undefined;
+		initial?: string | undefined;
+		placeholder?: string;
+		required?: boolean;
+		showEmptyErrors?: boolean;
+		schema?: Zod.ZodString;
+	}
 
-	let messageIsWarning = false;
-	let errorMessage: string = '';
-	let suggestions: string[] = [];
-	let results: object[] = [];
+	let {
+		value = $bindable(),
+		latitude = $bindable(null),
+		longitude = $bindable(null),
+		id = `input-address-${uuidv4()}`,
+		name = undefined,
+		initial = undefined,
+		placeholder = '',
+		required = false,
+		showEmptyErrors = true,
+		schema = z.string()
+	}: Props = $props();
 
-	let distanceToN7: number | null = null;
-	$: distanceToN7 =
-		latitude && longitude ? distanceBetween({ latitude, longitude }, ENSEEIHT) : null;
+	let messageIsWarning = $state(false);
+	let errorMessage: string = $state('');
+	let suggestions: string[] = $state([]);
+	let results: object[] = $state([]);
+
+	let distanceToN7: number | null = $state(null);
+	run(() => {
+		distanceToN7 =
+			latitude && longitude ? distanceBetween({ latitude, longitude }, ENSEEIHT) : null;
+	});
 
 	async function updateSuggestions() {
 		if (value.length <= 3) {
@@ -45,24 +64,30 @@
 		// }
 	}
 
-	$: suggestions = results.map(
-		({ properties: { name, postcode, city } }) => `${name}, ${postcode} ${city}`
-	);
+	run(() => {
+		suggestions = results.map(
+			({ properties: { name, postcode, city } }) => `${name}, ${postcode} ${city}`
+		);
+	});
 
-	$: if (value === '') {
-		latitude = null;
-		longitude = null;
-	}
+	run(() => {
+		if (value === '') {
+			latitude = null;
+			longitude = null;
+		}
+	});
 
-	$: if (showEmptyErrors && required && !value) {
-		errorMessage = 'Ce champ est requis';
-		messageIsWarning = false;
-	} else if (distanceToN7 !== null && distanceToN7 > 20e3) {
-		errorMessage = `L'adresse saisie est très loin de l'ENSEEIHT. Vérifiez l'adresse saisie.`;
-		messageIsWarning = true;
-	} else {
-		errorMessage = '';
-	}
+	run(() => {
+		if (showEmptyErrors && required && !value) {
+			errorMessage = 'Ce champ est requis';
+			messageIsWarning = false;
+		} else if (distanceToN7 !== null && distanceToN7 > 20e3) {
+			errorMessage = `L'adresse saisie est très loin de l'ENSEEIHT. Vérifiez l'adresse saisie.`;
+			messageIsWarning = true;
+		} else {
+			errorMessage = '';
+		}
+	});
 </script>
 
 <BaseInputText

@@ -51,8 +51,8 @@ export function display(
 				(field === 'surface'
 					? ' m²'
 					: ['charges', 'rent', 'deposit'].includes(field)
-					? '€'
-					: '')
+						? '€'
+						: '')
 			);
 
 		case 'boolean':

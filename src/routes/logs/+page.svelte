@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: `<tr>` is invalid inside `<table>` -->
 <script lang="ts">
 	import InputField from '$lib/InputField.svelte';
 	import InputSelectMultiple from '$lib/InputSelectMultiple.svelte';

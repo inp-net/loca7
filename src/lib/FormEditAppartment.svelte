@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import type { User } from '@prisma/client';
 	import ButtonPrimary from './ButtonPrimary.svelte';
 	import InputAddress from './InputAddress.svelte';
@@ -24,16 +26,28 @@
 	import Icon from './Icon.svelte';
 	import { MAX_PHOTO_SIZE_BYTES } from './constants';
 
-	export let appartment: Appartment;
-	export let action: string | undefined = undefined;
-	export let submitText: string = 'Confirmer';
-	export let user: User;
-	export let allEmails: string[] = [];
-	export let owner: User = user;
-	/*@ts-ignore*/
-	export let initial: WithUndefinableProperties<Appartment> = {
-		...EMPTY_APPARTMENT
-	};
+	interface Props {
+		appartment: Appartment;
+		action?: string | undefined;
+		submitText?: string;
+		user: User;
+		allEmails?: string[];
+		owner?: User;
+		/*@ts-ignore*/
+		initial?: WithUndefinableProperties<Appartment>;
+	}
+
+	let {
+		appartment = $bindable(),
+		action = undefined,
+		submitText = 'Confirmer',
+		user,
+		allEmails = [],
+		owner = $bindable(user),
+		initial = {
+			...EMPTY_APPARTMENT
+		}
+	}: Props = $props();
 
 	const emailSearcher = new Fuse(allEmails, {
 		shouldSort: true,
@@ -41,9 +55,11 @@
 		useExtendedSearch: true
 	});
 
-	let ownerCreationMode: 'vide' | 'nouveau' | 'existant' = 'vide';
-	$: ownerCreationMode =
-		owner.email === '' ? 'vide' : allEmails.includes(owner.email) ? 'existant' : 'nouveau';
+	let ownerCreationMode: 'vide' | 'nouveau' | 'existant' = $state('vide');
+	run(() => {
+		ownerCreationMode =
+			owner.email === '' ? 'vide' : allEmails.includes(owner.email) ? 'existant' : 'nouveau';
+	});
 </script>
 
 <form class="fields" {action} method="post" enctype="multipart/form-data">

@@ -31,7 +31,7 @@ export const actions: Actions = {
 
 		if (user.email !== email) {
 			if (await prisma.user.findUnique({ where: { email } })) {
-				throw redirect(302, '/account' + url.search + '#email-already-in-use');
+				redirect(302, '/account' + url.search + '#email-already-in-use');
 			}
 		}
 
@@ -84,7 +84,7 @@ export const actions: Actions = {
 		}
 
 		await log.info('change_email', user, 'success', { from: user.email, to: email });
-		throw redirect(302, '/account');
+		redirect(302, '/account');
 	},
 
 	async changePassword({ locals, request, fetch, url }) {
@@ -128,7 +128,7 @@ export const actions: Actions = {
 				case 'AUTH_INVALID_KEY_ID':
 				case 'AUTH_INVALID_USER_ID':
 					await log.error('change_password', user, 'invalid credentials');
-					throw redirect(302, '/account' + url.search + '#invalid-credentials');
+					redirect(302, '/account' + url.search + '#invalid-credentials');
 				default:
 					await log.fatal('change_password', user, 'unknown error', error);
 					throw error;
@@ -176,7 +176,7 @@ export const actions: Actions = {
 					case 'AUTH_INVALID_PASSWORD':
 					case 'AUTH_INVALID_KEY_ID':
 						await log.error('delete_account', user, 'invalid credentials');
-						throw redirect(
+						redirect(
 							302,
 							'/account' + url.search + '#invalid-credentials-delete-account'
 						);
@@ -226,6 +226,6 @@ export const actions: Actions = {
 		await auth.deleteUser(user.id);
 
 		await log.warn('delete_account', null, `deleted ${user.email}`);
-		throw redirect(302, '/');
+		redirect(302, '/');
 	}
 };

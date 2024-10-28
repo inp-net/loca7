@@ -1,18 +1,33 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { onMount } from 'svelte';
 
-	export let value: string | null = null;
-	export let options: string[] | Record<string, string> = {};
-	export let name: string | undefined = undefined;
-	export let required: boolean = false;
-
-	let errorMessage: string = '';
-	let showEmptyErrors: boolean = false;
-	$: if (required && value === null && showEmptyErrors) {
-		errorMessage = 'Ce champ est requis';
-	} else {
-		errorMessage = '';
+	interface Props {
+		value?: string | null;
+		options?: string[] | Record<string, string>;
+		name?: string | undefined;
+		required?: boolean;
+		children?: import('svelte').Snippet<[any]>;
 	}
+
+	let {
+		value = $bindable(null),
+		options = {},
+		name = undefined,
+		required = false,
+		children
+	}: Props = $props();
+
+	let errorMessage: string = $state('');
+	let showEmptyErrors: boolean = $state(false);
+	run(() => {
+		if (required && value === null && showEmptyErrors) {
+			errorMessage = 'Ce champ est requis';
+		} else {
+			errorMessage = '';
+		}
+	});
 
 	onMount(() => {
 		if (required) {
@@ -27,15 +42,19 @@
 
 	let edited: boolean = false;
 
-	let errored: boolean = false;
-	$: errored = errorMessage !== '';
+	let errored: boolean = $state(false);
+	run(() => {
+		errored = errorMessage !== '';
+	});
 
-	let optionsWithDisplay: Record<string, string> = {};
-	$: optionsWithDisplay = Array.isArray(options)
-		? Object.fromEntries(options.map((option) => [option, option]))
-		: options;
+	let optionsWithDisplay: Record<string, string> = $state({});
+	run(() => {
+		optionsWithDisplay = Array.isArray(options)
+			? Object.fromEntries(options.map((option) => [option, option]))
+			: options;
+	});
 
-	let fieldsetElement: HTMLFieldSetElement;
+	let fieldsetElement: HTMLFieldSetElement = $state();
 </script>
 
 <div class="wrapper" class:errored>
@@ -43,7 +62,7 @@
 		{#each Object.entries(optionsWithDisplay) as [option, display] (option)}
 			<label aria-current={option === value}>
 				<input type="radio" {required} {name} bind:group={value} value={option} />
-				<slot {value} {display} {option}>{display}</slot>
+				{#if children}{@render children({ value, display, option })}{:else}{display}{/if}
 			</label>
 		{/each}
 	</fieldset>

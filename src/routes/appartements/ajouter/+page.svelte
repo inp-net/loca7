@@ -4,11 +4,15 @@
 	import type { User } from '@prisma/client';
 	import type { PageData, Snapshot } from './$types';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 	let user: User = data.user;
 	let allEmails: string[] = data.allEmails;
 
-	let appartment: Appartment = {
+	let appartment: Appartment = $state({
 		availableAt: new Date(),
 		address: '',
 		charges: undefined,
@@ -26,7 +30,7 @@
 		rent: undefined,
 		roomsCount: undefined,
 		surface: undefined
-	};
+	});
 
 	export const snapshot: Snapshot = {
 		capture: () => appartment,

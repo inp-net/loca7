@@ -15,7 +15,7 @@
 		<div class="row">
 			{#each row as name}
 				<div class="item">
-					<div class="swatch" style="background-color: var(--{name})" />
+					<div class="swatch" style="background-color: var(--{name})"></div>
 					<p class="typo-field-label">{name}</p>
 				</div>
 			{/each}

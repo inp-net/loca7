@@ -1,11 +1,26 @@
 <script lang="ts">
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import type { Name as IconName } from '$lib/icons/types';
 	import Icon from './Icon.svelte';
-	export let id: string = '';
-	export let icon: IconName | undefined = undefined;
-	export let href: string | undefined = undefined;
-	export let submits: boolean = false;
-	export let smaller: boolean = false;
+	interface Props {
+		id?: string;
+		icon?: IconName | undefined;
+		href?: string | undefined;
+		submits?: boolean;
+		smaller?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		id = '',
+		icon = undefined,
+		href = undefined,
+		submits = false,
+		smaller = false,
+		children
+	}: Props = $props();
 </script>
 
 <svelte:element
@@ -14,7 +29,7 @@
 	{href}
 	class="button-primary typo-big-button"
 	class:smaller
-	on:click
+	onclick={bubble('click')}
 	type={submits ? 'submit' : 'button'}
 >
 	{#if icon !== undefined}
@@ -22,7 +37,7 @@
 			<Icon name={icon} />
 		</span>
 	{/if}
-	<slot />
+	{@render children?.()}
 </svelte:element>
 
 <style>

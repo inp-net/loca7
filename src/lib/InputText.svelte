@@ -3,18 +3,35 @@
 	import BaseInputText from './BaseInputText.svelte';
 	import type { Name as IconName } from './icons/types';
 
-	export let id: string | undefined = undefined;
-	export let name: string | undefined = undefined;
-	export let initial: string | undefined = undefined;
-	export let placeholder: string | undefined = undefined;
-	export let value: string;
-	export let required: boolean = false;
-	export let autocomplete: string | undefined = undefined;
-	export let schema: ZodSchema = z.string();
-	export let errorMessage: string | undefined = undefined;
-	export let messageIsWarning: boolean = false;
-	export let actionIcon: IconName | undefined = undefined;
-	export let leftIcon: IconName | undefined = undefined;
+	interface Props {
+		id?: string | undefined;
+		name?: string | undefined;
+		initial?: string | undefined;
+		placeholder?: string | undefined;
+		value: string;
+		required?: boolean;
+		autocomplete?: string | undefined;
+		schema?: ZodSchema;
+		errorMessage?: string | undefined;
+		messageIsWarning?: boolean;
+		actionIcon?: IconName | undefined;
+		leftIcon?: IconName | undefined;
+	}
+
+	let {
+		id = undefined,
+		name = undefined,
+		initial = undefined,
+		placeholder = undefined,
+		value = $bindable(),
+		required = false,
+		autocomplete = undefined,
+		schema = z.string(),
+		errorMessage = undefined,
+		messageIsWarning = false,
+		actionIcon = undefined,
+		leftIcon = undefined
+	}: Props = $props();
 </script>
 
 <BaseInputText

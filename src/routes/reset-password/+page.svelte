@@ -10,10 +10,14 @@
 	import InputField from '$lib/InputField.svelte';
 	import type { PageData } from './$types';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	let sent: boolean = $page.url.hash === '#sent';
-	let email: string = $page.url.searchParams.get('email') ?? '';
+	let email: string = $state($page.url.searchParams.get('email') ?? '');
 </script>
 
 <svelte:head>

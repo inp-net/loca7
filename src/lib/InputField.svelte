@@ -1,9 +1,14 @@
 <script lang="ts">
 	import { tooltip } from './tooltip';
 
-	export let label: string;
-	export let id: string | null = null;
-	export let required: boolean = false;
+	interface Props {
+		label: string;
+		id?: string | null;
+		required?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let { label, id = null, required = false, children }: Props = $props();
 </script>
 
 <div class="field">
@@ -14,7 +19,7 @@
 			{/if}</span
 		>
 	</svelte:element>
-	<slot />
+	{@render children?.()}
 </div>
 
 <style>

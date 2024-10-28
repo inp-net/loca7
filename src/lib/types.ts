@@ -298,7 +298,7 @@ export function appartmentTitle(appartment: Appartment, insideSentence = false):
 				: 'Bien'
 			: (insideSentence ? lowercaseDisplayAppartmentKind : DISPLAY_APPARTMENT_KIND)[
 					appartment.kind
-			  ]
+				]
 	} de ${appartment.surface}m² à ${appartment.rent + appartment.charges}€/mois`;
 }
 

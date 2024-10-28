@@ -8,8 +8,8 @@
 	import { oauthCSRFToken, oauthAccessToken } from '$lib/stores';
 	import { onMount } from 'svelte';
 
-	let email: string = '';
-	let password: string = '';
+	let email: string = $state('');
+	let password: string = $state('');
 
 	onMount(() => {
 		$oauthCSRFToken = Math.random().toString(36).slice(2);

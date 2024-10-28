@@ -40,15 +40,19 @@
 		});
 	});
 
-	let domEditor: HTMLElement;
-	export let placeholder: string = '';
-	export let name: string | undefined = undefined;
-	export let value: string = '';
+	let domEditor: HTMLElement = $state();
+	interface Props {
+		placeholder?: string;
+		name?: string | undefined;
+		value?: string;
+	}
+
+	let { placeholder = '', name = undefined, value = $bindable('') }: Props = $props();
 </script>
 
 <div class="wrapper">
 	<InputRichTextToolbar {editor} />
-	<div class="editor" bind:this={domEditor} contenteditable="true" />
+	<div class="editor" bind:this={domEditor} contenteditable="true"></div>
 	<input type="hidden" {name} {value} />
 </div>
 

@@ -1,25 +1,40 @@
 <script lang="ts">
-	export let id: string = '';
-	export let dangerous = false;
-	export let warns = false;
-	export let successful = false;
-	export let href: string = '';
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
+	interface Props {
+		id?: string;
+		dangerous?: boolean;
+		warns?: boolean;
+		successful?: boolean;
+		href?: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		id = '',
+		dangerous = false,
+		warns = false,
+		successful = false,
+		href = '',
+		children
+	}: Props = $props();
 
 	const backgroundColor = dangerous ? 'rose' : warns ? 'plaster' : successful ? 'moss' : 'ice';
 	const foregroundColor = dangerous
 		? 'blood'
 		: warns
-		? 'safran'
-		: successful
-		? 'cactus'
-		: 'cobalt';
+			? 'safran'
+			: successful
+				? 'cactus'
+				: 'cobalt';
 	const pressedBackgroundColor = dangerous
 		? 'mushroom'
 		: warns
-		? 'gold'
-		: successful
-		? 'acid'
-		: 'sky';
+			? 'gold'
+			: successful
+				? 'acid'
+				: 'sky';
 </script>
 
 <svelte:element
@@ -31,9 +46,9 @@
 	style:--background={`var(--${backgroundColor})`}
 	style:--pressed-background={`var(--${pressedBackgroundColor})`}
 	style:--pressed-foreground={successful ? '#000' : '#fff'}
-	on:click
+	onclick={bubble('click')}
 >
-	<slot />
+	{@render children?.()}
 </svelte:element>
 
 <style>
