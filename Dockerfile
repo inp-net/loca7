@@ -1,4 +1,5 @@
 FROM node:18-alpine
+run apk add --no-cache --update openssl
 
 workdir /app
 
