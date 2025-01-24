@@ -355,6 +355,15 @@
 							<p class="typo-paragraph">Fibre optique</p>
 						</li>
 					{/if}
+                    {#if appart.isLGBTQFriendly}
+                        <li class="aspect">
+                            <span class="icon">
+                                <img src="/progress_pride_flag.png" alt="<3">
+                            </span>
+                            <p class="typo-paragraph">LGBTQ+ friendly</p>
+                        </li>
+                    {/if}
+
 				</ul>
 			</section>
 
@@ -961,4 +970,9 @@
 	section.call-to-report h2 {
 		color: var(--blood);
 	}
+
+    .icon img {
+        height: 50px;
+        width: 50px;
+    }
 </style>

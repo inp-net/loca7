@@ -25,7 +25,8 @@
 		images: [],
 		rent: undefined,
 		roomsCount: undefined,
-		surface: undefined
+		surface: undefined,
+        isLGBTQFriendly: false
 	};
 
 	export const snapshot: Snapshot = {

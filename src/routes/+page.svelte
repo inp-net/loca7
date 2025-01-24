@@ -93,6 +93,7 @@
 					'fiberInternet',
 					'elevator'
 				) &&
+                ($searchCriteria.lgbtqFriendlyOnly ? appartment.isLGBTQFriendly : true ) &&
 				(!$searchCriteria.maximumRent || appartment.rent <= $searchCriteria.maximumRent) &&
 				(!$searchCriteria.minimumSurface ||
 					appartment.surface >= $searchCriteria.minimumSurface) &&
@@ -208,6 +209,13 @@
 								label="Ascenseur"
 								bind:value={$searchCriteria.elevator}
 							/>
+                            <InputCheckbox
+                                label="LGBTQ+ friendly"
+                                labelFalse="Peu importe"
+                                labelTrue="Seulement"
+                                bind:value={$searchCriteria.lgbtqFriendlyOnly}
+                                tristate={false}
+                            />
 						</div>
 					</InputField>
 				</div>

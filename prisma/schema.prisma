@@ -111,6 +111,7 @@ model Appartment {
   hasBicycleParking   Boolean?
   hasFiberInternet    Boolean?
   hasElevator         Boolean?
+  isLGBTQFriendly     Boolean                  @default(false)
   description         String                   @db.Text
   travelTimeToN7      TravelTimeToN7           @relation(fields: [travelTimeId], references: [id])
   travelTimeId        String

@@ -15,7 +15,8 @@ export const searchCriteria: Writable<SearchCriteria> = persisted('searchCriteri
 	fiberInternet: null,
 	elevator: null,
 	type: [],
-	description: ''
+	description: '',
+    lgbtqFriendlyOnly: false,
 });
 
 export const SORT_OPTIONS = [

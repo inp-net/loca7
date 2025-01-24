@@ -228,8 +228,21 @@
 				bind:value={appartment.hasElevator}
 				label="Ascenseur"
 			/>
+			<InputCheckbox
+				tristate={false}
+				name="isLGBTQFriendly"
+				bind:value={appartment.isLGBTQFriendly}
+				label="LGBTQ+ friendly"
+			/>
 		</div>
 	</InputField>
+
+	{#if appartment.isLGBTQFriendly}
+		<section class="notice-lgbtq-friendly">
+			Vous vous engagez, lors d'éventuelles visites ou autres interactions avec lea locataire,
+			à respecter les personnes LGBTQ+ et leurs identités de genre.
+		</section>
+	{/if}
 
 	<InputField label="Description">
 		<InputRichText name="description" bind:value={appartment.description} />
@@ -325,5 +338,11 @@
 	.help {
 		display: inline-block;
 		height: 1em;
+	}
+
+	section.notice-lgbtq-friendly {
+		background-color: var(--ice);
+		padding: 1rem;
+		margin-top: 1rem;
 	}
 </style>

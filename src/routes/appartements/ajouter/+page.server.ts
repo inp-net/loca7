@@ -125,7 +125,10 @@ export const actions: Actions = {
 				: null,
 			hasElevator: Object.keys(formData).includes('hasElevator')
 				? ternaryStateCheckboxToBoolean(formData.hasElevator)
-				: null
+				: null,
+            isLGBTQFriendly: Object.keys(formData).includes('isLGBTQFriendly')
+                ? (ternaryStateCheckboxToBoolean(formData.isLGBTQFriendly) || false)
+                : false,
 		};
 		if (latitude && longitude) {
 			appartInput.travelTimeToN7.create = {

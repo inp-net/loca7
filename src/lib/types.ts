@@ -189,7 +189,8 @@ export const SearchCriteriaSchema = z.object({
 	bicycleParking: z.boolean().nullable(),
 	fiberInternet: z.boolean().nullable(),
 	elevator: z.boolean().nullable(),
-	description: z.string().optional()
+	description: z.string().optional(),
+    lgbtqFriendlyOnly: z.boolean(),
 });
 
 export type GeographicPoint = z.infer<typeof GeographicPointSchema>;
@@ -231,6 +232,7 @@ export const AppartmentSchema = z.object({
 	hasBicycleParking: z.boolean().nullable(),
 	hasFiberInternet: z.boolean().nullable(),
 	hasElevator: z.boolean().nullable(),
+    isLGBTQFriendly: z.boolean(),
 	description: z.string(),
 	latitude: z.number().nullable(),
 	longitude: z.number().nullable()
@@ -254,7 +256,8 @@ export const EMPTY_APPARTMENT: WithUndefinableProperties<Appartment> = {
 	roomsCount: 0,
 	surface: undefined,
 	latitude: null,
-	longitude: null
+	longitude: null,
+    isLGBTQFriendly: false,
 };
 
 export const DISPLAY_ASPECT_FIELDS: Record<keyof Appartment, string> = {
@@ -262,7 +265,8 @@ export const DISPLAY_ASPECT_FIELDS: Record<keyof Appartment, string> = {
 	hasParking: 'parking',
 	hasBicycleParking: 'place pour vélo',
 	hasFiberInternet: 'fibre optique',
-	hasElevator: 'ascenceur'
+	hasElevator: 'ascenceur',
+    isLGBTQFriendly: 'LGBTQ+ friendly'
 };
 
 export function appartmentAccessible(
