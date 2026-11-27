@@ -72,7 +72,7 @@
 		"@lexical/list": "^0.8.1",
 		"@lexical/markdown": "^0.8.1",
 		"@lexical/rich-text": "^0.8.1",
-		"@lucia-auth/adapter-prisma": "^0.4.0",
+		"@lucia-auth/adapter-prisma": "^4.0.0",
 		"@lucia-auth/sveltekit": "^0.6.11",
 		"@prisma/client": "^4.16.2",
 		"autolinker": "^4.0.0",
